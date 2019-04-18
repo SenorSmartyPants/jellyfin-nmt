@@ -3,7 +3,7 @@
 include 'secrets.php';
 
 function seasonPosterExists($seasonId){
-    global $api_url, $user_id, $api_key;
+    global $api_url, $api_key;
 
     $url = $api_url . "/Items/" . $seasonId . "/Images/?api_key=" . $api_key;
 
