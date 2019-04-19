@@ -25,14 +25,15 @@ function seasonPosterExists($seasonId)
     return (count($images) > 0);
 }
 
-function firstEpisodeFromSeason($seasonId)
+function firstEpisodeFromSeason($seasonId, $seasonNumber)
 {
     global $user_id;
 
     //all episodes from unwatched season, no season data
-    //HOW?! don't include specials in regular seasons
-    $path = "/Users/" . $user_id . "/Items/?ParentID=" . $seasonId;
-    $all_episodes = apiCall($path,true);
+    //ParentIndexNumber - don't include specials in regular seasons
+    $path = "/Users/" . $user_id .
+        "/Items/?ParentID=" . $seasonId . "&ParentIndexNumber=" . $seasonNumber;
+    $all_episodes = apiCall($path, true);
 
     //return first
     return $all_episodes->Items[0];
@@ -74,17 +75,17 @@ function parseSeries($item) {
     return $menuItem;
 }
 
-function parseEpisode($item,$unplayedCount = null) {
+function parseEpisode($item, $unplayedCount = null)
+{
     //find first episode in season, this will be YAMJ filename
-    $first_from_season = firstEpisodeFromSeason($item->SeasonId);   
+    $first_from_season = firstEpisodeFromSeason($item->SeasonId, $item->ParentIndexNumber);
 
     $menuItem = new stdClass();
     $menuItem->Name = $first_from_season->SeriesName . ' ' . $first_from_season->SeasonName;
     $menuItem->DetailBaseURL = pathinfo($first_from_season->Path)['filename'] . ".html";
     $menuItem->PosterID = (seasonPosterExists($first_from_season->SeasonId)) ? $first_from_season->SeasonId : $first_from_season->SeriesId;
-    
-    if ($unplayedCount == null)
-    {
+
+    if ($unplayedCount == null) {
         $series = getSeries($item->SeriesId);
         $unplayedCount = $series->UserData->UnplayedItemCount;
     }
