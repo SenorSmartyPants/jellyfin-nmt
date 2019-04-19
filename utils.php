@@ -28,6 +28,21 @@ function firstEpisodeFromSeason($seasonId) {
     return $all_episodes->Items[0];
 }
 
+function getLatest($Limit)
+{
+    global $api_url, $user_id, $api_key, $GroupItems;
+
+    $url = $api_url . "/Users/" . $user_id .
+        "/Items/Latest?&GroupItems=" . $GroupItems .
+        "&Limit=" . $Limit .
+        "&api_key=" . $api_key;
+
+    //echo "<a href=\"" . $url . "\">url</a><br/>";
+
+    $contents = file_get_contents($url);
+    return json_decode($contents);
+}
+
 function getSeries($seriesId) {
     global $api_url, $user_id, $api_key;
 
