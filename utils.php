@@ -2,27 +2,37 @@
 
 include 'secrets.php';
 
-function seasonPosterExists($seasonId) {
-    global $api_url, $api_key;
+$apiCallCount = 0;
 
-    $url = $api_url . "/Items/" . $seasonId . "/Images/?api_key=" . $api_key;
+function apiCall($path, $debug = false)
+{
+    global $api_url, $api_key, $apiCallCount;
 
-    //seasons usually have a Primary or nothing
-    $contents = file_get_contents($url);
-    $images = json_decode($contents);
+    $apiCallCount++;
 
-    return (count($images)>0);
+    $url = $api_url . $path . "&api_key=" . $api_key;
+    if ($debug) echo "<a href=\"" . $url . "\">url</a><br/>";
+
+    return json_decode(file_get_contents($url));
 }
 
-function firstEpisodeFromSeason($seasonId) {
-    global $api_url, $user_id, $api_key;
+function seasonPosterExists($seasonId)
+{
+    //seasons usually have a Primary or nothing
+    $path =  "/Items/" . $seasonId . "/Images/?";
+    $images = apiCall($path);
+
+    return (count($images) > 0);
+}
+
+function firstEpisodeFromSeason($seasonId)
+{
+    global $user_id;
 
     //all episodes from unwatched season, no season data
-    $url = $api_url . "/Users/" . $user_id .
-        "/Items/?ParentID=" . $seasonId . "&api_key=" . $api_key;
-
-    $contents = file_get_contents($url);
-    $all_episodes = json_decode($contents);
+    //HOW?! don't include specials in regular seasons
+    $path = "/Users/" . $user_id . "/Items/?ParentID=" . $seasonId;
+    $all_episodes = apiCall($path,true);
 
     //return first
     return $all_episodes->Items[0];
@@ -30,43 +40,32 @@ function firstEpisodeFromSeason($seasonId) {
 
 function getLatest($Limit)
 {
-    global $api_url, $user_id, $api_key, $GroupItems;
+    global $user_id, $GroupItems;
 
-    $url = $api_url . "/Users/" . $user_id .
+    $path = "/Users/" . $user_id .
         "/Items/Latest?&GroupItems=" . $GroupItems .
-        "&Limit=" . $Limit .
-        "&api_key=" . $api_key;
+        "&Limit=" . $Limit;
 
-    //echo "<a href=\"" . $url . "\">url</a><br/>";
-
-    $contents = file_get_contents($url);
-    return json_decode($contents);
+    return apiCall($path,true);
 }
 
 function getSeries($seriesId) {
-    global $api_url, $user_id, $api_key;
+    global $user_id;
 
     //all episodes from unwatched season, no season data
-    $url = $api_url . "/Users/" . $user_id .
-        "/Items/?Ids=" . $seriesId . "&api_key=" . $api_key;
-
-    $contents = file_get_contents($url);
-    $all_episodes = json_decode($contents);
+    $path = "/Users/" . $user_id . "/Items/?Ids=" . $seriesId;
+    $all_episodes = apiCall($path);
 
     //return first
     return $all_episodes->Items[0];
 }
 
 function parseSeries($item) {
-    global $api_url, $user_id, $api_key;
+    global $user_id;
 
     //gets unwatched episodes for this series
-    $url = $api_url . "/Users/" . $user_id .
-        "/Items/Latest?ParentID=" . $item->Id . "&GroupItems=false" . 
-        "&api_key=" . $api_key;
-
-    $contents = file_get_contents($url);
-    $unwatched = json_decode($contents);
+    $path = "/Users/" . $user_id . "/Items/Latest?ParentID=" . $item->Id . "&GroupItems=false";
+    $unwatched = apiCall($path);
 
     $first_unwatched = $unwatched[count($unwatched)-1];
 
