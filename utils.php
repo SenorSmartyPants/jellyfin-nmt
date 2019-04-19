@@ -2,7 +2,7 @@
 
 include 'secrets.php';
 
-function seasonPosterExists($seasonId){
+function seasonPosterExists($seasonId) {
     global $api_url, $api_key;
 
     $url = $api_url . "/Items/" . $seasonId . "/Images/?api_key=" . $api_key;
@@ -14,7 +14,7 @@ function seasonPosterExists($seasonId){
     return (count($images)>0);
 }
 
-function firstEpisodeFromSeason($seasonId){
+function firstEpisodeFromSeason($seasonId) {
     global $api_url, $user_id, $api_key;
 
     //all episodes from unwatched season, no season data
@@ -28,7 +28,7 @@ function firstEpisodeFromSeason($seasonId){
     return $all_episodes->Items[0];
 }
 
-function getSeries($seriesId){
+function getSeries($seriesId) {
     global $api_url, $user_id, $api_key;
 
     //all episodes from unwatched season, no season data
