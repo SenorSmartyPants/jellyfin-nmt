@@ -97,7 +97,7 @@ function parseEpisode($item, $unplayedCount = null)
     }
     //or 1 if I want it to show up
     $menuItem->UnplayedCount = $unplayedCount > 1 ? $unplayedCount : null;
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&maxHeight=" . $popupHeight . "&maxWidth=" . $popupWidth;
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&Height=" . $popupHeight . "&Width=" . $popupWidth;
 
     return $menuItem;
 }
@@ -110,7 +110,7 @@ function parseMovie($item) {
     $menuItem->DetailBaseURL = pathinfo($item->Path)['filename'] . ".html";
     $menuItem->PosterID = $item->Id;
     $menuItem->UnplayedCount = null;
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?maxHeight=" . $popupHeight . "&maxWidth=" . $popupWidth;
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?Height=" . $popupHeight . "&Width=" . $popupWidth;
 
     return $menuItem;
 }
