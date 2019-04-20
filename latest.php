@@ -37,10 +37,10 @@ tv-banners=false
 
 function printMenuItem($menuItem)
 {
-    global $api_url, $jukebox_url, $popupWidth, $popupHeight;
+    global $api_url, $jukebox_url;
     ?>
     <a href="<?= $jukebox_url . $menuItem->DetailBaseURL ?>">
-        <img src="<?= $api_url ?>/Items/<?= $menuItem->PosterID ?>/Images/Primary?UnplayedCount=<?= $menuItem->UnplayedCount ?>&maxHeight=<?= $popupHeight ?>&maxWidth=<?= $popupWidth ?>" /></a><br />
+        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" /></a><br />
     <b><?= $menuItem->Name ?></b><br />
 <?php
 }
@@ -59,12 +59,125 @@ function printHeadEtc()
         <title>Moviejukebox</title>
 
         <style>
+            #imgDVD1 { visibility: hidden; position: absolute; top: 12px; left: 11px; }
+            #frmDVD1 { visibility: hidden; position: absolute; top: 1px; left: 0px; }
+            #title1 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD2 { visibility: hidden; position: absolute; top: 12px; left: 103px; }
+            #frmDVD2 { visibility: hidden; position: absolute; top: 1px; left: 93px; }
+            #title2 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD3 { visibility: hidden; position: absolute; top: 12px; left: 224px; }
+            #frmDVD3 { visibility: hidden; position: absolute; top: 1px; left: 214px; }
+            #title3 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD4 { visibility: hidden; position: absolute; top: 12px; left: 345px; }
+            #frmDVD4 { visibility: hidden; position: absolute; top: 1px; left: 335px; }
+            #title4 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD5 { visibility: hidden; position: absolute; top: 12px; left: 466px; }
+            #frmDVD5 { visibility: hidden; position: absolute; top: 1px; left: 456px; }
+            #title5 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD6 { visibility: hidden; position: absolute; top: 12px; left: 587px; }
+            #frmDVD6 { visibility: hidden; position: absolute; top: 1px; left: 577px; }
+            #title6 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD7 { visibility: hidden; position: absolute; top: 12px; left: 708px; }
+            #frmDVD7 { visibility: hidden; position: absolute; top: 1px; left: 698px; }
+            #title7 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD8 { visibility: hidden; position: absolute; top: 12px; left: 829px; }
+            #frmDVD8 { visibility: hidden; position: absolute; top: 1px; left: 819px; }
+            #title8 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD9 { visibility: hidden; position: absolute; top: 12px; left: 924px; }
+            #frmDVD9 { visibility: hidden; position: absolute; top: 1px; left: 914px; }
+            #title9 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD10 { visibility: hidden; position: absolute; top: 190px; left: 11px; }
+            #frmDVD10 { visibility: hidden; position: absolute; top: 179px; left: 0px; }
+            #title10 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD11 { visibility: hidden; position: absolute; top: 190px; left: 103px; }
+            #frmDVD11 { visibility: hidden; position: absolute; top: 179px; left: 93px; }
+            #title11 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD12 { visibility: hidden; position: absolute; top: 190px; left: 224px; }
+            #frmDVD12 { visibility: hidden; position: absolute; top: 179px; left: 214px; }
+            #title12 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD13 { visibility: hidden; position: absolute; top: 190px; left: 345px; }
+            #frmDVD13 { visibility: hidden; position: absolute; top: 179px; left: 335px; }
+            #title13 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD14 { visibility: hidden; position: absolute; top: 190px; left: 466px; }
+            #frmDVD14 { visibility: hidden; position: absolute; top: 179px; left: 456px; }
+            #title14 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD15 { visibility: hidden; position: absolute; top: 190px; left: 587px; }
+            #frmDVD15 { visibility: hidden; position: absolute; top: 179px; left: 577px; }
+            #title15 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD16 { visibility: hidden; position: absolute; top: 190px; left: 708px; }
+            #frmDVD16 { visibility: hidden; position: absolute; top: 179px; left: 698px; }
+            #title16 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD17 { visibility: hidden; position: absolute; top: 190px; left: 829px; }
+            #frmDVD17 { visibility: hidden; position: absolute; top: 179px; left: 819px; }
+            #title17 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD18 { visibility: hidden; position: absolute; top: 190px; left: 924px; }
+            #frmDVD18 { visibility: hidden; position: absolute; top: 179px; left: 914px; }
+            #title18 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD19 { visibility: hidden; position: absolute; top: 364px; left: 11px; }
+            #frmDVD19 { visibility: hidden; position: absolute; top: 353px; left: 0px; }
+            #title19 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD20 { visibility: hidden; position: absolute; top: 364px; left: 103px; }
+            #frmDVD20 { visibility: hidden; position: absolute; top: 353px; left: 93px; }
+            #title20 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD21 { visibility: hidden; position: absolute; top: 364px; left: 224px; }
+            #frmDVD21 { visibility: hidden; position: absolute; top: 353px; left: 214px; }
+            #title21 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD22 { visibility: hidden; position: absolute; top: 364px; left: 345px; }
+            #frmDVD22 { visibility: hidden; position: absolute; top: 353px; left: 335px; }
+            #title22 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD23 { visibility: hidden; position: absolute; top: 364px; left: 466px; }
+            #frmDVD23 { visibility: hidden; position: absolute; top: 353px; left: 456px; }
+            #title23 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD24 { visibility: hidden; position: absolute; top: 364px; left: 587px; }
+            #frmDVD24 { visibility: hidden; position: absolute; top: 353px; left: 577px; }
+            #title24 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD25 { visibility: hidden; position: absolute; top: 364px; left: 708px; }
+            #frmDVD25 { visibility: hidden; position: absolute; top: 353px; left: 698px; }
+            #title25 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD26 { visibility: hidden; position: absolute; top: 364px; left: 829px; }
+            #frmDVD26 { visibility: hidden; position: absolute; top: 353px; left: 819px; }
+            #title26 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            #imgDVD27 { visibility: hidden; position: absolute; top: 364px; left: 924px; }
+            #frmDVD27 { visibility: hidden; position: absolute; top: 353px; left: 914px; }
+            #title27 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
+            
+            td#title { font-size: 18pt; color: #868686; }
+            #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
+            td#page { font-size: 18pt; color: #868686; }
+            td#year { font-size: 18pt; color: #868686; }
+            div.title{ visibility:hidden; }
+            div.counter {font-size: 15pt; color: #AAAAAA; }
+
+            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; }
+            a { font-size: 18pt; color: #AAAAAA; text-decoration: none; }
+            img { border: 0; }
+            table.main { width:1090; height:83; }
+            table.categories { width:180; }
+            td { text-decoration: none;}
+            td.movies { padding-right: 10px;}
+
+
+            .hidden { visibility: hidden; display: none;}
+
             .indexname {
                 font-size: 23pt;
                 font-weight: normal;
                 color: #8e8e8e;
             }
         </style>
+
+        <script>
+            function show(x) {
+                title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
+                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "visible"
+                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "visible"
+            }
+            function hide(x) {
+                title.firstChild.nodeValue = "\xa0";
+                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "hidden"
+                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "hidden"
+            }
+        </script>
 
     </head>
 
@@ -122,8 +235,8 @@ function printPosterTable($items)
                     $menuItem = parseMovie($item);
                     break;
             }
-            //printMenuItem($menuItem);
-            printPostTD($menuItem, 0, $key);
+            printPosterTD($menuItem, 0, $key);
+            printPopup($menuItem, 0, $key);
 
             //last item in row
             if (isEndOfRow($key)) {
@@ -147,8 +260,19 @@ function isEndOfRow($position)
     return ($position % $nbThumbnailsPerLine == $nbThumbnailsPerLine - 1);
 }
 
+function printPopup($menuItem, $gap, $position)
+{
+    global $api_url, $jukebox_url;
+    $placement = $position + $gap + 1; //$position is zero based
+    ?>
+    <div id="title<?= $placement ?>"><?= $menuItem->Name ?></div>
+    <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
+    <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url ?>pictures/wall/hover-frame.png" />
+    <?php
+}
+
 //gap is for skipping rows, in sets on the bottom
-function printPostTD($menuItem, $gap, $position)
+function printPosterTD($menuItem, $gap, $position)
 {
     global $api_url, $jukebox_url, $popupWidth, $popupHeight;
     global $thumbnailsWidth, $thumbnailsHeight;
@@ -156,7 +280,7 @@ function printPostTD($menuItem, $gap, $position)
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center">
-        <a href="<?= $jukebox_url . $menuItem->DetailBaseURL ?>" onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>, 'do I even use this?')" onmouseout="hide(<?= $placement ?>, 'or this?')" onfocus="show(<?= $placement ?>, 'do I even use this?')" onblur="hide(<?= $placement ?>, 'or this?')" 
+        <a href="<?= $jukebox_url . $menuItem->DetailBaseURL ?>" onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
     //start of row
@@ -254,7 +378,7 @@ function printPostTD($menuItem, $gap, $position)
             </xsl:if>                
         */
                                                                                                                                                                                                                                                                                                                                                                                     ?>>
-            <img src="<?= $api_url ?>/Items/<?= $menuItem->PosterID ?>/Images/Primary?UnplayedCount=<?= $menuItem->UnplayedCount ?>&maxHeight=<?= $popupHeight ?>&maxWidth=<?= $popupWidth ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="pictures/wall/transparent.png" /></a>
+            <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="pictures/wall/transparent.png" /></a>
     </td>
 <?php
 }
