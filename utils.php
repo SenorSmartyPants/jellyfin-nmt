@@ -32,8 +32,9 @@ function firstEpisodeFromSeason($seasonId, $seasonNumber)
     //all episodes from unwatched season, no season data
     //ParentIndexNumber - don't include specials in regular seasons
     $path = "/Users/" . $user_id .
-        "/Items/?ParentID=" . $seasonId . "&ParentIndexNumber=" . $seasonNumber;
-    $all_episodes = apiCall($path, true);
+        "/Items/?Limit=1&ParentID=" . $seasonId . "&ParentIndexNumber=" . $seasonNumber .
+        "&Fields=Path";
+    $all_episodes = apiCall($path);
 
     //return first
     return $all_episodes->Items[0];
@@ -44,10 +45,10 @@ function getLatest($Limit)
     global $user_id, $GroupItems;
 
     $path = "/Users/" . $user_id .
-        "/Items/Latest?&GroupItems=" . $GroupItems .
+        "/Items/Latest?GroupItems=" . $GroupItems .
         "&Limit=" . $Limit;
 
-    return apiCall($path,true);
+    return apiCall($path);
 }
 
 function getSeries($seriesId) {
@@ -61,7 +62,10 @@ function getSeries($seriesId) {
     return $all_episodes->Items[0];
 }
 
-function parseSeries($item) {
+//3 API calls total for series
+//1 here + 2 in parseEpisode
+function parseSeries($item)
+{
     global $user_id;
 
     //gets unwatched episodes for this series
@@ -75,6 +79,8 @@ function parseSeries($item) {
     return $menuItem;
 }
 
+//3 API calls for Episode from Latest
+//2 API additional calls for Series from Latest
 function parseEpisode($item, $unplayedCount = null)
 {
     //find first episode in season, this will be YAMJ filename
@@ -95,6 +101,7 @@ function parseEpisode($item, $unplayedCount = null)
     return $menuItem;
 }
 
+//0 additional API calls
 function parseMovie($item) {
     $menuItem = new stdClass();
     $menuItem->Name = $item->Name;
