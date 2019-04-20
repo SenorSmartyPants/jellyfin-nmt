@@ -197,7 +197,6 @@ function printFooter()
 
 function printPosterTable($items)
 {
-    global $nbThumbnailsPerLine;
     //set table is centered
     $align = "left";
     ?>
@@ -274,9 +273,9 @@ function printPopup($menuItem, $gap, $position)
 //gap is for skipping rows, in sets on the bottom
 function printPosterTD($menuItem, $gap, $position)
 {
-    global $api_url, $jukebox_url, $popupWidth, $popupHeight;
+    global $api_url, $jukebox_url;
     global $thumbnailsWidth, $thumbnailsHeight;
-    global $nbThumbnailsPerPage, $nbThumbnailsPerLine;
+    global $nbThumbnailsPerPage;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center">
@@ -396,7 +395,7 @@ function printNavbar()
             <td class="indexname" id="indexmenuleft" align="left" valign="top" height="<?= $imagePadHeight ?>" width="265">
                 Latest
             </td>
-            <td id="indexmenuright" align="right">place holding</td>
+            <td id="indexmenuright" align="right">&nbsp;</td>
         </tr>
     </table>
 <?php
@@ -447,5 +446,5 @@ printTitleTable();
 
 printFooter();
 
-echo "<div class=\"indexname\">API call count = $apiCallCount</div>";
+//echo "<div class=\"indexname\">API call count = $apiCallCount</div>";
 ?>
