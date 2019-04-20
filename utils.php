@@ -46,7 +46,7 @@ function getLatest($Limit)
 
     $path = "/Users/" . $user_id .
         "/Items/Latest?GroupItems=" . $GroupItems .
-        "&Limit=" . $Limit;
+        "&Fields=Path&Limit=" . $Limit;
 
     return apiCall($path);
 }
@@ -82,6 +82,7 @@ function parseSeries($item)
 //2 API additional calls for Series from Latest
 function parseEpisode($item, $unplayedCount = null)
 {
+    global $popupHeight, $popupWidth;
     //find first episode in season, this will be YAMJ filename
     $first_from_season = firstEpisodeFromSeason($item->SeasonId, $item->ParentIndexNumber);
 
@@ -96,17 +97,20 @@ function parseEpisode($item, $unplayedCount = null)
     }
     //or 1 if I want it to show up
     $menuItem->UnplayedCount = $unplayedCount > 1 ? $unplayedCount : null;
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&maxHeight=" . $popupHeight . "&maxWidth=" . $popupWidth;
 
     return $menuItem;
 }
 
 //0 additional API calls
 function parseMovie($item) {
+    global $popupHeight, $popupWidth;
     $menuItem = new stdClass();
     $menuItem->Name = $item->Name;
     $menuItem->DetailBaseURL = pathinfo($item->Path)['filename'] . ".html";
     $menuItem->PosterID = $item->Id;
     $menuItem->UnplayedCount = null;
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?maxHeight=" . $popupHeight . "&maxWidth=" . $popupWidth;
 
     return $menuItem;
 }
