@@ -68,14 +68,16 @@ function parseSeries($item)
 {
     global $user_id;
 
-    //gets unwatched episodes for this series
-    $path = "/Users/" . $user_id . "/Items/Latest?ParentID=" . $item->Id . "&GroupItems=false";
+    //gets first unwatched episode for this series
+    $path = "/Users/" . $user_id . "/Items?ParentID=" . $item->Id .
+        "&Recursive=true&IncludeItemTypes=Episode&IsPlayed=false&Limit=1";
+
     $unwatched = apiCall($path);
 
-    $first_unwatched = $unwatched[count($unwatched)-1];
+    $first_unwatched = $unwatched->Items[0];
 
-    $menuItem = parseEpisode($first_unwatched,$item->UserData->UnplayedItemCount);
-    
+    $menuItem = parseEpisode($first_unwatched, $item->UserData->UnplayedItemCount);
+
     return $menuItem;
 }
 
