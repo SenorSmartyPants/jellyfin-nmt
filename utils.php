@@ -51,15 +51,12 @@ function getLatest($Limit)
     return apiCall($path);
 }
 
-function getSeries($seriesId) {
+function getItem($Id) {
     global $user_id;
 
-    //all episodes from unwatched season, no season data
-    $path = "/Users/" . $user_id . "/Items/?Ids=" . $seriesId;
-    $all_episodes = apiCall($path);
+    $path = "/Users/" . $user_id . "/Items/" . $Id . "?";
 
-    //return first
-    return $all_episodes->Items[0];
+    return apiCall($path);
 }
 
 //3 API calls total for series
@@ -94,7 +91,7 @@ function parseEpisode($item, $unplayedCount = null)
     $menuItem->PosterID = (seasonPosterExists($first_from_season->SeasonId)) ? $first_from_season->SeasonId : $first_from_season->SeriesId;
 
     if ($unplayedCount == null) {
-        $series = getSeries($item->SeriesId);
+        $series = getItem($item->SeriesId);
         $unplayedCount = $series->UserData->UnplayedItemCount;
     }
     //or 1 if I want it to show up
