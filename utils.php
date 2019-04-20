@@ -44,9 +44,10 @@ function getLatest($Limit)
 {
     global $user_id, $GroupItems;
 
+    $type = $_GET["type"];
     $path = "/Users/" . $user_id .
         "/Items/Latest?GroupItems=" . $GroupItems .
-        "&Fields=Path&Limit=" . $Limit;
+        "&IncludeItemTypes=" . $type . "&Fields=Path&Limit=" . $Limit;
 
     return apiCall($path);
 }
