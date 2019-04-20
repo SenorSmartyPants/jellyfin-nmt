@@ -285,7 +285,7 @@ function printTitleTable()
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
             <td width="25%"></td>
-            <td width="50%" align="center" id="title" valign="top">&#160;</td>
+            <td width="50%" align="center" id="title" valign="top">&nbsp;</td>
 
 
             <td width="25%" align="right" id="page" valign="top">
@@ -304,8 +304,8 @@ function printTitleTable()
             </td>
         </tr>
         <tr>
-            <td>&#160;</td>
-            <td align="right" id="year" valign="top">&#160;</td>
+            <td>&nbsp;</td>
+            <td align="right" id="year" valign="top">&nbsp;</td>
         </tr>
     </table>
 <?php
