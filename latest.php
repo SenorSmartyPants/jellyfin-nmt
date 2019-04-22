@@ -35,6 +35,8 @@ roundedcorners=awesome
 tv-banners=false
 */
 
+$menuItems = array();
+
 function printMenuItem($menuItem)
 {
     global $api_url, $jukebox_url;
@@ -188,6 +190,11 @@ function printHeadEtc()
 
 function printFooter()
 {
+    global $menuItems;
+    //print popups last of all, so they have highest z-index on NMT
+    foreach ($menuItems as $key => $menuItem) {
+        printPopup($menuItem, 0, $key);
+    }
     ?>
     </body>
 
@@ -197,6 +204,7 @@ function printFooter()
 
 function printPosterTable($items)
 {
+    global $menuItems;
     //set table is centered
     $align = "left";
     ?>
@@ -235,7 +243,8 @@ function printPosterTable($items)
                     break;
             }
             printPosterTD($menuItem, 0, $key);
-            printPopup($menuItem, 0, $key);
+            //add menuItem to menuItems list for later
+            array_push($menuItems, $menuItem);
 
             //last item in row
             if (isEndOfRow($key)) {
