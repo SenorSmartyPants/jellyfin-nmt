@@ -150,7 +150,7 @@ function printHeadEtc()
             div.title{ visibility:hidden; }
             div.counter {font-size: 15pt; color: #AAAAAA; }
 
-            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; }
+            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; background-position-x: -85px; }
             a { font-size: 18pt; color: #AAAAAA; text-decoration: none; }
             img { border: 0; }
             table.main { width:1090; height:83; }
@@ -406,7 +406,7 @@ function printNavbar()
     global $jukebox_url;
 
     //83 final height for navbar in original
-    $imagePadHeight = 83; //56 in original layout
+    $imagePadHeight = 56; //56 in original layout
     ?>
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
