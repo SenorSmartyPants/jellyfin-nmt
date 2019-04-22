@@ -40,12 +40,13 @@ function firstEpisodeFromSeason($seasonId, $seasonNumber)
     return $all_episodes->Items[0];
 }
 
-function getDetailBaseURL($SeasonId, $ParentIndexNumber)
+function getSeasonURL($SeasonId, $ParentIndexNumber)
 {
+    global $jukebox_url;
     //find first episode in season, this will be YAMJ filename
     $first_from_season = firstEpisodeFromSeason($SeasonId, $ParentIndexNumber);
 
-    return pathinfo($first_from_season->Path)['filename'] . ".html";
+    return $jukebox_url . pathinfo($first_from_season->Path)['filename'] . ".html";
 }
 
 function getLatest($Limit)
@@ -95,7 +96,7 @@ function parseEpisode($item, $unplayedCount = null)
 
     $menuItem = new stdClass();
     $menuItem->Name = $item->SeriesName . ' ' . $item->SeasonName;
-    $menuItem->DetailBaseURL = getDetailBaseURL($item->SeasonId, $item->ParentIndexNumber);
+    $menuItem->DetailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
     $menuItem->PosterID = (seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
 
     if ($unplayedCount == null) {
@@ -111,10 +112,10 @@ function parseEpisode($item, $unplayedCount = null)
 
 //0 additional API calls
 function parseMovie($item) {
-    global $popupHeight, $popupWidth;
+    global $jukebox_url, $popupHeight, $popupWidth;
     $menuItem = new stdClass();
     $menuItem->Name = $item->Name;
-    $menuItem->DetailBaseURL = pathinfo($item->Path)['filename'] . ".html";
+    $menuItem->DetailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
     $menuItem->PosterID = $item->Id;
     $menuItem->UnplayedCount = null;
     $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?Height=" . $popupHeight . "&Width=" . $popupWidth;

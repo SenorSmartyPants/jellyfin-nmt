@@ -39,9 +39,9 @@ $menuItems = array();
 
 function printMenuItem($menuItem)
 {
-    global $api_url, $jukebox_url;
+    global $api_url;
     ?>
-    <a href="<?= $jukebox_url . $menuItem->DetailBaseURL ?>">
+    <a href="<?= $menuItem->DetailURL ?>">
         <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" /></a><br />
     <b><?= $menuItem->Name ?></b><br />
 <?php
@@ -298,7 +298,7 @@ function printPosterTD($menuItem, $gap, $position)
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center">
-        <a href="<?= $jukebox_url . $menuItem->DetailBaseURL ?>" onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="<?= $menuItem->DetailURL ?>" onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
     //start of row
