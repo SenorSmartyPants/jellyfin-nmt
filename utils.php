@@ -40,6 +40,14 @@ function firstEpisodeFromSeason($seasonId, $seasonNumber)
     return $all_episodes->Items[0];
 }
 
+function getDetailBaseURL($SeasonId, $ParentIndexNumber)
+{
+    //find first episode in season, this will be YAMJ filename
+    $first_from_season = firstEpisodeFromSeason($SeasonId, $ParentIndexNumber);
+
+    return pathinfo($first_from_season->Path)['filename'] . ".html";
+}
+
 function getLatest($Limit)
 {
     global $user_id, $GroupItems;
@@ -84,13 +92,11 @@ function parseSeries($item)
 function parseEpisode($item, $unplayedCount = null)
 {
     global $popupHeight, $popupWidth;
-    //find first episode in season, this will be YAMJ filename
-    $first_from_season = firstEpisodeFromSeason($item->SeasonId, $item->ParentIndexNumber);
 
     $menuItem = new stdClass();
-    $menuItem->Name = $first_from_season->SeriesName . ' ' . $first_from_season->SeasonName;
-    $menuItem->DetailBaseURL = pathinfo($first_from_season->Path)['filename'] . ".html";
-    $menuItem->PosterID = (seasonPosterExists($first_from_season->SeasonId)) ? $first_from_season->SeasonId : $first_from_season->SeriesId;
+    $menuItem->Name = $item->SeriesName . ' ' . $item->SeasonName;
+    $menuItem->DetailBaseURL = getDetailBaseURL($item->SeasonId, $item->ParentIndexNumber);
+    $menuItem->PosterID = (seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
 
     if ($unplayedCount == null) {
         $series = getItem($item->SeriesId);
