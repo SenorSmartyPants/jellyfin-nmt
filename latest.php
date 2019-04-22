@@ -169,15 +169,25 @@ function printHeadEtc()
         </style>
 
         <script>
+            var title = 1;
+            function bind() {
+                if ( title == 1 ) title = document.getElementById('title');
+            }
             function show(x) {
+                bind();
                 title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
-                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "visible"
-                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "visible"
+                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "visible";
+                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "visible";
             }
             function hide(x) {
+                bind();
                 title.firstChild.nodeValue = "\xa0";
-                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "hidden"
-                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "hidden"
+                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "hidden";
+                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "hidden";
+            }
+
+            function initpage() {
+                return false;
             }
         </script>
 
@@ -386,7 +396,7 @@ function printPosterTD($menuItem, $gap, $position)
             </xsl:if>                
         */
                                                                                                                                                                                                                                                                                                                                                                                     ?>>
-            <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="pictures/wall/transparent.png" /></a>
+            <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="<?= $jukebox_url ?>pictures/wall/transparent.png" /></a>
     </td>
 <?php
 }
