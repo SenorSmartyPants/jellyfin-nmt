@@ -18,11 +18,15 @@ function apiCall($path, $debug = false)
 
 function seasonPosterExists($seasonId)
 {
-    //seasons usually have a Primary or nothing
-    $path =  "/Items/" . $seasonId . "/Images/?";
-    $images = apiCall($path);
+    if ($seasonId != '') {
+        //seasons usually have a Primary or nothing
+        $path =  "/Items/" . $seasonId . "/Images/?";
+        $images = apiCall($path);
 
-    return (count($images) > 0);
+        return (count($images) > 0);
+    } else {
+        return false;
+    }
 }
 
 function firstEpisodeFromSeason($seasonId, $seasonNumber)
