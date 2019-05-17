@@ -2,6 +2,7 @@
 
 include 'index.php';
 
+$useSeasonNameForMenuItems = false;
 $Limit = 27;
 
 //skin options

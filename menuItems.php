@@ -1,6 +1,7 @@
 <?php
 
 include 'data.php';
+$useSeasonNameForMenuItems = true;
 
 //3 API calls total for series
 //1 here + 2 in parseEpisode
@@ -28,9 +29,16 @@ function parseSeries($item)
 function parseEpisode($item, $unplayedCount = null)
 {
     global $popupHeight, $popupWidth;
+    global $useSeasonNameForMenuItems;
 
     $menuItem = new stdClass();
-    $menuItem->Name = $item->SeriesName . ' ' . $item->SeasonName;
+
+    if ($useSeasonNameForMenuItems) {
+        $menuItem->Name = $item->SeriesName . ' ' . $item->SeasonName;
+    } else {
+        $menuItem->Name = $item->SeriesName . ' S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
+    }
+
     $menuItem->DetailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
     $menuItem->PosterID = (seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
 
