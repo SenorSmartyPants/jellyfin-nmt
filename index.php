@@ -3,15 +3,7 @@
 include 'secrets.php';
 include 'menuItems.php';
 
-$GroupItems = "true";
-$Limit = 27;
-
-//latest tv ==
-//&IncludeItemTypes=episode,series
-
 //skin options
-$nbThumbnailsPerPage = 27;
-$nbThumbnailsPerLine = 9;
 $thumbnailsWidth = 117;
 $thumbnailsHeight = 174;
 $popupWidth = 160;
@@ -401,7 +393,7 @@ function printPosterTD($menuItem, $gap, $position)
 <?php
 }
 
-function printNavbar()
+function printNavbar($title)
 {
     global $jukebox_url, $api_url, $user_switch_url, $user_ids, $current_users;
 
@@ -412,7 +404,7 @@ function printNavbar()
         <tr valign="top">
             <td align="left" valign="top" height="<?= $imagePadHeight ?>" width="1"><img src="<?= $jukebox_url ?>pictures/detail/1x688.png" height="<?= $imagePadHeight ?>" /></td>
             <td class="indexname" id="indexmenuleft" align="left" valign="middle" height="<?= $imagePadHeight ?>" width="265">
-                Latest
+                <?= $title ?>
             </td>
             <td id="indexmenuright" align="right" valign="middle">&nbsp;
             <a href="<?= $user_switch_url ?>"><?php
@@ -458,18 +450,6 @@ function printTitleTable()
     </table>
 <?php
 }
-
-
-
-printHeadEtc();
-
-printNavbar();
-
-printPosterTable(getLatest($Limit));
-
-printTitleTable();
-
-printFooter();
 
 //echo "<div class=\"indexname\">API call count = $apiCallCount</div>";
 ?>
