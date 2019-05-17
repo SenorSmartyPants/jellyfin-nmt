@@ -150,7 +150,7 @@ function printHeadEtc()
             div.title{ visibility:hidden; }
             div.counter {font-size: 15pt; color: #AAAAAA; }
 
-            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; background-position-x: -85px; }
+            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; background-position-x: -85px; background-repeat: no-repeat;}
             a { font-size: 18pt; color: #AAAAAA; text-decoration: none; }
             img { border: 0; }
             table.main { width:1090; height:83; }
@@ -193,7 +193,7 @@ function printHeadEtc()
 
     </head>
 
-    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="transparent" onload="initpage()" background="<?= $jukebox_url ?>pictures/wall/background1.jpg">
+    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="transparent" onload="initpage()" background="images/background.png">
 
     <?php
 }
