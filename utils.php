@@ -65,6 +65,17 @@ function getLatest($Limit)
     return apiCall($path);
 }
 
+function getNextUp($Limit)
+{
+    global $user_id;
+
+    $path = "/Shows/NextUp?UserID=" . $user_id .
+        "&Fields=Path&Limit=" . $Limit;
+    //TODO: ProviderID could be added to fields for play/checkin from browse screen
+
+    return apiCall($path);
+}
+
 function getItem($Id) {
     global $user_id;
 
