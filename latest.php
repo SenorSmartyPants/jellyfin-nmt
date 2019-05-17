@@ -1,7 +1,7 @@
 <?php
 
 include 'secrets.php';
-include 'utils.php';
+include 'menuItems.php';
 
 $GroupItems = "true";
 $Limit = 27;
