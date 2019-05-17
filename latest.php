@@ -286,7 +286,7 @@ function printPopup($menuItem, $gap, $position)
     <div id="title<?= $placement ?>"><?= $menuItem->Name ?></div>
     <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
     <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url ?>pictures/wall/hover-frame.png" />
-    <?php
+<?php
 }
 
 //gap is for skipping rows, in sets on the bottom
@@ -403,7 +403,7 @@ function printPosterTD($menuItem, $gap, $position)
 
 function printNavbar()
 {
-    global $jukebox_url;
+    global $jukebox_url, $api_url, $user_switch_url, $user_ids, $current_users;
 
     //83 final height for navbar in original
     $imagePadHeight = 56; //56 in original layout
@@ -415,6 +415,12 @@ function printNavbar()
                 Latest
             </td>
             <td id="indexmenuright" align="right">&nbsp;</td>
+            <a href="<?= $user_switch_url ?>"><?php
+foreach($current_users as $user) {
+?><img src="<?= $api_url ?>/Users/<?= $user_ids[$user] ?>/Images/Primary" width="45" height="45" /><?php
+}
+?></a>&nbsp;
+            </td>
         </tr>
     </table>
 <?php
