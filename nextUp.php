@@ -12,9 +12,7 @@ $nbThumbnailsPerLine = 9;
 
 printHeadEtc();
 
-printNavbar("Next Up");
-
-printPosterTable(getNextUp($Limit)->Items);
+printNavbarAndPosters("Next Up", getNextUp($Limit)->Items);
 
 printTitleTable();
 

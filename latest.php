@@ -26,9 +26,7 @@ switch ($_GET["type"]) {
         break;
 }
 
-printNavbar($Title);
-
-printPosterTable(getLatest($Limit));
+printNavbarAndPosters($Title, getLatest($Limit));
 
 printTitleTable();
 

@@ -204,6 +204,19 @@ function printFooter()
 <?php
 }
 
+function printNavbarAndPosters($title, $items)
+{
+    ?>
+    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td height="598">
+    <?php  
+    printNavbar($title);
+
+    printPosterTable($items);
+?>
+    </td></tr></table>
+<?php    
+}
+
 function printPosterTable($items)
 {
     global $menuItems;
