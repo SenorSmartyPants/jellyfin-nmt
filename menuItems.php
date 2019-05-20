@@ -3,8 +3,8 @@
 include 'data.php';
 $useSeasonNameForMenuItems = true;
 
-//3 API calls total for series
-//1 here + 2 in parseEpisode
+//2 API calls total for series
+//1 here + 1 in parseEpisode
 function parseSeries($item)
 {
     global $user_id;
@@ -24,8 +24,8 @@ function parseSeries($item)
     return $menuItem;
 }
 
-//3 API calls for Episode from Latest
-//2 API additional calls for Series from Latest
+//2 API calls for Episode from Latest
+//1 API additional calls for Series from Latest
 function parseEpisode($item, $unplayedCount = null)
 {
     global $popupHeight, $popupWidth;
@@ -40,9 +40,11 @@ function parseEpisode($item, $unplayedCount = null)
     }
 
     $menuItem->DetailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+    //API
     $menuItem->PosterID = (seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
 
     if ($unplayedCount == null) {
+        //API
         $series = getItem($item->SeriesId);
         $unplayedCount = $series->UserData->UnplayedItemCount;
     }
