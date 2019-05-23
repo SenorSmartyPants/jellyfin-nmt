@@ -396,10 +396,10 @@ function printNavbar($title)
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
             <td align="left" valign="top" height="<?= $imagePadHeight ?>" width="1"><img src="<?= $jukebox_url ?>pictures/detail/1x688.png" height="<?= $imagePadHeight ?>" /></td>
-            <td class="indexname" id="indexmenuleft" align="left" valign="middle" height="<?= $imagePadHeight ?>" width="265">
+            <td class="indexname" id="indexmenuleft" align="left" valign="top" height="<?= $imagePadHeight ?>" width="265">
                 <?= $title ?>
             </td>
-            <td id="indexmenuright" align="right" valign="middle">&nbsp;
+            <td id="indexmenuright" align="right">&nbsp;
             <a href="<?= $user_switch_url ?>"><?php
 foreach($current_users as $user) {
 ?><img src="<?= $api_url ?>/Users/<?= $user_ids[$user] ?>/Images/Primary" width="45" height="45" /><?php
