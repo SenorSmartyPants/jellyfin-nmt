@@ -433,6 +433,7 @@ foreach($current_users as $user) {
 
 function printTitleTable()
 {
+    global $apiCallCount;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
@@ -441,7 +442,7 @@ function printTitleTable()
             <td width="50%" align="center" id="title" valign="top">&nbsp;</td>
 
 
-            <td width="25%" align="right" id="page" valign="top">
+            <td width="25%" align="right" id="page" valign="top">API call count = <?= $apiCallCount ?>
                 <!--<xsl:value-of select="$Page"/>&#160;
 	
 	        <xsl:if test="$ForComputer='false'"><xsl:value-of select="$currentIndex"/></xsl:if>
@@ -464,5 +465,4 @@ function printTitleTable()
 <?php
 }
 
-//echo "<div class=\"indexname\">API call count = $apiCallCount</div>";
 ?>
