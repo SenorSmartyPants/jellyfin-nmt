@@ -142,10 +142,10 @@ function printHeadEtc()
             div.title{ visibility:hidden; }
             div.counter {font-size: 15pt; color: #AAAAAA; }
 
-            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; background-position-x: -85px; background-repeat: no-repeat;}
+            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; }
             a { font-size: 18pt; color: #AAAAAA; text-decoration: none; }
             img { border: 0; }
-            table.main { width:1090; height:83; }
+            table.main { width:1090; }
             table.categories { width:180; }
             td { text-decoration: none;}
             td.movies { padding-right: 10px;}
@@ -159,6 +159,20 @@ function printHeadEtc()
                 color: #8e8e8e;
             }
         </style>
+
+        <style>
+            td#title { background-color: #77fffddd; }
+            td#page { background-color: #77ff77ff; }
+            table.movies { background-color: #ccAAAAAA; }
+            .indexname { background-color: #cccc00; }
+            td#indexmenuright { background-color: #cc666666; }
+
+            @media screen {
+                #popupWrapper { position: absolute; top: 30px; left: 93px; }
+                body { margin-top: 36px; margin-left: 93px; background-repeat: no-repeat; width: 1094px }
+            }
+        </style>
+
 
         <script>
             var title = 1;
@@ -193,11 +207,15 @@ function printHeadEtc()
 function printFooter()
 {
     global $menuItems;
+    ?>
+        <div id="popupWrapper">
+    <?php
     //print popups last of all, so they have highest z-index on NMT
     foreach ($menuItems as $key => $menuItem) {
         printPopup($menuItem, 0, $key);
     }
     ?>
+        </div>
     </body>
 
     </html>
@@ -410,8 +428,7 @@ function printNavbar($title)
 {
     global $jukebox_url, $api_url, $user_switch_url, $user_ids, $current_users;
 
-    //83 final height for navbar in original
-    $imagePadHeight = 56; //56 in original layout
+    $imagePadHeight = 56;
     ?>
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
