@@ -5,9 +5,13 @@ include 'index.php';
 $GroupItems = "true";
 $Limit = 27;
 
-//skin options
-$nbThumbnailsPerPage = 27;
-$nbThumbnailsPerLine = 9;
+$items = getLatest($Limit);
+
+if (count($items) > 12) {
+    setIndexStyle(IndexStyleEnum::Popup9x3);
+} else {
+    setIndexStyle(IndexStyleEnum::Popup6x2);
+}
 
 
 printHeadEtc();
@@ -26,7 +30,7 @@ switch ($_GET["type"]) {
         break;
 }
 
-printNavbarAndPosters($Title, getLatest($Limit));
+printNavbarAndPosters($Title, $items);
 
 printTitleTable();
 

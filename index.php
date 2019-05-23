@@ -3,11 +3,52 @@
 include 'secrets.php';
 include 'menuItems.php';
 
-//skin options
-$thumbnailsWidth = 117;
-$thumbnailsHeight = 174;
-$popupWidth = 160;
-$popupHeight = 237;
+abstract class IndexStyleEnum
+{
+    const Popup9x3 = 0;
+    const Popup6x2 = 1;
+}
+
+function setIndexStyle($indexStyle)
+{
+    global $thumbnailsWidth, $thumbnailsHeight, $popupWidth, $popupHeight;
+    global $Limit, $nbThumbnailsPerPage, $nbThumbnailsPerLine;
+    global $hoverFrame, $cssFile;
+
+    switch ($indexStyle) {
+        case IndexStyleEnum::Popup6x2:
+            $thumbnailsWidth = 176;
+            $thumbnailsHeight = 261;
+            $popupWidth = 218;
+            $popupHeight = 323;
+    
+            $Limit = 12;
+    
+            $nbThumbnailsPerPage = 12;
+            $nbThumbnailsPerLine = 6;
+    
+            $hoverFrame = "pictures/wall/hover-frame2.png";
+            $cssFile = "6x2PosterIndex.css";
+            break;
+    
+        case IndexStyleEnum::Popup9x3:
+        default:
+            $thumbnailsWidth = 117;
+            $thumbnailsHeight = 174;
+            $popupWidth = 160;
+            $popupHeight = 237;
+    
+            $Limit = 27;
+    
+            $nbThumbnailsPerPage = 27;
+            $nbThumbnailsPerLine = 9;
+    
+            $hoverFrame = "pictures/wall/hover-frame.png";
+            $cssFile = "9x3PosterIndex.css";
+            break;
+    }
+}
+
 
 /*
 skin-user.properties
@@ -41,7 +82,7 @@ function printMenuItem($menuItem)
 
 function printHeadEtc()
 {
-    global $jukebox_url;
+    global $jukebox_url, $cssFile;
     //TODO:background can be set to fanart... 
     ?>
     <html>
@@ -52,89 +93,11 @@ function printHeadEtc()
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Moviejukebox</title>
 
+        <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <style>
-            #imgDVD1 { visibility: hidden; position: absolute; top: 12px; left: 11px; }
-            #frmDVD1 { visibility: hidden; position: absolute; top: 1px; left: 0px; }
-            #title1 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD2 { visibility: hidden; position: absolute; top: 12px; left: 103px; }
-            #frmDVD2 { visibility: hidden; position: absolute; top: 1px; left: 93px; }
-            #title2 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD3 { visibility: hidden; position: absolute; top: 12px; left: 224px; }
-            #frmDVD3 { visibility: hidden; position: absolute; top: 1px; left: 214px; }
-            #title3 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD4 { visibility: hidden; position: absolute; top: 12px; left: 345px; }
-            #frmDVD4 { visibility: hidden; position: absolute; top: 1px; left: 335px; }
-            #title4 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD5 { visibility: hidden; position: absolute; top: 12px; left: 466px; }
-            #frmDVD5 { visibility: hidden; position: absolute; top: 1px; left: 456px; }
-            #title5 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD6 { visibility: hidden; position: absolute; top: 12px; left: 587px; }
-            #frmDVD6 { visibility: hidden; position: absolute; top: 1px; left: 577px; }
-            #title6 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD7 { visibility: hidden; position: absolute; top: 12px; left: 708px; }
-            #frmDVD7 { visibility: hidden; position: absolute; top: 1px; left: 698px; }
-            #title7 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD8 { visibility: hidden; position: absolute; top: 12px; left: 829px; }
-            #frmDVD8 { visibility: hidden; position: absolute; top: 1px; left: 819px; }
-            #title8 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD9 { visibility: hidden; position: absolute; top: 12px; left: 924px; }
-            #frmDVD9 { visibility: hidden; position: absolute; top: 1px; left: 914px; }
-            #title9 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD10 { visibility: hidden; position: absolute; top: 190px; left: 11px; }
-            #frmDVD10 { visibility: hidden; position: absolute; top: 179px; left: 0px; }
-            #title10 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD11 { visibility: hidden; position: absolute; top: 190px; left: 103px; }
-            #frmDVD11 { visibility: hidden; position: absolute; top: 179px; left: 93px; }
-            #title11 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD12 { visibility: hidden; position: absolute; top: 190px; left: 224px; }
-            #frmDVD12 { visibility: hidden; position: absolute; top: 179px; left: 214px; }
-            #title12 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD13 { visibility: hidden; position: absolute; top: 190px; left: 345px; }
-            #frmDVD13 { visibility: hidden; position: absolute; top: 179px; left: 335px; }
-            #title13 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD14 { visibility: hidden; position: absolute; top: 190px; left: 466px; }
-            #frmDVD14 { visibility: hidden; position: absolute; top: 179px; left: 456px; }
-            #title14 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD15 { visibility: hidden; position: absolute; top: 190px; left: 587px; }
-            #frmDVD15 { visibility: hidden; position: absolute; top: 179px; left: 577px; }
-            #title15 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD16 { visibility: hidden; position: absolute; top: 190px; left: 708px; }
-            #frmDVD16 { visibility: hidden; position: absolute; top: 179px; left: 698px; }
-            #title16 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD17 { visibility: hidden; position: absolute; top: 190px; left: 829px; }
-            #frmDVD17 { visibility: hidden; position: absolute; top: 179px; left: 819px; }
-            #title17 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD18 { visibility: hidden; position: absolute; top: 190px; left: 924px; }
-            #frmDVD18 { visibility: hidden; position: absolute; top: 179px; left: 914px; }
-            #title18 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD19 { visibility: hidden; position: absolute; top: 364px; left: 11px; }
-            #frmDVD19 { visibility: hidden; position: absolute; top: 353px; left: 0px; }
-            #title19 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD20 { visibility: hidden; position: absolute; top: 364px; left: 103px; }
-            #frmDVD20 { visibility: hidden; position: absolute; top: 353px; left: 93px; }
-            #title20 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD21 { visibility: hidden; position: absolute; top: 364px; left: 224px; }
-            #frmDVD21 { visibility: hidden; position: absolute; top: 353px; left: 214px; }
-            #title21 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD22 { visibility: hidden; position: absolute; top: 364px; left: 345px; }
-            #frmDVD22 { visibility: hidden; position: absolute; top: 353px; left: 335px; }
-            #title22 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD23 { visibility: hidden; position: absolute; top: 364px; left: 466px; }
-            #frmDVD23 { visibility: hidden; position: absolute; top: 353px; left: 456px; }
-            #title23 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD24 { visibility: hidden; position: absolute; top: 364px; left: 587px; }
-            #frmDVD24 { visibility: hidden; position: absolute; top: 353px; left: 577px; }
-            #title24 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD25 { visibility: hidden; position: absolute; top: 364px; left: 708px; }
-            #frmDVD25 { visibility: hidden; position: absolute; top: 353px; left: 698px; }
-            #title25 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD26 { visibility: hidden; position: absolute; top: 364px; left: 829px; }
-            #frmDVD26 { visibility: hidden; position: absolute; top: 353px; left: 819px; }
-            #title26 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            #imgDVD27 { visibility: hidden; position: absolute; top: 364px; left: 924px; }
-            #frmDVD27 { visibility: hidden; position: absolute; top: 353px; left: 914px; }
-            #title27 { visibility: hidden; position: absolute; top: 600px; left: 1px; font-size: 18pt; color: #868686; }
-            
+<?php readfile($cssFile); ?>
+        </style>
+        <style>
             td#title { font-size: 18pt; color: #868686; }
             #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
             td#page { font-size: 18pt; color: #868686; }
@@ -303,12 +266,12 @@ function isEndOfRow($position)
 
 function printPopup($menuItem, $gap, $position)
 {
-    global $api_url, $jukebox_url;
+    global $api_url, $jukebox_url, $hoverFrame;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <div id="title<?= $placement ?>"><?= $menuItem->Name ?></div>
     <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
-    <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url ?>pictures/wall/hover-frame.png" />
+    <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
 <?php
 }
 
