@@ -28,7 +28,7 @@ function setIndexStyle($indexStyle)
             $nbThumbnailsPerLine = 6;
     
             $hoverFrame = "pictures/wall/hover-frame2.png";
-            $cssFile = "6x2PosterIndex.css";
+            $cssFile = "css/6x2PosterIndex.css";
             break;
     
         case IndexStyleEnum::Popup9x3:
@@ -44,7 +44,7 @@ function setIndexStyle($indexStyle)
             $nbThumbnailsPerLine = 9;
     
             $hoverFrame = "pictures/wall/hover-frame.png";
-            $cssFile = "9x3PosterIndex.css";
+            $cssFile = "css/9x3PosterIndex.css";
             break;
     }
 }
@@ -121,11 +121,6 @@ function printHeadEtc()
         </style>
 
         <style>
-            td#title { background-color: #77fffddd; }
-            td#page { background-color: #77ff77ff; }
-            table.movies { background-color: #ccAAAAAA; }
-            .indexname { background-color: #cccc00; }
-            td#indexmenuright { background-color: #cc666666; }
 
             @media screen {
                 #popupWrapper { position: absolute; top: 30px; left: 93px; }
@@ -159,7 +154,7 @@ function printHeadEtc()
 
     </head>
 
-    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="transparent" onload="initpage()" background="images/background.png">
+    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="transparent" onload="initpage()">
 
     <?php
 }
