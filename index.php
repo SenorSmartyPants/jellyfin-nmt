@@ -89,14 +89,11 @@ function printHeadEtc()
 
     <head>
         <link rel="shortcut icon" href="/favicon.ico" />
-        <!--<link rel="StyleSheet" type="text/css" href="exportindex_item_pch.css"></link>-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Moviejukebox</title>
 
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
-        <style>
-<?php readfile($cssFile); ?>
-        </style>
+        <link rel="StyleSheet" type="text/css" href="<?= $cssFile ?>"/>
         <style>
             td#title { font-size: 18pt; color: #868686; }
             #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
