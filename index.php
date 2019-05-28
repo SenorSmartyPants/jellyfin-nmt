@@ -82,13 +82,13 @@ function printMenuItem($menuItem)
 
 function printHeadEtc()
 {
-    global $jukebox_url, $cssFile;
+    global $api_url, $cssFile;
     //TODO:background can be set to fanart... 
     ?>
     <html>
 
     <head>
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="<?= $api_url ?>/../web/favicon.ico" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Moviejukebox</title>
 
@@ -129,6 +129,8 @@ function printHeadEtc()
         </style>
 
 
+        <link rel="stylesheet" type="text/css" href="css/themes/dark.css" />
+
         <script>
             var title = 1;
             function bind() {
@@ -154,7 +156,7 @@ function printHeadEtc()
 
     </head>
 
-    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="transparent" onload="initpage()">
+    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()">
 
     <?php
 }
@@ -405,16 +407,16 @@ foreach($current_users as $user) {
 
 function printTitleTable()
 {
-    global $apiCallCount;
+    global $api_url, $apiCallCount;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
-            <td width="25%"></td>
+            <td width="25%" valign="top"><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/></td>
             <td width="50%" align="center" id="title" valign="top">&nbsp;</td>
 
 
-            <td width="25%" align="right" id="page" valign="top">API call count = <?= $apiCallCount ?>
+            <td width="25%" align="right" id="page" valign="top"><!-- API call count = <?= $apiCallCount ?> -->
                 <!--<xsl:value-of select="$Page"/>&#160;
 	
 	        <xsl:if test="$ForComputer='false'"><xsl:value-of select="$currentIndex"/></xsl:if>
