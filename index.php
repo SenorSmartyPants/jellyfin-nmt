@@ -121,10 +121,9 @@ function printHeadEtc()
         </style>
 
         <style>
-
             @media screen {
-                #popupWrapper { position: absolute; top: 30px; left: 93px; }
-                body { margin-top: 36px; margin-left: 93px; background-repeat: no-repeat; width: 1094px }
+                #popupWrapper { position: absolute; top: 30px; }
+                body { margin-top: 36px; margin-left: 93px; padding-right: 93px; background-repeat: no-repeat; width: 1094px }
             }
         </style>
 
