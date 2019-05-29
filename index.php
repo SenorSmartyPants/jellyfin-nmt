@@ -94,30 +94,16 @@ function printHeadEtc()
 
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $cssFile ?>"/>
+        <link rel="StyleSheet" type="text/css" href="css/themes/dark.css" />
         <style>
-            td#title { font-size: 18pt; color: #868686; }
             #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
-            td#page { font-size: 18pt; color: #868686; }
-            td#year { font-size: 18pt; color: #868686; }
             div.title{ visibility:hidden; }
-            div.counter {font-size: 15pt; color: #AAAAAA; }
-
-            body { font-size: 10pt; color: #AAAAAA; text-decoration: none; }
-            a { font-size: 18pt; color: #AAAAAA; text-decoration: none; }
             img { border: 0; }
             table.main { width:1090; }
             table.categories { width:180; }
             td { text-decoration: none;}
             td.movies { padding-right: 10px;}
-
-
             .hidden { visibility: hidden; display: none;}
-
-            .indexname {
-                font-size: 23pt;
-                font-weight: normal;
-                color: #8e8e8e;
-            }
         </style>
 
         <style>
@@ -126,9 +112,6 @@ function printHeadEtc()
                 body { margin-top: 36px; margin-left: 93px; padding-right: 93px; background-repeat: no-repeat; width: 1094px }
             }
         </style>
-
-
-        <link rel="stylesheet" type="text/css" href="css/themes/dark.css" />
 
         <script>
             var title = 1;

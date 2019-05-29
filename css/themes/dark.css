@@ -1,7 +1,38 @@
-body { 
-    background-color: #101010; 
+body {
+    background-color: #101010;
     color: #dddddd;
+    font-size: 10pt;
+    text-decoration: none;
 }
+
 .indexname {
     color: #dddddd;
+    font-size: 23pt;
+    font-weight: normal;
+}
+
+td#title {
+    color: #dddddd;
+    font-size: 18pt;
+}
+
+td#page {
+    color: #868686;
+    font-size: 18pt;
+}
+
+td#year {
+    color: #868686;
+    font-size: 18pt;
+}
+
+div.counter {
+    color: #AAAAAA;
+    font-size: 15pt;
+}
+
+a {
+    color: #AAAAAA;
+    font-size: 18pt;
+    text-decoration: none;
 }
