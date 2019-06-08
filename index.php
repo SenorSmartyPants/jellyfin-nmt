@@ -80,7 +80,7 @@ function printMenuItem($menuItem)
 <?php
 }
 
-function printHeadEtc()
+function printHeadEtc($onloadset = "1")
 {
     global $api_url, $cssFile;
     //TODO:background can be set to fanart... 
@@ -138,7 +138,7 @@ function printHeadEtc()
 
     </head>
 
-    <body bgproperties="fixed" onloadset="1" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()">
+    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()">
 
     <?php
 }
