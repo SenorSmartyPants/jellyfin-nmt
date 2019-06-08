@@ -12,10 +12,8 @@ function parseSeries($item)
     //gets first unwatched episode for this series
     //sorting by Premiere Date - not quite right for dvd ordered series
     //but next up doesn't work right after show is deleted
-    $path = "/Users/" . $user_id . "/Items?ParentID=" . $item->Id .
-        "&Recursive=true&IncludeItemTypes=Episode&IsPlayed=false&Limit=1&SortBy=PremiereDate&";
-
-    $unwatched = apiCall($path);
+        $unwatched = getUsersItems(null, null, 1, $item->Id, null,
+            "PremiereDate", "Episode", true, false, true);
 
     $first_unwatched = $unwatched->Items[0];
 

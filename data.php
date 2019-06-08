@@ -31,14 +31,10 @@ function seasonPosterExists($seasonId)
 
 function firstEpisodeFromSeason($seasonId, $seasonNumber)
 {
-    global $user_id;
-
     //all episodes from unwatched season, no season data
     //ParentIndexNumber - don't include specials in regular seasons
-    $path = "/Users/" . $user_id .
-        "/Items/?Limit=1&ParentID=" . $seasonId . "&ParentIndexNumber=" . $seasonNumber .
-        "&Fields=Path";
-    $all_episodes = apiCall($path);
+    $all_episodes = getUsersItems(null, "Path", 1, $seasonId, $seasonNumber);
+    //$all_episodes = apiCall($path);
 
     //return first
     return $all_episodes->Items[0];
@@ -53,16 +49,44 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return $jukebox_url . pathinfo($first_from_season->Path)['filename'] . ".html";
 }
 
-function getLatest($Limit)
+function getUsersItems($suffix = null, $fields = null, $limit = null, 
+    $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
+    $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null)
 {
-    global $user_id, $GroupItems;
+    global $user_id;
 
-    $type = $_GET["type"];
-    $path = "/Users/" . $user_id .
-        "/Items/Latest?GroupItems=" . $GroupItems .
-        "&IncludeItemTypes=" . $type . "&Fields=Path&Limit=" . $Limit;
+    $path = "/Users/" . $user_id . "/Items/" . $suffix . "?";
+
+    $path .= $fields ? "Fields=" . $fields : "";
+    $path .= $startIndex ? "&StartIndex=" . $startIndex : "";
+    $path .= $limit ? "&Limit=" . $limit : "";
+    $path .= $parentID ? "&ParentID=" . $parentID : "";
+    $path .= $parentIndexNumber ? "&ParentIndexNumber=" . $parentIndexNumber : "";
+    $path .= $type ? "&IncludeItemTypes=" . $type : "";
+    $path .= $excludeItemTypes ? "&ExcludeItemTypes=" . $excludeItemTypes : "";
+    $path .= $sortBy ? "&SortBy=" . $sortBy : "";
+    $path .= !is_null($groupItems) ? "&GroupItems=" . json_encode($groupItems) : "";
+    $path .= !is_null($isPlayed) ? "&IsPlayed=" . json_encode($isPlayed) : "";
+    $path .= !is_null($Recursive) ? "&Recursive=" . json_encode($Recursive) : "";
+
 
     return apiCall($path);
+}
+
+function getUsersViews()
+{
+    global $user_id;
+
+    $path = "/Users/" . $user_id . "/Views/?";
+    return apiCall($path);
+}
+
+function getLatest($Limit)
+{
+    global $GroupItems;
+
+    $type = $_GET["type"];
+    return getUsersItems("Latest", "Path", $Limit, null, null, null, $type, $GroupItems);
 }
 
 function getNextUp($Limit)
@@ -76,11 +100,12 @@ function getNextUp($Limit)
     return apiCall($path);
 }
 
+function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null)
+{
+    return getUsersItems(null, "Path", $Limit, $parentID, null, "SortName", $type, null, null, $recursive, $StartIndex, null);
+}
+
 function getItem($Id) {
-    global $user_id;
-
-    $path = "/Users/" . $user_id . "/Items/" . $Id . "?";
-
-    return apiCall($path);
+    return getUsersItems($Id);
 }
 ?>
