@@ -7,13 +7,22 @@ abstract class IndexStyleEnum
 {
     const Popup9x3 = 0;
     const Popup6x2 = 1;
+    const PopupPosterDynamic = 2; //will be 6x2 if count(index) >= 12
 }
 
-function setIndexStyle($indexStyle)
+function setIndexStyle($indexStyle, $indexCount = null)
 {
     global $thumbnailsWidth, $thumbnailsHeight, $popupWidth, $popupHeight;
     global $Limit, $nbThumbnailsPerPage, $nbThumbnailsPerLine;
     global $hoverFrame, $cssFile;
+
+    if ($indexStyle == IndexStyleEnum::PopupPosterDynamic) {
+        if (is_null($indexCount) || $indexCount > 12) {
+            $indexStyle = IndexStyleEnum::Popup9x3;
+        } else {
+            $indexStyle = IndexStyleEnum::Popup6x2;
+        }
+    }
 
     switch ($indexStyle) {
         case IndexStyleEnum::Popup6x2:

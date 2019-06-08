@@ -7,12 +7,7 @@ $Limit = 27;
 
 $items = getLatest($Limit);
 
-if (count($items) > 12) {
-    setIndexStyle(IndexStyleEnum::Popup9x3);
-} else {
-    setIndexStyle(IndexStyleEnum::Popup6x2);
-}
-
+setIndexStyle(IndexStyleEnum::PopupPosterDynamic, count($items));
 
 printHeadEtc();
 
