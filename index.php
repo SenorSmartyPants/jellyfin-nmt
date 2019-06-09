@@ -5,9 +5,9 @@ include 'menuItems.php';
 
 abstract class IndexStyleEnum
 {
-    const Popup9x3 = 0;
-    const Popup6x2 = 1;
-    const PopupPosterDynamic = 2; //will be 6x2 if count(index) >= 12
+    const PosterPopup9x3 = 0;
+    const PosterPopup6x2 = 1;
+    const PosterPopupDynamic = 2; //will be 6x2 if count(index) >= 12
 }
 
 function setIndexStyle($indexStyle, $indexCount = null)
@@ -16,16 +16,16 @@ function setIndexStyle($indexStyle, $indexCount = null)
     global $Limit, $nbThumbnailsPerPage, $nbThumbnailsPerLine;
     global $hoverFrame, $cssFile;
 
-    if ($indexStyle == IndexStyleEnum::PopupPosterDynamic) {
+    if ($indexStyle == IndexStyleEnum::PosterPopupDynamic) {
         if (is_null($indexCount) || $indexCount > 12) {
-            $indexStyle = IndexStyleEnum::Popup9x3;
+            $indexStyle = IndexStyleEnum::PosterPopup9x3;
         } else {
-            $indexStyle = IndexStyleEnum::Popup6x2;
+            $indexStyle = IndexStyleEnum::PosterPopup6x2;
         }
     }
 
     switch ($indexStyle) {
-        case IndexStyleEnum::Popup6x2:
+        case IndexStyleEnum::PosterPopup6x2:
             $thumbnailsWidth = 176;
             $thumbnailsHeight = 261;
             $popupWidth = 218;
@@ -40,7 +40,7 @@ function setIndexStyle($indexStyle, $indexCount = null)
             $cssFile = "css/6x2PosterIndex.css";
             break;
     
-        case IndexStyleEnum::Popup9x3:
+        case IndexStyleEnum::PosterPopup9x3:
         default:
             $thumbnailsWidth = 117;
             $thumbnailsHeight = 174;
