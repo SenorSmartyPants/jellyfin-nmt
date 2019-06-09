@@ -119,6 +119,8 @@ function printHeadEtc($onloadset = "1")
             @media screen {
                 #popupWrapper { position: absolute; top: 30px; }
                 body { margin-top: 36px; margin-left: 93px; padding-right: 93px; background-repeat: no-repeat; width: 1094px }
+
+                html { background-color: transparent; } /* override from theme.css. Messed with debug background placement */
             }
         </style>
 
