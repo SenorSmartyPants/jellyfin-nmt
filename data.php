@@ -65,9 +65,9 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
     $path .= $type ? "&IncludeItemTypes=" . $type : "";
     $path .= $excludeItemTypes ? "&ExcludeItemTypes=" . $excludeItemTypes : "";
     $path .= $sortBy ? "&SortBy=" . $sortBy : "";
-    $path .= !is_null($groupItems) ? "&GroupItems=" . json_encode($groupItems) : "";
-    $path .= !is_null($isPlayed) ? "&IsPlayed=" . json_encode($isPlayed) : "";
-    $path .= !is_null($Recursive) ? "&Recursive=" . json_encode($Recursive) : "";
+    $path .= !is_null($groupItems) ? "&GroupItems=" . ( $groupItems ? "true" : "false" ) : "";
+    $path .= !is_null($isPlayed) ? "&IsPlayed=" . ( $isPlayed ? "true" : "false" ) : "";
+    $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
 
 
     return apiCall($path);
