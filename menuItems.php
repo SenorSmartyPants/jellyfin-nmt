@@ -32,9 +32,11 @@ function parseEpisode($item, $unplayedCount = null)
     $menuItem = new stdClass();
 
     if ($useSeasonNameForMenuItems) {
-        $menuItem->Name = $item->SeriesName . ' ' . $item->SeasonName;
+        $menuItem->Name = $item->SeriesName;
+        $menuItem->Subtitle = $item->SeasonName;
     } else {
-        $menuItem->Name = $item->SeriesName . ' S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
+        $menuItem->Name = $item->SeriesName;
+        $menuItem->Subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
     }
 
     $menuItem->DetailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
@@ -58,6 +60,7 @@ function parseMovie($item) {
     global $jukebox_url, $popupHeight, $popupWidth;
     $menuItem = new stdClass();
     $menuItem->Name = $item->Name;
+    $menuItem->Subtitle = $item->ProductionYear;
     $menuItem->DetailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
     $menuItem->PosterID = $item->Id;
     $menuItem->UnplayedCount = null;

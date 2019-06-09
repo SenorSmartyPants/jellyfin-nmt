@@ -124,18 +124,23 @@ function printHeadEtc($onloadset = "1")
 
         <script>
             var title = 1;
+            var subtitle = 1;
+
             function bind() {
                 if ( title == 1 ) title = document.getElementById('title');
+                if (subtitle == 1) subtitle = document.getElementById('subtitle');
             }
             function show(x) {
                 bind();
                 title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
+                subtitle.firstChild.nodeValue = document.getElementById('subtitle'+x).firstChild.nodeValue;;
                 document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "visible";
             }
             function hide(x) {
                 bind();
                 title.firstChild.nodeValue = "\xa0";
+                subtitle.firstChild.nodeValue = "\xa0";
                 document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "hidden";
                 document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "hidden";
             }
@@ -255,6 +260,7 @@ function printPopup($menuItem, $gap, $position)
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <div id="title<?= $placement ?>"><?= $menuItem->Name ?></div>
+    <div id="subtitle<?= $placement ?>" class="hidden"><?= $menuItem->Subtitle ?></div>
     <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
     <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
 <?php
@@ -404,7 +410,16 @@ function printTitleTable()
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
             <td width="25%" valign="top"><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/></td>
-            <td width="50%" align="center" id="title" valign="top">&nbsp;</td>
+            <td width="50%" align="center" valign="top">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center" id="title" valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="center" id="subtitle" valign="top">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
 
 
             <td width="25%" align="right" id="page" valign="top"><!-- API call count = <?= $apiCallCount ?> -->
@@ -422,10 +437,7 @@ function printTitleTable()
 	        &#160;<xsl:value-of select="$OutOf"/>&#160;<a onfocusload=""><xsl:attribute name="href"><xsl:value-of select="library/category[@current='true']/index[@current='true']/@next" />.html</xsl:attribute><xsl:value-of select="$lastIndex" /></a>-->
             </td>
         </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td align="right" id="year" valign="top">&nbsp;</td>
-        </tr>
+
     </table>
 <?php
 }

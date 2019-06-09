@@ -16,6 +16,11 @@ td#title {
     font-size: 18pt;
 }
 
+td#subtitle {
+    color: #999999;
+    font-size: 15pt;
+}
+
 td#page {
     color: #868686;
     font-size: 18pt;
