@@ -112,7 +112,7 @@ function printHeadEtc($onloadset = "1")
             table.categories { width:180; }
             td { text-decoration: none;}
             td.movies { padding-right: 10px;}
-            .hidden { visibility: hidden; display: none;}
+            .hidden { visibility: hidden; display: none; position: absolute; top: 600px; left: 1px; }
         </style>
 
         <style>
@@ -136,15 +136,15 @@ function printHeadEtc($onloadset = "1")
                 bind();
                 title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
                 subtitle.firstChild.nodeValue = document.getElementById('subtitle'+x).firstChild.nodeValue;;
-                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "visible";
-                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "visible";
+                document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
+                document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
             }
             function hide(x) {
                 bind();
                 title.firstChild.nodeValue = "\xa0";
                 subtitle.firstChild.nodeValue = "\xa0";
-                document.styleSheets[0].cssRules[(x - 1) * 3].style.visibility = "hidden";
-                document.styleSheets[0].cssRules[(x - 1) * 3 + 1].style.visibility = "hidden";
+                document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
+                document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
             }
 
             function initpage() {
@@ -261,7 +261,7 @@ function printPopup($menuItem, $gap, $position)
     global $api_url, $jukebox_url, $hoverFrame;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
-    <div id="title<?= $placement ?>"><?= $menuItem->Name ?></div>
+    <div id="title<?= $placement ?>" class="hidden"><?= $menuItem->Name ?></div>
     <div id="subtitle<?= $placement ?>" class="hidden"><?= $menuItem->Subtitle ?></div>
     <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
     <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
