@@ -8,6 +8,8 @@ Jellyfin-NMT uses the Jellyfin API to generate HTML compatible with the Popcorn 
 
 Currently only a few index pages have been implemented, so you still need to generate your YAMJ jukebox like you have been doing for years. My eventual goal is to completely replace the YAMJ generated pages with JS API based ones.
 
+Videos are not played through Jellyfin and so are not marked as watched. I use a modified YAMJ skin and a trakt proxy to mark videos as watched. JF then syncs with trakt.
+
 ## Setup
 
 - Create an API key in Jellyfin
