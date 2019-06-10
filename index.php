@@ -135,7 +135,10 @@ function printHeadEtc($onloadset = "1")
             function show(x) {
                 bind();
                 title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
-                subtitle.firstChild.nodeValue = document.getElementById('subtitle'+x).firstChild.nodeValue;;
+                var subX = document.getElementById('subtitle'+x).firstChild;
+                if (subX) {
+                    subtitle.firstChild.nodeValue = subX.nodeValue;
+                }
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
             }
