@@ -99,7 +99,7 @@ function printHeadEtc($onloadset = "1")
     <head>
         <link rel="shortcut icon" href="<?= $api_url ?>/../web/favicon.ico" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Moviejukebox</title>
+        <title>Jellyfin NMT</title>
 
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $cssFile ?>"/>
@@ -195,9 +195,11 @@ function printNavbarAndPosters($title, $items)
 
 function printPosterTable($items)
 {
-    global $menuItems;
+    global $menuItems, $nbThumbnailsPerLine, $lastRow;
     //set table is centered
     $align = "left";
+
+    $lastRow = ceil(count($items) / $nbThumbnailsPerLine);
     ?>
     <table class="movies" border="0" cellpadding="0" cellspacing="4" align="<?= $align ?>">
         <?php
@@ -216,10 +218,10 @@ function printPosterTable($items)
       </tr>
     </xsl:for-each>
     */
-
+        $i = 0;
         foreach ($items as $key => $item) {
             //first item in row
-            if (isStartOfRow($key)) {
+            if (isStartOfRow($i)) {
                 echo "<tr>";
             }
             switch ($item->Type) {
@@ -232,15 +234,27 @@ function printPosterTable($items)
                 case "Movie":
                     $menuItem = parseMovie($item);
                     break;
+                case "CollectionFolder":
+                    $menuItem = parseCollectionFolder($item);
+                    break;
+                default:
+                    $menuItem = null;
+                    break;                    
             }
-            printPosterTD($menuItem, 0, $key);
-            //add menuItem to menuItems list for later
-            array_push($menuItems, $menuItem);
+            if ($menuItem) {
+                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $nbThumbnailsPerLine));
+                //add menuItem to menuItems list for later
+                array_push($menuItems, $menuItem);
 
-            //last item in row
-            if (isEndOfRow($key)) {
-                echo "</tr>";
+                //last item in row
+                if (isEndOfRow($i)) {
+                    echo "</tr>";
+                }
+
+                $i++;
             }
+            
+
         }
         ?>
     </table>
@@ -251,6 +265,12 @@ function isStartOfRow($position)
 {
     global $nbThumbnailsPerLine;
     return ($position % $nbThumbnailsPerLine == 0);
+}
+
+function isLastRow($row)
+{
+    global $lastRow;
+    return ($row == $lastRow);
 }
 
 function isEndOfRow($position)
@@ -272,11 +292,11 @@ function printPopup($menuItem, $gap, $position)
 }
 
 //gap is for skipping rows, in sets on the bottom
-function printPosterTD($menuItem, $gap, $position)
+function printPosterTD($menuItem, $gap, $position, $row)
 {
     global $api_url, $jukebox_url;
     global $thumbnailsWidth, $thumbnailsHeight;
-    global $nbThumbnailsPerPage;
+    global $nbThumbnailsPerLine, $nbThumbnailsPerPage;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center">
@@ -302,6 +322,11 @@ function printPosterTD($menuItem, $gap, $position)
     }
 
 
+        //last row
+        if (isLastRow($row)) {
+            //go to top row
+            echo " onkeydownset=\"" . ($placement % $nbThumbnailsPerLine) . "\" ";
+        }
 
 /*  TODO: is this anything I want to keep? 
                 <xsl:choose>
