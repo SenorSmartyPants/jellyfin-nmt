@@ -1,0 +1,19 @@
+#bannerlg1 { visibility: hidden; position: absolute; top: 72px; left: 11px; }
+#bannerfr1 { visibility: hidden; position: absolute; top: 61px; left: 0px; }
+#bannerlg2 { visibility: hidden; position: absolute; top: 72px; left: 529px; }
+#bannerfr2 { visibility: hidden; position: absolute; top: 61px; left: 518px; }
+
+#bannerlg3 { visibility: hidden; position: absolute; top: 203px; left: 11px; }
+#bannerfr3 { visibility: hidden; position: absolute; top: 192px; left: 0px; }
+#bannerlg4 { visibility: hidden; position: absolute; top: 203px; left: 529px; }
+#bannerfr4 { visibility: hidden; position: absolute; top: 192px; left: 518px; }
+
+#bannerlg5 { visibility: hidden; position: absolute; top: 334px; left: 11px; }
+#bannerfr5 { visibility: hidden; position: absolute; top: 323px; left: 0px; }
+#bannerlg6 { visibility: hidden; position: absolute; top: 334px; left: 529px; }
+#bannerfr6 { visibility: hidden; position: absolute; top: 323px; left: 518px; }
+
+#bannerlg7 { visibility: hidden; position: absolute; top: 465px; left: 11px; }
+#bannerfr7 { visibility: hidden; position: absolute; top: 454px; left: 0px; }
+#bannerlg8 { visibility: hidden; position: absolute; top: 465px; left: 529px; }
+#bannerfr8 { visibility: hidden; position: absolute; top: 454px; left: 518px; }

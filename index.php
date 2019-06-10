@@ -8,6 +8,10 @@ abstract class IndexStyleEnum
     const PosterPopup9x3 = 0;
     const PosterPopup6x2 = 1;
     const PosterPopupDynamic = 2; //will be 6x2 if count(index) >= 12
+    const Poster9x3 = 3;
+    const Poster6x2 = 4;
+    const Poster12x4 = 5;
+    
 }
 
 function setIndexStyle($indexStyle, $indexCount = null)
@@ -26,34 +30,43 @@ function setIndexStyle($indexStyle, $indexCount = null)
 
     switch ($indexStyle) {
         case IndexStyleEnum::PosterPopup6x2:
-            $thumbnailsWidth = 176;
-            $thumbnailsHeight = 261;
             $popupWidth = 218;
             $popupHeight = 323;
-    
-            $Limit = 12;
-    
-            $nbThumbnailsPerPage = 12;
-            $nbThumbnailsPerLine = 6;
-    
+
             $hoverFrame = "pictures/wall/hover-frame2.png";
             $cssFile = "css/6x2PosterIndex.css";
+        case IndexStyleEnum::Poster6x2:
+            $thumbnailsWidth = 176;
+            $thumbnailsHeight = 261;
+            
+            $Limit = 12;
+            $nbThumbnailsPerPage = 12;
+            $nbThumbnailsPerLine = 6;  
             break;
     
         case IndexStyleEnum::PosterPopup9x3:
         default:
-            $thumbnailsWidth = 117;
-            $thumbnailsHeight = 174;
             $popupWidth = 160;
             $popupHeight = 237;
-    
-            $Limit = 27;
-    
-            $nbThumbnailsPerPage = 27;
-            $nbThumbnailsPerLine = 9;
-    
+
             $hoverFrame = "pictures/wall/hover-frame.png";
             $cssFile = "css/9x3PosterIndex.css";
+        case IndexStyleEnum::Poster9x3:
+            $thumbnailsWidth = 117;
+            $thumbnailsHeight = 174;
+
+            $Limit = 27;
+            $nbThumbnailsPerPage = 27;
+            $nbThumbnailsPerLine = 9;
+            break;
+
+        case IndexStyleEnum::Poster12x4:
+            $thumbnailsWidth = 87;
+            $thumbnailsHeight = 130;
+
+            $Limit = 48;
+            $nbThumbnailsPerPage = 48;
+            $nbThumbnailsPerLine = 12;
             break;
     }
 }
@@ -402,7 +415,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
                 </xsl:if>
             </xsl:if>                
         */
-                                                                                                                                                                                                                                                                                                                                                                                    ?>>
+?>>
             <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="<?= $jukebox_url ?>pictures/wall/transparent.png" /></a>
     </td>
 <?php
