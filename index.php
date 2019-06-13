@@ -178,8 +178,8 @@ function printHeadEtc($onloadset = "1")
 function printFooter()
 {
     global $menuItems;
-    ?>
-        <div id="popupWrapper">
+?>
+    <div id="popupWrapper">
 <?
     //print popups last of all, so they have highest z-index on NMT
     foreach ($menuItems as $key => $menuItem) {
@@ -189,8 +189,8 @@ function printFooter()
     foreach ($menuItems as $key => $menuItem) {
         printPopup($menuItem, 0, $key);
     }
-    ?>
-        </div>
+?>
+    </div>
     </body>
 
     </html>
