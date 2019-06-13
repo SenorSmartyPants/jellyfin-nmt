@@ -319,7 +319,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     //start of row
     if (isStartOfRow($placement - 1)) {
         if ($placement == 1) {
-            echo "onkeyrightset=\"pgupload\"";
+            echo "onkeyleftset=\"pgupload\"";
         } else {
             echo "onkeyleftset=\"" . ($placement - 1) . "\"";
         }
@@ -335,11 +335,13 @@ function printPosterTD($menuItem, $gap, $position, $row)
     }
 
 
-        //last row
-        if (isLastRow($row)) {
-            //go to top row
-            echo " onkeydownset=\"" . ($placement % $nbThumbnailsPerLine) . "\" ";
-        }
+    //last row
+    if (isLastRow($row)) {
+        //go to top row
+        $topofcolumn = $placement % $nbThumbnailsPerLine;
+        $topofcolumn = ($topofcolumn == 0) ? $nbThumbnailsPerLine : $topofcolumn;
+        echo " onkeydownset=\"" . $topofcolumn . "\" ";
+    }
 
 /*  TODO: is this anything I want to keep? 
                 <xsl:choose>
