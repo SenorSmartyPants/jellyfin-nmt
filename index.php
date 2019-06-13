@@ -180,7 +180,11 @@ function printFooter()
     global $menuItems;
     ?>
         <div id="popupWrapper">
-    <?php
+<?
+    //print popups last of all, so they have highest z-index on NMT
+    foreach ($menuItems as $key => $menuItem) {
+        printTitleAndSubtitle($menuItem, 0, $key);
+    }
     //print popups last of all, so they have highest z-index on NMT
     foreach ($menuItems as $key => $menuItem) {
         printPopup($menuItem, 0, $key);
@@ -292,15 +296,22 @@ function isEndOfRow($position)
     return ($position % $nbThumbnailsPerLine == $nbThumbnailsPerLine - 1);
 }
 
+function printTitleAndSubtitle($menuItem, $gap, $position)
+{
+    $placement = $position + $gap + 1; //$position is zero based
+?>
+        <div id="title<?= $placement ?>" class="hidden"><?= $menuItem->Name ?></div>
+        <div id="subtitle<?= $placement ?>" class="hidden"><?= $menuItem->Subtitle ?></div>
+<?
+}
+
 function printPopup($menuItem, $gap, $position)
 {
     global $api_url, $jukebox_url, $hoverFrame;
     $placement = $position + $gap + 1; //$position is zero based
-    ?>
-    <div id="title<?= $placement ?>" class="hidden"><?= $menuItem->Name ?></div>
-    <div id="subtitle<?= $placement ?>" class="hidden"><?= $menuItem->Subtitle ?></div>
-    <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
-    <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
+?>
+        <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
+        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
 <?php
 }
 
