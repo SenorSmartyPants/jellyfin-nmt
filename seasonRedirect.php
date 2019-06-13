@@ -1,10 +1,15 @@
 <?php
 include 'data.php';
 
+$SeriesId = $_GET["SeriesId"];
 $SeasonId = $_GET["SeasonId"];
 $ParentIndexNumber = $_GET["ParentIndexNumber"];
 
-$DetailURL = getSeasonURL($SeasonId, $ParentIndexNumber);
+if ($SeriesId) {
+    $DetailURL = getSeasonBySeriesIdURL($SeriesId);
+} else {
+    $DetailURL = getSeasonURL($SeasonId, $ParentIndexNumber);
+}
 
 //301 redirect does not change window.location in NMT gaya browser
 //this can cause images not to resolve if url is set dynamically in Javascript (using relative paths)

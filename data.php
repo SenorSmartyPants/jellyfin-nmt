@@ -31,22 +31,36 @@ function seasonPosterExists($seasonId)
 
 function firstEpisodeFromSeason($seasonId, $seasonNumber)
 {
-    //all episodes from unwatched season, no season data
-    //ParentIndexNumber - don't include specials in regular seasons
+    //seasonNumber - don't include specials in regular seasons
     $all_episodes = getUsersItems(null, "Path", 1, $seasonId, $seasonNumber);
-    //$all_episodes = apiCall($path);
 
     //return first
     return $all_episodes->Items[0];
 }
 
+function firstEpisodeFromSeries($seriesId)
+{
+    $all_episodes = getUsersItems(null, "Path", 1, $seriesId, null, null, "episode", null, null, true);
+
+    return $all_episodes->Items[0];
+}
+
+function YAMJpath($item) {
+    global $jukebox_url;
+    
+    return $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
+}
+
+function getSeasonBySeriesIdURL($seasonId)
+{
+    //find first episode in season, this will be YAMJ filename
+    return YAMJpath(firstEpisodeFromSeries($seasonId));
+}
+
 function getSeasonURL($SeasonId, $ParentIndexNumber)
 {
-    global $jukebox_url;
     //find first episode in season, this will be YAMJ filename
-    $first_from_season = firstEpisodeFromSeason($SeasonId, $ParentIndexNumber);
-
-    return $jukebox_url . pathinfo($first_from_season->Path)['filename'] . ".html";
+    return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
@@ -102,7 +116,7 @@ function getNextUp($Limit)
 
 function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null)
 {
-    return getUsersItems(null, "Path", $Limit, $parentID, null, "SortName", $type, null, null, $recursive, $StartIndex, null);
+    return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, "SortName", $type, null, null, $recursive, $StartIndex, null);
 }
 
 function getItem($Id) {

@@ -30,9 +30,14 @@ function parseSeries2($item) {
     global $jukebox_url, $popupHeight, $popupWidth;
     $menuItem = new stdClass();
     $menuItem->Name = $item->Name;
-    //go to set page
-    //TODO: should change this to if one season go to season page... can be with series/set redirect page...
-    $menuItem->DetailURL = $jukebox_url . "Set_" . $item->Name . "_1.html";
+    
+    if ($item->ChildCount == 1) {
+        //go directly to season page
+        $menuItem->DetailURL = "seasonRedirect.php?SeriesId=" . $item->Id;
+    } else {
+        //go to set page
+        $menuItem->DetailURL = $jukebox_url . "Set_" . $item->Name . "_1.html";
+    }
     $menuItem->PosterID = $item->Id;
     $menuItem->UnplayedCount = $item->UserData->UnplayedItemCount;
     $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&Height=" . $popupHeight . "&Width=" . $popupWidth;
