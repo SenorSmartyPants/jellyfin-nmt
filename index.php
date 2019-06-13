@@ -191,6 +191,10 @@ function printFooter()
     }
 ?>
     </div>
+        <div class="hidden" id="navigationlinks">
+            <a TVID="HOME" href="home.php"></a>
+        </div>
+
     </body>
 
     </html>
@@ -458,9 +462,10 @@ foreach($current_users as $user) {
 <?php
 }
 
-function printTitleTable()
+function printTitleTable($currentPage = 1, $numPages = 1)
 {
     global $api_url, $apiCallCount;
+    global $QSBase;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
@@ -478,19 +483,17 @@ function printTitleTable()
             </td>
 
 
-            <td width="25%" align="right" id="page" valign="top"><!-- API call count = <?= $apiCallCount ?> -->
-                <!--<xsl:value-of select="$Page"/>&#160;
-	
-	        <xsl:if test="$ForComputer='false'"><xsl:value-of select="$currentIndex"/></xsl:if>
-	        <xsl:if test="$ForComputer='true'">
-		        <a>
-			        <xsl:attribute name="href">
-			        <xsl:value-of select="library/category[@current='true']/index[@current='true']/@previous" />.html</xsl:attribute>
-			        <xsl:value-of select="$currentIndex"/>
-		        </a>
-	        </xsl:if>
-	
-	        &#160;<xsl:value-of select="$OutOf"/>&#160;<a onfocusload=""><xsl:attribute name="href"><xsl:value-of select="library/category[@current='true']/index[@current='true']/@next" />.html</xsl:attribute><xsl:value-of select="$lastIndex" /></a>-->
+            <td width="25%" align="right" id="page" valign="top"><? 
+            if ($numPages > 1) { 
+                //pgup on first page, wraps around to last page
+                $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
+                echo "\n" . '               <a name="pgupload" onfocusload="" TVID="PGUP" href="' . $_SERVER['PHP_SELF'] . $QSBase . $page . "\" >" . $currentPage . "</a> / ";
+                //pgdn on last page wraps to first page
+                $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
+                echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="PGDN" href="' . $_SERVER['PHP_SELF'] . $QSBase . $page  . "\" >" . $numPages . "</a>";
+            }
+?>
+                <!-- API call count = <?= $apiCallCount ?> -->
             </td>
         </tr>
 
