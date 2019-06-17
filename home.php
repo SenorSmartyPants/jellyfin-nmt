@@ -46,11 +46,11 @@ function printNavbarAndPostersHome($title, $items)
     <?php  
     printNavbar($title);
     ?>
-    <a focustext="#00a4dc" focuscolor="transparent" href="nextUp.php" name="nextup">Next Up ></a>
+    <a href="nextUp.php" name="nextup">Next Up ></a>
     <br clear="all"/>
-    <a focustext="#00a4dc" focuscolor="transparent" href="latest.php?type=episode">Latest TV Shows ></a>
+    <a href="latest.php?type=episode">Latest TV Shows ></a>
     <br clear="all"/>
-    <a focustext="#00a4dc" focuscolor="transparent" href="latest.php?type=movie">Latest Movies ></a>
+    <a href="latest.php?type=movie">Latest Movies ></a>
     <br clear="all"/>
     <a href="categories.php">Categories ></a>
     <br clear="all"/>
