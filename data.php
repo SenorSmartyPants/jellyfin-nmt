@@ -65,7 +65,8 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
 
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
-    $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null)
+    $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
 {
     global $user_id;
 
@@ -79,6 +80,11 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
     $path .= $type ? "&IncludeItemTypes=" . $type : "";
     $path .= $excludeItemTypes ? "&ExcludeItemTypes=" . $excludeItemTypes : "";
     $path .= $sortBy ? "&SortBy=" . $sortBy : "";
+    $path .= $genres ? "&Genres=" . urlencode($genres) : "";
+    $path .= $nameStartsWith ? "&NameStartsWith=" . urlencode($nameStartsWith) : "";
+    $path .= $ratings ? "&OfficialRatings=" . $ratings : "";
+    $path .= $tags ? "&Tags=" . urlencode($tags) : "";
+    $path .= $years ? "&Years=" . $years : "";
     $path .= !is_null($groupItems) ? "&GroupItems=" . ( $groupItems ? "true" : "false" ) : "";
     $path .= !is_null($isPlayed) ? "&IsPlayed=" . ( $isPlayed ? "true" : "false" ) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
@@ -114,12 +120,28 @@ function getNextUp($Limit)
     return apiCall($path);
 }
 
-function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null)
+function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
 {
-    return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, "SortName", $type, null, null, $recursive, $StartIndex, null);
+    return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, "SortName", $type, 
+        null, null, $recursive, $StartIndex, null, 
+        $genres, $nameStartsWith, $ratings, $tags, $years);
 }
 
 function getItem($Id) {
     return getUsersItems($Id);
 }
+
+function getFilters($parentID = null, $type = null, $Recursive = null) {
+    global $user_id;
+
+    $path = "/Items/Filters?UserID=" . $user_id;
+
+    $path .= $parentID ? "&ParentID=" . $parentID : "";
+    $path .= $type ? "&IncludeItemTypes=" . $type : "";
+    $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
+    
+    return apiCall($path);
+}
+
 ?>
