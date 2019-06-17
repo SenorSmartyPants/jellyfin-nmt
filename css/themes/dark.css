@@ -1,6 +1,6 @@
 body {
     background-color: #101010;
-    color: #dddddd;
+    color: #999999;
     font-size: 10pt;
     text-decoration: none;
 }
@@ -26,18 +26,22 @@ td#page {
     font-size: 18pt;
 }
 
-td#year {
-    color: #868686;
-    font-size: 18pt;
-}
-
-div.counter {
-    color: #AAAAAA;
-    font-size: 15pt;
-}
-
 a {
     color: #dddddd;
     font-size: 18pt;
     text-decoration: none;
+}
+
+
+/* used in categories.php */
+
+th {
+    font-size: 22pt;
+    color: #dddddd;
+    text-align: left;
+}
+
+table.categories {
+    font-size: 18pt;
+    font-weight: bold;
 }

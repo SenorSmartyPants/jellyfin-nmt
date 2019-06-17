@@ -122,7 +122,6 @@ function printHeadEtc($onloadset = "1")
             div.title{ visibility:hidden; }
             img { border: 0; }
             table.main { width:1090; }
-            table.categories { width:180; }
             td { text-decoration: none;}
             td.movies { padding-right: 10px;}
             .hidden { visibility: hidden; display: none; position: absolute; top: 600px; left: 1px; }
@@ -193,6 +192,7 @@ function printFooter()
     </div>
         <div class="hidden" id="navigationlinks">
             <a TVID="HOME" href="home.php"></a>
+            <a href="categories.php" TVID="info"></a><br/>
         </div>
 
     </body>

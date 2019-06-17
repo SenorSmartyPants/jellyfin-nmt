@@ -52,6 +52,8 @@ function printNavbarAndPostersHome($title, $items)
     <br clear="all"/>
     <a focustext="#00a4dc" focuscolor="transparent" href="latest.php?type=movie">Latest Movies ></a>
     <br clear="all"/>
+    <a href="categories.php">Categories ></a>
+    <br clear="all"/>
 <?php 
     printPosterTable($items);
 ?>
