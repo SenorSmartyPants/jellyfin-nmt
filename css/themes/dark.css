@@ -22,7 +22,7 @@ td#subtitle {
 }
 
 td#page {
-    color: #868686;
+    color: #999999;
     font-size: 18pt;
 }
 
@@ -35,13 +35,19 @@ a {
 
 /* used in categories.php */
 
-th {
+table.categories {
+    font-size: 18pt;
+    color: #999999;
+    font-weight: bold;
+}
+
+table.categories th {
     font-size: 22pt;
     color: #dddddd;
     text-align: left;
 }
 
-table.categories {
+td.txt {
     font-size: 18pt;
-    font-weight: bold;
+    color: #999999;
 }

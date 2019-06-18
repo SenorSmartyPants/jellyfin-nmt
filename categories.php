@@ -65,7 +65,7 @@ function printCategory($name, $items) {
 <?
         for ($i=0; $i < count($items); $i++) { 
 ?>
-            <a href="browse.php?Name=<?= urlencode($items[$i]) ?>&<?= $name . "=" . urlencode($items[$i]) ?>" ><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
+            <a href="browse.php?Name=<?= urlencode($items[$i]) ?>&<?= $name . "=" . urlencode($items[$i]) ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
 <?
         }
 ?>
