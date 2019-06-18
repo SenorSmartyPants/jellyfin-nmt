@@ -314,7 +314,7 @@ function printPopup($menuItem, $gap, $position)
     global $api_url, $jukebox_url, $hoverFrame;
     $placement = $position + $gap + 1; //$position is zero based
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $api_url .$menuItem->PosterBaseURL ?>" />
+        <img id="imgDVD<?= $placement ?>" src="<?= $api_url . $menuItem->PosterBaseURL ?>" />
         <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
 <?php
 }
