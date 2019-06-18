@@ -35,9 +35,14 @@ switch ($collectionType) {
         $recursive = true;
         $type = "movie";
         break;
-    default:
+    case "search": //searching from categories page
         $recursive = true;
-        $type = "series,movie";
+        //exclude season and episodes to match JF behavior
+        $type = "movie,series,boxset";
+        break;
+    default: //browsing. boxsets,music,games,books,musicvideos,homevideos,livetv,channels
+        $recursive = false;
+        $type = null;
         break;
 }
 

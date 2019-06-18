@@ -37,7 +37,6 @@ function printNavbarAndCategories($title, $filters)
 }
 
 function printCategories($filters) {   
-    //TODO: "Other";
     printCategory("Genres", $filters->Genres);
     $titleLetters = range("A","Z");
     array_unshift($titleLetters,"#");
@@ -45,7 +44,6 @@ function printCategories($filters) {
     printCategory("Tags", $filters->Tags);
     printCategory("Ratings", $filters->OfficialRatings);
     printCategory("Years", $filters->Years);
-    //TODO: "Collection";
 }
 
 function printCategory($name, $items) {
@@ -65,7 +63,7 @@ function printCategory($name, $items) {
 <?
         for ($i=0; $i < count($items); $i++) { 
 ?>
-            <a href="browse.php?Name=<?= urlencode($items[$i]) ?>&<?= $name . "=" . urlencode($items[$i]) ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
+            <a href="browse.php?CollectionType=search&Name=<?= urlencode($items[$i]) ?>&<?= $name . "=" . urlencode($items[$i]) ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
 <?
         }
 ?>
