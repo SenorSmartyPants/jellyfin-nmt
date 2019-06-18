@@ -17,21 +17,23 @@ setIndexStyle(IndexStyleEnum::PosterPopupDynamic, count($items));
 //(1093 - (n+1)*4) / n = w
 //larger thumbnails need more padding I think
 
-//3x3
-$thumbnailsWidth = 360;
-$thumbnailsHeight = 202;
-$popupWidth = 360;
-$popupHeight = 202;
-$nbThumbnailsPerPage = 6;
-$nbThumbnailsPerLine = 3; 
-
-//4x4
-$thumbnailsWidth = 268;
-$thumbnailsHeight = 151;
-$popupWidth = 268;
-$popupHeight = 151;
-$nbThumbnailsPerPage = 12;
-$nbThumbnailsPerLine = 4;  
+if (count($items) <= 6) {
+    //3x3
+    $thumbnailsWidth = 360;
+    $thumbnailsHeight = 202;
+    $popupWidth = 360;
+    $popupHeight = 202;
+    $nbThumbnailsPerPage = 6;
+    $nbThumbnailsPerLine = 3; 
+} else {
+    //4x4
+    $thumbnailsWidth = 268;
+    $thumbnailsHeight = 151;
+    $popupWidth = 268;
+    $popupHeight = 151;
+    $nbThumbnailsPerPage = 12;
+    $nbThumbnailsPerLine = 4;  
+}
 
 printHeadEtc("nextup");
 
