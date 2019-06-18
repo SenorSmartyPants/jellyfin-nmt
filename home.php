@@ -22,12 +22,16 @@ $thumbnailsWidth = 360;
 $thumbnailsHeight = 202;
 $popupWidth = 360;
 $popupHeight = 202;
+$nbThumbnailsPerPage = 6;
+$nbThumbnailsPerLine = 3; 
 
 //4x4
 $thumbnailsWidth = 268;
 $thumbnailsHeight = 151;
 $popupWidth = 268;
 $popupHeight = 151;
+$nbThumbnailsPerPage = 12;
+$nbThumbnailsPerLine = 4;  
 
 printHeadEtc("nextup");
 
