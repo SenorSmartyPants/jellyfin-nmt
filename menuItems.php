@@ -103,7 +103,7 @@ function setDetailURL($item, $menuItem) {
                 break;
             default:
                 $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
-                $menuItem->VOD = true;
+                $menuItem->VOD = "VOD";
                 break; 
         }
     }
