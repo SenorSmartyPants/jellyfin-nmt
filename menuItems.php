@@ -4,13 +4,13 @@ include 'data.php';
 $useSeasonNameForMenuItems = true;
 
 //2 API calls total for series
-//1 here + 1 in parseEpisode
+//1 here + 1 in parse(episode)
 function parseSeries($item)
 {
     global $libraryBrowse;
     
     if ($item->UserData->Played or $libraryBrowse) {
-        return parseSeries2($item);
+        return parse($item);
     } else {
         //gets first unwatched episode for this series
         //sorting by Premiere Date - not quite right for dvd ordered series
@@ -19,109 +19,140 @@ function parseSeries($item)
             "PremiereDate", "Episode", true, false, true);
 
         $first_unwatched = $unwatched->Items[0];
-
-        $menuItem = parseEpisode($first_unwatched, $item->UserData->UnplayedItemCount);
+        $first_unwatched->UserData->UnplayedItemCount = $item->UserData->UnplayedItemCount;
+        $menuItem = parse($first_unwatched);
 
         return $menuItem;
     }
 }
 
-function parseSeries2($item) {
-    global $jukebox_url, $popupHeight, $popupWidth;
-    $menuItem = new stdClass();
-    $menuItem->Name = $item->Name;
-    
-    if ($item->ChildCount == 1) {
-        //go directly to season page
-        $menuItem->DetailURL = "seasonRedirect.php?SeriesId=" . $item->Id;
-    } else {
-        //go to set page
-        $menuItem->DetailURL = $jukebox_url . "Set_" . $item->Name . "_1.html";
-    }
-    $menuItem->PosterID = $item->Id;
-    $menuItem->UnplayedCount = $item->UserData->UnplayedItemCount;
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&Height=" . $popupHeight . "&Width=" . $popupWidth;
-
-    return $menuItem;
-}
-
-//2 API calls for Episode from Latest
-//1 API additional calls for Series from Latest
-function parseEpisode($item, $unplayedCount = null, $useSeasonImage = true)
-{
+function parse($item) {
     global $popupHeight, $popupWidth;
-    global $useSeasonNameForMenuItems;
-    global $libraryBrowse;
 
     $menuItem = new stdClass();
+    $menuItem->Name = getName($item);
+    $menuItem->Subtitle = getSubtitle($item);
+    setDetailURL($item, $menuItem);
+    $menuItem->PosterID = getPosterID($item);
+    $menuItem->UnplayedCount = getUnplayedCount($item);
 
-    if ($useSeasonNameForMenuItems) {
-        $menuItem->Name = $item->SeriesName;
-        $menuItem->Subtitle = $item->SeasonName;
-    } else {
-        $menuItem->Name = $item->SeriesName;
-        $menuItem->Subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
-    }
-
-    $menuItem->DetailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
-
-    if ($useSeasonImage) {
-        //API
-        $menuItem->PosterID = (seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
-    } else {
-        $menuItem->PosterID = $item->SeriesId;
-    }
-    
-    if ($unplayedCount == null) {
-        //API
-        $series = getItem($item->SeriesId);
-        $unplayedCount = $series->UserData->UnplayedItemCount;
-    }
-
-    //libraryBrowse, but should be based on if watched are hidden, like always in next up, or sometimes in latest
-    $minUnplayedCount = $libraryBrowse ? 0 : 1;
-    $menuItem->UnplayedCount = $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . "&Height=" . $popupHeight . "&Width=" . $popupWidth;
-
-    return $menuItem;
-}
-
-//0 additional API calls
-function parseMovie($item) {
-    global $jukebox_url, $popupHeight, $popupWidth;
-    $menuItem = new stdClass();
-    $menuItem->Name = $item->Name;
-    $menuItem->Subtitle = $item->ProductionYear;
-    $menuItem->DetailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
-    $menuItem->PosterID = $item->Id;
-    $menuItem->UnplayedCount = null;
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . 
-        "/Images/Primary?Height=" . $popupHeight . "&Width=" . $popupWidth . 
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . 
+        "&Height=" . $popupHeight . "&Width=" . $popupWidth . 
         ($item->UserData->Played ? "&AddPlayedIndicator=true" : null);
 
     return $menuItem;
 }
 
-function parseCollectionFolder($item) {
-    global $popupHeight, $popupWidth;
+function getName($item) {
+    if ($item->Type == 'Episode') {
+        $name = $item->SeriesName;
+    } else {
+        $name = $item->Name;
+    }
+    return $name;
+}
 
-    switch ($item->CollectionType) {
-        case "tvshows":
-        case "movies":
-            $menuItem = new stdClass();
-            $menuItem->Name = $item->Name;
-            $menuItem->DetailURL = "browse.php?parentId=" . $item->Id . 
-                "&CollectionType=" . $item->CollectionType .
-                "&Name=" . $item->Name;
-            $menuItem->PosterID = $item->Id;
-            $menuItem->UnplayedCount = null;
-            $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?Height=" . $popupHeight . "&Width=" . $popupWidth;
+function getSubtitle($item) {
+    global $useSeasonNameForMenuItems;
+    switch ($item->Type) {
+        case "Episode":
+            if ($useSeasonNameForMenuItems) {
+                $subtitle = $item->SeasonName;
+            } else {
+                $subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
+            }
+            break;
+        case "Series":
             break;
         default:
-            $menuItem = null;
+            $subtitle = $item->ProductionYear;
             break;
     }
+    return $subtitle;
+}
 
+function setDetailURL($item, $menuItem) {
+    global $jukebox_url, $NMT_path, $NMT_playerpath;
+    
+    if ($item->IsFolder) {
+        switch ($item->Type) {
+            case "Season":
+                $detailURL = "seasonRedirect.php?SeasonId=" . $item->Id . "&ParentIndexNumber=" . $item->IndexNumber;
+                break;   
+            case "Series":
+                //go directly to season page, or continue to default
+                if ($item->ChildCount == 1) {
+                    $detailURL = "seasonRedirect.php?SeriesId=" . $item->Id;
+                    break;
+                }   
+            default:
+                $detailURL = "browse.php?parentId=" . $item->Id . 
+                    "&CollectionType=" . $item->CollectionType .
+                    "&Name=" . $item->Name;
+                break;
+        }
+    } else {
+        switch ($item->Type) {
+            case "Movie":
+                $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
+                break; 
+            case "Episode":
+                $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+                break;
+            default:
+                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $menuItem->VOD = true;
+                break; 
+        }
+    }
+    $menuItem->DetailURL = $detailURL;
+}
+
+function getPosterID($item, $useSeasonImage = true) {
+    switch ($item->Type) {
+        case "Season":
+            $posterID = $item->ImageTags->Primary ? $item->Id : $item->SeriesId;
+            break;
+        case "Episode":
+            //API
+            $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
+            break;
+        default:
+            $posterID = $item->Id;
+            break; 
+    }
+    return $posterID;
+}
+
+function getUnplayedCount($item) {
+    global $libraryBrowse;
+
+    switch ($item->Type) {
+        case "Episode":
+            //API
+            $series = getItem($item->SeriesId);
+            $unplayedCount = $series->UserData->UnplayedItemCount;
+            break;
+        default:
+            $unplayedCount = $item->UserData->UnplayedItemCount;
+            break; 
+    }
+    //libraryBrowse, but should be based on if watched are hidden, like always in next up, or sometimes in latest
+    $minUnplayedCount = $libraryBrowse ? 0 : 1;
+    $unplayedCount = $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
+
+    return $unplayedCount;
+}
+
+function getMenuItem($item) {
+    switch ($item->Type) {
+        case "Series":
+            $menuItem = parseSeries($item);
+            break;
+        default:
+            $menuItem = parse($item);
+            break;                    
+    }
     return $menuItem;
 }
 ?>

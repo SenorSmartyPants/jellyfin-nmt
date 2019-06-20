@@ -245,23 +245,7 @@ function printPosterTable($items)
             if (isStartOfRow($i)) {
                 echo "<tr>";
             }
-            switch ($item->Type) {
-                case "Episode":
-                    $menuItem = parseEpisode($item);
-                    break;
-                case "Series":
-                    $menuItem = parseSeries($item);
-                    break;
-                case "Movie":
-                    $menuItem = parseMovie($item);
-                    break;
-                case "CollectionFolder":
-                    $menuItem = parseCollectionFolder($item);
-                    break;
-                default:
-                    $menuItem = null;
-                    break;                    
-            }
+            $menuItem = getMenuItem($item);
             if ($menuItem) {
                 printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $nbThumbnailsPerLine));
                 //add menuItem to menuItems list for later
