@@ -169,7 +169,8 @@ function printHeadEtc($onloadset = "1")
 
     </head>
 
-    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()">
+    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()"
+        <? if ($_GET["Backdrop"] && $_GET["parentId"]) { ?>background="<?= $api_url . "/Items/" . $_GET["parentId"] ?>/Images/Backdrop?Height=720&Width=1280" <? } ?>>
 
     <?php
 }

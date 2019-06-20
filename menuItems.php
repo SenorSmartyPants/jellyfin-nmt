@@ -31,7 +31,8 @@ function parse($item) {
 
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
-    $menuItem->Subtitle = getSubtitle($item);
+    $menuItem->Subtitle = getSubtitle($item);    
+    $menuItem->HasBackdrop = (count($item->BackdropImageTags) > 0);
     setDetailURL($item, $menuItem);
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
@@ -88,7 +89,8 @@ function setDetailURL($item, $menuItem) {
             default:
                 $detailURL = "browse.php?parentId=" . $item->Id . 
                     "&CollectionType=" . $item->CollectionType .
-                    "&Name=" . $item->Name;
+                    "&Name=" . $item->Name .
+                    ($menuItem->HasBackdrop ? "&Backdrop=true" : null);
                 break;
         }
     } else {
