@@ -32,7 +32,7 @@ function parse($item) {
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
     $menuItem->Subtitle = getSubtitle($item);    
-    $menuItem->HasBackdrop = (count($item->BackdropImageTags) > 0);
+    $menuItem->BackdropID = getBackdropID($item);
     setDetailURL($item, $menuItem);
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
@@ -90,7 +90,7 @@ function setDetailURL($item, $menuItem) {
                 $detailURL = "browse.php?parentId=" . $item->Id . 
                     "&CollectionType=" . $item->CollectionType .
                     "&Name=" . $item->Name .
-                    ($menuItem->HasBackdrop ? "&Backdrop=true" : null);
+                    ($menuItem->BackdropID ? "&backdropId=" . $menuItem->BackdropID : null);
                 break;
         }
     } else {
@@ -124,6 +124,12 @@ function getPosterID($item, $useSeasonImage = true) {
             break; 
     }
     return $posterID;
+}
+
+function getBackdropID($item) {
+    $backdropID = (count($item->BackdropImageTags) > 0) ? $item->Id : 
+        (($item->ParentBackdropImageTags && count($item->ParentBackdropImageTags) > 0) ? $item->ParentBackdropItemId : null);
+    return $backdropID;
 }
 
 function getUnplayedCount($item) {
