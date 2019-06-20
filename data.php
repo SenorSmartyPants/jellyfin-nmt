@@ -97,7 +97,7 @@ function getUsersViews()
 {
     global $user_id;
 
-    $path = "/Users/" . $user_id . "/Views/?";
+    $path = "/Users/" . $user_id . "/Views/?IncludeExternalContent=false";
     return apiCall($path);
 }
 
