@@ -120,7 +120,7 @@ function getPosterID($item, $useSeasonImage = true) {
             $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
             break;
         default:
-            $posterID = $item->Id;
+            $posterID = $item->ImageTags->Primary ? $item->Id : null;
             break; 
     }
     return $posterID;
