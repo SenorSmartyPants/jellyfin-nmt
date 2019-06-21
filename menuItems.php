@@ -99,7 +99,13 @@ function setDetailURL($item, $menuItem) {
                 $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
                 break; 
             case "Episode":
-                $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+                //check for season info, very rarely an episode has no season IDs provided
+                if ($item->SeasonId) {
+                    $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+                } else {
+                    //try season redirect, probably only one season
+                    $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId;
+                }
                 break;
             default:
                 $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
