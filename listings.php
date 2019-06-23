@@ -192,7 +192,7 @@ function printFooter()
 ?>
     </div>
         <div class="hidden" id="navigationlinks">
-            <a TVID="HOME" href="home.php"></a>
+            <a href="index.php" TVID="HOME"></a>
             <a href="categories.php" TVID="info"></a><br/>
         </div>
 
