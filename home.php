@@ -1,6 +1,6 @@
 <?php
 
-include 'index.php';
+include 'listings.php';
 
 $useSeasonNameForMenuItems = true;
 
