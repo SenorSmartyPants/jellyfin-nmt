@@ -94,6 +94,8 @@ function setDetailURL($item, $menuItem) {
                 break;
         }
     } else {
+        switch ($item->MediaType) {
+            case "Video":
         switch ($item->Type) {
             case "Movie":
                 $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
@@ -106,11 +108,23 @@ function setDetailURL($item, $menuItem) {
                     //try season redirect, probably only one season
                     $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId;
                 }
+                        break;
+                    default:
+                        $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                        $menuItem->OnDemandTag = "VOD";
+                        break; 
+                }
                 break;
-            default:
+            case "Audio":
                 $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
-                $menuItem->VOD = "VOD";
-                break; 
+                $menuItem->OnDemandTag = "AOD";
+                break;
+            case "Photo":
+                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $menuItem->OnDemandTag = "POD";
+                break;                
+            default:
+                break;
         }
     }
     $menuItem->DetailURL = $detailURL;

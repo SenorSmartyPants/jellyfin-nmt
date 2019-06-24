@@ -313,7 +313,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center">
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->VOD ?: null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?: null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
     //start of row
