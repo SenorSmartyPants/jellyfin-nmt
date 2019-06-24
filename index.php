@@ -4,14 +4,12 @@ include 'listings.php';
 
 $useSeasonNameForMenuItems = true;
 
-//$Limit = 27;
-
 $items = getUsersViews()->Items;
 
 /* features needed
 Series name only for menuitem title
 */
-setIndexStyle(IndexStyleEnum::PosterPopupDynamic, count($items));
+setIndexStyle(null, count($items));
 
 //960x540
 //(1093 - (n+1)*4) / n = w

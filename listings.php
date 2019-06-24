@@ -1,5 +1,6 @@
 <?php
 include 'IndexStyles.php';
+include 'config.php';
 include 'secrets.php';
 include 'menuItems.php';
 

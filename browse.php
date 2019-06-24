@@ -46,20 +46,14 @@ switch ($collectionType) {
         break;
 }
 
-$Limit = 27;
+//paging with dynamic style causes issues
+setIndexStyle($collection_listing_style[$collectionType], null);
+
 $itemsAndCount = getItems($parentId, ($page - 1) * $Limit, $Limit, $type, $recursive, 
     $genres, $nameStartsWith, $ratings, $tags, $years);
 $items = $itemsAndCount->Items;
 
 $numPages = ceil($itemsAndCount->TotalRecordCount / $Limit);
-
-/* features needed
-Series name only for menuitem title
-
-
-*/
-
-setIndexStyle(IndexStyleEnum::PosterPopupDynamic, count($items));
 
 printHeadEtc();
 
