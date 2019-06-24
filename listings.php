@@ -50,7 +50,8 @@ function printHeadEtc($onloadset = "1")
         <style>
             @media screen {
                 #popupWrapper { position: absolute; top: 30px; }
-                body { margin-top: 36px; margin-left: 93px; padding-right: 93px; background-repeat: no-repeat; width: 1094px }
+                /* 1096x648 usable area on NMT by default */
+                body { margin-top: 36px; margin-left: 92px; padding-right: 92px; background-repeat: no-repeat; width: 1096px; font-family: arial, sans-serif; }
 
                 html { background-color: transparent; } /* override from theme.css. Messed with debug background placement */
             }
