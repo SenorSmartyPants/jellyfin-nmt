@@ -29,6 +29,7 @@ function parseSeries($item)
 
 function parse($item) {
     global $popupHeight, $popupWidth;
+    global $thumbnailsWidth, $thumbnailsHeight, $ImageType;
 
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
@@ -38,8 +39,8 @@ function parse($item) {
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
-    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/Primary?UnplayedCount=" . $menuItem->UnplayedCount . 
-        "&Height=" . $popupHeight . "&Width=" . $popupWidth . 
+    $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/" . $ImageType . "?UnplayedCount=" . $menuItem->UnplayedCount . 
+        "&Height=" . ($popupHeight ?: $thumbnailsHeight) . "&Width=" . ($popupWidth ?: $thumbnailsWidth) . 
         ($item->UserData->Played ? "&AddPlayedIndicator=true" : null);
 
     return $menuItem;
@@ -98,18 +99,18 @@ function setDetailURL($item, $menuItem) {
     } else {
         switch ($item->MediaType) {
             case "Video":
-        switch ($item->Type) {
-            case "Movie":
-                $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
-                break; 
-            case "Episode":
-                //check for season info, very rarely an episode has no season IDs provided
-                if ($item->SeasonId) {
-                    $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
-                } else {
-                    //try season redirect, probably only one season
-                    $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId;
-                }
+                switch ($item->Type) {
+                    case "Movie":
+                        $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
+                        break; 
+                    case "Episode":
+                        //check for season info, very rarely an episode has no season IDs provided
+                        if ($item->SeasonId) {
+                            $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+                        } else {
+                            //try season redirect, probably only one season
+                            $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId;
+                        }
                         break;
                     default:
                         $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
@@ -133,16 +134,17 @@ function setDetailURL($item, $menuItem) {
 }
 
 function getPosterID($item, $useSeasonImage = true) {
+    global $ImageType;
     switch ($item->Type) {
         case "Season":
-            $posterID = $item->ImageTags->Primary ? $item->Id : $item->SeriesId;
+            $posterID = $item->ImageTags->{$ImageType} ? $item->Id : $item->SeriesId;
             break;
         case "Episode":
             //API
             $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
             break;
         default:
-            $posterID = $item->ImageTags->Primary ? $item->Id : null;
+            $posterID = $item->ImageTags->{$ImageType} ? $item->Id : null;
             break; 
     }
     return $posterID;

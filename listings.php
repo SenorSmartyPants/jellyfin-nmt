@@ -18,7 +18,7 @@ function printMenuItem($menuItem)
 
 function printHeadEtc($onloadset = "1")
 {
-    global $api_url, $cssFile;
+    global $api_url, $cssFile, $theme_css, $popupHeight;
     //TODO:background can be set to fanart... 
     ?>
     <html>
@@ -28,9 +28,15 @@ function printHeadEtc($onloadset = "1")
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Jellyfin NMT</title>
 
+<?
+        if (isset($cssFile)) {
+?>
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $cssFile ?>"/>
-        <link rel="StyleSheet" type="text/css" href="css/themes/dark.css" />
+<?
+        }
+?>
+        <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
         <style>
             #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
             div.title{ visibility:hidden; }
@@ -65,15 +71,27 @@ function printHeadEtc($onloadset = "1")
                 if (subX) {
                     subtitle.firstChild.nodeValue = subX.nodeValue;
                 }
+<?
+                if (isset($popupHeight)) {
+?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
+<?
+                }
+?>            
             }
             function hide(x) {
                 bind();
                 title.firstChild.nodeValue = "\xa0";
                 subtitle.firstChild.nodeValue = "\xa0";
+<?
+                if (isset($popupHeight)) {
+?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
+<?
+                }
+?>          
             }
 
             function initpage() {
@@ -91,20 +109,23 @@ function printHeadEtc($onloadset = "1")
 
 function printFooter()
 {
-    global $menuItems;
+    global $menuItems, $popupHeight;
+
 ?>
-    <div id="popupWrapper">
+        <div id="popupWrapper">
 <?
-    //print popups last of all, so they have highest z-index on NMT
-    foreach ($menuItems as $key => $menuItem) {
-        printTitleAndSubtitle($menuItem, 0, $key);
-    }
-    //print popups last of all, so they have highest z-index on NMT
-    foreach ($menuItems as $key => $menuItem) {
-        printPopup($menuItem, 0, $key);
-    }
+        //print popups last of all, so they have highest z-index on NMT
+        foreach ($menuItems as $key => $menuItem) {
+            printTitleAndSubtitle($menuItem, 0, $key);
+        }
+        if (isset($popupHeight)) {
+            //print popups last of all, so they have highest z-index on NMT
+            foreach ($menuItems as $key => $menuItem) {
+                printPopup($menuItem, 0, $key);
+            }
+        }
 ?>
-    </div>
+        </div>
         <div class="hidden" id="navigationlinks">
             <a href="index.php" TVID="HOME"></a>
             <a href="categories.php" TVID="info"></a><br/>
@@ -132,12 +153,11 @@ function printNavbarAndPosters($title, $items)
 function printPosterTable($items)
 {
     global $menuItems, $nbThumbnailsPerLine, $lastRow;
-    //set table is centered
-    $align = "left";
+    global $moviesTableAlign, $moviesTableCellpadding, $moviesTableCellspacing;
 
     $lastRow = ceil(count($items) / $nbThumbnailsPerLine);
     ?>
-    <table class="movies" border="0" cellpadding="0" cellspacing="4" align="<?= $align ?>">
+    <table class="movies" border="0" cellpadding="<?= $moviesTableCellpadding ?: 0 ?>" cellspacing="<?= $moviesTableCellspacing ?: 0 ?>" align="<?= $moviesTableAlign ?>">
         <?php
         /*
     <xsl:for-each select="library/movies/movie[position() mod $nbCols = 1]"> //selects first item in row
