@@ -12,25 +12,31 @@ Series name only for menuitem title
 setIndexStyle(null, count($items));
 
 //960x540
-//(1093 - (n+1)*4) / n = w
+//(1096 - (n+1)*cellspacing) / n = w
+//or 
+//(1096 - (2n)*cellpadding) / n = w
 //larger thumbnails need more padding I think
 
 if (count($items) <= 6) {
     //3x3
-    $thumbnailsWidth = 360;
-    $thumbnailsHeight = 202;
-    $popupWidth = 360;
-    $popupHeight = 202;
+    $thumbnailsWidth = 341;
+    $thumbnailsHeight = 191;
+    $popupWidth = 341;
+    $popupHeight = 191;
     $nbThumbnailsPerPage = 6;
-    $nbThumbnailsPerLine = 3; 
+    $nbThumbnailsPerLine = 3;
+    $moviesTableCellpadding = 12;
+    $moviesTableCellspacing = 0;
 } else {
     //4x4
-    $thumbnailsWidth = 268;
-    $thumbnailsHeight = 151;
-    $popupWidth = 268;
-    $popupHeight = 151;
+    $thumbnailsWidth = 254;
+    $thumbnailsHeight = 143;
+    $popupWidth = 254;
+    $popupHeight = 143;
     $nbThumbnailsPerPage = 12;
-    $nbThumbnailsPerLine = 4;  
+    $nbThumbnailsPerLine = 4; 
+    $moviesTableCellpadding = 10;
+    $moviesTableCellspacing = 0;
 }
 
 printHeadEtc("nextup");
