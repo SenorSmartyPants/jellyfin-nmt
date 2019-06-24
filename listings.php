@@ -384,12 +384,12 @@ foreach($current_users as $user) {
 function printTitleTable($currentPage = 1, $numPages = 1)
 {
     global $api_url, $apiCallCount;
-    global $QSBase;
+    global $QSBase, $include_jellyfin_logo_when_backdrop_present;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
-            <td width="25%" valign="top"><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/></td>
+            <td width="25%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/><? } ?></td>
             <td width="50%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
