@@ -2,7 +2,7 @@
 
 include 'listings.php';
 
-$filters = getFilters(null, null, true);
+$filters = getFilters(null, "movie,series,boxset", true);
 
 /* TODO: decades?
 //make a comma delimited list of years in the decade
