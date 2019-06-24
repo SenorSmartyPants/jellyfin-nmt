@@ -1,34 +1,36 @@
-#bannerlg1 { visibility: hidden; position: absolute; top: 34px; left: 11px; }
-#bannerfr1 { visibility: hidden; position: absolute; top: 23px; left: 0px; }
-#bannerlg2 { visibility: hidden; position: absolute; top: 34px; left: 425px; }
-#bannerfr2 { visibility: hidden; position: absolute; top: 23px; left: 414px; }
+#imgDVD1 { visibility: hidden; position: absolute; top: 34px; left: 11px; }
+#frmDVD1 { visibility: hidden; position: absolute; top: 23px; left: 0px; }
+#imgDVD2 { visibility: hidden; position: absolute; top: 34px; left: 425px; }
+#frmDVD2 { visibility: hidden; position: absolute; top: 23px; left: 414px; }
 
-#bannerlg3 { visibility: hidden; position: absolute; top: 112px; left: 11px; }
-#bannerfr3 { visibility: hidden; position: absolute; top: 101px; left: 0px; }
-#bannerlg4 { visibility: hidden; position: absolute; top: 112px; left: 425px; }
-#bannerfr4 { visibility: hidden; position: absolute; top: 101px; left: 414px; }
+#imgDVD3 { visibility: hidden; position: absolute; top: 112px; left: 11px; }
+#frmDVD3 { visibility: hidden; position: absolute; top: 101px; left: 0px; }
+#imgDVD4 { visibility: hidden; position: absolute; top: 112px; left: 425px; }
+#frmDVD4 { visibility: hidden; position: absolute; top: 101px; left: 414px; }
 
-#bannerlg5 { visibility: hidden; position: absolute; top: 190px; left: 11px; }
-#bannerfr5 { visibility: hidden; position: absolute; top: 179px; left: 0px; }
-#bannerlg6 { visibility: hidden; position: absolute; top: 190px; left: 425px; }
-#bannerfr6 { visibility: hidden; position: absolute; top: 179px; left: 414px; }
+#imgDVD5 { visibility: hidden; position: absolute; top: 190px; left: 11px; }
+#frmDVD5 { visibility: hidden; position: absolute; top: 179px; left: 0px; }
+#imgDVD6 { visibility: hidden; position: absolute; top: 190px; left: 425px; }
+#frmDVD6 { visibility: hidden; position: absolute; top: 179px; left: 414px; }
 
-#bannerlg7 { visibility: hidden; position: absolute; top: 268px; left: 11px; }
-#bannerfr7 { visibility: hidden; position: absolute; top: 257px; left: 0px; }
-#bannerlg8 { visibility: hidden; position: absolute; top: 268px; left: 425px; }
-#bannerfr8 { visibility: hidden; position: absolute; top: 257px; left: 414px; }
+#imgDVD7 { visibility: hidden; position: absolute; top: 268px; left: 11px; }
+#frmDVD7 { visibility: hidden; position: absolute; top: 257px; left: 0px; }
+#imgDVD8 { visibility: hidden; position: absolute; top: 268px; left: 425px; }
+#frmDVD8 { visibility: hidden; position: absolute; top: 257px; left: 414px; }
 
-#bannerlg9 { visibility: hidden; position: absolute; top: 346px; left: 11px; }
-#bannerfr9 { visibility: hidden; position: absolute; top: 335px; left: 0px; }
-#bannerlg10 { visibility: hidden; position: absolute; top: 346px; left: 425px; }
-#bannerfr10 { visibility: hidden; position: absolute; top: 335px; left: 414px; }
+#imgDVD9 { visibility: hidden; position: absolute; top: 346px; left: 11px; }
+#frmDVD9 { visibility: hidden; position: absolute; top: 335px; left: 0px; }
+#imgDVD10 { visibility: hidden; position: absolute; top: 346px; left: 425px; }
+#frmDVD10 { visibility: hidden; position: absolute; top: 335px; left: 414px; }
 
-#bannerlg11 { visibility: hidden; position: absolute; top: 424px; left: 11px; }
-#bannerfr11 { visibility: hidden; position: absolute; top: 413px; left: 0px; }
-#bannerlg12 { visibility: hidden; position: absolute; top: 424px; left: 425px; }
-#bannerfr12 { visibility: hidden; position: absolute; top: 413px; left: 414px; }
+#imgDVD11 { visibility: hidden; position: absolute; top: 424px; left: 11px; }
+#frmDVD11 { visibility: hidden; position: absolute; top: 413px; left: 0px; }
+#imgDVD12 { visibility: hidden; position: absolute; top: 424px; left: 425px; }
+#frmDVD12 { visibility: hidden; position: absolute; top: 413px; left: 414px; }
 
-#bannerlg13 { visibility: hidden; position: absolute; top: 502px; left: 11px; }
-#bannerfr13 { visibility: hidden; position: absolute; top: 491px; left: 0px; }
-#bannerlg14 { visibility: hidden; position: absolute; top: 502px; left: 425px; }
-#bannerfr14 { visibility: hidden; position: absolute; top: 491px; left: 414px; }
+#imgDVD13 { visibility: hidden; position: absolute; top: 502px; left: 11px; }
+#frmDVD13 { visibility: hidden; position: absolute; top: 491px; left: 0px; }
+#imgDVD14 { visibility: hidden; position: absolute; top: 502px; left: 425px; }
+#frmDVD14 { visibility: hidden; position: absolute; top: 491px; left: 414px; }
+
+table.movies td { height: 78px; width: 413px; }
