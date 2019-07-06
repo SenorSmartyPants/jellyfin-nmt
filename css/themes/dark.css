@@ -2,28 +2,24 @@ body {
     background-color: #101010;
     color: #999999;
     font-size: 10pt;
-    text-decoration: none;
+}
+
+td {
+    color: #999999;
+    font-size: 18pt;
 }
 
 .indexname {
     color: #dddddd;
     font-size: 23pt;
-    font-weight: normal;
 }
 
 td#title {
     color: #dddddd;
-    font-size: 18pt;
 }
 
 td#subtitle {
-    color: #999999;
     font-size: 15pt;
-}
-
-td#page {
-    color: #999999;
-    font-size: 18pt;
 }
 
 a {
@@ -34,20 +30,13 @@ a {
 
 
 /* used in categories.php */
-
-table.categories {
-    font-size: 18pt;
-    color: #999999;
-    font-weight: bold;
-}
-
 table.categories th {
     font-size: 22pt;
     color: #dddddd;
     text-align: left;
+    font-weight: normal;
 }
 
 td.txt {
-    font-size: 18pt;
-    color: #999999;
+    font-size: 16pt;
 }
