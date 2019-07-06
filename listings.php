@@ -390,8 +390,8 @@ function printTitleTable($currentPage = 1, $numPages = 1)
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
-            <td width="25%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/><? } ?></td>
-            <td width="50%" align="center" valign="top">
+            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/><? } ?></td>
+            <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td align="center" id="title" valign="top">&nbsp;</td>
@@ -403,7 +403,7 @@ function printTitleTable($currentPage = 1, $numPages = 1)
             </td>
 
 
-            <td width="25%" align="right" id="page" valign="top"><? 
+            <td width="20%" align="right" id="page" valign="top"><? 
             if ($numPages > 1) { 
                 //pgup on first page, wraps around to last page
                 $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
