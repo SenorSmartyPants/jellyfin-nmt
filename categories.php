@@ -59,7 +59,7 @@ function printCategory($name, $items) {
     <tr>
         <td background="<?= $jukebox_url ?>pictures/wall/cat-l.png"></td>
         <th width="120" valign="top"><?= $name ?></th>
-        <td class="txt">
+        <td class="secondaryText">
 <?
         for ($i=0; $i < count($items); $i++) { 
 ?>

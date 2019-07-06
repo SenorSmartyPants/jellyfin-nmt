@@ -36,6 +36,7 @@ function printHeadEtc($onloadset = "1")
 <?
         }
 ?>
+        <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
         <style>
             #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
@@ -397,7 +398,7 @@ function printTitleTable($currentPage = 1, $numPages = 1)
                         <td align="center" id="title" valign="top">&nbsp;</td>
                     </tr>
                     <tr>
-                        <td align="center" id="subtitle" valign="top">&nbsp;</td>
+                        <td align="center" id="subtitle" valign="top" class="secondaryText">&nbsp;</td>
                     </tr>
                 </table>
             </td>

@@ -1,0 +1,22 @@
+a {
+    font-size: 18pt;
+    text-decoration: none;
+}
+
+td {
+    font-size: 18pt;
+}
+
+th {
+    font-size: 22pt;
+    text-align: left;
+    font-weight: normal;
+}
+
+.secondaryText {
+    font-size: 16pt;
+}
+
+.indexname {
+    font-size: 23pt;
+}
