@@ -251,7 +251,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     global $nbThumbnailsPerLine, $nbThumbnailsPerPage;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
-    <td align="center" class="defaultCardBackground<?= ($position % 5) + 1 ?>" >
+    <td align="center" <? if (!$menuItem->PosterBaseURL) { ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>"<?}?> >
         <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?: null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
