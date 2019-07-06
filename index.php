@@ -25,8 +25,8 @@ if (count($items) <= 6) {
     $popupHeight = 191;
     $nbThumbnailsPerPage = 6;
     $nbThumbnailsPerLine = 3;
-    $moviesTableCellpadding = 12;
-    $moviesTableCellspacing = 0;
+    $moviesTableCellpadding = 0;
+    $moviesTableCellspacing = 16;
 } else {
     //4x4
     $thumbnailsWidth = 254;
@@ -35,8 +35,8 @@ if (count($items) <= 6) {
     $popupHeight = 143;
     $nbThumbnailsPerPage = 12;
     $nbThumbnailsPerLine = 4; 
-    $moviesTableCellpadding = 10;
-    $moviesTableCellspacing = 0;
+    $moviesTableCellpadding = 0;
+    $moviesTableCellspacing = 16;
 }
 
 printHeadEtc("nextup");

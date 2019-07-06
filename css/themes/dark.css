@@ -17,3 +17,23 @@ th {
 .secondaryText {
     color: #999999;
 }
+
+.defaultCardBackground1 {
+    background-color: #d2b019
+}
+
+.defaultCardBackground2 {
+    background-color: #338abb
+}
+
+.defaultCardBackground3 {
+    background-color: #6b689d
+}
+
+.defaultCardBackground4 {
+    background-color: #dd452b
+}
+
+.defaultCardBackground5 {
+    background-color: #5ccea9
+}
