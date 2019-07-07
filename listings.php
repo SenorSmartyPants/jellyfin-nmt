@@ -126,7 +126,9 @@ function printNavbarAndPosters($title, $items)
     <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td>
     <?php  
     printNavbar($title);
-
+?>
+    </td></tr><tr valign="top"><td class="posterTableParent">
+<? 
     printPosterTable($items);
 ?>
     </td></tr></table>
