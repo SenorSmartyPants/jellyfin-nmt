@@ -38,25 +38,6 @@ function printHeadEtc($onloadset = "1")
 ?>
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
-        <style>
-            #frmlistDVD { visibility: visible; position: absolute; top: 52px; left: 730px; }
-            div.title{ visibility:hidden; }
-            img { border: 0; }
-            table.main { width:1090; }
-            td { text-decoration: none;}
-            td.movies { padding-right: 10px;}
-            .hidden { visibility: hidden; display: none; position: absolute; top: 600px; left: 1px; }
-        </style>
-
-        <style>
-            @media screen {
-                #popupWrapper { position: absolute; top: 30px; }
-                /* 1096x648 usable area on NMT by default */
-                body { margin-top: 36px; margin-left: 92px; padding-right: 92px; background-repeat: no-repeat; width: 1096px; font-family: arial, sans-serif; }
-
-                html { background-color: transparent; } /* override from theme.css. Messed with debug background placement */
-            }
-        </style>
 
         <script>
             var title = 1;
@@ -142,7 +123,7 @@ function printFooter()
 function printNavbarAndPosters($title, $items)
 {
     ?>
-    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td height="598">
+    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td>
     <?php  
     printNavbar($title);
 
@@ -374,12 +355,10 @@ function printNavbar($title)
 {
     global $jukebox_url, $api_url, $user_switch_url, $user_ids, $current_users;
 
-    $imagePadHeight = 56;
     ?>
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
-            <td align="left" valign="top" height="<?= $imagePadHeight ?>" width="1"><img src="<?= $jukebox_url ?>pictures/detail/1x688.png" height="<?= $imagePadHeight ?>" /></td>
-            <td class="indexname" id="indexmenuleft" align="left" valign="top" height="<?= $imagePadHeight ?>" width="265">
+            <td class="indexname" id="indexmenuleft" align="left" valign="top">
                 <?= $title ?>
             </td>
             <td id="indexmenuright" align="right">&nbsp;

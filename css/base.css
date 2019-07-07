@@ -19,4 +19,46 @@ th {
 
 .indexname {
     font-size: 23pt;
+    height: 56px;
+    width: 265px;
+}
+
+.posterTableParent {
+    height: 542px;
+}
+
+table.main {
+    width: 1090;
+}
+
+img {
+    border: 0;
+}
+
+.hidden {
+    visibility: hidden;
+    display: none;
+    position: absolute;
+    top: 600px;
+    left: 1px;
+}
+
+@media screen {
+    #popupWrapper {
+        position: absolute;
+        top: 30px;
+    }
+    /* 1096x648 usable area on NMT by default */
+    body {
+        margin-top: 36px;
+        margin-left: 92px;
+        padding-right: 92px;
+        background-repeat: no-repeat;
+        width: 1096px;
+        font-family: arial, sans-serif;
+    }
+    /* override from <theme>.css. Messed with debug background placement */
+    html {
+        background-color: transparent;
+    }
 }
