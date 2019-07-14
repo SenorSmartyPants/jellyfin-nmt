@@ -2,7 +2,8 @@
 $theme_css = "dark.css";
 
 $default_listing_style = IndexStyleEnum::PosterPopupDynamic;
-$collection_listing_style['tvshows'] = IndexStyleEnum::TVBannerPopup7x2;
+$folder_collection_listing_style['CollectionFolder/tvshows'] = IndexStyleEnum::TVBannerPopup7x2;
+$folder_collection_listing_style['Series/'] = IndexStyleEnum::PosterPopup9x3;
 
 $include_jellyfin_logo_when_backdrop_present = false;
 
