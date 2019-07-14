@@ -16,10 +16,11 @@ function printMenuItem($menuItem)
 <?php
 }
 
-function printHeadEtc($onloadset = "1")
+function printHeadEtc($onloadset = null)
 {
     global $api_url, $cssFile, $theme_css, $popupHeight;
     //TODO:background can be set to fanart... 
+    $onloadset = $onloadset ?? "1";
     ?>
     <html>
 
@@ -142,7 +143,7 @@ function printPosterTable($items)
 
     $lastRow = ceil(count($items) / $nbThumbnailsPerLine);
     ?>
-    <table class="movies" border="0" cellpadding="<?= $moviesTableCellpadding ?: 0 ?>" cellspacing="<?= $moviesTableCellspacing ?: 0 ?>" align="<?= $moviesTableAlign ?>">
+    <table class="movies" border="0" cellpadding="<?= $moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $moviesTableCellspacing ?? 0 ?>" align="<?= $moviesTableAlign ?>">
         <?php
         /*
     <xsl:for-each select="library/movies/movie[position() mod $nbCols = 1]"> //selects first item in row
@@ -235,7 +236,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center" <? if (!$menuItem->PosterBaseURL) { ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>"<?}?> >
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?: null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
     //start of row

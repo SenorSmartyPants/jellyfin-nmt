@@ -7,7 +7,7 @@ $useSeasonImage = false;
 
 
 $page = $_GET["page"];
-$page = $page ?: 1;
+$page = $page ?? 1;
 
 $parentId = $_GET["parentId"];
 

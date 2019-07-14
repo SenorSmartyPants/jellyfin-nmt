@@ -21,7 +21,7 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
     global $Limit, $nbThumbnailsPerPage, $nbThumbnailsPerLine;
     global $hoverFrame, $cssFile;
 
-    $indexStyle = $indexStyle ?: $default_listing_style;
+    $indexStyle = $indexStyle ?? $default_listing_style;
 
     if ($indexStyle == IndexStyleEnum::PosterPopupDynamic) {
         if (is_null($indexCount) || $indexCount > 12) {
