@@ -13,12 +13,45 @@ abstract class IndexStyleEnum
     const TVBannerPopup7x2 = 8;
 }
 
+function setDataLimits($indexStyle = null)
+{
+    global $default_listing_style, $Limit;
+
+    $indexStyle = $indexStyle ?? $default_listing_style;
+
+    switch ($indexStyle) {
+        case IndexStyleEnum::PosterPopup6x2:
+        case IndexStyleEnum::Poster6x2:
+        case IndexStyleEnum::TVBannerPopup6x2:
+            $Limit = 12;
+            break;
+    
+        case IndexStyleEnum::PosterPopup9x3:
+        case IndexStyleEnum::Poster9x3:
+        default:
+            $Limit = 27;
+            break;
+
+        case IndexStyleEnum::Poster12x4:
+            $Limit = 48;
+            break;
+
+        case IndexStyleEnum::TVBannerPopup4x2:
+            $Limit = 8;      
+            break;
+
+        case IndexStyleEnum::TVBannerPopup7x2:
+            $Limit = 14;
+            break;             
+    }
+}
+
 function setIndexStyle($indexStyle = null, $indexCount = null)
 {
     global $default_listing_style, $ImageType;
     global $moviesTableAlign, $moviesTableCellpadding, $moviesTableCellspacing;
     global $thumbnailsWidth, $thumbnailsHeight, $popupWidth, $popupHeight;
-    global $Limit, $nbThumbnailsPerPage, $nbThumbnailsPerLine;
+    global $nbThumbnailsPerPage, $nbThumbnailsPerLine;
     global $hoverFrame, $cssFile;
 
     $indexStyle = $indexStyle ?? $default_listing_style;
@@ -42,7 +75,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 176;
             $thumbnailsHeight = 261;
             
-            $Limit = 12;
             $nbThumbnailsPerPage = 12;
             $nbThumbnailsPerLine = 6;
             $ImageType = "Primary";
@@ -61,7 +93,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 117;
             $thumbnailsHeight = 174;
 
-            $Limit = 27;
             $nbThumbnailsPerPage = 27;
             $nbThumbnailsPerLine = 9;
             $ImageType = "Primary";
@@ -73,7 +104,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 87;
             $thumbnailsHeight = 130;
 
-            $Limit = 48;
             $nbThumbnailsPerPage = 48;
             $nbThumbnailsPerLine = 12;
             $ImageType = "Primary";
@@ -91,7 +121,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 461;
             $thumbnailsHeight = 85;
             
-            $Limit = 8;
             $nbThumbnailsPerPage = 8;
             $nbThumbnailsPerLine = 2;
             $ImageType = "Banner";
@@ -108,7 +137,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 482;
             $thumbnailsHeight = 89;
             
-            $Limit = 12;
             $nbThumbnailsPerPage = 12;
             $nbThumbnailsPerLine = 2;
             $ImageType = "Banner";
@@ -125,7 +153,6 @@ function setIndexStyle($indexStyle = null, $indexCount = null)
             $thumbnailsWidth = 411;
             $thumbnailsHeight = 76;
             
-            $Limit = 14;
             $nbThumbnailsPerPage = 14;
             $nbThumbnailsPerLine = 2;
             $ImageType = "Banner";

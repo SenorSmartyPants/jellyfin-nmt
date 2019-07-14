@@ -48,13 +48,17 @@ switch ($collectionType) {
 }
 
 //paging with dynamic style causes issues
-setIndexStyle($collection_listing_style[$collectionType], null);
+setDataLimits($collection_listing_style[$collectionType]);
 
 $itemsAndCount = getItems($parentId, ($page - 1) * $Limit, $Limit, $type, $recursive, 
     $genres, $nameStartsWith, $ratings, $tags, $years);
 $items = $itemsAndCount->Items;
 
 $numPages = ceil($itemsAndCount->TotalRecordCount / $Limit);
+
+//items on page count, not total
+setIndexStyle($collection_listing_style[$collectionType], 
+    $page < $numPages ? $Limit : $itemsAndCount->TotalRecordCount % $Limit);
 
 printHeadEtc();
 
