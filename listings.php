@@ -1,8 +1,8 @@
 <?php
-include 'IndexStyles.php';
-include 'config.php';
-include 'secrets.php';
-include 'menuItems.php';
+include_once 'IndexStyles.php';
+include_once 'config.php';
+include_once 'secrets.php';
+include_once 'menuItems.php';
 
 $menuItems = array();
 

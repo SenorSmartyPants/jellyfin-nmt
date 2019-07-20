@@ -1,7 +1,7 @@
 <?php
 
-include 'config.php';
-include 'data.php';
+include_once 'config.php';
+include_once 'data.php';
 $useSeasonNameForMenuItems = true;
 
 //2 API calls total for series
