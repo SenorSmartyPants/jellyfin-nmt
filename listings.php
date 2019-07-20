@@ -31,7 +31,7 @@ function printHeadEtc($onloadset = null)
         <title>Jellyfin NMT</title>
 
 <?
-        if (null !== $indexStyle->cssFile()) {
+        if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
 ?>
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
