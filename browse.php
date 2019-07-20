@@ -22,10 +22,12 @@ $ratings = $_GET["Ratings"];
 $tags = $_GET["Tags"];
 $years = $_GET["Years"];
 
+$backdropId = $_GET["backdropId"];
+
 $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&CollectionType=" . $collectionType . "&Name=" . urlencode($name) . 
     "&Genres=" . urlencode($genres) . "&Title=" . urlencode($nameStartsWith) . 
     "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
-    "&Years=" . $years . "&page=";
+    "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
 
 switch ($collectionType) {
     case "tvshows":
