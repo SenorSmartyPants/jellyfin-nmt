@@ -7,7 +7,8 @@ $Limit = 27;
 
 $items = getLatest($Limit);
 
-setIndexStyle(IndexStyleEnum::PosterPopupDynamic, count($items));
+$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);
+$indexStyle->setIndexCount(count($items));
 
 printHeadEtc();
 

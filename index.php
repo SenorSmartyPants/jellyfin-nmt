@@ -9,7 +9,8 @@ $items = getUsersViews()->Items;
 /* features needed
 Series name only for menuitem title
 */
-setIndexStyle(null, count($items));
+$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup6x2);
+$indexStyle->setIndexCount(count($items));
 
 //960x540
 //(1096 - (n+1)*cellspacing) / n = w

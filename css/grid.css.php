@@ -6,7 +6,7 @@ $numPosters = $_GET["number"];
 $styleEnum = $_GET["style"];
 $align = $_GET["align"];
 $vAlign = $_GET["vAlign"];
-setIndexStyle($styleEnum);
+$indexStyle = new IndexStyle($styleEnum);
 
 switch ($styleEnum) {
     case IndexStyleEnum::PosterPopup6x2:
