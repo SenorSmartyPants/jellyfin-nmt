@@ -50,7 +50,8 @@ switch ($collectionType) {
 }
 
 //paging with dynamic style causes issues
-setDataLimits($folder_collection_listing_style[$folderType .'/'. $collectionType]);
+//$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
+overrideIndexStyle($folderType, $collectionType);
 
 $itemsAndCount = getItems($parentId, ($page - 1) * $Limit, $Limit, $type, $recursive, 
     $genres, $nameStartsWith, $ratings, $tags, $years);
