@@ -8,7 +8,7 @@ $indexStyle = new IndexStyle();
 
 $items = getNextUp($indexStyle->Limit)->Items;
 
-setIndexStyle(null, count($items));
+$indexStyle->setIndexCount(count($items));
 
 printHeadEtc();
 

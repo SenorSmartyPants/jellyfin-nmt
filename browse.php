@@ -53,15 +53,15 @@ switch ($collectionType) {
 //$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
 overrideIndexStyle($folderType, $collectionType);
 
-$itemsAndCount = getItems($parentId, ($page - 1) * $Limit, $Limit, $type, $recursive, 
+$itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexStyle->Limit, $type, $recursive, 
     $genres, $nameStartsWith, $ratings, $tags, $years);
 $items = $itemsAndCount->Items;
 
-$numPages = ceil($itemsAndCount->TotalRecordCount / $Limit);
+$numPages = ceil($itemsAndCount->TotalRecordCount / $indexStyle->Limit);
+
 
 //items on page count, not total
-getIndexStyle($folderType, $collectionType,
-    $page < $numPages ? $Limit : $itemsAndCount->TotalRecordCount % $Limit);
+$indexStyle->setIndexCount($page < $numPages ? $indexStyle->Limit : $itemsAndCount->TotalRecordCount - ($indexStyle->Limit * ($page-1)));
 
 printHeadEtc();
 

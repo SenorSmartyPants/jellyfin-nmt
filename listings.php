@@ -252,7 +252,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 
     //end of row
     if (isEndOfRow($placement - 1)) {
-        if ($placement != $indexStyle->nbThumbnailsPerPage) {
+        if ($placement != $indexStyle->Limit) {
             echo "onkeyrightset=\"" . ($placement + 1) . "\"";
         } else {
             echo "onkeyrightset=\"pgdnload\"";

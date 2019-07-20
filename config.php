@@ -23,6 +23,8 @@ function overrideIndexStyle($folderType, $collectionType)
             //override style options
             $indexStyle->moviesTableAlign = "center";
             $indexStyle->moviesTableVAlign = "bottom";
+            $indexStyle->Limit = 9;
+            $indexStyle->nbThumbnailsPerLine = 9;
             break;
 
         default:
