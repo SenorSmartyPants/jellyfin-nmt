@@ -17,26 +17,28 @@ setIndexStyle(null, count($items));
 //(1096 - (2n)*cellpadding) / n = w
 //larger thumbnails need more padding I think
 
+//thumbnail/.8 = popup dimensions
+//can be whatever I want!
 if (count($items) <= 6) {
-    //3x3
-    $thumbnailsWidth = 341;
-    $thumbnailsHeight = 191;
-    $popupWidth = 341;
-    $popupHeight = 191;
-    $nbThumbnailsPerPage = 6;
-    $nbThumbnailsPerLine = 3;
-    $moviesTableCellpadding = 0;
-    $moviesTableCellspacing = 16;
+    //3x2
+    $indexStyle->thumbnailsWidth = 341;
+    $indexStyle->thumbnailsHeight = 191;
+    $indexStyle->popupWidth = 426;
+    $indexStyle->popupHeight = 238;
+    $indexStyle->nbThumbnailsPerPage = 6;
+    $indexStyle->nbThumbnailsPerLine = 3;
+    //$indexStyle->moviesTableCellpadding = 0;
+    $indexStyle->moviesTableCellspacing = 16;
 } else {
-    //4x4
-    $thumbnailsWidth = 254;
-    $thumbnailsHeight = 143;
-    $popupWidth = 254;
-    $popupHeight = 143;
-    $nbThumbnailsPerPage = 12;
-    $nbThumbnailsPerLine = 4; 
-    $moviesTableCellpadding = 0;
-    $moviesTableCellspacing = 16;
+    //4x3
+    $indexStyle->thumbnailsWidth = 254;
+    $indexStyle->thumbnailsHeight = 143;
+    $indexStyle->popupWidth = 318;
+    $indexStyle->popupHeight = 179;
+    $indexStyle->nbThumbnailsPerPage = 12;
+    $indexStyle->nbThumbnailsPerLine = 4; 
+    //$indexStyle->moviesTableCellpadding = 0;
+    $indexStyle->moviesTableCellspacing = 16;
 }
 
 printHeadEtc("nextup");

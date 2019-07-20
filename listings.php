@@ -18,7 +18,8 @@ function printMenuItem($menuItem)
 
 function printHeadEtc($onloadset = null)
 {
-    global $api_url, $cssFile, $theme_css, $popupHeight;
+    global $api_url, $theme_css;
+    global $indexStyle;
     //TODO:background can be set to fanart... 
     $onloadset = $onloadset ?? "1";
     ?>
@@ -30,10 +31,10 @@ function printHeadEtc($onloadset = null)
         <title>Jellyfin NMT</title>
 
 <?
-        if (isset($cssFile)) {
+        if (null !== $indexStyle->cssFile()) {
 ?>
         <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
-        <link rel="StyleSheet" type="text/css" href="<?= $cssFile ?>"/>
+        <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
 <?
         }
 ?>
@@ -56,7 +57,7 @@ function printHeadEtc($onloadset = null)
                     subtitle.firstChild.nodeValue = subX.nodeValue;
                 }
 <?
-                if (isset($popupHeight)) {
+                if (isset($indexStyle->popupHeight)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
@@ -69,7 +70,7 @@ function printHeadEtc($onloadset = null)
                 title.firstChild.nodeValue = "\xa0";
                 subtitle.firstChild.nodeValue = "\xa0";
 <?
-                if (isset($popupHeight)) {
+                if (isset($indexStyle->popupHeight)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
@@ -93,7 +94,7 @@ function printHeadEtc($onloadset = null)
 
 function printFooter()
 {
-    global $menuItems, $popupHeight;
+    global $menuItems, $indexStyle;
 
 ?>
         <div id="popupWrapper">
@@ -102,7 +103,7 @@ function printFooter()
         foreach ($menuItems as $key => $menuItem) {
             printTitleAndSubtitle($menuItem, 0, $key);
         }
-        if (isset($popupHeight)) {
+        if (isset($indexStyle->popupHeight)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($menuItems as $key => $menuItem) {
                 printPopup($menuItem, 0, $key);
@@ -123,12 +124,13 @@ function printFooter()
 
 function printNavbarAndPosters($title, $items)
 {
+    global $indexStyle;
     ?>
     <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td>
     <?php  
     printNavbar($title);
 ?>
-    </td></tr><tr valign="top"><td class="posterTableParent">
+    </td></tr><tr valign="<?= $indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
 <? 
     printPosterTable($items);
 ?>
@@ -138,12 +140,13 @@ function printNavbarAndPosters($title, $items)
 
 function printPosterTable($items)
 {
-    global $menuItems, $nbThumbnailsPerLine, $lastRow;
-    global $moviesTableAlign, $moviesTableCellpadding, $moviesTableCellspacing;
+    global $menuItems, $lastRow;
 
-    $lastRow = ceil(count($items) / $nbThumbnailsPerLine);
+    global $indexStyle;
+
+    $lastRow = ceil(count($items) / $indexStyle->nbThumbnailsPerLine);
     ?>
-    <table class="movies" border="0" cellpadding="<?= $moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $moviesTableCellspacing ?? 0 ?>" align="<?= $moviesTableAlign ?>">
+    <table class="movies" border="0" cellpadding="<?= $indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $indexStyle->moviesTableAlign ?>">
         <?php
         /*
     <xsl:for-each select="library/movies/movie[position() mod $nbCols = 1]"> //selects first item in row
@@ -168,7 +171,7 @@ function printPosterTable($items)
             }
             $menuItem = getMenuItem($item);
             if ($menuItem) {
-                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $nbThumbnailsPerLine));
+                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $indexStyle->nbThumbnailsPerLine));
                 //add menuItem to menuItems list for later
                 array_push($menuItems, $menuItem);
 
@@ -189,8 +192,8 @@ function printPosterTable($items)
 
 function isStartOfRow($position)
 {
-    global $nbThumbnailsPerLine;
-    return ($position % $nbThumbnailsPerLine == 0);
+    global $indexStyle;
+    return ($position % $indexStyle->nbThumbnailsPerLine == 0);
 }
 
 function isLastRow($row)
@@ -201,8 +204,8 @@ function isLastRow($row)
 
 function isEndOfRow($position)
 {
-    global $nbThumbnailsPerLine;
-    return ($position % $nbThumbnailsPerLine == $nbThumbnailsPerLine - 1);
+    global $indexStyle;
+    return ($position % $indexStyle->nbThumbnailsPerLine == $indexStyle->nbThumbnailsPerLine - 1);
 }
 
 function printTitleAndSubtitle($menuItem, $gap, $position)
@@ -216,13 +219,13 @@ function printTitleAndSubtitle($menuItem, $gap, $position)
 
 function printPopup($menuItem, $gap, $position)
 {
-    global $api_url, $jukebox_url, $hoverFrame;
+    global $api_url, $jukebox_url, $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
 
     if ($menuItem->PosterBaseURL) {
 ?>
         <img id="imgDVD<?= $placement ?>" src="<?= $api_url . $menuItem->PosterBaseURL ?>" />
-        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $hoverFrame ?>" />
+        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $indexStyle->hoverFrame ?>" />
 <?php
     }
 }
@@ -231,8 +234,7 @@ function printPopup($menuItem, $gap, $position)
 function printPosterTD($menuItem, $gap, $position, $row)
 {
     global $api_url, $jukebox_url;
-    global $thumbnailsWidth, $thumbnailsHeight;
-    global $nbThumbnailsPerLine, $nbThumbnailsPerPage;
+    global $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center" <? if (!$menuItem->PosterBaseURL) { ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>"<?}?> >
@@ -250,7 +252,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 
     //end of row
     if (isEndOfRow($placement - 1)) {
-        if ($placement != $nbThumbnailsPerPage) {
+        if ($placement != $indexStyle->nbThumbnailsPerPage) {
             echo "onkeyrightset=\"" . ($placement + 1) . "\"";
         } else {
             echo "onkeyrightset=\"pgdnload\"";
@@ -261,8 +263,8 @@ function printPosterTD($menuItem, $gap, $position, $row)
     //last row
     if (isLastRow($row)) {
         //go to top row
-        $topofcolumn = $placement % $nbThumbnailsPerLine;
-        $topofcolumn = ($topofcolumn == 0) ? $nbThumbnailsPerLine : $topofcolumn;
+        $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
+        $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
         echo " onkeydownset=\"" . $topofcolumn . "\" ";
     }
 
@@ -344,7 +346,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 <?
     if ($menuItem->PosterBaseURL) {
 ?>
-        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $thumbnailsWidth ?>" height="<?= $thumbnailsHeight ?>" onfocussrc="<?= $jukebox_url ?>pictures/wall/transparent.png" />
+        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="<?= $jukebox_url ?>pictures/wall/transparent.png" />
 <?   
     } else {
         echo $menuItem->Name;
@@ -356,7 +358,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 
 function printNavbar($title)
 {
-    global $jukebox_url, $api_url, $user_switch_url, $user_ids, $current_users;
+    global $api_url, $user_switch_url, $user_ids, $current_users;
 
     ?>
     <table class="main" border="0" cellpadding="0" cellspacing="0">

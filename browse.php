@@ -57,7 +57,7 @@ $items = $itemsAndCount->Items;
 $numPages = ceil($itemsAndCount->TotalRecordCount / $Limit);
 
 //items on page count, not total
-setIndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType], 
+getIndexStyle($folderType, $collectionType,
     $page < $numPages ? $Limit : $itemsAndCount->TotalRecordCount % $Limit);
 
 printHeadEtc();

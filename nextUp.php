@@ -3,9 +3,10 @@
 include 'listings.php';
 
 $useSeasonNameForMenuItems = false;
-$Limit = 27;
 
-$items = getNextUp($Limit)->Items;
+$indexStyle = new IndexStyle();
+
+$items = getNextUp($indexStyle->Limit)->Items;
 
 setIndexStyle(null, count($items));
 

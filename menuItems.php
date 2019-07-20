@@ -28,8 +28,7 @@ function parseSeries($item)
 }
 
 function parse($item) {
-    global $popupHeight, $popupWidth;
-    global $thumbnailsWidth, $thumbnailsHeight, $ImageType;
+    global $indexStyle;
 
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
@@ -40,8 +39,8 @@ function parse($item) {
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
     if ($menuItem->PosterID) {
-        $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/" . $ImageType . "?UnplayedCount=" . $menuItem->UnplayedCount . 
-            "&Height=" . ($popupHeight ?? $thumbnailsHeight) . "&Width=" . ($popupWidth ?? $thumbnailsWidth) . 
+        $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/" . $indexStyle->ImageType . "?UnplayedCount=" . $menuItem->UnplayedCount . 
+            "&Height=" . ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight) . "&Width=" . ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth) . 
             ($item->UserData->Played ? "&AddPlayedIndicator=true" : null);
     }
 
@@ -136,17 +135,17 @@ function setDetailURL($item, $menuItem) {
 }
 
 function getPosterID($item, $useSeasonImage = true) {
-    global $ImageType;
+    global $indexStyle;
     switch ($item->Type) {
         case "Season":
-            $posterID = $item->ImageTags->{$ImageType} ? $item->Id : $item->SeriesId;
+            $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
         case "Episode":
             //API
             $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
             break;
         default:
-            $posterID = $item->ImageTags->{$ImageType} ? $item->Id : null;
+            $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
             break; 
     }
     return $posterID;

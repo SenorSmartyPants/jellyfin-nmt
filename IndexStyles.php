@@ -13,13 +13,80 @@ abstract class IndexStyleEnum
     const TVBannerPopup7x2 = 8;
 }
 
-function setDataLimits($indexStyle = null)
+class IndexStyle {
+    public $styleEnum;
+    public $indexCount;
+
+    public $hoverFrame;
+    //public $cssFile;
+
+    public $ImageType;
+
+    public $popupWidth;
+    public $popupHeight;
+
+    public $thumbnailsWidth;
+    public $thumbnailsHeight;
+
+    public $Limit;
+
+    public $nbThumbnailsPerPage;
+    public $nbThumbnailsPerLine;
+
+    public $moviesTableAlign;
+    public $moviesTableVAlign;
+    public $moviesTableCellspacing;
+
+
+    public function __construct()
+    {
+        //set defaults
+        $this->ImageType = "Primary";
+
+        $this->Limit = 27;
+
+        $this->moviesTableVAlign = "top";
+        $this->moviesTableAlign = "left";
+    }
+
+
+    
+    public function cssFile()
+    {    
+        $retval = null;
+        switch ($this->styleEnum) {
+            case IndexStyleEnum::PosterPopup6x2:
+            case IndexStyleEnum::PosterPopup9x3:
+                $retval = "css/grid.css.php?number=" . $this->indexCount . 
+                    "&style=" . $this->styleEnum . 
+                    "&align=" . $this->moviesTableAlign . 
+                    "&vAlign=" . $this->moviesTableVAlign;
+                break;
+    
+            case IndexStyleEnum::TVBannerPopup4x2:
+                $retval = "css/8TVBanners.css";        
+                break;
+    
+            case IndexStyleEnum::TVBannerPopup6x2:
+                $retval = "css/12TVBanners.css";
+                break;
+    
+            case IndexStyleEnum::TVBannerPopup7x2:
+                $retval = "css/14TVBanners.css";
+                break;             
+        }
+        return $retval;
+    }
+
+}
+
+function setDataLimits($styleEnum = null)
 {
     global $default_listing_style, $Limit;
 
-    $indexStyle = $indexStyle ?? $default_listing_style;
+    $styleEnum = $styleEnum ?? $default_listing_style;
 
-    switch ($indexStyle) {
+    switch ($styleEnum) {
         case IndexStyleEnum::PosterPopup6x2:
         case IndexStyleEnum::Poster6x2:
         case IndexStyleEnum::TVBannerPopup6x2:
@@ -46,118 +113,120 @@ function setDataLimits($indexStyle = null)
     }
 }
 
-function setIndexStyle($indexStyle = null, $indexCount = null)
+
+function setIndexStyle($styleEnum = null, $indexCount = null)
 {
-    global $default_listing_style, $ImageType;
-    global $moviesTableAlign, $moviesTableCellpadding, $moviesTableCellspacing;
-    global $thumbnailsWidth, $thumbnailsHeight, $popupWidth, $popupHeight;
-    global $nbThumbnailsPerPage, $nbThumbnailsPerLine;
-    global $hoverFrame, $cssFile;
+    global $default_listing_style;
+    global $indexStyle;
+    
+    $indexStyle = new IndexStyle();
 
-    $indexStyle = $indexStyle ?? $default_listing_style;
+    $styleEnum = $styleEnum ?? $default_listing_style;
 
-    if ($indexStyle == IndexStyleEnum::PosterPopupDynamic) {
+    if ($styleEnum == IndexStyleEnum::PosterPopupDynamic) {
         if (is_null($indexCount) || $indexCount > 12) {
-            $indexStyle = IndexStyleEnum::PosterPopup9x3;
+            $styleEnum = IndexStyleEnum::PosterPopup9x3;
         } else {
-            $indexStyle = IndexStyleEnum::PosterPopup6x2;
+            $styleEnum = IndexStyleEnum::PosterPopup6x2;
         }
     }
 
-    switch ($indexStyle) {
-        case IndexStyleEnum::PosterPopup6x2:
-            $popupWidth = 218;
-            $popupHeight = 323;
+    $indexStyle->styleEnum = $styleEnum;
+    $indexStyle->indexCount = $indexCount;
 
-            $hoverFrame = "pictures/wall/hover-frame2.png";
-            $cssFile = "css/6x2PosterIndex.css";
+    switch ($styleEnum) {
+        case IndexStyleEnum::PosterPopup6x2:
+            $indexStyle->popupWidth = 218;
+            $indexStyle->popupHeight = 323;
+
+            $indexStyle->hoverFrame = "pictures/wall/hover-frame2.png";
         case IndexStyleEnum::Poster6x2:
-            $thumbnailsWidth = 176;
-            $thumbnailsHeight = 261;
+            $indexStyle->thumbnailsWidth = 176;
+            $indexStyle->thumbnailsHeight = 261;
             
-            $nbThumbnailsPerPage = 12;
-            $nbThumbnailsPerLine = 6;
-            $ImageType = "Primary";
-            $moviesTableAlign = "left";
-            $moviesTableCellspacing = 4;
+            $indexStyle->nbThumbnailsPerPage = 12;
+            $indexStyle->nbThumbnailsPerLine = 6;
+            $indexStyle->ImageType = "Primary";
+            $indexStyle->moviesTableAlign = "center";
+            $indexStyle->moviesTableVAlign = "middle";
+            $indexStyle->moviesTableCellspacing = 4;
             break;
     
         case IndexStyleEnum::PosterPopup9x3:
         default:
-            $popupWidth = 160;
-            $popupHeight = 237;
+            $indexStyle->popupWidth = 160;
+            $indexStyle->popupHeight = 237;
 
-            $hoverFrame = "pictures/wall/hover-frame.png";
-            $cssFile = "css/9x3PosterIndex.css";
+            $indexStyle->hoverFrame = "pictures/wall/hover-frame.png";
         case IndexStyleEnum::Poster9x3:
-            $thumbnailsWidth = 117;
-            $thumbnailsHeight = 174;
+            $indexStyle->thumbnailsWidth = 117;
+            $indexStyle->thumbnailsHeight = 174;
 
-            $nbThumbnailsPerPage = 27;
-            $nbThumbnailsPerLine = 9;
-            $ImageType = "Primary";
-            $moviesTableAlign = "left";
-            $moviesTableCellspacing = 4;
+            $indexStyle->nbThumbnailsPerPage = 27;
+            $indexStyle->nbThumbnailsPerLine = 9;
+            $indexStyle->ImageType = "Primary";
+            $indexStyle->moviesTableCellspacing = 4;
             break;
 
         case IndexStyleEnum::Poster12x4:
-            $thumbnailsWidth = 87;
-            $thumbnailsHeight = 130;
+            $indexStyle->thumbnailsWidth = 87;
+            $indexStyle->thumbnailsHeight = 130;
 
-            $nbThumbnailsPerPage = 48;
-            $nbThumbnailsPerLine = 12;
-            $ImageType = "Primary";
-            $moviesTableAlign = "left";
-            $moviesTableCellspacing = 4;
+            $indexStyle->nbThumbnailsPerPage = 48;
+            $indexStyle->nbThumbnailsPerLine = 12;
+            $indexStyle->ImageType = "Primary";
+            $indexStyle->moviesTableCellspacing = 4;
             break;
 
         case IndexStyleEnum::TVBannerPopup4x2:
-            $popupWidth = 557;
-            $popupHeight = 103;
+            $indexStyle->popupWidth = 557;
+            $indexStyle->popupHeight = 103;
 
-            $hoverFrame = "pictures/wall/hover-frame-banner8.png";
-            $cssFile = "css/8TVBanners.css";
+            $indexStyle->hoverFrame = "pictures/wall/hover-frame-banner8.png";
+            $indexStyle->cssFile = "css/8TVBanners.css";
 
-            $thumbnailsWidth = 461;
-            $thumbnailsHeight = 85;
+            $indexStyle->thumbnailsWidth = 461;
+            $indexStyle->thumbnailsHeight = 85;
             
-            $nbThumbnailsPerPage = 8;
-            $nbThumbnailsPerLine = 2;
-            $ImageType = "Banner";
-            $moviesTableAlign = "center";           
+            $indexStyle->nbThumbnailsPerPage = 8;
+            $indexStyle->nbThumbnailsPerLine = 2;
+            $indexStyle->ImageType = "Banner";
+            $indexStyle->moviesTableAlign = "center";           
             break;
 
         case IndexStyleEnum::TVBannerPopup6x2:
-            $popupWidth = 587;
-            $popupHeight = 108;
+            $indexStyle->popupWidth = 587;
+            $indexStyle->popupHeight = 108;
 
-            $hoverFrame = "pictures/wall/hover-frame-banner12.png";
-            $cssFile = "css/12TVBanners.css";
+            $indexStyle->hoverFrame = "pictures/wall/hover-frame-banner12.png";
+            $indexStyle->cssFile = "css/12TVBanners.css";
 
-            $thumbnailsWidth = 482;
-            $thumbnailsHeight = 89;
+            $indexStyle->thumbnailsWidth = 482;
+            $indexStyle->thumbnailsHeight = 89;
             
-            $nbThumbnailsPerPage = 12;
-            $nbThumbnailsPerLine = 2;
-            $ImageType = "Banner";
-            $moviesTableAlign = "center";
+            $indexStyle->nbThumbnailsPerPage = 12;
+            $indexStyle->nbThumbnailsPerLine = 2;
+            $indexStyle->ImageType = "Banner";
+            $indexStyle->moviesTableAlign = "center";
             break;
 
         case IndexStyleEnum::TVBannerPopup7x2:
-            $popupWidth = 659;
-            $popupHeight = 121;
+            $indexStyle->popupWidth = 659;
+            $indexStyle->popupHeight = 121;
 
-            $hoverFrame = "pictures/wall/hover-frame-banner14.png";
-            $cssFile = "css/14TVBanners.css";
+            $indexStyle->hoverFrame = "pictures/wall/hover-frame-banner14.png";
+            $indexStyle->cssFile = "css/14TVBanners.css";
 
-            $thumbnailsWidth = 411;
-            $thumbnailsHeight = 76;
+            $indexStyle->thumbnailsWidth = 411;
+            $indexStyle->thumbnailsHeight = 76;
             
-            $nbThumbnailsPerPage = 14;
-            $nbThumbnailsPerLine = 2;
-            $ImageType = "Banner";
-            $moviesTableAlign = "center";
+            $indexStyle->nbThumbnailsPerPage = 14;
+            $indexStyle->nbThumbnailsPerLine = 2;
+            $indexStyle->ImageType = "Banner";
+            $indexStyle->moviesTableAlign = "center";
             break;             
     }
+
+    return $indexStyle;
 }
 ?>
