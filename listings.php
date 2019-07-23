@@ -225,8 +225,12 @@ function printPopup($menuItem, $gap, $position)
     if ($menuItem->PosterBaseURL) {
 ?>
         <img id="imgDVD<?= $placement ?>" src="<?= $api_url . $menuItem->PosterBaseURL ?>" />
-        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $indexStyle->hoverFrame ?>" />
 <?php
+        if ($indexStyle->hoverFrame) {
+?>
+        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $indexStyle->hoverFrame ?>" />
+<?php            
+        }
     }
 }
 
