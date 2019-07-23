@@ -11,6 +11,7 @@ abstract class IndexStyleEnum
     const TVBannerPopup4x2 = 6;
     const TVBannerPopup6x2 = 7;
     const TVBannerPopup7x2 = 8;
+    const PosterPopup = 9; //generic popups
 }
 
 class IndexStyle {
@@ -88,8 +89,16 @@ class IndexStyle {
         switch ($this->styleEnum) {
             case IndexStyleEnum::PosterPopup6x2:
             case IndexStyleEnum::PosterPopup9x3:
+            case IndexStyleEnum::PosterPopup:
                 $retval = "css/grid.css.php?number=" . $this->indexCount . 
                     "&style=" . $this->styleEnum . 
+                    "&numPerLine=" . $this->nbThumbnailsPerLine . 
+                    "&thumbnailsWidth=" . $this->thumbnailsWidth . 
+                    "&thumbnailsHeight=" . $this->thumbnailsHeight . 
+                    "&popupWidth=" . $this->popupWidth . 
+                    "&popupHeight=" . $this->popupHeight . 
+                    "&moviesTableCellspacing=" . $this->moviesTableCellspacing . 
+                    "&OffsetY=" . $this->offsetY . 
                     "&align=" . $this->moviesTableAlign . 
                     "&vAlign=" . $this->moviesTableVAlign;
                 break;

@@ -4,9 +4,16 @@ header('Content-type: text/css');
 
 $numPosters = $_GET["number"];
 $styleEnum = $_GET["style"];
+$numPerLine = $_GET["numPerLine"];
+$thumbnailsWidth = $_GET["thumbnailsWidth"];
+$thumbnailsHeight = $_GET["thumbnailsHeight"];
+$popupWidth = $_GET["popupWidth"];
+$popupHeight = $_GET["popupHeight"];
+$moviesTableCellspacing = $_GET["moviesTableCellspacing"];
+$baseOffsetX = 0;
+$baseOffsetY = intval($_GET["OffsetY"]);
 $align = $_GET["align"];
 $vAlign = $_GET["vAlign"];
-$indexStyle = new IndexStyle($styleEnum);
 
 switch ($styleEnum) {
     case IndexStyleEnum::PosterPopup6x2:
@@ -20,34 +27,19 @@ switch ($styleEnum) {
         break;
 }
 
-//define frame as optional?
-//additional OffsetX
-
-//minimum parameters needed
-/*
-$nbThumbnailsPerLine = 3;
-$thumbnailsWidth = 341;
-$thumbnailsHeight = 191;
-$moviesTableCellspacing = 16;
-moviesTableAlign
-moviesTableVAlign
-popupWidth
-popupHeight
-*/
-
-$thumbWidthPlusCellSpacing = $indexStyle->thumbnailsWidth + $indexStyle->moviesTableCellspacing;
+$thumbWidthPlusCellSpacing = $thumbnailsWidth + $moviesTableCellspacing;
 $tableWidth = ($thumbWidthPlusCellSpacing) * 
-    ($numPosters >= $indexStyle->nbThumbnailsPerLine ? $indexStyle->nbThumbnailsPerLine : $numPosters)
-     + $indexStyle->moviesTableCellspacing;
+    ($numPosters >= $numPerLine ? $numPerLine : $numPosters)
+     + $moviesTableCellspacing;
 
-$thumbHeightPlusCellSpacing = $indexStyle->thumbnailsHeight + $indexStyle->moviesTableCellspacing;
+$thumbHeightPlusCellSpacing = $thumbnailsHeight + $moviesTableCellspacing;
 $tableHeight = ($thumbHeightPlusCellSpacing) * 
-    (intdiv($numPosters - 1, $indexStyle->nbThumbnailsPerLine) + 1)
-    + $indexStyle->moviesTableCellspacing; 
+    (intdiv($numPosters - 1, $numPerLine) + 1)
+    + $moviesTableCellspacing; 
     
 //9x3 table is 1093x538
 //6x2 table is 1084x534
-$containingCellWidth = 1096; //1090 or 1096?
+$containingCellWidth = 1096;
 $containingCellHeight = 542;
 $lowerBound = 620; //612 first try
 
@@ -65,7 +57,7 @@ switch ($align) {
         $offsetX = 0;
         break;
 }
-$offsetX = max($offsetX, 0);
+$offsetX = max($offsetX + $baseOffsetX, 0);
 
 
 switch ($vAlign) {
@@ -81,22 +73,22 @@ switch ($vAlign) {
         $offsetY = 0;
         break;
 }
-$offsetY = max($offsetY, 0);
+$offsetY = max($offsetY + $baseOffsetY, 0);
 
 //echo "table dimensions = ${tableWidth}x${tableHeight}\n";
 //echo "offset = ${offsetX}x${offsetY}\n";
 
 //Height - top of table 56px down
 
-$halfPosterWidth = ($thumbWidthPlusCellSpacing + $indexStyle->moviesTableCellspacing) / 2;
-$frameWidth = $indexStyle->popupWidth + $frameDifferenceWidth * 2;
-$frameHeight = $indexStyle->popupHeight + $frameDifferenceHeight * 2;
+$halfPosterWidth = ($thumbWidthPlusCellSpacing + $moviesTableCellspacing) / 2;
+$frameWidth = $popupWidth + $frameDifferenceWidth * 2;
+$frameHeight = $popupHeight + $frameDifferenceHeight * 2;
 
 for ($i=0;$i < $numPosters; $i++) {
-    $row = intdiv($i, $indexStyle->nbThumbnailsPerLine);
+    $row = intdiv($i, $numPerLine);
 
     //width
-    $previousPostersGap = ($thumbWidthPlusCellSpacing) * ($i % $indexStyle->nbThumbnailsPerLine);
+    $previousPostersGap = ($thumbWidthPlusCellSpacing) * ($i % $numPerLine);
     $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth/2));
     //add offset
     $frameLeft += $offsetX;
