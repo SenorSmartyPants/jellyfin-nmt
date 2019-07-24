@@ -9,7 +9,7 @@ $items = getUsersViews()->Items;
 /* features needed
 Series name only for menuitem title
 */
-$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup6x2);
+$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup);
 $indexStyle->setIndexCount(count($items));
 
 //960x540
@@ -28,8 +28,6 @@ if (count($items) <= 6) {
     $indexStyle->popupHeight = 238;
     $indexStyle->Limit = 6;
     $indexStyle->nbThumbnailsPerLine = 3;
-    //$indexStyle->moviesTableCellpadding = 0;
-    $indexStyle->moviesTableCellspacing = 16;
 } else {
     //4x3
     $indexStyle->thumbnailsWidth = 254;
@@ -38,9 +36,11 @@ if (count($items) <= 6) {
     $indexStyle->popupHeight = 179;
     $indexStyle->Limit = 12;
     $indexStyle->nbThumbnailsPerLine = 4; 
-    //$indexStyle->moviesTableCellpadding = 0;
-    $indexStyle->moviesTableCellspacing = 16;
 }
+$indexStyle->moviesTableCellspacing = 16;
+$indexStyle->hoverFrame = null;
+$indexStyle->moviesTableVAlign = "top";
+$indexStyle->offsetY = 156;
 
 printHeadEtc("nextup");
 
