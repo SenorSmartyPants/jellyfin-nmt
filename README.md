@@ -1,6 +1,6 @@
 # Jellyfin-NMT
 
-![Next Up Screen shot](NextUp.png)
+![Next Up Screen shot](../assets/NextUp.png)
 
 This is a work in progress.
 
