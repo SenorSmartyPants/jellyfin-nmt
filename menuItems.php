@@ -39,9 +39,11 @@ function parse($item) {
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
     if ($menuItem->PosterID) {
-        $menuItem->PosterBaseURL = "/Items/" . $menuItem->PosterID . "/Images/" . $indexStyle->ImageType . "?UnplayedCount=" . $menuItem->UnplayedCount . 
-            "&Height=" . ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight) . "&Width=" . ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth) . 
-            ($item->UserData->Played ? "&AddPlayedIndicator=true" : null);
+        $menuItem->PosterURL = getImageURL($menuItem->PosterID, 
+            ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight),
+            ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth),
+            $indexStyle->ImageType, $menuItem->UnplayedCount, $item->UserData->Played
+            );
     }
 
     return $menuItem;

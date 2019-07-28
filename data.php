@@ -144,4 +144,32 @@ function getFilters($parentID = null, $type = null, $Recursive = null) {
     return apiCall($path);
 }
 
+function getImageURL($id, $height = null, $width = null, $imageType = null, $unplayedCount = null, 
+    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null)
+{
+    global $api_url; 
+
+    $itemsOrUsers = $itemsOrUsers ?? "Items";
+    $imageType = $imageType ?? "Primary";
+
+    $URL = $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?UnplayedCount=" . $unplayedCount .
+        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
+        ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
+
+    return $URL;
+}
+
+function getFavIconURL()
+{
+    global $api_url; 
+
+    return $api_url . "/../web/favicon.ico";
+}
+
+function getLogoURL()
+{
+    global $api_url; 
+
+    return $api_url . "/../web/components/themes/logowhite.png";
+}
 ?>

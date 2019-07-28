@@ -8,15 +8,14 @@ $menuItems = array();
 
 function printHeadEtc($onloadset = null)
 {
-    global $api_url, $theme_css;
-    global $indexStyle;
+    global $theme_css, $indexStyle;
 
     $onloadset = $onloadset ?? "1";
     ?>
     <html>
 
     <head>
-        <link rel="shortcut icon" href="<?= $api_url ?>/../web/favicon.ico" />
+        <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Jellyfin NMT</title>
 
@@ -77,7 +76,7 @@ function printHeadEtc($onloadset = null)
     </head>
 
     <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()"
-        <? if ($_GET["backdropId"]) { ?>background="<?= $api_url . "/Items/" . $_GET["backdropId"] ?>/Images/Backdrop?Height=720&Width=1280" <? } ?>>
+        <? if ($_GET["backdropId"]) { ?>background="<?= getImageURL($_GET["backdropId"],720,1280,"Backdrop") ?>" <? } ?>>
 
     <?php
 }
@@ -209,12 +208,12 @@ function printTitleAndSubtitle($menuItem, $gap, $position)
 
 function printPopup($menuItem, $gap, $position)
 {
-    global $api_url, $indexStyle;
+    global $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
 
-    if ($menuItem->PosterBaseURL) {
+    if ($menuItem->PosterURL) {
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $api_url . $menuItem->PosterBaseURL ?>" />
+        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" />
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
@@ -227,12 +226,11 @@ function printPopup($menuItem, $gap, $position)
 //gap is for skipping rows, in sets on the bottom
 function printPosterTD($menuItem, $gap, $position, $row)
 {
-    global $api_url;
     global $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center" <? 
-    if (!$menuItem->PosterBaseURL) { 
+    if (!$menuItem->PosterURL) { 
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
         <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
@@ -341,9 +339,9 @@ function printPosterTD($menuItem, $gap, $position, $row)
         */
 ?>>
 <?
-    if ($menuItem->PosterBaseURL) {
+    if ($menuItem->PosterURL) {
 ?>
-        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="images/wall/transparent.png" />
+        <img src="<?= $menuItem->PosterURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="images/wall/transparent.png" />
 <?   
     } else {
         echo $menuItem->Name;
@@ -355,7 +353,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 
 function printNavbar($title)
 {
-    global $api_url, $user_switch_url, $user_ids, $current_users;
+    global $user_switch_url, $user_ids, $current_users;
 
     ?>
     <table class="main" border="0" cellpadding="0" cellspacing="0">
@@ -366,7 +364,7 @@ function printNavbar($title)
             <td id="indexmenuright" align="right">&nbsp;
             <a href="<?= $user_switch_url ?>"><?php
 foreach($current_users as $user) {
-?><img src="<?= $api_url ?>/Users/<?= $user_ids[$user] ?>/Images/Primary" width="45" height="45" /><?php
+?><img src="<?=getImageURL($user_ids[$user],45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
 }
 ?></a>&nbsp;
             </td>
@@ -377,13 +375,12 @@ foreach($current_users as $user) {
 
 function printTitleTable($currentPage = 1, $numPages = 1)
 {
-    global $api_url, $apiCallCount;
-    global $QSBase, $include_jellyfin_logo_when_backdrop_present;
+    global $apiCallCount, $QSBase, $include_jellyfin_logo_when_backdrop_present;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= $api_url ?>/../web/components/themes/logowhite.png" height="47"/><? } ?></td>
+            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= getLogoURL() ?>" height="47"/><? } ?></td>
             <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
