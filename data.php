@@ -10,7 +10,7 @@ function apiCall($path, $debug = false)
 
     $apiCallCount++;
 
-    $url = $api_url . $path . "&api_key=" . $api_key;
+    $url = $api_url . '/emby' . $path . "&api_key=" . $api_key;
     if ($debug) echo "<a href=\"" . $url . "\">url</a><br/>";
 
     return json_decode(file_get_contents($url));
@@ -152,7 +152,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? "Items";
     $imageType = $imageType ?? "Primary";
 
-    $URL = $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?UnplayedCount=" . $unplayedCount .
+    $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?UnplayedCount=" . $unplayedCount .
         ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
         ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
 
@@ -163,13 +163,13 @@ function getFavIconURL()
 {
     global $api_url; 
 
-    return $api_url . "/../web/favicon.ico";
+    return $api_url . "/web/favicon.ico";
 }
 
 function getLogoURL()
 {
     global $api_url; 
 
-    return $api_url . "/../web/components/themes/logowhite.png";
+    return $api_url . "/web/components/themes/logowhite.png";
 }
 ?>

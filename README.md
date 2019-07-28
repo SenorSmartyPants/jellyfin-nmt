@@ -21,7 +21,7 @@ Videos are not played through Jellyfin and so are not marked as watched. I use a
 //url to YAMJ generated files
 $jukebox_url = "http://192.168.1.1/New/Jukebox/";
 
-$api_url = "http://localhost:8096/emby";
+$api_url = "http://localhost:8096";
 $api_key = "APIKEY";
 
 $user_id = "USERID";
