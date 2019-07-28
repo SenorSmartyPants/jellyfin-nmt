@@ -76,7 +76,7 @@ function getSubtitle($item) {
 }
 
 function setDetailURL($item, $menuItem) {
-    global $jukebox_url, $NMT_path, $NMT_playerpath;
+    global $NMT_path, $NMT_playerpath;
     
     if ($item->IsFolder) {
         switch ($item->Type) {
