@@ -6,21 +6,11 @@ include_once 'menuItems.php';
 
 $menuItems = array();
 
-function printMenuItem($menuItem)
-{
-    global $api_url;
-    ?>
-    <a href="<?= $menuItem->DetailURL ?>">
-        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" /></a><br />
-    <b><?= $menuItem->Name ?></b><br />
-<?php
-}
-
 function printHeadEtc($onloadset = null)
 {
     global $api_url, $theme_css;
     global $indexStyle;
-    //TODO:background can be set to fanart... 
+
     $onloadset = $onloadset ?? "1";
     ?>
     <html>
