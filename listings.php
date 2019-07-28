@@ -219,7 +219,7 @@ function printTitleAndSubtitle($menuItem, $gap, $position)
 
 function printPopup($menuItem, $gap, $position)
 {
-    global $api_url, $jukebox_url, $indexStyle;
+    global $api_url, $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
 
     if ($menuItem->PosterBaseURL) {
@@ -228,7 +228,7 @@ function printPopup($menuItem, $gap, $position)
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
-        <img id="frmDVD<?= $placement ?>" src="<?= $jukebox_url . $indexStyle->hoverFrame ?>" />
+        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" />
 <?php            
         }
     }
@@ -237,7 +237,7 @@ function printPopup($menuItem, $gap, $position)
 //gap is for skipping rows, in sets on the bottom
 function printPosterTD($menuItem, $gap, $position, $row)
 {
-    global $api_url, $jukebox_url;
+    global $api_url;
     global $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
@@ -353,7 +353,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
 <?
     if ($menuItem->PosterBaseURL) {
 ?>
-        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="<?= $jukebox_url ?>pictures/wall/transparent.png" />
+        <img src="<?= $api_url . $menuItem->PosterBaseURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="images/wall/transparent.png" />
 <?   
     } else {
         echo $menuItem->Name;

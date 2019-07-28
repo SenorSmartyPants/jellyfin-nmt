@@ -145,7 +145,7 @@ class IndexStyle {
                 $this->popupWidth = 218;
                 $this->popupHeight = 323;
     
-                $this->hoverFrame = "pictures/wall/hover-frame2.png";
+                $this->hoverFrame = "images/wall/hover-frame2.png";
             case IndexStyleEnum::Poster6x2:
                 $this->thumbnailsWidth = 176;
                 $this->thumbnailsHeight = 261;
@@ -163,7 +163,7 @@ class IndexStyle {
                 $this->popupWidth = 160;
                 $this->popupHeight = 237;
     
-                $this->hoverFrame = "pictures/wall/hover-frame.png";
+                $this->hoverFrame = "images/wall/hover-frame.png";
             case IndexStyleEnum::Poster9x3:
                 $this->thumbnailsWidth = 117;
                 $this->thumbnailsHeight = 174;
@@ -186,7 +186,7 @@ class IndexStyle {
                 $this->popupWidth = 557;
                 $this->popupHeight = 103;
     
-                $this->hoverFrame = "pictures/wall/hover-frame-banner8.png";
+                $this->hoverFrame = "images/wall/hover-frame-banner8.png";
                 $this->cssFile = "css/8TVBanners.css";
     
                 $this->thumbnailsWidth = 461;
@@ -201,7 +201,7 @@ class IndexStyle {
                 $this->popupWidth = 587;
                 $this->popupHeight = 108;
     
-                $this->hoverFrame = "pictures/wall/hover-frame-banner12.png";
+                $this->hoverFrame = "images/wall/hover-frame-banner12.png";
                 $this->cssFile = "css/12TVBanners.css";
     
                 $this->thumbnailsWidth = 482;
@@ -216,7 +216,7 @@ class IndexStyle {
                 $this->popupWidth = 659;
                 $this->popupHeight = 121;
     
-                $this->hoverFrame = "pictures/wall/hover-frame-banner14.png";
+                $this->hoverFrame = "images/wall/hover-frame-banner14.png";
                 $this->cssFile = "css/14TVBanners.css";
     
                 $this->thumbnailsWidth = 411;
