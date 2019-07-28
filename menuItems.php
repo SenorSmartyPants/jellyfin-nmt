@@ -102,7 +102,7 @@ function setDetailURL($item, $menuItem) {
             case "Video":
                 switch ($item->Type) {
                     case "Movie":
-                        $detailURL = $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
+                        $detailURL = YAMJpath($item);
                         break; 
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
