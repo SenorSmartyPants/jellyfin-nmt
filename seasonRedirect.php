@@ -4,6 +4,7 @@ include 'data.php';
 $SeriesId = $_GET["SeriesId"];
 $SeasonId = $_GET["SeasonId"];
 $ParentIndexNumber = $_GET["ParentIndexNumber"];
+$IndexNumber = $_GET["IndexNumber"];
 
 if ($SeriesId) {
     $DetailURL = getSeasonBySeriesIdURL($SeriesId);
@@ -16,4 +17,4 @@ if ($SeriesId) {
 //using html refresh intead, which works in this case on gaya
 //don't enclose url in single quotes, which break on gaya
 ?>
-<meta http-equiv="REFRESH" content="0; url=<?= $DetailURL ?>" />
+<meta http-equiv="REFRESH" content="0; url=<?= $DetailURL ?>?<?= $IndexNumber ?>" />

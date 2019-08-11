@@ -109,10 +109,12 @@ function setDetailURL($item, $menuItem) {
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
                         if ($item->SeasonId) {
-                            $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber;
+                            $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber
+                                . "&IndexNumber=" . $item->IndexNumber;
                         } else {
                             //try season redirect, probably only one season
-                            $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId;
+                            $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId
+                                . "&IndexNumber=" . $item->IndexNumber;
                         }
                         break;
                     default:
