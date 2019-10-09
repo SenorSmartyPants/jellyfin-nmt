@@ -5,30 +5,6 @@ include 'listings.php';
 $libraryBrowse = true;
 $useSeasonImage = false;
 
-
-$page = $_GET["page"];
-$page = $page ?? 1;
-
-$parentId = $_GET["parentId"];
-
-$folderType = $_GET["FolderType"];
-$collectionType = $_GET["CollectionType"];
-
-$name = $_GET["Name"];
-
-$genres = $_GET["Genres"];
-$nameStartsWith = $_GET["Title"];
-$ratings = $_GET["Ratings"];
-$tags = $_GET["Tags"];
-$years = $_GET["Years"];
-
-$backdropId = $_GET["backdropId"];
-
-$QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&CollectionType=" . $collectionType . "&Name=" . urlencode($name) . 
-    "&Genres=" . urlencode($genres) . "&Title=" . urlencode($nameStartsWith) . 
-    "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
-    "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
-
 switch ($collectionType) {
     case "tvshows":
         $recursive = true;
