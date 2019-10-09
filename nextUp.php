@@ -4,7 +4,7 @@ include 'listings.php';
 
 $useSeasonNameForMenuItems = false;
 
-$indexStyle = new IndexStyle();
+$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup6x2);
 
 $itemsAndCount = getNextUp($indexStyle->Limit, ($page - 1) * $indexStyle->Limit);
 $items = $itemsAndCount->Items;
