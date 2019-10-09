@@ -6,15 +6,16 @@ $useSeasonNameForMenuItems = false;
 
 $indexStyle = new IndexStyle();
 
-$items = getNextUp($indexStyle->Limit)->Items;
+$itemsAndCount = getNextUp($indexStyle->Limit, ($page - 1) * $indexStyle->Limit);
+$items = $itemsAndCount->Items;
 
-$indexStyle->setIndexCount(count($items));
+setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 printHeadEtc();
 
 printNavbarAndPosters("Next Up", $items);
 
-printTitleTable();
+printTitleTable($page, $numPages);
 
 printFooter();
 

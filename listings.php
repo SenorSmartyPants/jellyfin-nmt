@@ -29,6 +29,15 @@ $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&Collection
     "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
     "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
 
+function setNumPagesAndIndexCount($totalRecordCount)
+{
+    global $page, $numPages, $indexStyle;
+    $numPages = ceil($totalRecordCount / $indexStyle->Limit);
+    $indexStyle->setIndexCount($page < $numPages ? 
+                $indexStyle->Limit : 
+                $totalRecordCount - ($indexStyle->Limit * ($page-1)));
+}
+
 function printHeadEtc($onloadset = null)
 {
     global $theme_css, $indexStyle;

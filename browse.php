@@ -33,11 +33,7 @@ $itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexSty
     $genres, $nameStartsWith, $ratings, $tags, $years);
 $items = $itemsAndCount->Items;
 
-$numPages = ceil($itemsAndCount->TotalRecordCount / $indexStyle->Limit);
-
-
-//items on page count, not total
-$indexStyle->setIndexCount($page < $numPages ? $indexStyle->Limit : $itemsAndCount->TotalRecordCount - ($indexStyle->Limit * ($page-1)));
+setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 printHeadEtc();
 
