@@ -412,7 +412,7 @@ function printTitleTable($currentPage = 1, $numPages = 1)
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !isset($_GET["backdropId"])) { ?><img src="<?= getLogoURL() ?>" height="47"/><? } ?></td>
+            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$_GET["backdropId"]) { ?><img src="<?= getLogoURL() ?>" height="47"/><? } ?></td>
             <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
