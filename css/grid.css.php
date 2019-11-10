@@ -103,7 +103,7 @@ for ($i=0;$i < $numPosters; $i++) {
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
-    echo "#imgDVD" . ($i + 1) ." { visibility: hidden; position: absolute; top: " . ($frameTop + $frameDifferenceHeight) . "px; left: " . ($frameLeft + $frameDifferenceWidth) . "px; }\n";
+    echo "#imgDVD" . ($i + 1) ." { visibility: hidden; position: absolute; top: " . ($frameTop + $frameDifferenceHeight) . "px; left: " . ($frameLeft + $frameDifferenceWidth + ($frameLeft == 0 ? 1 : 0)) . "px; }\n";
     echo "#frmDVD" . ($i + 1) ." { visibility: hidden; position: absolute; top: ${frameTop}px; left: ${frameLeft}px; }\n";
 }
 ?>
