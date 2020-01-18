@@ -38,7 +38,7 @@ function parse($item) {
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
-    $played = ($item->Type == "Series" ? null : $item->UserData->Played);
+    $played = ($item->Type == "Series" || $item->Type == "Season" ? null : $item->UserData->Played);
 
     if ($menuItem->PosterID) {
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, 
