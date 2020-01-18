@@ -259,6 +259,7 @@ function printPopup($menuItem, $gap, $position)
 function printPosterTD($menuItem, $gap, $position, $row)
 {
     global $indexStyle;
+    global $page, $numPages;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center" <? 
@@ -289,10 +290,15 @@ function printPosterTD($menuItem, $gap, $position, $row)
 
     //last row
     if (isLastRow($row)) {
-        //go to top row
-        $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
-        $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
-        echo " onkeydownset=\"" . $topofcolumn . "\" ";
+        if ($numPages == 1) {
+            //go to top row
+            $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
+            $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
+            echo " onkeydownset=\"" . $topofcolumn . "\" ";
+        } else {
+            //down arrow goes to next page
+            echo " onkeydownset=\"pgdnload\"";
+        }
     }
 
 /*  TODO: is this anything I want to keep? 
@@ -394,7 +400,7 @@ function printNavbar($title)
                 <?= $title ?>
             </td>
             <td id="indexmenuright" align="right">&nbsp;
-            <a href="<?= $user_switch_url ?>"><?php
+            <a onkeydownset="1" href="<?= $user_switch_url ?>"><?php
 foreach($current_users as $user) {
 ?><img src="<?=getImageURL($user_ids[$user],45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
 }
