@@ -11,7 +11,7 @@ function overrideIndexStyle($folderType, $collectionType)
 
     switch ($folderType . '/' . $collectionType) {
         case 'CollectionFolder/tvshows':
-            $indexStyle = new IndexStyle(IndexStyleEnum::TVBannerPopup7x2);
+            $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
             break;
 
         case 'BoxSet/':
