@@ -33,6 +33,6 @@ function overrideIndexStyle($folderType, $collectionType)
 }
 
 //NMT player path
-$NMT_path = "/media/Videos/"; //server based path to share to NMT
-$NMT_playerpath = "file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/Videos/";  //NMT path to the share
+$NMT_path = "/storage/media/Videos/"; //server based path to share to NMT
+$NMT_playerpath = "file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/media/Videos/";  //NMT path to the share
 ?>
