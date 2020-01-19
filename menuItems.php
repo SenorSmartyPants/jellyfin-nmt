@@ -85,6 +85,7 @@ function setDetailURL($item, $menuItem) {
         switch ($item->Type) {
             case "Season":
                 $detailURL = "seasonRedirect.php?SeasonId=" . $item->Id . "&ParentIndexNumber=" . $item->IndexNumber;
+                $detailURL = "Season.php?id=" . $item->Id;
                 break;   
             case "Series":
                 //go directly to season page, or continue to default
@@ -106,7 +107,7 @@ function setDetailURL($item, $menuItem) {
                 switch ($item->Type) {
                     case "Movie":
                         $detailURL = YAMJpath($item);
-                        break; 
+                        //break; 
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
                         if ($item->SeasonId) {
@@ -117,9 +118,10 @@ function setDetailURL($item, $menuItem) {
                             $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId
                                 . "&IndexNumber=" . $item->IndexNumber;
                         }
-                        break;
+                        //break;
                     default:
                         $detailURL = translatePathToNMT($item->Path);
+                        $detailURL = "itemDetails.php?id=" . $item->Id;
                         $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
