@@ -80,7 +80,6 @@ function getSubtitle($item) {
 }
 
 function setDetailURL($item, $menuItem) {
-    global $NMT_path, $NMT_playerpath;
     
     if ($item->IsFolder) {
         switch ($item->Type) {
@@ -120,17 +119,17 @@ function setDetailURL($item, $menuItem) {
                         }
                         break;
                     default:
-                        $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                        $detailURL = translatePathToNMT($item->Path);
                         $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
                 break;
             case "Audio":
-                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $detailURL = translatePathToNMT($item->Path);
                 $menuItem->OnDemandTag = "AOD";
                 break;
             case "Photo":
-                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $detailURL = translatePathToNMT($item->Path);
                 $menuItem->OnDemandTag = "POD";
                 break;                
             default:
