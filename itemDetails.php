@@ -8,6 +8,14 @@ render();
 
 printFooter();
 
+function formatCast($cast)
+{
+    $links = array();
+    foreach($cast as $person) {
+        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
+    }
+    return implode(' / ', $links);
+}
 
 function render()
 {
@@ -52,10 +60,19 @@ function render()
 
     $added = date("n/j/Y g:i A",strtotime($item->DateCreated));
 
+    $directors = array();
+    $writers = array();
+    $actors = array();
     if ($item->People) {
         foreach ($item->People as $person) {
             if ($person->Type == 'Director') {
-                $director = $person;
+                $directors[] = $person;
+            }
+            if ($person->Type == 'Writer') {
+                $writers[] = $person;
+            }
+            if ($person->Type == 'Actor') {
+                $actors[] = $person;
             }
         }
     }
@@ -103,7 +120,9 @@ function render()
     echo '<br/>';
     ?>
 
-    <?= $director ? 'Director: <a href="itemDetails.php?id=' . $director->Id . '">' . $director->Name . '</a>' : null ?> 
+    <?= count($directors) > 0 ? 'Directed by: ' . formatCast($directors) . '<br/>' : null ?>
+    <?= count($writers) > 0 ? 'Written by: ' . formatCast($writers) . '<br/>'  : null ?>
+    <?= count($actors) > 0 ? 'Starring: ' . formatCast($actors) . '<br/>'  : null ?>
     <br/>
     <br/>
     <?= $videoStream ? $videoStream->Type . ': ' . $videoStream->DisplayTitle : null ?>
