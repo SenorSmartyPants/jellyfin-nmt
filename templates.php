@@ -1,4 +1,10 @@
 <?
+function traktGetterIMG()
+{ ?>
+    <img width="1" height="1" id="getter" src="#"/>
+<?
+}
+
 function audioCodec($audioStream)
 {
     switch (strtolower($audioStream->Codec)) {

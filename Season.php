@@ -44,7 +44,9 @@ if ($firstSource) {
 }
 
 printSeasonHeadEtc();
-
+printTopBar();
+printSpacerTable();
+printLowerTable();
 printSeasonFooter();
 
 function formatCast($cast)
@@ -60,7 +62,6 @@ function renderEpisodeJS($episode)
 {
     global $titleTruncate;
 ?>
-
     <script type="text/javascript">
         <!--
         asEpisodeTitle.push("<?= $episode->Name ?>");
@@ -75,7 +76,6 @@ function renderEpisodeJS($episode)
         asEpisodeImage.push("<?= getImageURL($episode->Id, 164, null, "Primary", null, null, $episode->ImageTags->Primary) ?>");
         -->
     </script>
-
 <?
 }
 
@@ -164,7 +164,6 @@ function printSeasonHeadEtc($onloadset = null)
         <tr>
             <td valign="top">
 <?
-    printTopBar();
 }
 
 function printTopBar()
@@ -210,6 +209,172 @@ function printTopBar()
         </tr>
     </table>
 <? 
+}
+
+function printSpacerTable()
+{
+?>
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="290">
+            </td>
+        </tr>
+    </table> 
+<?
+}
+
+function printLowerTable()
+{
+?>
+<table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+        <td width="30" height="314"></td>
+        <td width="690" valign="top">
+            <table width="100%" height="314" border="1" cellspacing="0" cellpadding="0" id="episodenInfos" class="XXhidden">
+                <tr>
+                    <td colspan="2" width="100%" height="74" id="episodeName" class="tveptitle" valign="top" align="left">&#160; </td>
+                </tr>
+                <tr>
+                    <td width="320" height="240"></td>
+                    <td width="410" id="episodeId" class="tvplot" align="left" valign="top">&#160; </td>
+                </tr>
+	        </table>
+        </td>
+        <td width="22" valign="top"></td>
+        <td width="360" valign="top">
+<?
+/*
+<!--list episodes-->
+<xsl:variable name="iEpisodesPerPage" select="38" />
+
+<xsl:variable name="tooManySeries">
+	<xsl:choose>
+		<xsl:when test="count(/details/movie/files/file/filePlot) &gt; $iEpisodesPerPage">true</xsl:when>
+		<xsl:otherwise>false</xsl:otherwise>
+	</xsl:choose>
+</xsl:variable>
+<xsl:if test="position()=20">
+    <xsl:attribute name="onkeydownset">21</xsl:attribute>
+</xsl:if>
+*/
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+<tr>
+<tr>
+<td height="10">
+<a class="TvLink" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
+<!--
+    <xsl:if test="count(files/file/filePlot) != '1'">
+
+        <xsl:if test="$tv-random-episode='false'"><xsl:attribute name="onkeyrightset">episode1</xsl:attribute></xsl:if>
+        <xsl:if test="$tv-random-episode='true'"><xsl:attribute name="onkeyrightset">randomplay</xsl:attribute></xsl:if>
+        
+        <xsl:if test="$tv-extras='false'"><xsl:attribute name="onkeyleftset">episode1</xsl:attribute></xsl:if>
+        <xsl:if test="$tv-extras='true'"><xsl:attribute name="onkeyleftset">refresh</xsl:attribute></xsl:if>
+
+
+        <xsl:attribute name="href">
+            <xsl:value-of select="concat(concat(/details/movie/baseFilename,'.playlist'),'.jsp')" />
+        </xsl:attribute>   
+        
+        <xsl:attribute name="vod">playlist</xsl:attribute>
+        <xsl:attribute name="id">gtPlay</xsl:attribute>
+    </xsl:if>
+
+    <xsl:if test="count(files/file/filePlot) = '1'">
+
+        <xsl:if test="$tv-random-episode='false'"><xsl:attribute name="onkeyrightset">episode1</xsl:attribute></xsl:if>
+        <xsl:if test="$tv-random-episode='true'"><xsl:attribute name="onkeyrightset">randomplay</xsl:attribute></xsl:if>
+
+        <xsl:if test="$tv-extras='false'"><xsl:attribute name="onkeyleftset">episode1</xsl:attribute></xsl:if>
+        <xsl:if test="$tv-extras='true'"><xsl:attribute name="onkeyleftset">refresh</xsl:attribute></xsl:if>
+
+
+        <xsl:attribute name="href">
+            <xsl:value-of select="/details/movie/files/file/fileURL"/>
+        </xsl:attribute>
+
+        <xsl:attribute name="vod"/>
+        <xsl:if test="//movie/container = 'ISO' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.ISO' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.iso'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
+        <xsl:if test="//movie/container = 'IMG' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.IMG' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.img'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
+        <xsl:if test="substring(//files/file/fileURL,string-length(//files/file/fileURL)-7,8) = 'VIDEO_TS'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
+    </xsl:if>
+        -->
+Play all
+</a>
+</td>
+		<td height="10"><!--random play episode link goes here --></td>
+		<td align="right" width="70">
+        <!-- episode paging indicator -->
+			<table border="0" cellpadding="0" cellspacing="0">
+                <tr><td align="right">
+                    <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink" >
+                    <span class="tabTvShow" id="pageCountNew">&#160;</span>
+                    </a>
+                </td></tr>
+            </table>
+		</td>
+</tr>
+<td width="100%" colspan="3">
+<!-- episode list, write out the first 15 -->
+<a id="a_e_dummy" name="episode-dummy" href="#" ></a>
+<? 
+    global $items;
+    for ($i=0; $i < 15 && $i < count($items) ; $i++) { 
+        # code...
+        renderEpisodeHTML($items[$i],$i+1);
+    }
+    traktGetterIMG();
+?>			
+</td>
+         
+         <tr>
+		 <td valign="top" width="80" colspan="3">
+         
+                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_21"/>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                        <a class="TvLink" href="#" vod="" id="a_e_22" name="toleft" onfocus="toggleLeft()" onmouseover="toggleLeft()">
+                        <span class="tabTvShow" id="s_e_22"><img src="/New/Jukebox/pictures/1x1.png"/></span>
+                        </a>
+                    </td></tr>
+                </table>
+                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_22"/>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                        <a class="TvLink" href="#" vod="" id="a_e_23" name="toright" onfocus="toggleRight()" onmouseover="toggleRight()">
+                        <span class="tabTvShow" id="s_e_23"><img src="/New/Jukebox/pictures/1x1.png"/></span>
+                        </a>
+                    </td></tr>
+                </table>
+                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_23"/>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                        <a class="TvLink" href="#" vod="" id="a_e_24" name="toup" onfocus="clickUpNew()" onmouseover="clickUpNew()">
+                        <span class="tabTvShow" id="s_e_24"><img src="/New/Jukebox/pictures/1x1.png"/></span>
+                        </a>
+                    </td></tr>
+                </table>
+                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_24"/>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                        <a class="TvLink" href="#" vod="" id="a_e_25" name="todown" onfocus="clickDownNew()" onmouseover="clickDownNew()">
+                            <span class="tabTvShow" id="s_e_25"><img src="/New/Jukebox/pictures/1x1.png"/></span>
+                        </a>
+                    </td></tr>
+                </table>
+                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_25"/>
+            
+		 </td>
+		 </tr>
+         </tr>
+		 
+         </table>  		
+           
+  		 </td>
+         </tr>
+         </table>
+<?
 }
 
 function printSeasonFooter()
