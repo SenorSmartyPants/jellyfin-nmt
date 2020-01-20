@@ -90,17 +90,15 @@ function renderEpisodeHTML($episode, $indexInList)
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
                     onclick="return clicked(this);" onfocus="resetGetter();"
                     onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
-                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $episode->IndexNumber ?>. <?= substr($episode->Name, 0, $titleTruncate) ?></span>
+                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= sprintf('%02d', $episode->IndexNumber) ?>. <?= substr($episode->Name, 0, $titleTruncate) ?></span>
                 </a>
                 <a style="display:none;visibility:hidden" width="0" height="0" onfocusload="" 
-                href="file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/media/Videos/No%20Trakt/The%20Daily%20Show/The%20Daily%20Show%2025x22%20-%20%5BWEBDL-720p%5D%5BAAC%202.0%5D%5Bx264%5D%20Noah%20Baumbach-TBS.mkv" 
+                href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>" 
                 vod="" 
                 id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>" />
             </td>
         </tr>
     </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocusNew(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" />
-
-
 <?
 }
 
