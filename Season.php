@@ -27,6 +27,11 @@ $tvNumberRating = false;
 
 $id = $_GET["id"];
 
+//Banners don't inherit from parents
+//have to load season to find out if it has a banner
+$season = getItem($id);
+$bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
+
 $itemsAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
 $items = $itemsAndCount->Items;
 $item = $items[0];
@@ -179,12 +184,13 @@ function printTopBar()
 {
     global $item, $videoStream, $audioStream, $firstSource;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
+    global $bannerId;
 ?>
     <table border="0" cellspacing="0" cellpadding="0">
         <tr height="50" valign="bottom">
             <td width="18"></td>
             <td width="250">
-                <img width="244" height="45" src="<?= getImageURL($item->SeriesId, 45, 244, "Banner") ?>" />
+                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" />
             </td>
             <td width="30"></td>
             <td align="center" valign="center" class="tvseason"><?= ($item->ParentIndexNumber > 0) ? "S" . $item->ParentIndexNumber : "Sp" ?></td>
