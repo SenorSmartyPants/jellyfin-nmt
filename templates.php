@@ -59,6 +59,7 @@ function audioCodec($audioStream)
         case '7.1':
             $channelFile = "audch_71.png";
             break;
+        case 'stereo':
         case '2.0':
             $channelFile = "audch_20.png";
             break;
