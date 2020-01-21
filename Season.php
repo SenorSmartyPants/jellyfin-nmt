@@ -248,11 +248,11 @@ function printSpacerTable()
 function printLowerTable()
 {
 ?>
-<table border="1" cellspacing="0" cellpadding="0">
+<table border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td width="30" height="314"></td>
         <td width="690" valign="top">
-            <table width="100%" height="314" border="1" cellspacing="0" cellpadding="0" id="episodenInfos" class="XXhidden">
+            <table width="100%" height="314" border="0" cellspacing="0" cellpadding="0" id="episodenInfos" class="XXhidden">
                 <tr>
                     <td colspan="2" width="100%" height="74" id="episodeName" class="tveptitle" valign="top" align="left">&#160; </td>
                 </tr>
