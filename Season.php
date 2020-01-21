@@ -82,6 +82,15 @@ function renderEpisodeJS($episode)
 function renderEpisodeHTML($episode, $indexInList)
 {
     global $titleTruncate;
+
+    if ($episode->ParentIndexNumber > 0) {
+        $titleLine = sprintf('%02d', $episode->IndexNumber);
+    } else {
+        //Special season, then list episode as SX. Title
+        $titleLine = 'S' . $episode->IndexNumber;
+    }
+    $titleLine .= '. ' . substr($episode->Name, 0, $titleTruncate);
+    
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
@@ -90,7 +99,7 @@ function renderEpisodeHTML($episode, $indexInList)
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
                     onclick="return clicked(this);" onfocus="resetGetter();"
                     onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
-                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= sprintf('%02d', $episode->IndexNumber) ?>. <?= substr($episode->Name, 0, $titleTruncate) ?></span>
+                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
                 <a style="display:none;visibility:hidden" width="0" height="0" onfocusload="" 
                 href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>" 
