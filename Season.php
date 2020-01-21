@@ -34,7 +34,14 @@ $bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
 
 $itemsAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
 $items = $itemsAndCount->Items;
-$item = $items[0];
+
+//if this isn't specials season (check id parameter against seasonId)
+//then use item to find backdrop and banner Ids
+$i=0;
+do {
+    $item = $items[$i++];
+} while ($id >= $item->SeasonId && $i < count($items));
+
 
 $firstSource = $item->MediaSources[0];
 if ($firstSource) {
