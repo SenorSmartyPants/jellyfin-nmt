@@ -125,7 +125,7 @@ function renderEpisodeHTML($episode, $indexInList)
 
 function printSeasonHeadEtc($onloadset = null)
 {
-    global $item;
+    global $season;
 
     global $theme_css, $indexStyle;
     $onloadset = $onloadset ?? "1";
@@ -179,7 +179,13 @@ function printSeasonHeadEtc($onloadset = null)
     </head>
 
     <body bgproperties="fixed" onloadset="episode1" onload="initNew()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
-    <? if ($item->ParentBackdropImageTags[0]) { ?> background="<?= getImageURL($item->ParentBackdropItemId, 720, 1280, "Backdrop", null, null, $item->ParentBackdropImageTags[0]) ?>"> <? } ?>
+    <? if ($season->BackdropImageTags[0]) 
+    { 
+        ?> background="<?= getImageURL($season->Id, 720, 1280, "Backdrop", null, null, $season->BackdropImageTags[0]) ?>"> <? 
+    } else {
+        ?> background="<?= getImageURL($season->ParentBackdropItemId, 720, 1280, "Backdrop", null, null, $season->ParentBackdropImageTags[0]) ?>"> <?    
+    }
+    ?>
 
     <table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="/New/Jukebox/pictures/sabishmod/tvbg-v2.png">
         <tr>
@@ -189,7 +195,7 @@ function printSeasonHeadEtc($onloadset = null)
 
 function printTopBar()
 {
-    global $item, $videoStream, $audioStream, $firstSource;
+    global $item, $season, $videoStream, $audioStream, $firstSource;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
@@ -200,18 +206,18 @@ function printTopBar()
                 <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" />
             </td>
             <td width="30"></td>
-            <td align="center" valign="center" class="tvseason"><?= ($item->ParentIndexNumber > 0) ? "S" . $item->ParentIndexNumber : "Sp" ?></td>
+            <td align="center" valign="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
             <td width="20"></td>
 
-            <td align="center" valign="center" class="tvyear"><?= $item->ProductionYear ?></td>
+            <td align="center" valign="center" class="tvyear"><?= $season->ProductionYear ?></td>
 
             <td width="50"></td>
             <td valign="center" style="font-size: medium"><?= $ShowAudioCodec ? audioCodec($audioStream) : null ?><?= $ShowContainer ? container($firstSource->Container) : null ?><?= $ShowVideoOutput ? videoOutput($videoStream) : null ?></td>
 
-            <?= $item->ParentIndexNumber < 10 ? '<td width="90"></td>' : null ?> 
-            <?= ($item->ParentIndexNumber > 9 and $item->ParentIndexNumber < 100) ? '<td width="70"></td>' : null ?>
-            <?= ($item->ParentIndexNumber > 99 and $item->ParentIndexNumber < 1000) ? '<td width="50"></td>' : null ?>
-            <?= ($item->ParentIndexNumber > 999) ? '<td width="30"></td>' : null ?>
+            <?= $season->IndexNumber < 10 ? '<td width="90"></td>' : null ?> 
+            <?= ($season->IndexNumber > 9 and $season->IndexNumber < 100) ? '<td width="70"></td>' : null ?>
+            <?= ($season->IndexNumber > 99 and $season->IndexNumber < 1000) ? '<td width="50"></td>' : null ?>
+            <?= ($season->IndexNumber > 999) ? '<td width="30"></td>' : null ?>
             
             <td align="right" valign="center" class="rating">						
                 <? 
