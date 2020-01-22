@@ -15,7 +15,7 @@ TODO: support season banner. But most in JF don't have
 
 */
 include_once 'data.php';
-include_once 'listings.php';
+include_once 'utils.php';
 include_once 'templates.php';
 
 $titleTruncate = 34;
@@ -31,12 +31,12 @@ $id = $_GET["id"];
 //have to load season to find out if it has a banner
 $season = getItem($id);
 $bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
+$backdrop = getBackdropIDandTag($season);
 
 $itemsAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
 $items = $itemsAndCount->Items;
 
 //if this isn't specials season (check id parameter against seasonId)
-//then use item to find backdrop and banner Ids
 $i=0;
 do {
     $item = $items[$i++];
@@ -125,7 +125,7 @@ function renderEpisodeHTML($episode, $indexInList)
 
 function printSeasonHeadEtc($onloadset = null)
 {
-    global $season;
+    global $backdrop;
 
     global $theme_css, $indexStyle;
     $onloadset = $onloadset ?? "1";
@@ -179,11 +179,9 @@ function printSeasonHeadEtc($onloadset = null)
     </head>
 
     <body bgproperties="fixed" onloadset="episode1" onload="initNew()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
-    <? if ($season->BackdropImageTags[0]) 
+    <? if ($backdrop->Tag) 
     { 
-        ?> background="<?= getImageURL($season->Id, 720, 1280, "Backdrop", null, null, $season->BackdropImageTags[0]) ?>"> <? 
-    } else {
-        ?> background="<?= getImageURL($season->ParentBackdropItemId, 720, 1280, "Backdrop", null, null, $season->ParentBackdropImageTags[0]) ?>"> <?    
+        ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"> <?   
     }
     ?>
 

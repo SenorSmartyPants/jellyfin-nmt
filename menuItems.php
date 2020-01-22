@@ -2,6 +2,7 @@
 
 include_once 'config.php';
 include_once 'data.php';
+include_once 'utils.php';
 $useSeasonNameForMenuItems = true;
 
 //2 API calls total for series
@@ -32,8 +33,8 @@ function parse($item) {
 
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
-    $menuItem->Subtitle = getSubtitle($item);    
-    $menuItem->BackdropID = getBackdropID($item);
+    $menuItem->Subtitle = getSubtitle($item);
+    $menuItem->BackdropID = getBackdropIDandTag($item)->Id;
     setDetailURL($item, $menuItem);
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
@@ -156,12 +157,6 @@ function getPosterID($item, $useSeasonImage = true) {
             break; 
     }
     return $posterID;
-}
-
-function getBackdropID($item) {
-    $backdropID = (count($item->BackdropImageTags) > 0) ? $item->Id : 
-        (($item->ParentBackdropImageTags && count($item->ParentBackdropImageTags) > 0) ? $item->ParentBackdropItemId : null);
-    return $backdropID;
 }
 
 function getUnplayedCount($item) {
