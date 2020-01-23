@@ -10,7 +10,7 @@ TODO: support season banner. But most in JF don't have
     <br />
     episodes support ParentalRating, but not populated in JF
     <br />
-    Support watched. Check skin to see <?= $item->UserData->Played ?>
+    Support watched. Check skin to see <?= $episode->UserData->Played ?>
 
 
 */
@@ -33,17 +33,15 @@ $season = getItem($id);
 $bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
 $backdrop = getBackdropIDandTag($season);
 
-$itemsAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
-$items = $itemsAndCount->Items;
-
-//if this isn't specials season (check id parameter against seasonId)
+$episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
+$episodes = $episodesAndCount->Items;
 $i=0;
 do {
-    $item = $items[$i++];
-} while ($id >= $item->SeasonId && $i < count($items));
+    $episode = $episodes[$i++];
+} while ($id >= $episode->SeasonId && $i < count($episodes));
 
 
-$firstSource = $item->MediaSources[0];
+$firstSource = $episode->MediaSources[0];
 if ($firstSource) {
     foreach ($firstSource->MediaStreams as $mediastream) {
         if ($mediastream->Type == 'Video' && $mediastream->IsDefault) {
@@ -193,7 +191,7 @@ function printSeasonHeadEtc($onloadset = null)
 
 function printTopBar()
 {
-    global $item, $season, $videoStream, $audioStream, $firstSource;
+    global $episode, $season, $videoStream, $audioStream, $firstSource;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
@@ -219,16 +217,16 @@ function printTopBar()
             
             <td align="right" valign="center" class="rating">						
                 <? 
-                if ($item->CommunityRating) 
+                if ($episode->CommunityRating) 
                 {
                     if ($star_rating) 
                     { ?>
-                        <img hspace="10" vspace="10" src="/New/Jukebox/pictures/detail/rating_<?= round($item->CommunityRating)*10?>.png" >
+                        <img hspace="10" vspace="10" src="/New/Jukebox/pictures/detail/rating_<?= round($episode->CommunityRating)*10?>.png" >
                         </img>
                     <? }
                     if ($tvNumberRating) 
                     {
-                        echo "&nbsp;(" . $item->CommunityRating . "/10)"; 
+                        echo "&nbsp;(" . $episode->CommunityRating . "/10)"; 
                     }
                 } ?>
 		    </td>			
@@ -345,10 +343,10 @@ Play all
 <!-- episode list, write out the first 15 -->
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
 <? 
-    global $items;
-    for ($i=0; $i < 15 && $i < count($items) ; $i++) { 
+    global $episodes;
+    for ($i=0; $i < 15 && $i < count($episodes) ; $i++) { 
         # code...
-        renderEpisodeHTML($items[$i],$i+1);
+        renderEpisodeHTML($episodes[$i],$i+1);
     }
     traktGetterIMG();
 ?>			
