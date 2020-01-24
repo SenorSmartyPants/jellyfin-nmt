@@ -30,6 +30,7 @@ $id = $_GET["id"];
 //Banners don't inherit from parents
 //have to load season to find out if it has a banner
 $season = getItem($id);
+$series = getItem($season->SeriesId);
 $bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
 $backdrop = getBackdropIDandTag($season);
 
@@ -91,13 +92,14 @@ function renderEpisodeJS($episode)
 
 function renderEpisodeHTML($episode, $indexInList)
 {
-    global $titleTruncate;
+    global $season, $titleTruncate;
 
-    if ($episode->ParentIndexNumber > 0) {
-        $titleLine = sprintf('%02d', $episode->IndexNumber);
-    } else {
-        //Special season, then list episode as SX. Title
+    if ($episode->ParentIndexNumber = 0 || $season->IndexNumber != 0) {
+        //Special episode, not displaying special season, then list episode as SX. Title
         $titleLine = 'S' . $episode->IndexNumber;
+    } else {
+
+        $titleLine = sprintf('%02d', $episode->IndexNumber);
     }
     $titleLine .= '. ' . substr($episode->Name, 0, $titleTruncate);
     
