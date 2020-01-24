@@ -45,7 +45,7 @@ do {
 $firstSource = $episode->MediaSources[0];
 if ($firstSource) {
     foreach ($firstSource->MediaStreams as $mediastream) {
-        if ($mediastream->Type == 'Video' && $mediastream->IsDefault) {
+        if ($mediastream->Type == 'Video') {
             $videoStream = $mediastream;
         }
     }
