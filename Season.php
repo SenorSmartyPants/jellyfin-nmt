@@ -125,7 +125,7 @@ function renderEpisodeHTML($episode, $indexInList)
 
 function printSeasonHeadEtc($onloadset = null)
 {
-    global $backdrop;
+    global $backdrop, $season;
 
     global $theme_css, $indexStyle;
     $onloadset = $onloadset ?? "1";
@@ -135,7 +135,7 @@ function printSeasonHeadEtc($onloadset = null)
     <head>
         <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Jellyfin NMT</title>
+        <title><?= $season->Name . ' - ' . $season->SeriesName ?> - Jellyfin NMT</title>
 
 <?
         if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
