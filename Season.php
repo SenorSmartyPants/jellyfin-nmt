@@ -39,7 +39,8 @@ $episodes = $episodesAndCount->Items;
 $i=0;
 do {
     $episode = $episodes[$i++];
-} while ($id >= $episode->SeasonId && $i < count($episodes));
+} while ($id != $episode->SeasonId && $i < count($episodes));
+//$episode == first episode from this season, not from specials
 
 
 $firstSource = $episode->MediaSources[0];
