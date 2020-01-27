@@ -19,11 +19,11 @@ function apiCall($path, $debug = false)
 function seasonPosterExists($seasonId)
 {
     if ($seasonId != '') {
-        //seasons usually have a Primary or nothing
         $path =  "/Items/" . $seasonId . "/Images/?";
         $images = apiCall($path);
 
-        return (count($images) > 0);
+        $primarys = array_filter($images, function($image) { return $image->ImageType == 'Primary'; });
+        return (count($primarys) > 0);
     } else {
         return false;
     }
