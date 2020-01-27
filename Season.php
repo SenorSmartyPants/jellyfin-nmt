@@ -78,7 +78,8 @@ function renderEpisodeJS($episode)
         <!--
         asEpisodeTitle.push("<?= $episode->Name ?>");
         asEpisodeTitleShort.push("<?= substr($episode->Name, 0, $titleTruncate) ?>");
-        asEpisodePlot.push("<?= $episode->Overview ?>");
+        //remove line breaks from overview
+        asEpisodePlot.push("<?= str_replace(array("\n", "\r"), '', $episode->Overview) ?>");
         asEpisodeUrl.push("<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
