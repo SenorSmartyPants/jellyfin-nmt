@@ -31,7 +31,7 @@ $id = $_GET["id"];
 //have to load season to find out if it has a banner
 $season = getItem($id);
 $series = getItem($season->SeriesId);
-$bannerId = $season->ImageTags->Banner ? $season->Id : $season->SeriesId;
+$bannerId = $season->ImageTags->Banner ? $season->Id : ($series->ImageTags->Banner ? $season->SeriesId : null);
 $backdrop = getBackdropIDandTag($season);
 
 $episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
@@ -199,8 +199,8 @@ function printTopBar()
     <table border="0" cellspacing="0" cellpadding="0">
         <tr height="50" valign="bottom">
             <td width="18"></td>
-            <td width="250">
-                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" />
+            <td width="250"><? if ($bannerId) { ?> 
+                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" /> <? } ?>
             </td>
             <td width="30"></td>
             <td align="center" valign="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
