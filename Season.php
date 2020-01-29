@@ -148,6 +148,8 @@ function printSeasonHeadEtc($onloadset = null)
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
 
+        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/exportdetails_item_popcorn.css" />
+        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />
         <style>
 /*Sabish TVMod V2 - override*/
 .test {color: c6cace; font-weight: normal; font-size: 32pt;!important}
@@ -407,6 +409,26 @@ function printSeasonFooter()
                 </td>
             </tr>
         </table>  	
+    <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()" />
+    <a id="openEpisode" TVID="Play" href="#" vod="" />
+    <a href="#" onclick="return  toggleEpisodeDetails();" tvid="" />
+    <div id="plotInfo" class="abs plotInfoSabish tabPlot"> </div>
+    <div id="episodePages" class="abs episodePagesSabish tabTvShow"> </div>
+    <div id="popupWrapper">
+        <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack" class="hidden" /></div>
+        <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg" class="hidden" /></div>
+        <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
+    </div>
+    <table>
+        <tr>
+            <td height="50" />
+        </tr>
+    </table>
+    <div id="noNMT"><a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a><a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a><a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br /><a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a><a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br /><a class="clickIndex" href="">Index</a><br /></div>
+    <a TVID="HOME" href="index.php" />
+    <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href="" />
+    <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href="" />
+
     </body>
 
     </html>
