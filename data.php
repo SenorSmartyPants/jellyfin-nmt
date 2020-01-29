@@ -51,10 +51,10 @@ function YAMJpath($item) {
     return $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
 }
 
-function getSeasonBySeriesIdURL($seasonId)
+function getSeasonBySeriesIdURL($seriesId)
 {
     //find first episode in season, this will be YAMJ filename
-    return YAMJpath(firstEpisodeFromSeries($seasonId));
+    return YAMJpath(firstEpisodeFromSeries($seriesId));
 }
 
 function getSeasonURL($SeasonId, $ParentIndexNumber)
