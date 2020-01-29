@@ -8,6 +8,7 @@ function traktGetterIMG()
 function audioCodec($audioStream)
 {
     switch (strtolower($audioStream->Codec)) {
+        case 'eac3': //TODO: Digital Dolby+
         case 'ac3':
             $codecFile = "audcod_dolby.png";
             break;
@@ -111,6 +112,7 @@ function container($containerID)
         case 'wmv':
             $url = $containerID . ".png";
             break;
+        case 'mpegts':
         case 'bdav':
         case 'bluray':
             $url = "m2ts.png";
@@ -136,8 +138,19 @@ function container($containerID)
 function videoOutput($videoStream)
 {
     //TODO testing
-    $url = "output_" . strtolower(explode(" ",$videoStream->DisplayTitle)[0]) . ".png";
-    return '<img src="/New/Jukebox/pictures/flags/' .  $url . '"/>&nbsp;&nbsp;';
+    //JF reports HDHR vdeos as 720i
+    $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
+    switch ($output) {
+        case '720i':
+            $url = "720p.png";
+            break;
+        case 'sd':
+            $url = "sdtv.png";
+            break;            
+        default:
+            $url = $output . ".png";
+    }
+    return '<img src="/New/Jukebox/pictures/flags/output_' .  $url . '"/>&nbsp;&nbsp;';
 }
 /*
 <xsl:template name="videoOutput">
