@@ -192,7 +192,7 @@ function printSeasonHeadEtc($onloadset = null)
 
 function printTopBar()
 {
-    global $episode, $season, $videoStream, $audioStream, $firstSource;
+    global $series, $season, $videoStream, $audioStream, $firstSource;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
@@ -218,16 +218,15 @@ function printTopBar()
             
             <td align="right" valign="center" class="rating">						
                 <? 
-                if ($episode->CommunityRating) 
+                if ($series->CommunityRating) 
                 {
                     if ($star_rating) 
                     { ?>
-                        <img hspace="10" vspace="10" src="/New/Jukebox/pictures/detail/rating_<?= round($episode->CommunityRating)*10?>.png" >
-                        </img>
+                        <img hspace="10" vspace="10" src="/New/Jukebox/pictures/detail/rating_<?= round($series->CommunityRating)*10?>.png" />
                     <? }
                     if ($tvNumberRating) 
                     {
-                        echo "&nbsp;(" . $episode->CommunityRating . "/10)"; 
+                        echo "&nbsp;(" . $series->CommunityRating . "/10)"; 
                     }
                 } ?>
 		    </td>			
