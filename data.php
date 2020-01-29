@@ -19,11 +19,11 @@ function apiCall($path, $debug = false)
 function seasonPosterExists($seasonId)
 {
     if ($seasonId != '') {
-        //seasons usually have a Primary or nothing
         $path =  "/Items/" . $seasonId . "/Images/?";
         $images = apiCall($path);
 
-        return (count($images) > 0);
+        $primarys = array_filter($images, function($image) { return $image->ImageType == 'Primary'; });
+        return (count($primarys) > 0);
     } else {
         return false;
     }
@@ -45,16 +45,23 @@ function firstEpisodeFromSeries($seriesId)
     return $all_episodes->Items[0];
 }
 
+function firstSeasonFromSeries($seriesId)
+{
+    $seasons = getUsersItems(null, null, 1, $seriesId, null, null, "season");
+
+    return $seasons->Items[0];
+}
+
 function YAMJpath($item) {
     global $jukebox_url;
     
     return $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
 }
 
-function getSeasonBySeriesIdURL($seasonId)
+function getSeasonBySeriesIdURL($seriesId)
 {
     //find first episode in season, this will be YAMJ filename
-    return YAMJpath(firstEpisodeFromSeries($seasonId));
+    return YAMJpath(firstEpisodeFromSeries($seriesId));
 }
 
 function getSeasonURL($SeasonId, $ParentIndexNumber)

@@ -2,6 +2,7 @@
 
 include_once 'config.php';
 include_once 'data.php';
+include_once 'utils.php';
 $useSeasonNameForMenuItems = true;
 
 //2 API calls total for series
@@ -32,8 +33,8 @@ function parse($item) {
 
     $menuItem = new stdClass();
     $menuItem->Name = getName($item);
-    $menuItem->Subtitle = getSubtitle($item);    
-    $menuItem->BackdropID = getBackdropID($item);
+    $menuItem->Subtitle = getSubtitle($item);
+    $menuItem->BackdropID = getBackdropIDandTag($item)->Id;
     setDetailURL($item, $menuItem);
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
@@ -80,12 +81,11 @@ function getSubtitle($item) {
 }
 
 function setDetailURL($item, $menuItem) {
-    global $NMT_path, $NMT_playerpath;
     
     if ($item->IsFolder) {
         switch ($item->Type) {
             case "Season":
-                $detailURL = "seasonRedirect.php?SeasonId=" . $item->Id . "&ParentIndexNumber=" . $item->IndexNumber;
+                $detailURL = "Season.php?id=" . $item->Id;
                 break;   
             case "Series":
                 //go directly to season page, or continue to default
@@ -111,8 +111,7 @@ function setDetailURL($item, $menuItem) {
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
                         if ($item->SeasonId) {
-                            $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber
-                                . "&IndexNumber=" . $item->IndexNumber;
+                            $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
                         } else {
                             //try season redirect, probably only one season
                             $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId
@@ -120,17 +119,18 @@ function setDetailURL($item, $menuItem) {
                         }
                         break;
                     default:
-                        $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                        $detailURL = translatePathToNMT($item->Path);
+                        $detailURL = "itemDetails.php?id=" . $item->Id;
                         $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
                 break;
             case "Audio":
-                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $detailURL = translatePathToNMT($item->Path);
                 $menuItem->OnDemandTag = "AOD";
                 break;
             case "Photo":
-                $detailURL = str_replace($NMT_path,$NMT_playerpath,$item->Path);
+                $detailURL = translatePathToNMT($item->Path);
                 $menuItem->OnDemandTag = "POD";
                 break;                
             default:
@@ -155,12 +155,6 @@ function getPosterID($item, $useSeasonImage = true) {
             break; 
     }
     return $posterID;
-}
-
-function getBackdropID($item) {
-    $backdropID = (count($item->BackdropImageTags) > 0) ? $item->Id : 
-        (($item->ParentBackdropImageTags && count($item->ParentBackdropImageTags) > 0) ? $item->ParentBackdropItemId : null);
-    return $backdropID;
 }
 
 function getUnplayedCount($item) {
