@@ -73,7 +73,7 @@ function audioCodec($audioStream)
         default:
             $channelFile = "../1x1.png";
     }
-    return '<img align="top" src="/New/Jukebox/pictures/flags/' . $codecFile . '"/><img align="top" src="/New/Jukebox/pictures/flags/' . $channelFile . '"/>&nbsp;&nbsp';
+    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) . '<img align="top" src="/New/Jukebox/pictures/flags/' . $codecFile . '"/><img align="top" src="/New/Jukebox/pictures/flags/' . $channelFile . '"/>&nbsp;&nbsp;';
 }
 
 function container($containerID)
@@ -132,7 +132,7 @@ function container($containerID)
             default:
             $url = "unknown.png";
     }    
-    return '<img src="/New/Jukebox/pictures/flags/container_' . $url . '"/>&nbsp;&nbsp;';
+    return (($url == "unknown.png") ? $containerID : null) . '<img src="/New/Jukebox/pictures/flags/container_' . $url . '"/>&nbsp;&nbsp;';
 }
 
 function videoOutput($videoStream)
