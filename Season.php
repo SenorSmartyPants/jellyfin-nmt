@@ -123,6 +123,85 @@ function renderEpisodeHTML($episode, $indexInList)
 <?
 }
 
+function printInitJS()
+{
+    global $series, $season, $episodes;
+?>
+    <script type="text/javascript">
+        iMainSeason = <?= $season->IndexNumber ?>;
+
+        var QS = location.search.substring(1);
+        var params = QS.split('&');
+
+        focusEpisodeNo = 1;
+
+        for (var i = 0; i < params.length; i++) {
+            var pair = params[i].split('=');
+            if (decodeURIComponent(pair[0]) == 'episode') {
+                focusEpisodeNo = pair[1];
+            }
+        }
+
+        asEpisodeTitle = new Array('0');
+        asEpisodeTitleShort = new Array('0');
+        asEpisodePlot = new Array('0');
+        asEpisodeUrl = new Array('0');
+        asEpisodeVod = new Array('0');
+        asSeasonNo = new Array('0');
+        asEpisodeNo = new Array('0');
+        asEpisodeTVDBID = new Array('0');
+        asEpisodeWatched = new Array('0');
+        asEpisodeImage = new Array('0');
+    </script>
+
+<?
+
+foreach ($episodes as $episode) {
+    renderEpisodeJS($episode);
+}
+?>
+
+
+    <script type="text/javascript" src="js/season.js"></script>
+
+    <script type="text/javascript">
+        <!--
+        var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
+        var sTitleLong = "<?= $series->Name ?>";
+        var fWatch = true;
+        var fTVplaylist = false;
+        -->
+    </script>
+
+    <script type="text/javascript">
+        <!--
+        function clicked(link) {
+            var title = "<?= $series->Name ?>";
+            var year = "<?= $season->ProductionYear ?>";
+            var tvdb_id = "<?= $series->ProviderIds->Tvdb ?>";
+
+            var season = link.getAttribute('season');
+            var episode = link.getAttribute('episode');
+            var episode_id = link.getAttribute('tvdbid');
+
+            var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=" + tvdb_id + "&season=" + season + "&episode=" + episode + "&episode_id=" + episode_id +
+                "&title=" + encodeURIComponent(title) + "&year=" + year;
+            var getter = document.getElementById('getter');
+            getter.setAttribute('src', url);
+            return true;
+        }
+
+        function resetGetter() {
+            var getter = document.getElementById('getter');
+            getter.setAttribute('src', '#');
+        };
+        -->
+    </script>  
+
+<?
+
+}
+
 function printSeasonHeadEtc($onloadset = null)
 {
     global $backdrop, $season;
@@ -174,10 +253,9 @@ function printSeasonHeadEtc($onloadset = null)
 
 </style>
 
-        <script>
-
-        </script>
-
+<?
+    printInitJS();
+?>
     </head>
 
     <body bgproperties="fixed" onloadset="episode1" onload="initNew()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
