@@ -1,10 +1,7 @@
 <?
 /*
 no tv rating in JF episode data?
-TODO: support season banner. But most in JF don't have
-    Banner(doesn't inherit):
-
-        <br />
+TODO:
     Season
     Overview and OfficialRating - missing, pull separately?
     <br />
@@ -346,64 +343,12 @@ function printLowerTable()
         </td>
         <td width="22" valign="top"></td>
         <td width="360" valign="top">
-<?
-/*
-<!--list episodes-->
-<xsl:variable name="iEpisodesPerPage" select="38" />
 
-<xsl:variable name="tooManySeries">
-	<xsl:choose>
-		<xsl:when test="count(/details/movie/files/file/filePlot) &gt; $iEpisodesPerPage">true</xsl:when>
-		<xsl:otherwise>false</xsl:otherwise>
-	</xsl:choose>
-</xsl:variable>
-<xsl:if test="position()=20">
-    <xsl:attribute name="onkeydownset">21</xsl:attribute>
-</xsl:if>
-*/
-?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 <tr>
 <tr>
 <td height="10">
 <a class="TvLink" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
-<!--
-    <xsl:if test="count(files/file/filePlot) != '1'">
-
-        <xsl:if test="$tv-random-episode='false'"><xsl:attribute name="onkeyrightset">episode1</xsl:attribute></xsl:if>
-        <xsl:if test="$tv-random-episode='true'"><xsl:attribute name="onkeyrightset">randomplay</xsl:attribute></xsl:if>
-        
-        <xsl:if test="$tv-extras='false'"><xsl:attribute name="onkeyleftset">episode1</xsl:attribute></xsl:if>
-        <xsl:if test="$tv-extras='true'"><xsl:attribute name="onkeyleftset">refresh</xsl:attribute></xsl:if>
-
-
-        <xsl:attribute name="href">
-            <xsl:value-of select="concat(concat(/details/movie/baseFilename,'.playlist'),'.jsp')" />
-        </xsl:attribute>   
-        
-        <xsl:attribute name="vod">playlist</xsl:attribute>
-        <xsl:attribute name="id">gtPlay</xsl:attribute>
-    </xsl:if>
-
-    <xsl:if test="count(files/file/filePlot) = '1'">
-
-        <xsl:if test="$tv-random-episode='false'"><xsl:attribute name="onkeyrightset">episode1</xsl:attribute></xsl:if>
-        <xsl:if test="$tv-random-episode='true'"><xsl:attribute name="onkeyrightset">randomplay</xsl:attribute></xsl:if>
-
-        <xsl:if test="$tv-extras='false'"><xsl:attribute name="onkeyleftset">episode1</xsl:attribute></xsl:if>
-        <xsl:if test="$tv-extras='true'"><xsl:attribute name="onkeyleftset">refresh</xsl:attribute></xsl:if>
-
-
-        <xsl:attribute name="href">
-            <xsl:value-of select="/details/movie/files/file/fileURL"/>
-        </xsl:attribute>
-
-        <xsl:attribute name="vod"/>
-        <xsl:if test="//movie/container = 'ISO' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.ISO' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.iso'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
-        <xsl:if test="//movie/container = 'IMG' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.IMG' or substring(//files/file/fileURL,string-length(//files/file/fileURL)-3,4) = '.img'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
-        <xsl:if test="substring(//files/file/fileURL,string-length(//files/file/fileURL)-7,8) = 'VIDEO_TS'"><xsl:attribute name="zcd">2</xsl:attribute></xsl:if>
-    </xsl:if>
-        -->
 Play all
 </a>
 </td>
