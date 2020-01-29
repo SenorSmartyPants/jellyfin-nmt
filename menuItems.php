@@ -85,7 +85,6 @@ function setDetailURL($item, $menuItem) {
     if ($item->IsFolder) {
         switch ($item->Type) {
             case "Season":
-                $detailURL = "seasonRedirect.php?SeasonId=" . $item->Id . "&ParentIndexNumber=" . $item->IndexNumber;
                 $detailURL = "Season.php?id=" . $item->Id;
                 break;   
             case "Series":
@@ -112,8 +111,7 @@ function setDetailURL($item, $menuItem) {
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
                         if ($item->SeasonId) {
-                            $detailURL = "seasonRedirect.php?SeasonId=" . $item->SeasonId . "&ParentIndexNumber=" . $item->ParentIndexNumber
-                                . "&IndexNumber=" . $item->IndexNumber;
+                            $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
                         } else {
                             //try season redirect, probably only one season
                             $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId

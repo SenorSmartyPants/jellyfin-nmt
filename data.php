@@ -45,6 +45,13 @@ function firstEpisodeFromSeries($seriesId)
     return $all_episodes->Items[0];
 }
 
+function firstSeasonFromSeries($seriesId)
+{
+    $seasons = getUsersItems(null, null, 1, $seriesId, null, null, "season");
+
+    return $seasons->Items[0];
+}
+
 function YAMJpath($item) {
     global $jukebox_url;
     
