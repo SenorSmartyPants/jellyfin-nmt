@@ -83,7 +83,7 @@ function renderEpisodeJS($episode)
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
-        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, 164, null, "Primary", null, null, $episode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>");
+        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, "Primary", null, null, $episode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>");
         -->
     </script>
 <?
