@@ -274,26 +274,28 @@ function printTopBar()
     global $bannerId;
 ?>
     <table border="0" cellspacing="0" cellpadding="0">
-        <tr height="50" valign="bottom">
+        <tr height="62" valign="middle">
             <td width="18"></td>
             <td width="250"><? if ($bannerId) { ?> 
                 <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" /> <? } ?>
             </td>
             <td width="30"></td>
-            <td align="center" valign="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
+            <td align="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
             <td width="20"></td>
 
-            <td align="center" valign="center" class="tvyear"><?= $season->ProductionYear ?></td>
+            <td align="center"class="tvyear"><?= $season->ProductionYear ?></td>
 
             <td width="50"></td>
-            <td valign="center" style="font-size: medium"><?= $ShowAudioCodec ? audioCodec($audioStream) : null ?><?= $ShowContainer ? container($firstSource->Container) : null ?><?= $ShowVideoOutput ? videoOutput($videoStream) : null ?></td>
+            <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' : null ?>
+            <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' : null ?>
+            <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . '</td>' : null ?>
 
             <?= $season->IndexNumber < 10 ? '<td width="90"></td>' : null ?> 
             <?= ($season->IndexNumber > 9 and $season->IndexNumber < 100) ? '<td width="70"></td>' : null ?>
             <?= ($season->IndexNumber > 99 and $season->IndexNumber < 1000) ? '<td width="50"></td>' : null ?>
             <?= ($season->IndexNumber > 999) ? '<td width="30"></td>' : null ?>
             
-            <td align="right" valign="center" class="rating">						
+            <td align="right" class="rating">						
                 <? 
                 if ($series->CommunityRating) 
                 {
@@ -317,7 +319,7 @@ function printSpacerTable()
 ?>
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td height="290">
+            <td height="278">
             </td>
         </tr>
     </table> 

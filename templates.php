@@ -73,7 +73,7 @@ function audioCodec($audioStream)
         default:
             $channelFile = "../1x1.png";
     }
-    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) . '<img align="top" src="/New/Jukebox/pictures/flags/' . $codecFile . '"/><img align="top" src="/New/Jukebox/pictures/flags/' . $channelFile . '"/>&nbsp;&nbsp;';
+    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) . '<img align="top" src="/New/Jukebox/pictures/flags/' . $codecFile . '"/><img align="top" src="/New/Jukebox/pictures/flags/' . $channelFile . '"/>';
 }
 
 function container($containerID)
@@ -132,7 +132,7 @@ function container($containerID)
             default:
             $url = "unknown.png";
     }    
-    return (($url == "unknown.png") ? $containerID : null) . '<img src="/New/Jukebox/pictures/flags/container_' . $url . '"/>&nbsp;&nbsp;';
+    return (($url == "unknown.png") ? $containerID : null) . '<img src="/New/Jukebox/pictures/flags/container_' . $url . '"/>';
 }
 
 function videoOutput($videoStream)
@@ -150,7 +150,7 @@ function videoOutput($videoStream)
         default:
             $url = $output . ".png";
     }
-    return '<img src="/New/Jukebox/pictures/flags/output_' .  $url . '"/>&nbsp;&nbsp;';
+    return '<img src="/New/Jukebox/pictures/flags/output_' .  $url . '"/>';
 }
 /*
 <xsl:template name="videoOutput">
