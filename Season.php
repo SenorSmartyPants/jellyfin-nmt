@@ -298,8 +298,8 @@ function printTopBar()
         <tr height="62" valign="middle">
             <td width="18"></td>
             <td width="250"><? if ($bannerId) { ?> 
-                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" /> <? } ?>
-            </td>
+                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" />
+            <? } ?></td>
             <td width="30"></td>
             <td align="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
             <td width="20"></td>
