@@ -389,6 +389,7 @@ Play all
             </table>
 		</td>
 </tr>
+<tr>
 <td width="100%" colspan="3">
 <!-- episode list, write out the first 15 -->
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
@@ -401,7 +402,7 @@ Play all
     traktGetterIMG();
 ?>			
 </td>
-         
+</tr>  
          <tr>
 		 <td valign="top" width="80" colspan="3">
          
