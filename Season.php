@@ -267,6 +267,27 @@ function printSeasonHeadEtc($onloadset = null)
 <?
 }
 
+function TopBarSpacerWidth($seasonIndexNumber)
+{
+    if ($seasonIndexNumber < 10) 
+    {
+        $width = 90;
+    } 
+    elseif ($seasonIndexNumber > 9 && $seasonIndexNumber < 100)
+    {
+        $width = 70;
+    }
+    elseif ($seasonIndexNumber > 99 && $seasonIndexNumber < 1000) 
+    {
+        $width = 50;
+    }
+    elseif ($seasonIndexNumber > 999) 
+    {
+        $width = 30;
+    }
+    return $width;
+}
+
 function printTopBar()
 {
     global $series, $season, $videoStream, $audioStream, $firstSource;
@@ -290,10 +311,7 @@ function printTopBar()
             <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' : null ?>
             <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . '</td>' : null ?>
 
-            <?= $season->IndexNumber < 10 ? '<td width="90"></td>' : null ?> 
-            <?= ($season->IndexNumber > 9 && $season->IndexNumber < 100) ? '<td width="70"></td>' : null ?>
-            <?= ($season->IndexNumber > 99 && $season->IndexNumber < 1000) ? '<td width="50"></td>' : null ?>
-            <?= ($season->IndexNumber > 999) ? '<td width="30"></td>' : null ?>
+            <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
             
             <td align="right" class="rating">						
                 <? 
