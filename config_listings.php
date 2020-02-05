@@ -1,8 +1,5 @@
 <?php
-
-date_default_timezone_set('America/Chicago');
-
-$theme_css = "dark.css";
+require_once 'config.php';
 
 $default_listing_style = IndexStyleEnum::PosterPopupDynamic;
 

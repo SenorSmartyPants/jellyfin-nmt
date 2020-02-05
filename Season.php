@@ -11,6 +11,7 @@ TODO:
 
 
 */
+require_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
 include_once 'templates.php';
