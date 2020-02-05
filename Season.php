@@ -28,7 +28,12 @@ $id = $_GET["id"];
 //have to load season to find out if it has a banner
 $season = getItem($id);
 $series = getItem($season->SeriesId);
-$bannerId = $season->ImageTags->Banner ? $season->Id : ($series->ImageTags->Banner ? $season->SeriesId : null);
+$bannerId = null;
+if ($season->ImageTags->Banner) {
+    $bannerId = $season->Id;
+} elseif ($series->ImageTags->Banner) {
+    $bannerId = $season->SeriesId;
+}
 $backdrop = getBackdropIDandTag($season);
 
 $episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
