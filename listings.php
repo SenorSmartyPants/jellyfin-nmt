@@ -169,21 +169,6 @@ function printPosterTable($items)
     ?>
     <table class="movies" border="0" cellpadding="<?= $indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $indexStyle->moviesTableAlign ?>">
         <?php
-        /*
-    <xsl:for-each select="library/movies/movie[position() mod $nbCols = 1]"> //selects first item in row
-    //here position is row number
-    //gap is # items already displayed on previous rows 
-      <tr>
-        <xsl:apply-templates
-             select=".|following-sibling::movie[position() &lt; $nbCols]">
-          <xsl:with-param name="gap" select="(position() - 1) * $nbCols" />
-          <xsl:with-param name="currentIndex" select="$currentIndex" />
-          <xsl:with-param name="lastIndex" select="$lastIndex" />
-          <xsl:with-param name="lastGap" select="($nbLines - 1) * $nbCols" />
-        </xsl:apply-templates>
-      </tr>
-    </xsl:for-each>
-    */
         $i = 0;
         foreach ($items as $key => $item) {
             //first item in row
@@ -300,81 +285,6 @@ function printPosterTD($menuItem, $gap, $position, $row)
             echo " onkeydownset=\"pgdnload\"";
         }
     }
-
-/*  TODO: is this anything I want to keep? 
-                <xsl:choose>
-                    <xsl:when test="count(files/file) > 1">
-                        <xsl:call-template name="search-and-replace">
-                            <xsl:with-param name="input" select="baseFilename" />
-                            <xsl:with-param name="search-string">'</xsl:with-param>
-                            <xsl:with-param name="replace-string">\'</xsl:with-param>
-                        </xsl:call-template>.playlist.jsp','playlist
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="files/file[1]/fileURL" />','<xsl:choose>
-                            <xsl:when test="container='DVD Video' or container='dvd video'">zcd</xsl:when>
-                            <xsl:when test="container = 'ISO' or ends-with(files/file[1]/fileURL, '.ISO') or ends-with(files/file[1]/fileURL, '.iso')">zcd</xsl:when>
-                            <xsl:when test="container = 'IMG' or ends-with(files/file[1]/fileURL, '.IMG') or ends-with(files/file[1]/fileURL, '.img')">zcd</xsl:when>
-                            <xsl:when test="ends-with(files/file[1]/fileURL, 'VIDEO_TS')">zcd</xsl:when>
-                            <xsl:otherwise>vod</xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose> 
-
-            <xsl:attribute name="onmouseout">hide(
-            <xsl:value-of select="position()+$gap" />, '<xsl:call-template name="search-and-replace">
-                <xsl:with-param name="input" select="baseFilename" />
-                <xsl:with-param name="search-string">'</xsl:with-param>
-                <xsl:with-param name="replace-string">\'</xsl:with-param>
-            </xsl:call-template>.playlist.jsp')</xsl:attribute>
-
-            <xsl:attribute name="onfocus">show(
-                <xsl:value-of select="position()+$gap" />, '<xsl:choose>
-                    <xsl:when test="count(files/file) > 1">
-                        <xsl:call-template name="search-and-replace">
-                            <xsl:with-param name="input" select="baseFilename" />
-                            <xsl:with-param name="search-string">'</xsl:with-param>
-                            <xsl:with-param name="replace-string">\'</xsl:with-param>
-                        </xsl:call-template>.playlist.jsp','playlist
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="files/file[1]/fileURL" />','<xsl:choose>
-                            <xsl:when test="container='DVD Video' or container='dvd video'">zcd</xsl:when>
-                            <xsl:when test="container = 'ISO' or ends-with(files/file[1]/fileURL, '.ISO') or ends-with(files/file[1]/fileURL, '.iso')">zcd</xsl:when>
-                            <xsl:when test="container = 'IMG' or ends-with(files/file[1]/fileURL, '.IMG') or ends-with(files/file[1]/fileURL, '.img')">zcd</xsl:when>
-                            <xsl:when test="ends-with(files/file[1]/fileURL, 'VIDEO_TS')">zcd</xsl:when>
-                            <xsl:otherwise>vod</xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose>')</xsl:attribute>
-
-                <xsl:attribute name="onblur">hide(
-                <xsl:value-of select="position()+$gap" />, '<xsl:call-template name="search-and-replace">
-                    <xsl:with-param name="input" select="baseFilename" />
-                    <xsl:with-param name="search-string">'</xsl:with-param>
-                    <xsl:with-param name="replace-string">\'</xsl:with-param>
-                </xsl:call-template>.playlist.jsp')</xsl:attribute>
-
-
-
-
-//TODO: this manages keyset navigation . Top and bottom rows
-            <xsl:if test="$lastIndex != 0">
-                <xsl:if test="$gap=0 and $currentIndex != 0 and $FilterBar='true'">
-                    <xsl:attribute name="onkeyupset">left</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="$gap=0 and $currentIndex != 0 and $FilterBar='false' and $NavBar='false'">
-                    <xsl:attribute name="onkeyupset">pgupload</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="$gap=0 and $currentIndex != 0 and $FilterBar='false' and $NavBar='true'">
-                    <xsl:attribute name="onkeyupset">moviestv</xsl:attribute>
-                </xsl:if>
-
-                <xsl:if test="$gap=$lastGap and $currentIndex != $lastIndex">
-                    <xsl:attribute name="onkeydownset">pgdnload</xsl:attribute>
-                </xsl:if>
-            </xsl:if>                
-        */
 ?>>
 <?
     if ($menuItem->PosterURL) {
@@ -416,7 +326,6 @@ function printTitleTable($currentPage = 1, $numPages = 1)
     global $apiCallCount, $QSBase, $include_jellyfin_logo_when_backdrop_present;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
-        <!--<xsl:if test="$index-titlebackground = 'true'"><xsl:attribute name="background">pictures/dim/custom_tvtitle_dim.png</xsl:attribute></xsl:if>-->
         <tr>
             <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$_GET["backdropId"]) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
             <td width="60%" align="center" valign="top">
