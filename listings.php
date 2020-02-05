@@ -1,6 +1,6 @@
 <?php
 include_once 'IndexStyles.php';
-include_once 'config.php';
+include_once 'config_listings.php';
 include_once 'secrets.php';
 include_once 'menuItems.php';
 
