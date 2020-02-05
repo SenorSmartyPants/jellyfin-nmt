@@ -11,7 +11,7 @@ function parseSeries($item)
 {
     global $libraryBrowse;
     
-    if ($item->UserData->Played or $libraryBrowse) {
+    if ($item->UserData->Played || $libraryBrowse) {
         return parse($item);
     } else {
         //gets first unwatched episode for this series

@@ -291,8 +291,8 @@ function printTopBar()
             <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . '</td>' : null ?>
 
             <?= $season->IndexNumber < 10 ? '<td width="90"></td>' : null ?> 
-            <?= ($season->IndexNumber > 9 and $season->IndexNumber < 100) ? '<td width="70"></td>' : null ?>
-            <?= ($season->IndexNumber > 99 and $season->IndexNumber < 1000) ? '<td width="50"></td>' : null ?>
+            <?= ($season->IndexNumber > 9 && $season->IndexNumber < 100) ? '<td width="70"></td>' : null ?>
+            <?= ($season->IndexNumber > 99 && $season->IndexNumber < 1000) ? '<td width="50"></td>' : null ?>
             <?= ($season->IndexNumber > 999) ? '<td width="30"></td>' : null ?>
             
             <td align="right" class="rating">						
