@@ -17,6 +17,7 @@ include_once 'utils.php';
 include_once 'templates.php';
 
 $titleTruncate = 34;
+$EpisodesPerPage = 15;
 $ShowAudioCodec = true;
 $ShowContainer = true;
 $ShowVideoOutput = true;
@@ -128,6 +129,7 @@ function renderEpisodeHTML($episode, $indexInList)
 function printInitJS()
 {
     global $series, $season, $episodes;
+    global $EpisodesPerPage;
 ?>
     <script type="text/javascript">
         iMainSeason = <?= $season->IndexNumber ?>;
@@ -161,9 +163,12 @@ function printInitJS()
 foreach ($episodes as $episode) {
     renderEpisodeJS($episode);
 }
+
+if (count($episodes) > $EpisodesPerPage) {
+?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
+<?
+}
 ?>
-
-
     <script type="text/javascript" src="js/season.js"></script>
 
     <script type="text/javascript">
@@ -365,11 +370,11 @@ Play all
 </tr>
 <tr>
 <td width="100%" colspan="3">
-<!-- episode list, write out the first 15 -->
+<!-- episode list, write out the first X -->
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
 <? 
-    global $episodes;
-    for ($i=0; $i < 15 && $i < count($episodes) ; $i++) { 
+    global $episodes, $EpisodesPerPage;
+    for ($i=0; $i < $EpisodesPerPage && $i < count($episodes) ; $i++) { 
         # code...
         renderEpisodeHTML($episodes[$i],$i+1);
     }
