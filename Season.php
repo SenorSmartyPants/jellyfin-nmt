@@ -81,7 +81,6 @@ function renderEpisodeJS($episode)
         <!--
         asEpisodeTitle.push("<?= $episode->Name ?>");
         asEpisodeTitleShort.push("<?= substr($episode->Name, 0, $titleTruncate) ?>");
-        //remove line breaks from overview
         asEpisodePlot.push("<?= addslashes(str_replace(array("\n", "\r"), '', $episode->Overview)) ?>");
         asEpisodeUrl.push("<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>");
         asEpisodeVod.push("vod");
@@ -347,7 +346,6 @@ function printLowerTable()
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 <tr>
-<tr>
 <td height="10">
 <a class="TvLink secondaryText" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
 Play all
@@ -418,7 +416,6 @@ Play all
             
 		 </td>
 		 </tr>
-         </tr>
 		 
          </table>  		
            
