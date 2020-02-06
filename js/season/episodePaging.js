@@ -54,7 +54,7 @@ function toggletab() {
                 iEpisodeNoNew = 'S' + iEpisodeNoNew;
             }
 
-            sWatched = '';
+            var sWatched = '';
             if (asEpisodeWatched[noNew]) {
                 sWatched = "* ";
             }
