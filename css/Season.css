@@ -1,0 +1,77 @@
+#divEpisodeImgBackSabish {
+    top: 405px;
+    left: 20px;
+}
+
+#divEpisodeImgSabish {
+    top: 417px;
+    left: 31px;
+}
+
+#divEpisodeCertification {
+    top: 597px;
+    left: 161px;
+}
+
+.tvseason {
+    font-size: 32pt;
+}
+
+.tvyear {
+    font-size: 32pt;
+}
+
+.rating {
+    font-size: 18pt;
+}
+
+.tvplot {
+    font-size: 13pt;
+}
+
+.TvLink {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+#episodeName{
+    font-weight: bold;
+}
+
+.tveptitle {
+    font-size: 26pt;
+}
+
+.tveptitle24 {
+    font-size: 24pt;
+}
+
+.tveptitle22 {
+    font-size: 22pt;
+}
+
+.tveptitle20 {
+    font-size: 20pt;
+}
+
+.tveptitle18 {
+    font-size: 18pt;
+}
+
+.tveptitle16 {
+    font-size: 16pt;
+}
+
+.tveptitle14 {
+    font-size: 14pt;
+}
+
+#noNMT {
+    visibility: hidden;
+    display: none;
+}
+
+#noNMT a {
+    visibility: hidden;
+    display: none;
+}
