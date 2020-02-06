@@ -126,7 +126,6 @@ function setDetailURL($item, $menuItem) {
                         break;
                     default:
                         $detailURL = translatePathToNMT($item->Path);
-                        $detailURL = "itemDetails.php?id=" . $item->Id;
                         $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
