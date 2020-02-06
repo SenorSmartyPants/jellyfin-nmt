@@ -437,8 +437,6 @@ function printSeasonFooter()
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()" />
     <a id="openEpisode" TVID="Play" href="#" vod="" />
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid="" />
-    <div id="plotInfo" class="abs plotInfoSabish tabPlot"> </div>
-    <div id="episodePages" class="abs episodePagesSabish tabTvShow"> </div>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack" class="hidden" /></div>
         <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg" class="hidden" /></div>
