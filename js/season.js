@@ -262,23 +262,4 @@
                     document.getElementById('episodeId').firstChild.nodeValue = sPlotLong;
                     fShowSeasonInfo = true;
                 }
-            },
-
-            setParams = function(destination)
-        // pass the sort option and the now value to the help screen
-        {
-            var test5 = decodeURIComponent(destination);
-            location.assign(test5);
-        }
-
-        getParams = function() {
-            var params = location.search.substring(1);
-
-            var temp = params.split(',');
-            if (temp[0] == 1) {
-                var goback = temp[2];
-                document.getElementById('backbutton').setAttribute("href", "javascript:setParams('" + escape(goback) + ".html?1," + temp[1].toString() + "," + temp[3].toString() + "," + temp[4] + "')");
-            } else {
-                document.getElementById('backbutton').setAttribute("href", "javascript:history.back();");
-            }
         };
