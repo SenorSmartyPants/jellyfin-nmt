@@ -19,7 +19,6 @@
         var url = false;
         var Eid = 'play';
         var Evod = 'vod';
-        var x = 0;
         var rRand = 1;
 
         //##########################################################
