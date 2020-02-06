@@ -43,6 +43,10 @@ img {
     left: 1px;
 }
 
+.abs {
+    position: absolute;
+}
+
 @media screen {
     #popupWrapper {
         position: absolute;

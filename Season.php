@@ -110,7 +110,7 @@ function renderEpisodeHTML($episode, $indexInList)
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <a class="TvLink" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
+                <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
                     onclick="return clicked(this);" onfocus="resetGetter();"
                     onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
@@ -229,33 +229,8 @@ function printSeasonHeadEtc($onloadset = null)
 ?>
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
-
-        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/exportdetails_item_popcorn.css" />
+        <link rel="StyleSheet" type="text/css" href="css/Season.css" />
         <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />
-        <style>
-/*Sabish TVMod V2 - override*/
-.test {color: c6cace; font-weight: normal; font-size: 32pt;!important}
-#divEpisodeImgBackSabish {top: 405px; left: 20px;!important}
-#divEpisodeImgSabish {top: 417px; left: 31px;!important}
-#divEpisodeCertification {top: 597px; left: 161px;!important}
-.tvseason {color: c6cace; font-weight: normal; font-size: 32pt;!important}
-.tvyear {color: 868686; font-weight: normal; font-size: 32pt;!important}
-.tveptitle {font-size:26pt; font-weight: bold; color:#FFFFFF}
-
-.tveptitle24 {font-size:24pt; font-weight: bold; color:#FFFFFF}
-.tveptitle22 {font-size:22pt; font-weight: bold; color:#FFFFFF}
-.tveptitle20 {font-size:20pt; font-weight: bold; color:#FFFFFF}
-.tveptitle18 {font-size:18pt; font-weight: bold; color:#FFFFFF}
-.tveptitle16 {font-size:16pt; font-weight: bold; color:#FFFFFF}
-.tveptitle14 {font-size:14pt; font-weight: bold; color:#FFFFFF}
-
-.tvplot {color: ececec; font-weight: normal; font-size: 13pt;!important}
-.TvLink {color: 868686; font-size: 12pt; font-weight: bold;!important}
-.TvLink11 {color: 868686; font-size: 11pt; font-weight: bold;!important}
-.rating {color: ffffff; font-weight: 400; font-size: 18pt;!important}
-
-</style>
-
 <?
     printInitJS();
 ?>
@@ -310,7 +285,7 @@ function printTopBar()
             <td align="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
             <td width="20"></td>
 
-            <td align="center"class="tvyear"><?= $season->ProductionYear ?></td>
+            <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
 
             <td width="50"></td>
             <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' : null ?>
@@ -357,7 +332,7 @@ function printLowerTable()
     <tr>
         <td width="30" height="314"></td>
         <td width="690" valign="top">
-            <table width="100%" height="314" border="0" cellspacing="0" cellpadding="0" id="episodenInfos" class="XXhidden">
+            <table width="100%" height="314" border="0" cellspacing="0" cellpadding="0" id="episodenInfos">
                 <tr>
                     <td colspan="2" width="100%" height="74" id="episodeName" class="tveptitle" valign="top" align="left">&#160; </td>
                 </tr>
@@ -374,7 +349,7 @@ function printLowerTable()
 <tr>
 <tr>
 <td height="10">
-<a class="TvLink" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
+<a class="TvLink secondaryText" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
 Play all
 </a>
 </td>
@@ -383,7 +358,7 @@ Play all
         <!-- episode paging indicator -->
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
-                    <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink" >
+                    <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink secondaryText" >
                     <span class="tabTvShow" id="pageCountNew">&#160;</span>
                     </a>
                 </td></tr>
@@ -410,7 +385,7 @@ Play all
                 <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_21"/>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr><td>
-                        <a class="TvLink" href="#" vod="" id="a_e_22" name="toleft" onfocus="toggleLeft()" onmouseover="toggleLeft()">
+                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_22" name="toleft" onfocus="toggleLeft()" onmouseover="toggleLeft()">
                         <span class="tabTvShow" id="s_e_22"><img src="/New/Jukebox/pictures/1x1.png"/></span>
                         </a>
                     </td></tr>
@@ -418,7 +393,7 @@ Play all
                 <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_22"/>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr><td>
-                        <a class="TvLink" href="#" vod="" id="a_e_23" name="toright" onfocus="toggleRight()" onmouseover="toggleRight()">
+                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_23" name="toright" onfocus="toggleRight()" onmouseover="toggleRight()">
                         <span class="tabTvShow" id="s_e_23"><img src="/New/Jukebox/pictures/1x1.png"/></span>
                         </a>
                     </td></tr>
@@ -426,7 +401,7 @@ Play all
                 <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_23"/>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr><td>
-                        <a class="TvLink" href="#" vod="" id="a_e_24" name="toup" onfocus="clickUpNew()" onmouseover="clickUpNew()">
+                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_24" name="toup" onfocus="clickUpNew()" onmouseover="clickUpNew()">
                         <span class="tabTvShow" id="s_e_24"><img src="/New/Jukebox/pictures/1x1.png"/></span>
                         </a>
                     </td></tr>
@@ -434,7 +409,7 @@ Play all
                 <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_24"/>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr><td>
-                        <a class="TvLink" href="#" vod="" id="a_e_25" name="todown" onfocus="clickDownNew()" onmouseover="clickDownNew()">
+                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_25" name="todown" onfocus="clickDownNew()" onmouseover="clickDownNew()">
                             <span class="tabTvShow" id="s_e_25"><img src="/New/Jukebox/pictures/1x1.png"/></span>
                         </a>
                     </td></tr>
