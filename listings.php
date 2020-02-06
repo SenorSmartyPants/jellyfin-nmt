@@ -41,6 +41,7 @@ function setNumPagesAndIndexCount($totalRecordCount)
 function printHeadEtc($onloadset = null)
 {
     global $theme_css, $indexStyle;
+    global $backdropId;
 
     $onloadset = $onloadset ?? "1";
     ?>
@@ -108,7 +109,7 @@ function printHeadEtc($onloadset = null)
     </head>
 
     <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()"
-        <? if ($_GET["backdropId"]) { ?>background="<?= getImageURL($_GET["backdropId"],720,1280,"Backdrop") ?>" <? } ?>>
+        <? if ($backdropId) { ?>background="<?= getImageURL($backdropId,720,1280,"Backdrop") ?>" <? } ?>>
 
     <?php
 }
@@ -324,10 +325,11 @@ foreach($current_users as $user) {
 function printTitleTable($currentPage = 1, $numPages = 1)
 {
     global $apiCallCount, $QSBase, $include_jellyfin_logo_when_backdrop_present;
+    global $backdropId;
     ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$_GET["backdropId"]) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
+            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$backdropId) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
             <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
