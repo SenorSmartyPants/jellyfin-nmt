@@ -171,7 +171,7 @@ function printPosterTable($items)
     <table class="movies" border="0" cellpadding="<?= $indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $indexStyle->moviesTableAlign ?>">
         <?php
         $i = 0;
-        foreach ($items as $key => $item) {
+        foreach ($items as $item) {
             //first item in row
             if (isStartOfRow($i)) {
                 echo "<tr>";
@@ -189,8 +189,6 @@ function printPosterTable($items)
 
                 $i++;
             }
-            
-
         }
         ?>
     </table>
