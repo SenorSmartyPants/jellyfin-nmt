@@ -382,45 +382,14 @@ Play all
 ?>			
 </td>
 </tr>  
-         <tr>
-		 <td valign="top" width="80" colspan="3">
-         
-                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_21"/>
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr><td>
-                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_22" name="toleft" onfocus="toggleLeft()" onmouseover="toggleLeft()">
-                        <span class="tabTvShow" id="s_e_22"><img src="/New/Jukebox/pictures/1x1.png"/></span>
-                        </a>
-                    </td></tr>
-                </table>
-                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_22"/>
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr><td>
-                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_23" name="toright" onfocus="toggleRight()" onmouseover="toggleRight()">
-                        <span class="tabTvShow" id="s_e_23"><img src="/New/Jukebox/pictures/1x1.png"/></span>
-                        </a>
-                    </td></tr>
-                </table>
-                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_23"/>
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr><td>
-                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_24" name="toup" onfocus="clickUpNew()" onmouseover="clickUpNew()">
-                        <span class="tabTvShow" id="s_e_24"><img src="/New/Jukebox/pictures/1x1.png"/></span>
-                        </a>
-                    </td></tr>
-                </table>
-                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_24"/>
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr><td>
-                        <a class="TvLink secondaryText" href="#" vod="" id="a_e_25" name="todown" onfocus="clickDownNew()" onmouseover="clickDownNew()">
-                            <span class="tabTvShow" id="s_e_25"><img src="/New/Jukebox/pictures/1x1.png"/></span>
-                        </a>
-                    </td></tr>
-                </table>
-                <a href="#" class="tabTvShow" TVID="" onclick="" id="t_e_25"/>
-            
-		 </td>
-		 </tr>
+    <tr>
+		<td valign="top" width="80" colspan="3">
+            <a href="#" name="toleft" onfocus="toggleLeft()"/>
+            <a href="#" name="toright" onfocus="toggleRight()"/>
+            <a href="#" name="toup" onfocus="clickUpNew()"/>
+            <a href="#" name="todown" onfocus="clickDownNew()"/>
+		</td>
+	</tr>
 		 
          </table>  		
            
