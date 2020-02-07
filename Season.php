@@ -288,18 +288,13 @@ function printTopBar()
             <td width="30"></td>
             <td align="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
             <td width="20"></td>
-
             <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
-
             <td width="50"></td>
-            <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' : null ?>
-            <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' : null ?>
-            <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . '</td>' : null ?>
-
+            <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . "</td>\n"  : null ?>
             <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
-            
-            <td align="right" class="rating">						
-                <? 
+            <td align="right" class="rating"><? 
                 if ($series->CommunityRating) 
                 {
                     if ($star_rating) 
@@ -310,8 +305,8 @@ function printTopBar()
                     {
                         echo "&nbsp;(" . $series->CommunityRating . "/10)"; 
                     }
-                } ?>
-		    </td>			
+                } 
+            ?></td>			
         </tr>
     </table>
 <? 
@@ -322,8 +317,7 @@ function printSpacerTable()
 ?>
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td height="278">
-            </td>
+            <td height="278"></td>
         </tr>
     </table> 
 <?
