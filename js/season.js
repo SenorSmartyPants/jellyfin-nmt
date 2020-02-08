@@ -20,23 +20,20 @@
         var showEpisode = function(x) {
                 helpy = x;
                 url = buildUrl(x)
-                if (asEpisodeTitle[helpy].length > 35) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle24");
-                    if (asEpisodeTitle[helpy].length > 38) {
-                        document.getElementById('episodeName').setAttribute("class", "tveptitle22");
-                        if (asEpisodeTitle[helpy].length > 43) {
-                            document.getElementById('episodeName').setAttribute("class", "tveptitle20");
-                            if (asEpisodeTitle[helpy].length > 46) {
-                                document.getElementById('episodeName').setAttribute("class", "tveptitle18");
-                                if (asEpisodeTitle[helpy].length > 53) {
-                                    document.getElementById('episodeName').setAttribute("class", "tveptitle16");
-                                    asEpisodeTitle[helpy] = asEpisodeTitle[helpy].substring(0, 56) + '...'
-                                }
-                            }
-                        }
-                    }
-                } else {
+                var iTitleLength = asEpisodeTitle[helpy].length;
+                if (iTitleLength <= 35) {
                     document.getElementById('episodeName').setAttribute("class", "tveptitle");
+                } else if (iTitleLength <= 38) {
+                    document.getElementById('episodeName').setAttribute("class", "tveptitle24");
+                } else if (iTitleLength <= 43) {
+                    document.getElementById('episodeName').setAttribute("class", "tveptitle22");
+                } else if (iTitleLength <= 46) {
+                    document.getElementById('episodeName').setAttribute("class", "tveptitle20");
+                } else if (iTitleLength <= 53) {
+                    document.getElementById('episodeName').setAttribute("class", "tveptitle18");
+                } else {
+                    document.getElementById('episodeName').setAttribute("class", "tveptitle16");
+                    asEpisodeTitle[helpy] = asEpisodeTitle[helpy].substring(0, 56) + '...';
                 }
                 document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[helpy];
                 document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[helpy];
