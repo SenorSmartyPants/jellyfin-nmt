@@ -120,7 +120,7 @@ function renderEpisodeHTML($episode, $indexInList)
                     onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
                     <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
-                <a style="display:none;visibility:hidden" width="0" height="0" onfocusload="" 
+                <a onfocusload="" 
                 href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>" 
                 vod="" 
                 id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>" />
@@ -410,11 +410,6 @@ function printSeasonFooter()
         <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg" class="hidden" /></div>
         <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
     </div>
-    <table>
-        <tr>
-            <td height="50" />
-        </tr>
-    </table>
     <div id="noNMT"><a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a><a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a><a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br /><a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a><a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br /><a class="clickIndex" href="">Index</a><br /></div>
     <a TVID="HOME" href="index.php" />
     <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href="" />
