@@ -123,10 +123,10 @@ function renderEpisodeHTML($episode, $indexInList)
                 <a onfocusload="" 
                 href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>" 
                 vod="" 
-                id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>" />
+                id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"></a>
             </td>
         </tr>
-    </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocusNew(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" />
+    </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocusNew(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
 <?
 }
 
@@ -381,10 +381,10 @@ Play all
 </tr>  
     <tr>
 		<td valign="top" width="80" colspan="3">
-            <a href="#" name="toleft" onfocus="toggleLeft()"/>
-            <a href="#" name="toright" onfocus="toggleRight()"/>
-            <a href="#" name="toup" onfocus="clickUpNew()"/>
-            <a href="#" name="todown" onfocus="clickDownNew()"/>
+            <a href="#" name="toleft" onfocus="toggleLeft()"></a>
+            <a href="#" name="toright" onfocus="toggleRight()"></a>
+            <a href="#" name="toup" onfocus="clickUpNew()"></a>
+            <a href="#" name="todown" onfocus="clickDownNew()"></a>
 		</td>
 	</tr>
 		 
@@ -402,18 +402,18 @@ function printSeasonFooter()
                 </td>
             </tr>
         </table>  	
-    <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()" />
-    <a id="openEpisode" TVID="Play" href="#" vod="" />
-    <a href="#" onclick="return  toggleEpisodeDetails();" tvid="" />
+    <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
+    <a id="openEpisode" TVID="Play" href="#" vod=""></a>
+    <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack" class="hidden" /></div>
         <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg" class="hidden" /></div>
         <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
     </div>
     <div id="noNMT"><a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a><a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a><a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br /><a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a><a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br /><a class="clickIndex" href="">Index</a><br /></div>
-    <a TVID="HOME" href="index.php" />
-    <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href="" />
-    <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href="" />
+    <a TVID="HOME" href="index.php"></a>
+    <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
+    <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 
     </body>
 
