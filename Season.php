@@ -109,7 +109,7 @@ function renderEpisodeHTML($episode, $indexInList)
     } else {
         $titleLine = sprintf('%02d', $episode->IndexNumber);
     }
-    $titleLine .= '. ' . substr($episode->Name, 0, TITLETRUNCATE);
+    $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
     
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
