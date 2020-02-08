@@ -19,6 +19,7 @@ include_once 'templates.php';
 const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
+const PCMENU = true;
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
@@ -393,6 +394,20 @@ Play all
 <?
 }
 
+function printPCMenu()
+{
+?>
+    <div id="noNMT">
+        <a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a>
+        <a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a>
+        <a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br />
+        <a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a>
+        <a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br />
+        <a class="clickIndex" href="">Index</a><br />
+    </div>
+<?
+}
+
 function printSeasonFooter()
 {
 ?>
@@ -407,7 +422,11 @@ function printSeasonFooter()
         <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg" class="hidden" /></div>
         <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
     </div>
-    <div id="noNMT"><a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a><a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a><a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br /><a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a><a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br /><a class="clickIndex" href="">Index</a><br /></div>
+<?
+    if (PCMENU) {
+        printPCMenu();
+    }
+?>
     <a TVID="HOME" href="index.php"></a>
     <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
