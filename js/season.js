@@ -1,25 +1,17 @@
         // series config vars
 
-        var iPageNew = 1;
-        var iEpPagesNew = 1;
-        var iEpisodeIdNew = 1;
-        var iEpisodesPerPageNew = 15;
-        var iLoopNew = iEpisodesPerPageNew;
-        var sIdLinkPrefixNew = 'a_e_';
-        var sId2ndLinkPrefixNew = 'a2_e_';
-        var sIdSpanPrefixNew = 's_e_';
-        var sIdTvPrefixNew = 't_e_';
-        var fFirstCall = false;
-        var focusIdNew = ' ';
+        var iPage = 1;
+        var iEpPages = 1;
+        var iEpisodeId = 1;
+        var iEpisodesPerPage = 15;
+        var sIdLinkPrefix = 'a_e_';
+        var focusId = ' ';
         var helpx = 0;
         var helpy = 0;
         var fShowSeasonInfo = false;
         var fmorePages = false;
         var iEpisodesLength = asEpisodePlot.length - 1;
         var url = false;
-        var Eid = 'play';
-        var Evod = 'vod';
-        var rRand = 1;
 
         //##########################################################
         //## Functions Series ######################################
@@ -72,20 +64,20 @@
                 document.getElementById('episodeImg').setAttribute("class", "");
                 document.getElementById('episodeImgBack').setAttribute("class", "");
                 document.getElementById('episodenInfos').setAttribute("class", "");
-                iEpisodeIdNew = 1;
-                iPageNew = 1;
-                iEpPagesNew = Math.floor(1) + Math.floor((iEpisodesLength - 1) / iEpisodesPerPageNew);
-                if (iEpPagesNew > 1) {
+                iEpisodeId = 1;
+                iPage = 1;
+                iEpPages = Math.floor(1) + Math.floor((iEpisodesLength - 1) / iEpisodesPerPage);
+                if (iEpPages > 1) {
                     fmorePages = true;
-                    document.getElementById('pageCountNew').firstChild.nodeValue = '1' + ' / ' + iEpPagesNew + ' (' + iEpisodesLength + ')';
+                    document.getElementById('pageCountNew').firstChild.nodeValue = '1' + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
                 }
 
                 var iEpisodeIdNextUp = indexOf(asEpisodeNo, focusEpisodeNo);
                 if (iEpisodeIdNextUp != -1) {
-                    iEpisodeIdNew = iEpisodeIdNextUp;
-                    var iPageNextUp = 1 + Math.floor((iEpisodeIdNew - 1) / iEpisodesPerPageNew);
+                    iEpisodeId = iEpisodeIdNextUp;
+                    var iPageNextUp = 1 + Math.floor((iEpisodeId - 1) / iEpisodesPerPage);
                     if (iPageNextUp > 1) {
-                        iPageNew = iPageNextUp;
+                        iPage = iPageNextUp;
                         toggletab();
                         window.setTimeout("showNfocus()", 1);
                     } else {
@@ -93,27 +85,29 @@
                     }
                 } else {
                     //show first in list
-                    showEpisode(iEpisodeIdNew);
+                    showEpisode(iEpisodeId);
                 }
             },
 
             clickDownNew = function() {
-                if ((iEpisodeIdNew / (iPageNew * iEpisodesPerPageNew)) == 1) {
+                if ((iEpisodeId / (iPage * iEpisodesPerPage)) == 1) {
+                    //episode is max # on a page, bottom of the list
                     if (fmorePages == true) {
-                        iPageNew = iPageNew + 1;
-                        iEpisodeIdNew = iEpisodeIdNew + 1;
+                        iPage = iPage + 1;
+                        iEpisodeId = iEpisodeId + 1;
                         toggletab();
                         window.setTimeout("showNfocus()", 1);
                     } else {
-                        iEpisodeIdNew = 1;
+                        //only one page, go to top
+                        iEpisodeId = 1;
                         showNfocus();
                     }
                 } else {
-                    iEpisodeIdNew = iEpisodeIdNew + 1;
-                    if (iEpisodeIdNew > iEpisodesLength) {
-                        iEpisodeIdNew = 1;
+                    iEpisodeId = iEpisodeId + 1;
+                    if (iEpisodeId > iEpisodesLength) {
+                        iEpisodeId = 1;
                         if (fmorePages == true) {
-                            iPageNew = 1;
+                            iPage = 1;
                             toggletab();
                             window.setTimeout("showNfocus()", 1);
                         } else
@@ -124,25 +118,25 @@
             },
 
             clickUpNew = function() {
-                if ((iEpisodeIdNew - ((iPageNew - 1) * iEpisodesPerPageNew)) == 1) {
+                if ((iEpisodeId - ((iPage - 1) * iEpisodesPerPage)) == 1) {
                     document.getElementById('gtPlay').focus();
                 } else {
-                    iEpisodeIdNew = iEpisodeIdNew - 1;
+                    iEpisodeId = iEpisodeId - 1;
                     showNfocus();
                 }
             },
 
             toggleLeft = function() {
                 if (fmorePages == true) {
-                    if (iPageNew == 1) {
-                        iPageNew = iEpPagesNew;
-                        iEpisodeIdNew = iEpisodeIdNew + ((iEpPagesNew - 1) * iEpisodesPerPageNew);
-                        if (iEpisodeIdNew > iEpisodesLength) {
-                            iEpisodeIdNew = iEpisodesLength;
+                    if (iPage == 1) {
+                        iPage = iEpPages;
+                        iEpisodeId = iEpisodeId + ((iEpPages - 1) * iEpisodesPerPage);
+                        if (iEpisodeId > iEpisodesLength) {
+                            iEpisodeId = iEpisodesLength;
                         }
                     } else {
-                        iPageNew = iPageNew - 1;
-                        iEpisodeIdNew = iEpisodeIdNew - iEpisodesPerPageNew;
+                        iPage = iPage - 1;
+                        iEpisodeId = iEpisodeId - iEpisodesPerPage;
                     }
                     toggletab();
                     window.setTimeout("showNfocus()", 1);
@@ -152,13 +146,13 @@
 
             toggleRight = function() {
                 if (fmorePages == true) {
-                    if (iPageNew == iEpPagesNew) {
-                        iPageNew = 1;
-                        iEpisodeIdNew = iEpisodeIdNew - ((iEpPagesNew - 1) * iEpisodesPerPageNew);
+                    if (iPage == iEpPages) {
+                        iPage = 1;
+                        iEpisodeId = iEpisodeId - ((iEpPages - 1) * iEpisodesPerPage);
                     } else {
-                        iPageNew = iPageNew + 1;
-                        iEpisodeIdNew = iEpisodeIdNew + iEpisodesPerPageNew;
-                        if (iEpisodeIdNew > iEpisodesLength) iEpisodeIdNew = iEpisodesLength;
+                        iPage = iPage + 1;
+                        iEpisodeId = iEpisodeId + iEpisodesPerPage;
+                        if (iEpisodeId > iEpisodesLength) iEpisodeId = iEpisodesLength;
                     }
                     toggletab();
                     window.setTimeout("showNfocus()", 1);
@@ -167,15 +161,15 @@
             },
 
             showNfocus = function() {
-                helpy = iEpisodeIdNew - ((iPageNew - 1) * iEpisodesPerPageNew);
-                focusIdNew = sIdLinkPrefixNew + helpy;
-                document.getElementById(focusIdNew).focus();
-                showEpisode(iEpisodeIdNew);
+                helpy = iEpisodeId - ((iPage - 1) * iEpisodesPerPage);
+                focusId = sIdLinkPrefix + helpy;
+                document.getElementById(focusId).focus();
+                showEpisode(iEpisodeId);
             },
 
             setFocusNew = function(x) {
                 helpx = x;
-                iEpisodeIdNew = helpx + ((iPageNew - 1) * iEpisodesPerPageNew);
+                iEpisodeId = helpx + ((iPage - 1) * iEpisodesPerPage);
                 fShowSeasonInfo = false;
                 showNfocus();
             },

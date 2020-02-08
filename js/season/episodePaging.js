@@ -1,3 +1,11 @@
+var sId2ndLinkPrefix = 'a2_e_';
+var iLoop = iEpisodesPerPage;
+var sIdSpanPrefix = 's_e_';
+var sIdTvPrefix = 't_e_';
+var Eid = 'play';
+var Evod = 'vod';
+
+
 function setVOD(Eid, Evod) {
 
     document.getElementById(Eid).removeAttribute('vod');
@@ -19,18 +27,18 @@ function setVOD(Eid, Evod) {
 }
 
 function toggletab() {
-    for (var i = 1; i <= iLoopNew; i++) {
+    for (var i = 1; i <= iLoop; i++) {
         var iElIdNew = i;
-        var sLinkIdNew = sIdLinkPrefixNew + iElIdNew;
-        var s2ndLinkIdNew = sId2ndLinkPrefixNew + iElIdNew;
-        var sSpanIdNew = sIdSpanPrefixNew + iElIdNew;
-        var sTvIdNew = sIdTvPrefixNew + iElIdNew;
+        var sLinkIdNew = sIdLinkPrefix + iElIdNew;
+        var s2ndLinkIdNew = sId2ndLinkPrefix + iElIdNew;
+        var sSpanIdNew = sIdSpanPrefix + iElIdNew;
+        var sTvIdNew = sIdTvPrefix + iElIdNew;
 
         var elLinkNew = document.getElementById(sLinkIdNew);
         var el2ndLinkNew = document.getElementById(s2ndLinkIdNew);
         var elSpanNew = document.getElementById(sSpanIdNew);
         var elTvIDNew = document.getElementById(sTvIdNew);
-        var noNew = Math.floor(((iPageNew - 1) * iLoopNew) + i);
+        var noNew = Math.floor(((iPage - 1) * iLoop) + i);
         if (noNew < (iEpisodesLength + 1)) {
             if (fTVplaylist == true) {
                 elLinkNew.setAttribute("href", asEpisodePlaylist[noNew]);
@@ -70,5 +78,5 @@ function toggletab() {
         }
 
     }
-    document.getElementById('pageCountNew').firstChild.nodeValue = ' ' + iPageNew + ' / ' + iEpPagesNew + ' (' + iEpisodesLength + ')';
+    document.getElementById('pageCountNew').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
 }
