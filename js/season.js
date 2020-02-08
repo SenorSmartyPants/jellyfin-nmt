@@ -49,7 +49,7 @@ function showEpisode(x) {
     document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[helpy]);
 }
 
-        initNew = function() {
+    var initNew = function() {
 
                 document.getElementById('episodeImg').setAttribute("class", "");
                 document.getElementById('episodeImgBack').setAttribute("class", "");
