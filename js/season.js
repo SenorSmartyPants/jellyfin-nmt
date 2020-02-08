@@ -49,16 +49,6 @@ function showEpisode(x) {
     document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[helpy]);
 }
 
-
-        indexOf = function(arr, item) {
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i] == item) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-
         initNew = function() {
 
                 document.getElementById('episodeImg').setAttribute("class", "");

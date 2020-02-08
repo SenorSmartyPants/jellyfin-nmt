@@ -168,13 +168,15 @@ foreach ($episodes as $episode) {
     renderEpisodeJS($episode);
 }
 
+?>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/season.js"></script>
+<?
 if (count($episodes) > EPISODESPERPAGE) {
 ?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
 <?
 }
 ?>
-    <script type="text/javascript" src="js/season.js"></script>
-
     <script type="text/javascript">
 
         var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
