@@ -17,35 +17,38 @@
         //## Functions Series ######################################
         //##########################################################
 
-        var showEpisode = function(x) {
-                helpy = x;
-                url = buildUrl(x)
-                var iTitleLength = asEpisodeTitle[helpy].length;
-                if (iTitleLength <= 35) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle");
-                } else if (iTitleLength <= 38) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle24");
-                } else if (iTitleLength <= 43) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle22");
-                } else if (iTitleLength <= 46) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle20");
-                } else if (iTitleLength <= 53) {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle18");
-                } else {
-                    document.getElementById('episodeName').setAttribute("class", "tveptitle16");
-                    asEpisodeTitle[helpy] = asEpisodeTitle[helpy].substring(0, 56) + '...';
-                }
-                document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[helpy];
-                document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[helpy];
-                document.getElementById('episodeImg').setAttribute("src", asEpisodeImage[helpy]);
-                document.getElementById('openEpisode').setAttribute("href", url);
+function setTitleCSSClass() {
+    var iTitleLength = asEpisodeTitle[helpy].length;
+    if (iTitleLength <= 35) {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle");
+    }
+    else if (iTitleLength <= 38) {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle24");
+    }
+    else if (iTitleLength <= 43) {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle22");
+    }
+    else if (iTitleLength <= 46) {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle20");
+    }
+    else if (iTitleLength <= 53) {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle18");
+    }
+    else {
+        document.getElementById('episodeName').setAttribute("class", "tveptitle16");
+        asEpisodeTitle[helpy] = asEpisodeTitle[helpy].substring(0, 56) + '...';
+    }
+}
 
+function showEpisode(x) {
+    helpy = x;
+    setTitleCSSClass();
+    document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[helpy];
+    document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[helpy];
+    document.getElementById('episodeImg').setAttribute("src", asEpisodeImage[helpy]);
+    document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[helpy]);
+}
 
-            },
-
-            buildUrl = function(no) {
-                return asEpisodeUrl[no];
-            };
 
         indexOf = function(arr, item) {
             for (var i = 0; i < arr.length; i++) {
