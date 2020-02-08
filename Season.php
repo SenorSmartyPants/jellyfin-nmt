@@ -347,7 +347,7 @@ function printLowerTable()
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 <tr>
 <td height="10">
-<a class="TvLink secondaryText" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
+<a class="TvLink secondaryText" id="gtPlay" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
 Play all
 </a>
 </td>
