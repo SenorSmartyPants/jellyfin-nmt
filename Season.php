@@ -16,8 +16,10 @@ include_once 'data.php';
 include_once 'utils.php';
 include_once 'templates.php';
 
-$titleTruncate = 34;
-$EpisodesPerPage = 15;
+const TITLETRUNCATE = 34;
+const PLOTTRUNCATE = 470;
+const EPISODESPERPAGE = 15;
+
 $ShowAudioCodec = true;
 $ShowContainer = true;
 $ShowVideoOutput = true;
@@ -76,13 +78,16 @@ function formatCast($cast)
 
 function renderEpisodeJS($episode)
 {
-    global $titleTruncate;
+    $Plot = $episode->Overview;
+    if (strlen($episode->Overview) > PLOTTRUNCATE) {
+        $Plot = substr($episode->Overview, 0, PLOTTRUNCATE) . '...';
+    }
+    $Plot = addslashes(str_replace(array("\n", "\r"), '', $Plot))
 ?>
     <script type="text/javascript">
-        <!--
         asEpisodeTitle.push("<?= $episode->Name ?>");
-        asEpisodeTitleShort.push("<?= substr($episode->Name, 0, $titleTruncate) ?>");
-        asEpisodePlot.push("<?= addslashes(str_replace(array("\n", "\r"), '', $episode->Overview)) ?>");
+        asEpisodeTitleShort.push("<?= substr($episode->Name, 0, TITLETRUNCATE) ?>");
+        asEpisodePlot.push("<?= $Plot ?>");
         asEpisodeUrl.push("<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
@@ -90,21 +95,20 @@ function renderEpisodeJS($episode)
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
         asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, "Primary", null, null, $episode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>");
-        -->
     </script>
 <?
 }
 
 function renderEpisodeHTML($episode, $indexInList)
 {
-    global $season, $titleTruncate;
+    global $season;
     if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
         //Special episode, not displaying special season, then list episode as SX. Title
         $titleLine = 'S' . $episode->IndexNumber;
     } else {
         $titleLine = sprintf('%02d', $episode->IndexNumber);
     }
-    $titleLine .= '. ' . substr($episode->Name, 0, $titleTruncate);
+    $titleLine .= '. ' . substr($episode->Name, 0, TITLETRUNCATE);
     
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
@@ -129,7 +133,6 @@ function renderEpisodeHTML($episode, $indexInList)
 function printInitJS()
 {
     global $series, $season, $episodes;
-    global $EpisodesPerPage;
 ?>
     <script type="text/javascript">
         iMainSeason = <?= $season->IndexNumber ?>;
@@ -164,7 +167,7 @@ foreach ($episodes as $episode) {
     renderEpisodeJS($episode);
 }
 
-if (count($episodes) > $EpisodesPerPage) {
+if (count($episodes) > EPISODESPERPAGE) {
 ?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
 <?
 }
@@ -367,8 +370,8 @@ Play all
 <!-- episode list, write out the first X -->
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
 <? 
-    global $episodes, $EpisodesPerPage;
-    for ($i=0; $i < $EpisodesPerPage && $i < count($episodes) ; $i++) { 
+    global $episodes;
+    for ($i=0; $i < EPISODESPERPAGE && $i < count($episodes) ; $i++) { 
         # code...
         renderEpisodeHTML($episodes[$i],$i+1);
     }
