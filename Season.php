@@ -175,16 +175,14 @@ if (count($episodes) > EPISODESPERPAGE) {
     <script type="text/javascript" src="js/season.js"></script>
 
     <script type="text/javascript">
-        <!--
+
         var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
         var sTitleLong = "<?= $series->Name ?>";
         var fWatch = true;
         var fTVplaylist = false;
-        -->
     </script>
 
     <script type="text/javascript">
-        <!--
         function clicked(link) {
             var title = "<?= $series->Name ?>";
             var year = "<?= $season->ProductionYear ?>";
@@ -205,7 +203,6 @@ if (count($episodes) > EPISODESPERPAGE) {
             var getter = document.getElementById('getter');
             getter.setAttribute('src', '#');
         };
-        -->
     </script>  
 
 <?
