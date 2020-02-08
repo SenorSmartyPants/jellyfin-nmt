@@ -127,7 +127,7 @@ function renderEpisodeHTML($episode, $indexInList)
                 id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"></a>
             </td>
         </tr>
-    </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocusNew(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
+    </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
 <?
 }
 
@@ -243,7 +243,7 @@ function printSeasonHeadEtc($onloadset = null)
 ?>
     </head>
 
-    <body bgproperties="fixed" onloadset="episode1" onload="initNew()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
+    <body bgproperties="fixed" onloadset="episode1" onload="init()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
     <? if ($backdrop->Tag) 
     { 
         ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
@@ -359,7 +359,7 @@ Play all
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
                     <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink secondaryText" >
-                    <span class="tabTvShow" id="pageCountNew">&#160;</span>
+                    <span class="tabTvShow" id="pageCount">&#160;</span>
                     </a>
                 </td></tr>
             </table>
@@ -383,8 +383,8 @@ Play all
 		<td valign="top" width="80" colspan="3">
             <a href="#" name="toleft" onfocus="toggleLeft()"></a>
             <a href="#" name="toright" onfocus="toggleRight()"></a>
-            <a href="#" name="toup" onfocus="clickUpNew()"></a>
-            <a href="#" name="todown" onfocus="clickDownNew()"></a>
+            <a href="#" name="toup" onfocus="clickUp()"></a>
+            <a href="#" name="todown" onfocus="clickDown()"></a>
 		</td>
 	</tr>
 		 
@@ -401,8 +401,8 @@ function printPCMenu()
 ?>
     <div id="noNMT">
         <a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a>
-        <a href="#" class="clickUp" onclick="clickUpNew(); return false;">Click Up</a>
-        <a href="#" class="clickDown" onclick="clickDownNew(); return false;">Click Down</a><br />
+        <a href="#" class="clickUp" onclick="clickUp(); return false;">Click Up</a>
+        <a href="#" class="clickDown" onclick="clickDown(); return false;">Click Down</a><br />
         <a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a>
         <a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br />
         <a class="clickIndex" href="">Index</a><br />

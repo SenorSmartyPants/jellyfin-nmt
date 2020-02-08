@@ -78,5 +78,5 @@ function toggletab() {
         }
 
     }
-    document.getElementById('pageCountNew').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
+    document.getElementById('pageCount').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
 }
