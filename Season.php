@@ -117,7 +117,7 @@ function renderEpisodeHTML($episode, $indexInList)
             <td>
                 <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
-                    onclick="return clicked(this);" onfocus="resetGetter();"
+                    onclick="return clicked(this);"
                     onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
                     <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
@@ -170,6 +170,7 @@ foreach ($episodes as $episode) {
 
 ?>
     <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript" src="js/season.js"></script>
 <?
 if (count($episodes) > EPISODESPERPAGE) {
@@ -197,15 +198,15 @@ if (count($episodes) > EPISODESPERPAGE) {
 
             var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=" + tvdb_id + "&season=" + season + "&episode=" + episode + "&episode_id=" + episode_id +
                 "&title=" + encodeURIComponent(title) + "&year=" + year;
-            var getter = document.getElementById('getter');
-            getter.setAttribute('src', url);
+            document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
+        
             return true;
         }
 
-        function resetGetter() {
-            var getter = document.getElementById('getter');
-            getter.setAttribute('src', '#');
-        };
+        function callback(id, inlineMsg) {
+            //setText(id, inlineMsg)
+            document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
+        }
     </script>  
 
 <?
@@ -375,7 +376,6 @@ Play all
         # code...
         renderEpisodeHTML($episodes[$i],$i+1);
     }
-    traktGetterIMG();
 ?>			
 </td>
 </tr>  
