@@ -117,8 +117,8 @@ function renderEpisodeHTML($episode, $indexInList)
             <td>
                 <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
-                    onclick="return clicked(this);"
-                    onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" season="<?= $episode->ParentIndexNumber ?>" episode="<?= $episode->IndexNumber ?>" tvdbid="<?= $episode->ProviderIds->Tvdb ?>">
+                    onclick="checkin();"
+                    onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" >
                     <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
                 <a onfocusload="" 
@@ -187,24 +187,14 @@ if (count($episodes) > EPISODESPERPAGE) {
     </script>
 
     <script type="text/javascript">
-        function clicked(link) {
-            var title = "<?= $series->Name ?>";
-            var year = "<?= $season->ProductionYear ?>";
-            var tvdb_id = "<?= $series->ProviderIds->Tvdb ?>";
-
-            var season = link.getAttribute('season');
-            var episode = link.getAttribute('episode');
-            var episode_id = link.getAttribute('tvdbid');
-
-            var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=" + tvdb_id + "&season=" + season + "&episode=" + episode + "&episode_id=" + episode_id +
-                "&title=" + encodeURIComponent(title) + "&year=" + year;
+        function checkin() {
+            var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
+                asSeasonNo[iEpisodeId] + "&episode=" + asEpisodeNo[iEpisodeId] + "&episode_id=" + asEpisodeTVDBID[iEpisodeId];
+             
             document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
-        
-            return true;
         }
 
         function callback(id, inlineMsg) {
-            //setText(id, inlineMsg)
             document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
         }
     </script>  
