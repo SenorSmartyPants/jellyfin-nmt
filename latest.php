@@ -8,7 +8,7 @@ $Limit = 27;
 $items = getLatest($Limit);
 
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);
-$indexStyle->setIndexCount(count($items));
+setNumPagesAndIndexCount(count($items));
 
 printHeadEtc();
 

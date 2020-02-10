@@ -10,7 +10,6 @@ $items = getUsersViews()->Items;
 Series name only for menuitem title
 */
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup);
-$indexStyle->setIndexCount(count($items));
 
 //960x540
 //(1096 - (n+1)*cellspacing) / n = w
@@ -41,6 +40,8 @@ $indexStyle->moviesTableCellspacing = 16;
 $indexStyle->hoverFrame = null;
 $indexStyle->moviesTableVAlign = "top";
 $indexStyle->offsetY = 156;
+
+setNumPagesAndIndexCount(count($items));
 
 printHeadEtc("nextup");
 
