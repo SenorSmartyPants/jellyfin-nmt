@@ -69,7 +69,6 @@ function showEpisode(x) {
                     if (iPageNextUp > 1) {
                         iPage = iPageNextUp;
                         toggletab();
-                        window.setTimeout("showNfocus()", 1);
                     } else {
                         showNfocus();
                     }
@@ -80,29 +79,26 @@ function showEpisode(x) {
             },
 
             clickDown = function() {
-                if ((iEpisodeId / (iPage * iEpisodesPerPage)) == 1) {
-                    //episode is max # on a page, bottom of the list
+                //if episode is last in array
+                if (iEpisodeId == iEpisodesLength) {
+                    //go to first episode
+                    iEpisodeId = 1;
                     if (fmorePages == true) {
-                        iPage = iPage + 1;
-                        iEpisodeId = iEpisodeId + 1;
+                        //multiple pages, go to first page
+                        iPage = 1;
                         toggletab();
-                        window.setTimeout("showNfocus()", 1);
                     } else {
-                        //only one page, go to top
-                        iEpisodeId = 1;
                         showNfocus();
                     }
-                } else {
+                } else if ((iEpisodeId / (iPage * iEpisodesPerPage)) == 1) {
+                    //there must be multiple pages if this is true (fmorePages == true)
+                    //episode is last on this page, go to next page
+                    iPage = iPage + 1;
                     iEpisodeId = iEpisodeId + 1;
-                    if (iEpisodeId > iEpisodesLength) {
-                        iEpisodeId = 1;
-                        if (fmorePages == true) {
-                            iPage = 1;
-                            toggletab();
-                            window.setTimeout("showNfocus()", 1);
-                        } else
-                            showNfocus();
-                    } else
+                    toggletab();
+                } else {
+                    //just move down
+                    iEpisodeId = iEpisodeId + 1;
                         showNfocus();
                 }
             },
@@ -129,7 +125,6 @@ function showEpisode(x) {
                         iEpisodeId = iEpisodeId - iEpisodesPerPage;
                     }
                     toggletab();
-                    window.setTimeout("showNfocus()", 1);
                 } else
                     showNfocus();
             },
@@ -145,7 +140,6 @@ function showEpisode(x) {
                         if (iEpisodeId > iEpisodesLength) iEpisodeId = iEpisodesLength;
                     }
                     toggletab();
-                    window.setTimeout("showNfocus()", 1);
                 } else
                     showNfocus();
             },

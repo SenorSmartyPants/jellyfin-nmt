@@ -79,4 +79,7 @@ function toggletab() {
 
     }
     document.getElementById('pageCount').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
+                            
+    //wait for new page to draw, then set focus 
+    window.setTimeout("showNfocus()", 1);
 }
