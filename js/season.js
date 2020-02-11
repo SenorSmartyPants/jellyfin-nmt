@@ -34,7 +34,9 @@ function setTitleCSSClass(episodeIndex) {
     }
     else {
         document.getElementById('episodeName').setAttribute("class", "tveptitle16");
-        asEpisodeTitle[episodeIndex] = asEpisodeTitle[episodeIndex].substring(0, 56) + '...';
+        if (iTitleLength > 56) {
+            asEpisodeTitle[episodeIndex] = asEpisodeTitle[episodeIndex].substring(0, 56) + '...';
+        }
     }
 }
 
