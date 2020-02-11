@@ -5,9 +5,6 @@
         var iEpisodeId = 1;
         var iEpisodesPerPage = 15;
         var sIdLinkPrefix = 'a_e_';
-        var focusId = ' ';
-        var helpx = 0;
-        var helpy = 0;
         var fShowSeasonInfo = false;
         var fmorePages = false;
         var iEpisodesLength = asEpisodePlot.length - 1;
@@ -17,8 +14,9 @@
         //## Functions Series ######################################
         //##########################################################
 
-function setTitleCSSClass() {
-    var iTitleLength = asEpisodeTitle[helpy].length;
+//only called from season.js
+function setTitleCSSClass(episodeIndex) {
+    var iTitleLength = asEpisodeTitle[episodeIndex].length;
     if (iTitleLength <= 35) {
         document.getElementById('episodeName').setAttribute("class", "tveptitle");
     }
@@ -36,17 +34,17 @@ function setTitleCSSClass() {
     }
     else {
         document.getElementById('episodeName').setAttribute("class", "tveptitle16");
-        asEpisodeTitle[helpy] = asEpisodeTitle[helpy].substring(0, 56) + '...';
+        asEpisodeTitle[episodeIndex] = asEpisodeTitle[episodeIndex].substring(0, 56) + '...';
     }
 }
 
-function showEpisode(x) {
-    helpy = x;
-    setTitleCSSClass();
-    document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[helpy];
-    document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[helpy];
-    document.getElementById('episodeImg').setAttribute("src", asEpisodeImage[helpy]);
-    document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[helpy]);
+//called from Season.php and season.js
+function showEpisode(episodeIndex) {
+    setTitleCSSClass(episodeIndex);
+    document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[episodeIndex];
+    document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[episodeIndex];
+    document.getElementById('episodeImg').setAttribute("src", asEpisodeImage[episodeIndex]);
+    document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[episodeIndex]);
 }
 
     var init = function() {
@@ -141,15 +139,19 @@ function showEpisode(x) {
             },
 
             showNfocus = function() {
-                helpy = iEpisodeId - ((iPage - 1) * iEpisodesPerPage);
-                focusId = sIdLinkPrefix + helpy;
+                //index on the current page
+                var episodeIndexThisPage = iEpisodeId - ((iPage - 1) * iEpisodesPerPage);
+                var focusId = sIdLinkPrefix + episodeIndexThisPage;
                 document.getElementById(focusId).focus();
                 showEpisode(iEpisodeId);
             },
 
-            setFocus = function(x) {
-                helpx = x;
-                iEpisodeId = helpx + ((iPage - 1) * iEpisodesPerPage);
+            //called from Season.php
+            //setFocus is called with episode index on current displayed page
+            //used when handling TVID to set focus to episode number type (not the parameter)
+            //would be better to pass in iEpisodeId? then t_e_X wouldn't need to be updated on paging
+            setFocus = function(episodeIndexThisPage) {
+                iEpisodeId = episodeIndexThisPage + ((iPage - 1) * iEpisodesPerPage);
                 fShowSeasonInfo = false;
                 showNfocus();
             },
