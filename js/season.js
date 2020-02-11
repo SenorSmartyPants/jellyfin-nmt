@@ -79,28 +79,24 @@ function showEpisode(x) {
             },
 
             clickDown = function() {
-                //if episode is last in array
-                if (iEpisodeId == iEpisodesLength) {
+                iEpisodeId = iEpisodeId + 1;
+                if (iEpisodeId > iEpisodesLength) {
                     //go to first episode
                     iEpisodeId = 1;
                     if (fmorePages == true) {
                         //multiple pages, go to first page
                         iPage = 1;
                         toggletab();
-                    } else {
-                        showNfocus();
+                        return;
                     }
-                } else if ((iEpisodeId / (iPage * iEpisodesPerPage)) == 1) {
-                    //there must be multiple pages if this is true (fmorePages == true)
-                    //episode is last on this page, go to next page
+                } else if ((iEpisodeId % iEpisodesPerPage) == 1) {
+                    //moved to a new page
                     iPage = iPage + 1;
-                    iEpisodeId = iEpisodeId + 1;
                     toggletab();
-                } else {
-                    //just move down
-                    iEpisodeId = iEpisodeId + 1;
-                        showNfocus();
+                    return; 
                 }
+                //just move down
+                showNfocus();
             },
 
             clickUp = function() {
