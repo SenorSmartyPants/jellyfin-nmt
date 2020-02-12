@@ -60,9 +60,6 @@ function showEpisode(episodeIndex) {
                 elEpisodeImg = document.getElementById('episodeImg');
                 elOpenEpisode = document.getElementById('openEpisode');
 
-                document.getElementById('episodeImg').setAttribute("class", "");
-                document.getElementById('episodeImgBack').setAttribute("class", "");
-                document.getElementById('episodenInfos').setAttribute("class", "");
                 iEpisodeId = 1;
                 iPage = 1;
                 iEpPages = Math.floor(1) + Math.floor((iEpisodesLength - 1) / iEpisodesPerPage);
