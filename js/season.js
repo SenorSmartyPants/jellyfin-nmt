@@ -9,6 +9,10 @@
         var fmorePages = false;
         var iEpisodesLength = asEpisodePlot.length - 1;
         var url = false;
+        var elEpisodeName;
+        var elEpisodeId;
+        var elEpisodeImg;
+        var elOpenEpisode;
 
         //##########################################################
         //## Functions Series ######################################
@@ -18,22 +22,22 @@
 function setTitleCSSClass(episodeIndex) {
     var iTitleLength = asEpisodeTitle[episodeIndex].length;
     if (iTitleLength <= 35) {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle");
+        elEpisodeName.setAttribute("class", "tveptitle");
     }
     else if (iTitleLength <= 38) {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle24");
+        elEpisodeName.setAttribute("class", "tveptitle24");
     }
     else if (iTitleLength <= 43) {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle22");
+        elEpisodeName.setAttribute("class", "tveptitle22");
     }
     else if (iTitleLength <= 46) {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle20");
+        elEpisodeName.setAttribute("class", "tveptitle20");
     }
     else if (iTitleLength <= 53) {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle18");
+        elEpisodeName.setAttribute("class", "tveptitle18");
     }
     else {
-        document.getElementById('episodeName').setAttribute("class", "tveptitle16");
+        elEpisodeName.setAttribute("class", "tveptitle16");
         if (iTitleLength > 56) {
             asEpisodeTitle[episodeIndex] = asEpisodeTitle[episodeIndex].substring(0, 56) + '...';
         }
@@ -43,13 +47,18 @@ function setTitleCSSClass(episodeIndex) {
 //called from Season.php and season.js
 function showEpisode(episodeIndex) {
     setTitleCSSClass(episodeIndex);
-    document.getElementById('episodeName').firstChild.nodeValue = asEpisodeTitle[episodeIndex];
-    document.getElementById('episodeId').firstChild.nodeValue = asEpisodePlot[episodeIndex];
-    document.getElementById('episodeImg').setAttribute("src", asEpisodeImage[episodeIndex]);
-    document.getElementById('openEpisode').setAttribute("href", asEpisodeUrl[episodeIndex]);
+    elEpisodeName.firstChild.nodeValue = asEpisodeTitle[episodeIndex];
+    elEpisodeId.nodeValue = asEpisodePlot[episodeIndex];
+    elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
+    elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
 }
 
     var init = function() {
+
+                elEpisodeName = document.getElementById('episodeName');
+                elEpisodeId = document.getElementById('episodeId').firstChild;
+                elEpisodeImg = document.getElementById('episodeImg');
+                elOpenEpisode = document.getElementById('openEpisode');
 
                 document.getElementById('episodeImg').setAttribute("class", "");
                 document.getElementById('episodeImgBack').setAttribute("class", "");
@@ -163,8 +172,8 @@ function showEpisode(episodeIndex) {
                     showNfocus();
                     fShowSeasonInfo = false;
                 } else {
-                    document.getElementById('episodeName').firstChild.nodeValue = sTitleLong;
-                    document.getElementById('episodeId').firstChild.nodeValue = sPlotLong;
+                    elEpisodeName.firstChild.nodeValue = sTitleLong;
+                    elEpisodeId.nodeValue = sPlotLong;
                     fShowSeasonInfo = true;
                 }
         };
