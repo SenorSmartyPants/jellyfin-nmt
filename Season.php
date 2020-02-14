@@ -302,8 +302,6 @@ function printSeasonHeadEtc($onloadset = null)
     }
     ?>>
     <table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="/New/Jukebox/pictures/sabishmod/tvbg-v2.png">
-        <tr>
-            <td valign="top">
 <?
 }
 
@@ -334,6 +332,8 @@ function printTopBar()
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
+<tr>
+    <td valign="top">
     <table border="0" cellspacing="0" cellpadding="0">
         <tr height="62" valign="middle">
             <td width="18"></td>
@@ -364,17 +364,17 @@ function printTopBar()
             ?></td>			
         </tr>
     </table>
+    </td>
+</tr>
 <? 
 }
 
 function printSpacerTable()
 {
 ?>
-    <table border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td height="278"></td>
         </tr>
-    </table> 
 <?
 }
 
@@ -382,6 +382,9 @@ function printLowerTable()
 {
     global $selectedEpisode, $episodeCount, $epPages, $selectedPage;
 ?>
+<tr>
+    <td>
+
 <table border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td width="30" height="314"></td>
@@ -449,6 +452,9 @@ Play all
   		 </td>
          </tr>
          </table>
+
+    </td>
+</tr>
 <?
 }
 
@@ -470,8 +476,6 @@ function printSeasonFooter()
 {
     global $selectedEpisode;
 ?>
-                </td>
-            </tr>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
     <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(escapeURL($selectedEpisode->Path)) ?>" vod=""></a>
