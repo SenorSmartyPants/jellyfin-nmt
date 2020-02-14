@@ -48,11 +48,8 @@ function toggletab() {
                 el2ndLinkNew.setAttribute("href", sUrlNew);
                 setVOD(s2ndLinkIdNew, asEpisodeVod[i]);
             }
-            var sMouseOverValueNew = 'return showEpisode(' + noNew + ')';
+            var sMouseOverValueNew = 'showEpisode(' + noNew + ')';
             elLinkNew.setAttribute("onmouseover", sMouseOverValueNew);
-            elLinkNew.setAttribute("season", asSeasonNo[noNew]);
-            elLinkNew.setAttribute("episode", asEpisodeNo[noNew]);
-            elLinkNew.setAttribute("tvdbid", asEpisodeTVDBID[noNew]);
 
             var iEpisodeNoNew = asEpisodeNo[noNew];
             if (iEpisodeNoNew < 10) {
@@ -79,4 +76,7 @@ function toggletab() {
 
     }
     document.getElementById('pageCount').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
+                            
+    //wait for new page to draw, then set focus 
+    window.setTimeout("showNfocus()", 1);
 }
