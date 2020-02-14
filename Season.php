@@ -136,6 +136,11 @@ function formatCast($cast)
     return implode(' / ', $links);
 }
 
+function escapeURL($url)
+{
+    return implode("/", array_map("rawurlencode", explode("/", $url)));
+}
+
 function renderEpisodeJS($episode)
 {
     $Plot = truncatePlot($episode->Overview, true);
@@ -145,7 +150,7 @@ function renderEpisodeJS($episode)
         asEpisodeTitleCSS.push("<?= titleCSS(strlen($episode->Name)) ?>");
         asEpisodeTitleShort.push("<?= substr($episode->Name, 0, TITLETRUNCATE) ?>");
         asEpisodePlot.push("<?= $Plot ?>");
-        asEpisodeUrl.push("<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>");
+        asEpisodeUrl.push("<?= translatePathToNMT(escapeURL($episode->Path)) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
@@ -180,7 +185,7 @@ function renderEpisodeHTML($episode, $indexInList)
                     <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
                 <a onfocusload="" 
-                href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>" 
+                href="<?= translatePathToNMT(escapeURL($episode->Path)) ?>" 
                 vod="" 
                 id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"></a>
             </td>
@@ -466,7 +471,7 @@ function printSeasonFooter()
             </tr>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
-    <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $selectedEpisode->Path)))) ?>" vod=""></a>
+    <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(escapeURL($selectedEpisode->Path)) ?>" vod=""></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack"/></div>
