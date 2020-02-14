@@ -388,7 +388,10 @@ function printLowerTable()
         <td width="690" valign="top">
             <table width="100%" height="314" border="0" cellspacing="0" cellpadding="0" id="episodenInfos">
                 <tr>
-                    <td colspan="2" width="100%" height="74" id="episodeName" class="<?= titleCSS(strlen($selectedEpisode->Name)) ?>" valign="top" align="left"><?= truncateTitle($selectedEpisode->Name) ?></td>
+                    <td colspan="2" width="100%" height="50" id="episodeName" class="<?= titleCSS(strlen($selectedEpisode->Name)) ?>" valign="middle" align="left"><?= truncateTitle($selectedEpisode->Name) ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2" height="24" ></td>
                 </tr>
                 <tr>
                     <td width="320" height="240"></td>
