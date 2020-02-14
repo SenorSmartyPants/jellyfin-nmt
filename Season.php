@@ -16,6 +16,7 @@ include_once 'data.php';
 include_once 'utils.php';
 include_once 'templates.php';
 
+const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
@@ -68,6 +69,48 @@ printSpacerTable();
 printLowerTable();
 printSeasonFooter();
 
+function titleCSS($length)
+{
+    if ($length <= 35) {
+        $cssClass = "tveptitle";
+    }
+    else if ($length <= 38) {
+        $cssClass = "tveptitle24";
+    }
+    else if ($length <= 43) {
+        $cssClass = "tveptitle22";
+    }
+    else if ($length <= 46) {
+        $cssClass = "tveptitle20";
+    }
+    else if ($length <= 53) {
+        $cssClass = "tveptitle18";
+    }
+    else {
+        $cssClass = "tveptitle16";
+    }
+    return $cssClass;
+}
+
+function truncateTitle($title)
+{
+    if (strlen($title) > TITLETRUNCATELONG) {
+        $title = substr($title, 0, TITLETRUNCATELONG) . '...';
+    }
+    return $title;
+}
+
+function truncatePlot($Plot, $JSescape = false)
+{
+    if (strlen($Plot) > PLOTTRUNCATE) {
+        $Plot = substr($Plot, 0, PLOTTRUNCATE) . '...';
+    }
+    if ($JSescape) {
+        $Plot = addslashes(str_replace(array("\n", "\r"), '', $Plot));
+    }
+    return $Plot;
+}
+
 function formatCast($cast)
 {
     $links = array();
@@ -79,14 +122,11 @@ function formatCast($cast)
 
 function renderEpisodeJS($episode)
 {
-    $Plot = $episode->Overview;
-    if (strlen($episode->Overview) > PLOTTRUNCATE) {
-        $Plot = substr($episode->Overview, 0, PLOTTRUNCATE) . '...';
-    }
-    $Plot = addslashes(str_replace(array("\n", "\r"), '', $Plot))
+    $Plot = truncatePlot($episode->Overview, true);
 ?>
     <script type="text/javascript">
-        asEpisodeTitle.push("<?= $episode->Name ?>");
+        asEpisodeTitle.push("<?= truncateTitle($episode->Name) ?>");
+        asEpisodeTitleCSS.push("<?= titleCSS(strlen($episode->Name)) ?>");
         asEpisodeTitleShort.push("<?= substr($episode->Name, 0, TITLETRUNCATE) ?>");
         asEpisodePlot.push("<?= $Plot ?>");
         asEpisodeUrl.push("<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $episode->Path)))) ?>");
@@ -151,15 +191,17 @@ function printInitJS()
         }
 
         asEpisodeTitle = new Array('0');
-        asEpisodeTitleShort = new Array('0');
+        asEpisodeTitleCSS = new Array('0');
         asEpisodePlot = new Array('0');
         asEpisodeUrl = new Array('0');
-        asEpisodeVod = new Array('0');
         asSeasonNo = new Array('0');
         asEpisodeNo = new Array('0');
         asEpisodeTVDBID = new Array('0');
-        asEpisodeWatched = new Array('0');
         asEpisodeImage = new Array('0');
+        //the following are only used for episode paging
+        asEpisodeTitleShort = new Array('0');
+        asEpisodeVod = new Array('0');
+        asEpisodeWatched = new Array('0');
     </script>
 
 <?

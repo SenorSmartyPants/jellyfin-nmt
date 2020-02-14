@@ -18,35 +18,9 @@
         //## Functions Series ######################################
         //##########################################################
 
-//only called from season.js
-function setTitleCSSClass(episodeIndex) {
-    var iTitleLength = asEpisodeTitle[episodeIndex].length;
-    if (iTitleLength <= 35) {
-        elEpisodeName.setAttribute("class", "tveptitle");
-    }
-    else if (iTitleLength <= 38) {
-        elEpisodeName.setAttribute("class", "tveptitle24");
-    }
-    else if (iTitleLength <= 43) {
-        elEpisodeName.setAttribute("class", "tveptitle22");
-    }
-    else if (iTitleLength <= 46) {
-        elEpisodeName.setAttribute("class", "tveptitle20");
-    }
-    else if (iTitleLength <= 53) {
-        elEpisodeName.setAttribute("class", "tveptitle18");
-    }
-    else {
-        elEpisodeName.setAttribute("class", "tveptitle16");
-        if (iTitleLength > 56) {
-            asEpisodeTitle[episodeIndex] = asEpisodeTitle[episodeIndex].substring(0, 56) + '...';
-        }
-    }
-}
-
 //called from Season.php and season.js
 function showEpisode(episodeIndex) {
-    setTitleCSSClass(episodeIndex);
+    elEpisodeName.setAttribute("class", asEpisodeTitleCSS[episodeIndex]);
     elEpisodeName.firstChild.nodeValue = asEpisodeTitle[episodeIndex];
     elEpisodeId.nodeValue = asEpisodePlot[episodeIndex];
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
