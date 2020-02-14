@@ -487,7 +487,7 @@ function printPCMenu()
 
 function printSeasonFooter()
 {
-    global $selectedEpisode;
+    global $series, $selectedEpisode;
 ?>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
@@ -496,7 +496,7 @@ function printSeasonFooter()
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack"/></div>
         <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, "Primary", null, null, $selectedEpisode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
-        <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
+        <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
     </div>
 <?
     if (PCMENU) {

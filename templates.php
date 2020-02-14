@@ -165,4 +165,34 @@ function videoOutput($videoStream)
 <img><xsl:attribute name="src"><xsl:value-of select="concat('pictures/flags/', $tmp)" /></xsl:attribute></img>
 </xsl:template>
 */
+
+function officialRating($rating)
+{
+    switch ($rating) {
+        case 'TV-14':
+            $url = "tv_14.png";
+            break;
+        case 'TV-G':
+            $url = "tv_g.png";
+            break;
+        case 'TV-MA':
+            $url = "tv_ma.png";
+            break;
+        case 'TV-PG':
+            $url = "tv_pg.png";
+            break;
+        case 'TV-Y':
+            $url = "tv_y.png";
+            break;
+        case 'TV-Y7':
+            $url = "tv_y7.png";
+            break;
+        case 'TV-Y7FV':
+            $url = "tv_y7fv.png";
+            break;
+        default:
+            $url = $rating;
+    }
+    return strlen($rating) > 0 ? '<img src="/New/Jukebox/pictures/certificates/' .  $url . '"/>' : '';
+}
 ?>
