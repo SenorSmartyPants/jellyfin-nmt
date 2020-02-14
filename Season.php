@@ -295,7 +295,7 @@ function printSeasonHeadEtc($onloadset = null)
 ?>
     </head>
 
-    <body bgproperties="fixed" onloadset="episode<?= $onloadset ?>" onload="init()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
+    <body bgproperties="fixed" onloadset="episode<?= $onloadset ?>" onload="init()" bgcolor="#000000" focustext="#dddddd" FOCUSCOLOR="transparent" 
     <? if ($backdrop->Tag) 
     { 
         ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
