@@ -21,6 +21,7 @@ const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
 const PCMENU = true;
+const CHECKIN = true;
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
@@ -141,6 +142,10 @@ function escapeURL($url)
     return implode("/", array_map("rawurlencode", explode("/", $url)));
 }
 
+function videoAttributes($path){
+    return 'vod="" href="' . translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $path)))) . '"';
+}
+
 function renderEpisodeJS($episode)
 {
     $Plot = truncatePlot($episode->Overview, true);
@@ -180,14 +185,21 @@ function renderEpisodeHTML($episode, $indexInList)
             <td>
                 <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
                     onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
-                    onclick="checkin();"
-                    onmouseover="showEpisode(<?= $indexInList ?>)" href="#playepisode<?= $indexInList ?>" >
+                    <? if (CHECKIN) { ?>
+onclick="checkin();" href="#playepisode<?= $indexInList ?>"
+<?
+} else {
+    echo videoAttributes($episode->Path) ."\n";
+} 
+?>
+                    onmouseover="showEpisode(<?= $indexInList ?>)" >
                     <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
                 </a>
-                <a onfocusload="" 
-                href="<?= translatePathToNMT(escapeURL($episode->Path)) ?>" 
-                vod="" 
-                id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"></a>
+<? if (CHECKIN) { ?>
+                <a onfocusload="" id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"
+                    <?= videoAttributes($episode->Path); ?> >
+                </a>
+<? } ?>
             </td>
         </tr>
     </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
@@ -231,7 +243,6 @@ foreach ($episodes as $episode) {
 
 ?>
     <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript" src="js/season.js"></script>
 <?
 if ($episodeCount > EPISODESPERPAGE) {
@@ -246,7 +257,8 @@ if ($episodeCount > EPISODESPERPAGE) {
         var fWatch = true;
         var fTVplaylist = false;
     </script>
-
+<? if (CHECKIN) { ?>
+    <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript">
         function checkin() {
             var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
@@ -261,6 +273,7 @@ if ($episodeCount > EPISODESPERPAGE) {
     </script>  
 
 <?
+    }
 
 }
 
