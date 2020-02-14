@@ -29,6 +29,7 @@ $star_rating = true;
 $tvNumberRating = false;
 
 $id = $_GET["id"];
+$selectedEpisodeIndexNumber = $_GET["episode"];
 
 //Banners don't inherit from parents
 //have to load season to find out if it has a banner
@@ -44,14 +45,29 @@ $backdrop = getBackdropIDandTag($season);
 
 $episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
 $episodes = $episodesAndCount->Items;
+$episodeCount = $episodesAndCount->TotalRecordCount;
+
+$epPages = 1 + intdiv(($episodeCount - 1), EPISODESPERPAGE);
+
 $i=0;
 do {
     $episode = $episodes[$i++];
-} while ($id != $episode->SeasonId && $i < count($episodes));
+} while ($id != $episode->SeasonId && $i < $episodeCount);
 //$episode == first episode from this season, not from specials
 
+$selectedEpisode = $episodes[0];
+foreach($episodes as $key => $episode) {
+    if ($selectedEpisodeIndexNumber == $episode->IndexNumber && $id == $episode->SeasonId) {
+        $selectedEpisode = $episode;
+        $selectedEpisodeArrayIndex = $key + 1;
+        break;
+    }
+}
 
-$firstSource = $episode->MediaSources[0];
+
+$selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
+
+$firstSource = $selectedEpisode->MediaSources[0];
 if ($firstSource) {
     foreach ($firstSource->MediaStreams as $mediastream) {
         if ($mediastream->Type == 'Video') {
@@ -63,7 +79,7 @@ if ($firstSource) {
     $subtitleStream = $firstSource->MediaStreams[$firstSource->DefaultSubtitleStreamIndex];
 }
 
-printSeasonHeadEtc();
+printSeasonHeadEtc($selectedEpisodeArrayIndex);
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -143,13 +159,15 @@ function renderEpisodeJS($episode)
 function renderEpisodeHTML($episode, $indexInList)
 {
     global $season;
-    if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
-        //Special episode, not displaying special season, then list episode as SX. Title
-        $titleLine = 'S' . $episode->IndexNumber;
-    } else {
-        $titleLine = sprintf('%02d', $episode->IndexNumber);
+    if ($episode) {
+        if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
+            //Special episode, not displaying special season, then list episode as SX. Title
+            $titleLine = 'S' . $episode->IndexNumber;
+        } else {
+            $titleLine = sprintf('%02d', $episode->IndexNumber);
+        }
+        $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
     }
-    $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
     
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
@@ -173,22 +191,18 @@ function renderEpisodeHTML($episode, $indexInList)
 
 function printInitJS()
 {
-    global $series, $season, $episodes;
+    global $series, $season, $episodes, $selectedPage, $epPages, $episodeCount, $selectedEpisodeArrayIndex;
 ?>
     <script type="text/javascript">
         iMainSeason = <?= $season->IndexNumber ?>;
 
-        var QS = location.search.substring(1);
-        var params = QS.split('&');
+        var iPage = <?= $selectedPage ?> //selected page
+        var iEpPages = <?= $epPages ?>;
+        var iEpisodeId = <?= $selectedEpisodeArrayIndex ?? 1 ?>;
+        
+        var iEpisodesPerPage = <?= EPISODESPERPAGE ?>;
 
-        focusEpisodeNo = 1;
-
-        for (var i = 0; i < params.length; i++) {
-            var pair = params[i].split('=');
-            if (decodeURIComponent(pair[0]) == 'episode') {
-                focusEpisodeNo = pair[1];
-            }
-        }
+        var fmorePages = <?= $epPages > 1 ? 'true':'false' ?>;
 
         asEpisodeTitle = new Array('0');
         asEpisodeTitleCSS = new Array('0');
@@ -215,7 +229,7 @@ foreach ($episodes as $episode) {
     <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript" src="js/season.js"></script>
 <?
-if (count($episodes) > EPISODESPERPAGE) {
+if ($episodeCount > EPISODESPERPAGE) {
 ?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
 <?
 }
@@ -276,7 +290,7 @@ function printSeasonHeadEtc($onloadset = null)
 ?>
     </head>
 
-    <body bgproperties="fixed" onloadset="episode1" onload="init()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
+    <body bgproperties="fixed" onloadset="episode<?= $onloadset ?>" onload="init()" bgcolor="#000000" focustext="#FFFFFF" FOCUSCOLOR="transparent" 
     <? if ($backdrop->Tag) 
     { 
         ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
@@ -361,6 +375,7 @@ function printSpacerTable()
 
 function printLowerTable()
 {
+    global $selectedEpisode, $episodeCount, $epPages, $selectedPage;
 ?>
 <table border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -368,11 +383,11 @@ function printLowerTable()
         <td width="690" valign="top">
             <table width="100%" height="314" border="0" cellspacing="0" cellpadding="0" id="episodenInfos">
                 <tr>
-                    <td colspan="2" width="100%" height="74" id="episodeName" class="tveptitle" valign="top" align="left">&#160; </td>
+                    <td colspan="2" width="100%" height="74" id="episodeName" class="<?= titleCSS(strlen($selectedEpisode->Name)) ?>" valign="top" align="left"><?= truncateTitle($selectedEpisode->Name) ?></td>
                 </tr>
                 <tr>
                     <td width="320" height="240"></td>
-                    <td width="410" id="episodeId" class="tvplot" align="left" valign="top">&#160; </td>
+                    <td width="410" id="episodeId" class="tvplot" align="left" valign="top"><?= truncatePlot($selectedEpisode->Overview) ?? "&#160; " ?></td>
                 </tr>
 	        </table>
         </td>
@@ -392,7 +407,7 @@ Play all
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
                     <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink secondaryText" >
-                    <span class="tabTvShow" id="pageCount">&#160;</span>
+                    <span class="tabTvShow" id="pageCount"><? if ($epPages > 1) { echo $selectedPage . ' / ' . $epPages . ' (' . $episodeCount . ')'; } ?></span>
                     </a>
                 </td></tr>
             </table>
@@ -404,9 +419,10 @@ Play all
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
 <? 
     global $episodes;
-    for ($i=0; $i < EPISODESPERPAGE && $i < count($episodes) ; $i++) { 
-        # code...
-        renderEpisodeHTML($episodes[$i],$i+1);
+    $episodeOffset = ($selectedPage - 1) * EPISODESPERPAGE;
+    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) { 
+        $episodeIndex = $episodeOffset + $i;
+        renderEpisodeHTML($episodes[$episodeIndex],$i+1);
     }
 ?>			
 </td>
@@ -444,16 +460,17 @@ function printPCMenu()
 
 function printSeasonFooter()
 {
+    global $selectedEpisode;
 ?>
                 </td>
             </tr>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
-    <a id="openEpisode" TVID="Play" href="#" vod=""></a>
+    <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $selectedEpisode->Path)))) ?>" vod=""></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack"/></div>
-        <div id="divEpisodeImgSabish" class="abs"><img src="/New/Jukebox/pictures/wall/transparent.png" width="278" height="164" id="episodeImg"/></div>
+        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, "Primary", null, null, $selectedEpisode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
         <div id="divEpisodeCertification" class="abs"><img src="/New/Jukebox/pictures/certificates/tv_ma.png" /></div>
     </div>
 <?
