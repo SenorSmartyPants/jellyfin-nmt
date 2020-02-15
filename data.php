@@ -159,7 +159,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? "Items";
     $imageType = $imageType ?? "Primary";
 
-    $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?UnplayedCount=" . $unplayedCount .
+    $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
         ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
         ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
 
