@@ -161,7 +161,7 @@ function renderEpisodeJS($episode)
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
-        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, "Primary", null, null, $episode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>");
+        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, "Primary", null, null, $episode->ImageTags->Primary) : "images/wall/transparent.png" ?>");
     </script>
 <?
 }
@@ -314,7 +314,7 @@ function printSeasonHeadEtc($onloadset = null)
         ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
     }
     ?>>
-    <table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="/New/Jukebox/pictures/sabishmod/tvbg-v2.png">
+    <table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="images/season/background.png">
 <?
 }
 
@@ -367,7 +367,7 @@ function printTopBar()
                 {
                     if ($star_rating) 
                     { ?>
-                        <img hspace="10" vspace="10" src="/New/Jukebox/pictures/detail/rating_<?= round($series->CommunityRating)*10?>.png" />
+                        <img hspace="10" vspace="10" src="images/detail/rating_<?= round($series->CommunityRating)*10?>.png" />
                     <? }
                     if ($tvNumberRating) 
                     {
@@ -494,8 +494,8 @@ function printSeasonFooter()
     <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(escapeURL($selectedEpisode->Path)) ?>" vod=""></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
-        <div id="divEpisodeImgBackSabish" class="abs"><img src="/New/Jukebox/pictures/sabishmod/epi_back.png" width="308" id="episodeImgBack"/></div>
-        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, "Primary", null, null, $selectedEpisode->ImageTags->Primary) : "/New/Jukebox/pictures/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
+        <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
+        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, "Primary", null, null, $selectedEpisode->ImageTags->Primary) : "images/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
         <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
     </div>
 <?

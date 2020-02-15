@@ -2,7 +2,9 @@
 function audioCodec($audioStream)
 {
     switch (strtolower($audioStream->Codec)) {
-        case 'eac3': //TODO: Digital Dolby+
+        case 'eac3':
+            $codecFile = "audcod_dolbyplus.png";
+            break;
         case 'ac3':
             $codecFile = "audcod_dolby.png";
             break;
@@ -67,7 +69,9 @@ function audioCodec($audioStream)
         default:
             $channelFile = "../1x1.png";
     }
-    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) . '<img align="top" src="/New/Jukebox/pictures/flags/' . $codecFile . '"/><img align="top" src="/New/Jukebox/pictures/flags/' . $channelFile . '"/>';
+    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
+    . '<img align="top" src="images/flags/' . $codecFile 
+    . '"/><img align="top" src="images/flags/' . $channelFile . '"/>';
 }
 
 function container($containerID)
@@ -126,7 +130,7 @@ function container($containerID)
             default:
             $url = "unknown.png";
     }    
-    return (($url == "unknown.png") ? $containerID : null) . '<img src="/New/Jukebox/pictures/flags/container_' . $url . '"/>';
+    return (($url == "unknown.png") ? $containerID : null) . '<img src="images/flags/container_' . $url . '"/>';
 }
 
 function videoOutput($videoStream)
@@ -144,7 +148,7 @@ function videoOutput($videoStream)
         default:
             $url = $output . ".png";
     }
-    return '<img src="/New/Jukebox/pictures/flags/output_' .  $url . '"/>';
+    return '<img src="images/flags/output_' .  $url . '"/>';
 }
 /*
 <xsl:template name="videoOutput">
@@ -193,6 +197,6 @@ function officialRating($rating)
         default:
             $url = $rating;
     }
-    return strlen($rating) > 0 ? '<img src="/New/Jukebox/pictures/certificates/' .  $url . '"/>' : '';
+    return strlen($rating) > 0 ? '<img src="images/certificates/' .  $url . '"/>' : '';
 }
 ?>
