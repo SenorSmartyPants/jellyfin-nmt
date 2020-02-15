@@ -302,8 +302,10 @@ function printSeasonHeadEtc($onloadset = null)
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
         <link rel="StyleSheet" type="text/css" href="css/Season.css" />
-        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />
 <?
+    if (PCMENU) {
+        echo '        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />' . "\n";
+    }
     printInitJS();
 ?>
     </head>
