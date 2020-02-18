@@ -129,6 +129,9 @@ class IndexStyle {
             }
             $this->setIndexStyle($this->styleEnum);
         }
+        if ($this->styleEnum == IndexStyleEnum::PosterPopup6x2) {
+            $this->nbThumbnailsPerLine = $indexCount > 4 ? intdiv($indexCount+1,2) : 6;
+        }
     }
 
     private function setIndexStyle($styleEnum = null)
