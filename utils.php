@@ -20,10 +20,15 @@ function getBackdropIDandTag($item)
     return $retval;
 }
 
+function escapeURL($url)
+{
+    return implode("/", array_map("rawurlencode", explode("/", $url)));
+}
+
 function translatePathToNMT($path)
 {
     global $NMT_path,$NMT_playerpath;
-    return str_replace($NMT_path,$NMT_playerpath,$path);
+    return str_replace($NMT_path,$NMT_playerpath,escapeURL($path));
 }
 
 ?>
