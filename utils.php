@@ -20,6 +20,10 @@ function getBackdropIDandTag($item)
     return $retval;
 }
 
+function videoAttributes($path){
+    return 'vod="" href="' . translatePathToNMT($path) . '"';
+}
+
 function escapeURL($url)
 {
     return implode("/", array_map("rawurlencode", explode("/", $url)));

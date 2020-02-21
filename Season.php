@@ -137,10 +137,6 @@ function formatCast($cast)
     return implode(' / ', $links);
 }
 
-function videoAttributes($path){
-    return 'vod="" href="' . translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $path)))) . '"';
-}
-
 function renderEpisodeJS($episode)
 {
     $Plot = truncatePlot($episode->Overview, true);
