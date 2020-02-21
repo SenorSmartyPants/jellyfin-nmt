@@ -20,8 +20,14 @@ function getBackdropIDandTag($item)
     return $retval;
 }
 
-function videoAttributes($path){
-    return 'vod="" href="' . translatePathToNMT($path) . '"';
+function videoAttributes($item)
+{
+    $attrs = 'vod="" href="' . translatePathToNMT($item->Path) . '"';
+    if ($item->VideoType != "VideoFile")
+    {
+        $attrs .= ' zcd="2"';
+    }
+    return $attrs;
 }
 
 function escapeURL($url)

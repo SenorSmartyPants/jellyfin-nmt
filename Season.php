@@ -180,7 +180,7 @@ function renderEpisodeHTML($episode, $indexInList)
 onclick="checkin();" href="#playepisode<?= $indexInList ?>"
 <?
 } else {
-    echo videoAttributes($episode->Path) ."\n";
+    echo videoAttributes($episode) ."\n";
 } 
 ?>
                     onmouseover="showEpisode(<?= $indexInList ?>)" >
@@ -188,7 +188,7 @@ onclick="checkin();" href="#playepisode<?= $indexInList ?>"
                 </a>
 <? if (CHECKIN) { ?>
                 <a onfocusload="" id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"
-                    <?= videoAttributes($episode->Path); ?> >
+                    <?= videoAttributes($episode); ?> >
                 </a>
 <? } ?>
             </td>
@@ -484,7 +484,7 @@ function printSeasonFooter()
 ?>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
-    <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT($selectedEpisode->Path) ?>" vod=""></a>
+    <a id="openEpisode" TVID="Play" <?= videoAttributes($selectedEpisode) ?> ></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
