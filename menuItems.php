@@ -79,6 +79,17 @@ function getSubtitle($item) {
                 $subtitle .= 'Present';
             }
             break;
+        //PersonTypes
+        case "Actor":
+        case "Director":
+        case "Writer":
+        case "Producer":
+        case "GuestStar":
+        case "Composer":
+        case "Conductor":
+        case "Lyricist":
+            $subtitle .= "as " . $item->Role;
+            break;
         default:
             $subtitle = $item->ProductionYear;
             break;
