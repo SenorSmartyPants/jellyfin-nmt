@@ -152,7 +152,8 @@ function getFilters($parentID = null, $type = null, $Recursive = null) {
 }
 
 function getImageURL($id, $height = null, $width = null, $imageType = null, $unplayedCount = null, 
-    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null)
+    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null,
+    $maxHeight = null, $maxWidth = null)
 {
     global $api_url; 
 
@@ -160,7 +161,9 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $imageType = $imageType ?? "Primary";
 
     $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
-        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
+        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 
+        ($maxHeight ? "&maxHeight=" . $maxHeight : null) . ($maxWidth ? "&maxWidth=" . $maxWidth : null) . 
+        ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
         ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
 
     return $URL;
