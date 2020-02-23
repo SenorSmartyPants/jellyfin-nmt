@@ -153,10 +153,15 @@ function getPosterID($item, $useSeasonImage = true) {
             break;
         case "Episode":
             //API
-            $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
+            $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 
+                ($item->SeriesPrimaryImageTag ? $item->SeriesId : null); 
             break;
         default:
-            $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
+            if ($item->ImageTags) {
+                $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
+            } else {
+                $posterID = $item->PrimaryImageTag ? $item->Id : null;
+            }
             break; 
     }
     return $posterID;

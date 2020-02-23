@@ -16,14 +16,14 @@ function apiCall($path, $debug = false)
     return json_decode(file_get_contents($url));
 }
 
-function seasonPosterExists($seasonId)
+function itemImageExists($itemId, $ImageType = 'Primary')
 {
-    if ($seasonId != '') {
-        $path =  "/Items/" . $seasonId . "/Images/?";
+    if ($itemId != '') {
+        $path =  "/Items/" . $itemId . "/Images/?";
         $images = apiCall($path);
 
-        $primarys = array_filter($images, function($image) { return $image->ImageType == 'Primary'; });
-        return (count($primarys) > 0);
+        $foundImages = array_filter($images, function($image) use ($ImageType) { return $image->ImageType == $ImageType; });
+        return (count($foundImages) > 0);
     } else {
         return false;
     }

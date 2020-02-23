@@ -7,7 +7,7 @@ $NMT_playerpath = "file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/m
 function getBackdropIDandTag($item)
 {
     $retval = new stdClass();
-    if (count($item->BackdropImageTags) > 0) {
+    if ($item->BackdropImageTags && count($item->BackdropImageTags) > 0) {
         $retval->Id = $item->Id;
         $retval->Tag = $item->BackdropImageTags[0];
     } elseif ($item->ParentBackdropImageTags && count($item->ParentBackdropImageTags) > 0) {
