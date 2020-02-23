@@ -123,7 +123,6 @@ function setDetailURL($item, $menuItem) {
             case "Video":
                 switch ($item->Type) {
                     case "Movie":
-                        $detailURL = YAMJpath($item);
                         break; 
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
@@ -136,8 +135,6 @@ function setDetailURL($item, $menuItem) {
                         }
                         break;
                     default:
-                        $detailURL = translatePathToNMT($item->Path);
-                        $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
                 break;
@@ -151,6 +148,10 @@ function setDetailURL($item, $menuItem) {
                 break;                
             default:
                 break;
+        }
+        if (!$detailURL) {
+            //default to itemDetails page
+            $detailURL = "itemDetails.php?id=" . $item->Id;
         }
     }
     $menuItem->DetailURL = $detailURL;
