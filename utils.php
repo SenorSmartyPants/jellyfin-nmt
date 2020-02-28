@@ -41,4 +41,14 @@ function translatePathToNMT($path)
     return str_replace($NMT_path,$NMT_playerpath,escapeURL($path));
 }
 
+function formatCast($cast, $limit, $separator = ' / ')
+{
+    $links = array();
+    $cast = array_slice($cast, 0, $limit);
+    foreach($cast as $person) {
+        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
+    }
+    return implode($separator, $links);
+}
+
 ?>

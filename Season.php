@@ -128,15 +128,6 @@ function truncatePlot($Plot, $JSescape = false)
     return $Plot;
 }
 
-function formatCast($cast)
-{
-    $links = array();
-    foreach ($cast as $person) {
-        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
-    }
-    return implode(' / ', $links);
-}
-
 function renderEpisodeJS($episode)
 {
     $Plot = truncatePlot($episode->Overview, true);
