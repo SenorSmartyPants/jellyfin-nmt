@@ -38,7 +38,7 @@ function setNumPagesAndIndexCount($totalRecordCount)
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
 }
 
-function printHeadEtc($onloadset = null)
+function printHeadEtc($onloadset = null, $additionalCSS = null)
 {
     global $theme_css, $indexStyle;
     global $backdropId;
@@ -54,14 +54,21 @@ function printHeadEtc($onloadset = null)
 
 <?
         if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
+            //don't add any styles before the following. JS show/hide code depends on this these being first
 ?>
-        <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
 <?
         }
 ?>
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
+        <?
+        if ($additionalCSS) {
+?>
+        <link rel="StyleSheet" type="text/css" href="css/<?= $additionalCSS ?>"/>
+<?
+        }
+?>      
 
         <script>
             var title = 1;
