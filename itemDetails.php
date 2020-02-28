@@ -8,15 +8,6 @@ render();
 
 printFooter();
 
-function formatCast($cast)
-{
-    $links = array();
-    foreach($cast as $person) {
-        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
-    }
-    return implode(' / ', $links);
-}
-
 function render()
 {
     $id = $_GET["id"];
