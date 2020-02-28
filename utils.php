@@ -51,4 +51,16 @@ function formatCast($cast, $limit, $separator = ' / ')
     return implode($separator, $links);
 }
 
+function formatDate($datetimeString)
+{
+    //use gmdate because PremiereDate usually is only a date, time is not significant
+    //don't do localtime translation
+    return gmdate("n/j/Y",strtotime($datetimeString));
+}
+
+function formatDateTime($datetimeString)
+{
+    return date("n/j/Y g:i A",strtotime($datetimeString));
+}
+
 ?>

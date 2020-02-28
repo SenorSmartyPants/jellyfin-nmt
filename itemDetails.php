@@ -51,14 +51,12 @@ function render()
     if ($item->Type == 'Movie') {
         $date = $item->ProductionYear;
     } else {
-        //use gmdate because PremiereDate usually is only a date, time is not significant
-        //don't do localtime translation
         if ($item->PremiereDate) {
-            $date = gmdate("n/j/Y",strtotime($item->PremiereDate));
+            $date = formatDate($item->PremiereDate);
         }
     }
 
-    $added = date("n/j/Y g:i A",strtotime($item->DateCreated));
+    $added = formatDateTime($item->DateCreated);
 
     $directors = array();
     $writers = array();
