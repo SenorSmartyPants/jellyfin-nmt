@@ -414,7 +414,7 @@ Play all
         <!-- episode paging indicator -->
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
-                    <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink secondaryText" >
+                    <a href="" id="a_e_page" name="epispageCount" onmouseover="toggleRight()" class="TvLink secondaryText" >
                     <span class="tabTvShow" id="pageCount"><? if ($epPages > 1) { echo $selectedPage . ' / ' . $epPages . ' (' . $episodeCount . ')'; } ?></span>
                     </a>
                 </td></tr>
