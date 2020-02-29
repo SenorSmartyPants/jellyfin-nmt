@@ -15,9 +15,12 @@ foreach ($filters->Years as $year) {
     }
 }
 */
-printHeadEtc();
 
-printNavbarAndCategories("Categories", $filters);
+$Title = "Categories";
+
+printHeadEtc(null, null, $Title);
+
+printNavbarAndCategories($Title, $filters);
 
 printTitleTable();
 

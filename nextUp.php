@@ -11,9 +11,11 @@ $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
-printHeadEtc();
+$Title = "Next Up";
 
-printNavbarAndPosters("Next Up", $items);
+printHeadEtc(null, null, $Title);
+
+printNavbarAndPosters($Title, $items);
 
 printTitleTable($page, $numPages);
 

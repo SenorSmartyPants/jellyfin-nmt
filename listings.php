@@ -38,7 +38,7 @@ function setNumPagesAndIndexCount($totalRecordCount)
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
 }
 
-function printHeadEtc($onloadset = null, $additionalCSS = null)
+function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
 {
     global $theme_css, $indexStyle;
     global $backdropId;
@@ -50,7 +50,7 @@ function printHeadEtc($onloadset = null, $additionalCSS = null)
     <head>
         <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Jellyfin NMT</title>
+        <title><?= $title ? $title . ' - ' : null ?>Jellyfin NMT</title>
 
 <?
         if (isset($indexStyle) && null !== $indexStyle->cssFile()) {

@@ -35,7 +35,7 @@ $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
-printHeadEtc();
+printHeadEtc(null, null, $name);
 
 printNavbarAndPosters($name, $items);
 
