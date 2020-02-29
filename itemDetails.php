@@ -139,22 +139,22 @@ function render()
     }
     echo '<br/>';
     ?>
+        <div id="mediainfo">
+        <?= $videoStream ? $videoStream->Type . ': ' . $videoStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
+        <?= $audioStream ? $audioStream->Type . ': ' . $audioStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
+        <?= $subtitleStream ? $subtitleStream->Type . ': ' . $subtitleStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
+        </div>&nbsp;<br>
 
     <?= count($directors) > 0 ? 'Directed by: ' . formatCast($directors) . '<br/>' : null ?>
     <?= count($writers) > 0 ? 'Written by: ' . formatCast($writers) . '<br/>'  : null ?>
     <?= count($actors) > 0 ? 'Starring: ' . formatCast($actors) . '<br/>'  : null ?>
     <br/>
     <br/>
-    <?= $videoStream ? $videoStream->Type . ': ' . $videoStream->DisplayTitle : null ?>
-    <?= $audioStream ? $audioStream->Type . ': ' . $audioStream->DisplayTitle : null ?>
-    <?= $subtitleStream ? $subtitleStream->Type . ': ' . $subtitleStream->DisplayTitle : null ?>
-    <br/>
-    <br/>
 
-    <?= $item->Taglines[0] ? '<h3>' . $item->Taglines[0] . '</h3>' : null ?>
-    <?= $item->Overview ?><br/><br/>
+    <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
+    <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
-    <?= $item->mediaType ? 'Added: ' . $added . '<br/>' : null ?>
+    <?= $item->MediaType ? '<div id="added">Added ' . $added . '</div>' : null ?>
     
 
 
