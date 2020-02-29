@@ -65,6 +65,10 @@ function render()
 
     $added = formatDateTime($item->DateCreated);
 
+    if ($item->UserData->Played && $item->MediaType) {
+        $played = formatDateTime($item->UserData->LastPlayedDate);
+    }
+
     $directors = array();
     $writers = array();
     $actors = array();
