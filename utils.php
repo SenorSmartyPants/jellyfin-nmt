@@ -41,7 +41,7 @@ function translatePathToNMT($path)
     return str_replace($NMT_path,$NMT_playerpath,escapeURL($path));
 }
 
-function formatCast($cast, $limit, $separator = ' / ')
+function formatCast($cast, $limit = 27, $separator = ' / ')
 {
     $links = array();
     $cast = array_slice($cast, 0, $limit);
