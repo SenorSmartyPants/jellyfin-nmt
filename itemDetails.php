@@ -131,13 +131,43 @@ function render()
     }
 ?>
 
+    <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr>
+<? 
+    if ($date) {
+?>        
+        <td class=""><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
+<?
+    }
 
-    <?= $date ?>
-    <?= $durationInSeconds > 0 ? $durationInMinutes . ' mins' : null ?> 
-    <?= $item->OfficialRating ?>
-    <?= $item->CommunityRating ? '*' . $item->CommunityRating : null ?>
-    <?= $durationInSeconds > 0 ? 'Ends at ' . date('g:i A', time() + ($durationInSeconds) ) : null ?>
-    <br/>
+    if ($item->MediaType) {
+?>          
+        <td class="" ><?= $durationInSeconds > 0 ? $durationInMinutes . ' mins' : null ?>&nbsp;&nbsp;&nbsp;</td>
+<? 
+    }
+
+    if ($item->OfficialRating) {
+?>
+        <td><div class="border">
+&nbsp;<?= $item->OfficialRating ?>&nbsp;</div></td><td>&nbsp;&nbsp;&nbsp;</td>
+<?
+    } 
+
+    if ($item->CommunityRating) {
+?>        
+        <td>*<?= $item->CommunityRating ?>&nbsp;&nbsp;&nbsp;</td>
+<?
+    } 
+
+    if ($item->MediaType) {
+?>  
+        <td><?= $durationInSeconds > 0 ? 'Ends at ' . date('g:i A', time() + ($durationInSeconds) ) : null ?></td>
+<?
+    } 
+?>
+
+
+    </tr></table>
+    &nbsp;<br>
 
     <?
     if ($item->GenreItems && count($item->GenreItems) > 0) {
