@@ -98,11 +98,18 @@ function render()
     }
 ?>
 
-<table border="1">
-    <tr>
-        <td valign="top">
-        <? if ($item->ImageTags->Primary) { ?><img src="<?= getImageURL($item->Id, 360, null, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? } ?>
+<table class="main" border="0" cellpadding="0" cellspacing="0">
+    <tr valign="top">
+        <td width="276px" height="416px">
+        <? 
+        if ($item->ImageTags->Primary) { 
+            ?><img width="276" src="<?= getImageURL($item->Id, null, 276, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? 
+        } else if ($item->ImageTags->Thumb) { 
+            ?><img width="276" src="<?= getImageURL($item->Id, null, 276, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? 
+        } ?>
 
+        </td>
+        <td width="30px">
         </td>
         <td>
 <?
