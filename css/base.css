@@ -7,6 +7,10 @@ td {
     font-size: 18pt;
 }
 
+td#title {
+    font-size: 18pt;
+}
+
 th {
     font-size: 22pt;
     text-align: left;
