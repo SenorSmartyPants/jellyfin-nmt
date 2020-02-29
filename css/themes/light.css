@@ -19,6 +19,10 @@ th {
     color: #888888;
 }
 
+.button {
+    background-color: #d8d8d8;
+}
+
 .defaultCardBackground1 {
     background-color: #009688
 }

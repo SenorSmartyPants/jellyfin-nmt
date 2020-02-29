@@ -47,6 +47,15 @@ img {
     position: absolute;
 }
 
+div.border {
+    border-style: solid;
+    border-width: 1px;
+}
+
+table.button {
+    padding: 12px;
+}
+
 @media screen {
     #popupWrapper {
         position: absolute;
