@@ -46,12 +46,21 @@ function render()
     $CC = $item->HasSubtitles;
 
 
-    if ($item->Type == 'Movie') {
-        $date = $item->ProductionYear;
-    } else {
-        if ($item->PremiereDate) {
-            $date = formatDate($item->PremiereDate);
-        }
+    switch ($item->Type) {
+        case 'Movie':
+            $date = $item->ProductionYear;
+            break;
+        case 'Series':
+            $date = ProductionRangeString($item);
+            break;
+        case 'Season':
+            $date = null;
+            break;               
+        default:
+            if ($item->PremiereDate) {
+                $date = formatDate($item->PremiereDate);
+            }
+            break;
     }
 
     $added = formatDateTime($item->DateCreated);
