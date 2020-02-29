@@ -161,8 +161,16 @@ function render()
         <?= $subtitleStream ? $subtitleStream->Type . ': ' . $subtitleStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
         </div>&nbsp;<br>
 
+<?
+        if ($item->MediaType) { //only display play button for single items
+?>  
+    <table class="nobuffer button" ><tr><td><a name="play" tvid="play" <?= videoAttributes($item) ?>>Play</a></td></tr></table>&nbsp;<br>
+<?
+        }
+?>    
 
 
+    <?= $played ? '<div id="played">Date played ' . $played . '</div>&nbsp;<br>' : null ?>
 
 
 
