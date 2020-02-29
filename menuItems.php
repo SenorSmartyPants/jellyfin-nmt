@@ -83,7 +83,7 @@ function getSubtitle($item) {
         case "Composer":
         case "Conductor":
         case "Lyricist":
-            $subtitle .= "as " . $item->Role;
+            $subtitle = ($item->Role ? "as " . $item->Role : $item->Type);
             break;
         default:
             $subtitle = $item->ProductionYear;
