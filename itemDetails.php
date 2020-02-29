@@ -180,6 +180,9 @@ function render()
     
     <?= $item->MediaType ? '<div id="added">Added ' . $added . '</div>' : null ?>
     
+    <? if ($item->AirDays) { ?> 
+    <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
+    <? } ?>
 
 
         </td>
