@@ -2,33 +2,44 @@
 include_once 'data.php';
 include_once 'listings.php';
 
-printHeadEtc();
+$id = $_GET["id"];
+$item = getItem($id);
+
+setNames($item);
+printHeadEtc("play","itemDetails.css", $Title);
 
 render();
 
 printFooter();
 
-function render()
+
+
+function setNames($item)
 {
-    global $item;
-    $id = $_GET["id"];
-
-    $item = getItem($id);
-
+    global $parentName, $itemName, $Title;
 
     switch ($item->Type) {
         case 'Season':
             $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName);
             $itemName = $item->Name;
+            $Title = $item->Name . ' - ' . $item->SeriesName;
             break;
         case 'Episode':
             $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName) . ' - ' . itemDetailsLink($item->SeasonId, false, $item->SeasonName);
             $itemName = $item->IndexNumber . '. ' . $item->Name;
+            $Title = $item->Name . ' - ' . $item->SeasonName . ' - ' . $item->SeriesName;
             break;
         default:
             $itemName = $item->Name;
+            $Title = $item->Name;
             break;
     }
+}
+    
+function render()
+{
+    global $item;
+    global $parentName, $itemName;
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
     $durationInMinutes = round($durationInSeconds / 60);
@@ -154,12 +165,12 @@ function render()
    <!--
     Images:<br/>
     
-    <? if ($item->ImageTags->Primary) { ?><img src="<?= getImageURL($id, 200, null, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? } ?>
-    <? if ($item->ImageTags->Thumb) { ?><img src="<?= getImageURL($id, 200, null, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? } ?>
+    <? if ($item->ImageTags->Primary) { ?><img src="<?= getImageURL($item->Id, 200, null, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? } ?>
+    <? if ($item->ImageTags->Thumb) { ?><img src="<?= getImageURL($item->Id, 200, null, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? } ?>
     <br/>
-    <? if ($item->ImageTags->Logo) { ?><img src="<?= getImageURL($id, 50, null, "Logo", null, null, $item->ImageTags->Logo) ?>" /> <? } ?>
+    <? if ($item->ImageTags->Logo) { ?><img src="<?= getImageURL($item->Id, 50, null, "Logo", null, null, $item->ImageTags->Logo) ?>" /> <? } ?>
     <br/>
-    <? if ($item->BackdropImageTags[0]) { ?><img src="<?= getImageURL($id, 200, null, "Backdrop", null, null, $item->BackdropImageTags[0]) ?>" /> <? } ?>
+    <? if ($item->BackdropImageTags[0]) { ?><img src="<?= getImageURL($item->Id, 200, null, "Backdrop", null, null, $item->BackdropImageTags[0]) ?>" /> <? } ?>
     
     
     Parent Images (movies have no parent):<br/>
