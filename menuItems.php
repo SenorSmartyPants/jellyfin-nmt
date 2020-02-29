@@ -72,12 +72,7 @@ function getSubtitle($item) {
             }
             break;
         case "Series":
-            $subtitle = $item->ProductionYear . ' - ';
-            if ($item->EndDate) {
-                $subtitle .= gmdate("Y",strtotime($item->EndDate));
-            } else {
-                $subtitle .= 'Present';
-            }
+            $subtitle = ProductionRangeString($item);
             break;
         //PersonTypes
         case "Actor":

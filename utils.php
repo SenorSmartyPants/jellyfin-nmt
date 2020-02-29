@@ -63,4 +63,14 @@ function formatDateTime($datetimeString)
     return date("n/j/Y g:i A",strtotime($datetimeString));
 }
 
+function ProductionRangeString($item)
+{
+    $retval = $item->ProductionYear . ' - ';
+    if ($item->EndDate) {
+        $retval .= gmdate("Y",strtotime($item->EndDate));
+    } else {
+        $retval .= 'Present';
+    }
+    return $retval;
+}
 ?>
