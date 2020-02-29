@@ -243,7 +243,7 @@ if ($episodeCount > EPISODESPERPAGE) {
     <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript">
         function checkin() {
-            var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
+            var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
                 asSeasonNo[iEpisodeId] + "&episode=" + asEpisodeNo[iEpisodeId] + "&episode_id=" + asEpisodeTVDBID[iEpisodeId];
              
             document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
