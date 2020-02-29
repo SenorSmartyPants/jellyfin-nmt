@@ -141,16 +141,15 @@ function render()
 
     <?
     if ($item->GenreItems && count($item->GenreItems) > 0) {
-        echo 'Genres: ';
-
+        echo '<div id="genres">Genres: ';
         foreach ($item->GenreItems as $genre) {
-            echo '<a href="' . $genre->Id . '">' . $genre->Name . '</a>';
+            printf('<a href="browse.php?CollectionType=search&Name=%1$s&Genres=%1$s">%1$s</a>', $genre->Name);
             if ($genre != end($item->GenreItems)) {
                 echo ', ';
             }
         }
+        echo '</div>&nbsp;<br>';
     }
-    echo '<br/>';
     ?>
         <div id="mediainfo">
         <?= $videoStream ? $videoStream->Type . ': ' . $videoStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
