@@ -471,7 +471,7 @@ function printPCMenu()
 
 function printSeasonFooter()
 {
-    global $series, $selectedEpisode;
+    global $series, $season, $selectedEpisode;
 ?>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
@@ -491,6 +491,7 @@ function printSeasonFooter()
     <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 
+    <a TVID="RED" href="<?= itemDetailsLink($season->Id) ?>"></a>
     </body>
 
     </html>

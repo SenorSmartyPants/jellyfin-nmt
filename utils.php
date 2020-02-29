@@ -46,7 +46,7 @@ function formatCast($cast, $limit, $separator = ' / ')
     $links = array();
     $cast = array_slice($cast, 0, $limit);
     foreach($cast as $person) {
-        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
+        $links[] = itemDetailsLink($person->Id, false, $person->Name);
     }
     return implode($separator, $links);
 }
@@ -73,4 +73,15 @@ function ProductionRangeString($item)
     }
     return $retval;
 }
+
+function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
+    $url = 'itemDetails.php?id=' . $id;
+    if ($urlOnly) {
+        return $url;
+    } else {
+        return '<a href="' . $url . '">' . $linkText . '</a>';
+    }
+    
+}
+
 ?>

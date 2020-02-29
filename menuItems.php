@@ -146,7 +146,7 @@ function setDetailURL($item, $menuItem) {
         }
         if (!$detailURL) {
             //default to itemDetails page
-            $detailURL = "itemDetails.php?id=" . $item->Id;
+            $detailURL = itemDetailsLink($item->Id);
         }
     }
     $menuItem->DetailURL = $detailURL;
