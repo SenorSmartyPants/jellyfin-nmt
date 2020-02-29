@@ -10,17 +10,24 @@ printFooter();
 
 function render()
 {
+    global $item;
     $id = $_GET["id"];
 
     $item = getItem($id);
 
 
-
-    if ($item->SeriesName) {
-        $parentName = $item->SeriesName . ' - ' . $item->SeasonName;
-        $itemName = $item->IndexNumber . '. ' . $item->Name;
-    } else {
-        $itemName = $item->Name;
+    switch ($item->Type) {
+        case 'Season':
+            $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName);
+            $itemName = $item->Name;
+            break;
+        case 'Episode':
+            $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName) . ' - ' . itemDetailsLink($item->SeasonId, false, $item->SeasonName);
+            $itemName = $item->IndexNumber . '. ' . $item->Name;
+            break;
+        default:
+            $itemName = $item->Name;
+            break;
     }
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
