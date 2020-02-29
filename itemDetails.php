@@ -101,7 +101,7 @@ function render()
 <table border="1">
     <tr>
         <td valign="top">
-        <? if ($item->ImageTags->Primary) { ?><img src="<?= getImageURL($id, 360, null, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? } ?>
+        <? if ($item->ImageTags->Primary) { ?><img src="<?= getImageURL($item->Id, 360, null, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? } ?>
 
         </td>
         <td>
