@@ -115,13 +115,19 @@ function render()
 <?
     if ($parentName) {
 ?>
-        <h1><?= $parentName ?></h1>
-        <h3><?= $itemName ?></h3>
+        <h1 class="parentName"><?= $parentName ?></h1>&nbsp;<br>
+        <h3 class="itemName"><?= $itemName ?></h3>&nbsp;<br>
 <?
     } else {
 ?>
-        <h1><?= $itemName ?></h1>
+        <h1 class="itemName"><?= $itemName ?></h1>&nbsp;<br>
 <?
+    }
+
+    if ($item->OriginalTitle && $item->OriginalTitle != $item->Name) {
+?>
+        <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
+<? 
     }
 ?>
 
