@@ -10,9 +10,31 @@ printHeadEtc("play","itemDetails.css", $Title);
 
 render();
 
+printLogo();
+
 printFooter();
 
+function printLogo()
+{
+    global $item;
 
+    if ($item->ImageTags->Logo) { 
+        $logoId = $item->Id;
+        $logoTag = $item->ImageTags->Logo;
+    } else if ($item->ParentLogoImageTag) {
+        $logoId = $item->ParentLogoItemId;
+        $logoTag = $item->ParentLogoImageTag;
+    }
+
+    if ($logoId) { 
+        ?>
+        <div id="popupWrapper">
+                <img class="abs" id="logo" 
+                 src="<?= getImageURL($logoId, null, null, "Logo", null, null, $logoTag, null, null, 155, 400) ?>" />
+        </div>
+        <? 
+    }
+}
 
 function setNames($item)
 {
