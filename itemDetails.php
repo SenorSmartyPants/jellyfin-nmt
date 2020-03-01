@@ -5,6 +5,9 @@ include_once 'listings.php';
 $id = $_GET["id"];
 $item = getItem($id);
 
+$useSeasonNameForMenuItems = false;
+$forceItemDetails = true;
+
 setNames($item);
 
 setupChildData($item);

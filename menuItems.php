@@ -93,6 +93,7 @@ function getSubtitle($item) {
 }
 
 function setDetailURL($item, $menuItem) {
+    global $forceItemDetails;
     
     if ($item->IsFolder) {
         switch ($item->Type) {
@@ -144,7 +145,7 @@ function setDetailURL($item, $menuItem) {
             default:
                 break;
         }
-        if (!$detailURL) {
+        if (!$detailURL || $forceItemDetails) {
             //default to itemDetails page
             $detailURL = itemDetailsLink($item->Id);
         }
