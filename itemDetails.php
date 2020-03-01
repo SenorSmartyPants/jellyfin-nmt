@@ -151,6 +151,8 @@ function render()
         <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
 <? 
     }
+
+    if ($item->Type != "Person" && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
 ?>
 
     <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr>
@@ -186,12 +188,10 @@ function render()
 <?
     } 
 ?>
+    </tr></table>&nbsp;<br>
+    <?   
+    }
 
-
-    </tr></table>
-    &nbsp;<br>
-
-    <?
     if ($item->GenreItems && count($item->GenreItems) > 0) {
         echo '<div id="genres">Genres: ';
         foreach ($item->GenreItems as $genre) {
@@ -207,13 +207,17 @@ function render()
         <?= count($directors) > 0 ? '<div id="directors">Directed by: ' . formatCast($directors, 4, ', ') . '</div>&nbsp;<br>' : null ?>
         <?= count($writers) > 0 ? '<div id="writers">Written by: ' . formatCast($writers, 4, ', ') . '</div>&nbsp;<br>'  : null ?>
 
+<?
+        if ($item->MediaType) { //only display play button for single items
+?>          
         <div id="mediainfo">
         <?= $videoStream ? $videoStream->Type . ': ' . $videoStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
         <?= $audioStream ? $audioStream->Type . ': ' . $audioStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
         <?= $subtitleStream ? $subtitleStream->Type . ': ' . $subtitleStream->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
         </div>&nbsp;<br>
-
 <?
+        }
+
         if ($item->MediaType) { //only display play button for single items
 ?>  
     <table class="nobuffer button" ><tr><td><a name="play" tvid="play" <?= videoAttributes($item) ?>>Play</a></td></tr></table>&nbsp;<br>
