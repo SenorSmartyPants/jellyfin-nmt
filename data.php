@@ -143,6 +143,14 @@ function getItem($Id) {
     return getUsersItems($Id);
 }
 
+function getSimilarItems($Id, $limit = null)
+{
+    global $user_id;
+    $path =  "/Items/" . $Id . "/Similar?UserID=" . $user_id;
+    $path .= $limit ? "&Limit=" . $limit : "";
+    return apiCall($path);
+}
+
 function getFilters($parentID = null, $type = null, $Recursive = null) {
     global $user_id;
 
