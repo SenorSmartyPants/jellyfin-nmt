@@ -236,7 +236,11 @@ function render()
     <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
     <? } ?>
 
+        </td>
+    </tr>    
 
+    <tr height="182">
+        <td colspan="3" align="center">
         </td>
     </tr>
 </table>
