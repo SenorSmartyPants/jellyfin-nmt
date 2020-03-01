@@ -117,6 +117,10 @@ function setDetailURL($item, $menuItem) {
                     ($menuItem->BackdropID ? "&backdropId=" . $menuItem->BackdropID : null);
                 break;
         }
+        if ($forceItemDetails) {
+            //default to itemDetails page
+            $detailURL = itemDetailsLink($item->Id);
+        }
     } else {
         switch ($item->MediaType) {
             case "Video":
