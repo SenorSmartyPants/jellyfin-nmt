@@ -6,6 +6,9 @@ $id = $_GET["id"];
 $item = getItem($id);
 
 setNames($item);
+
+setupChildData($item);
+
 printHeadEtc("play","itemDetails.css", $Title);
 
 render();
@@ -15,6 +18,39 @@ printTitleTable();
 printLogo();
 
 printFooter();
+
+function setupChildData($item)
+{
+    global $indexStyle, $itemsToDisplay;
+
+    //must be set before head so grid.css.php can run right
+    $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
+    //9x1
+    $indexStyle->Limit = 9;
+    $indexStyle->offsetY = 500;
+    
+    //people displayed before children (series actors before seasons)
+    if (count($item->People) > 0) {
+        //get first X cast and crew
+        $itemsToDisplay = $item->People;
+        $itemsToDisplay = array_slice($itemsToDisplay, 0, $indexStyle->Limit);
+    } else if ($item->ChildCount) {
+        //get first X children
+        if ($item->Type == "Person") {
+            //filter items to ones where PersonID is included
+            $children = getItems(null, 0, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
+        } else {
+            //just get child items
+            $children = getItems($item->Id, 0, $indexStyle->Limit);
+        }
+        $itemsToDisplay = $children->Items;
+    }
+    
+    if ($itemsToDisplay) {
+        setNumPagesAndIndexCount(count($itemsToDisplay));
+    }
+    
+}
 
 function printLogo()
 {
@@ -266,6 +302,12 @@ function render()
 
     <tr height="182">
         <td colspan="3" align="center">
+<?
+global $itemsToDisplay;
+if ($itemsToDisplay) {
+    printPosterTable($itemsToDisplay);
+}
+?>
         </td>
     </tr>
 </table>
