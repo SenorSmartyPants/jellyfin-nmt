@@ -2,6 +2,9 @@
 include_once 'data.php';
 include_once 'listings.php';
 
+const POSTER_WIDTH = 276;
+const THUMB_WIDTH = 396;
+
 $id = $_GET["id"];
 $item = getItem($id);
 
@@ -166,12 +169,17 @@ function render()
 
 <table class="main" border="0" cellpadding="0" cellspacing="0">
     <tr valign="top">
-        <td width="276px" height="416px">
+        <td width="<?= POSTER_WIDTH ?>px" height="416px">
         <? 
         if ($item->ImageTags->Primary) { 
-            ?><img width="276" src="<?= getImageURL($item->Id, null, 276, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? 
+            if ($item->PrimaryImageAspectRatio < 1) {
+                $width = POSTER_WIDTH;
+            } else {
+                $width = THUMB_WIDTH;
+            }
+            ?><img width="$width" src="<?= getImageURL($item->Id, null, $width, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? 
         } else if ($item->ImageTags->Thumb) { 
-            ?><img width="276" src="<?= getImageURL($item->Id, null, 276, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? 
+            ?><img width="THUMB_WIDTH" src="<?= getImageURL($item->Id, null, THUMB_WIDTH, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? 
         } ?>
 
         </td>
