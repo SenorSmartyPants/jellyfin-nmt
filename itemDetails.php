@@ -39,6 +39,9 @@ function setupChildData($item)
         if ($item->Type == "Person") {
             //filter items to ones where PersonID is included
             $children = getItems(null, 0, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
+        } else if ($item->Type == "Studio") {
+            //filter items to ones where StudioID is included
+            $children = getItems(null, 0, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
         } else {
             //just get child items
             $children = getItems($item->Id, 0, $indexStyle->Limit);
