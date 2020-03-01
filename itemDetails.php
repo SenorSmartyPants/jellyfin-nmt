@@ -230,6 +230,25 @@ function render()
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
+    <? if ($item->Type == "Person") {
+        if ($date) { 
+            ?>
+		    <div>Born: <?= $date ?></div>&nbsp;<br>
+            <?                
+        }
+        if ($item->ProductionLocations[0]) {
+            ?>
+            <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
+            <?    
+        }
+        if ($item->EndDate) {
+            ?>
+            <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
+            <?    
+        }        
+    } 
+    ?>
+
     <?= $item->MediaType ? '<div id="added">Added ' . $added . '</div>' : null ?>
     
     <? if ($item->AirDays) { ?> 
