@@ -10,6 +10,8 @@ printHeadEtc("play","itemDetails.css", $Title);
 
 render();
 
+printTitleTable();
+
 printLogo();
 
 printFooter();
