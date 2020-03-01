@@ -73,7 +73,7 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
     $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, $personIDs = null)
 {
     global $user_id;
 
@@ -92,6 +92,7 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
     $path .= $ratings ? "&OfficialRatings=" . $ratings : "";
     $path .= $tags ? "&Tags=" . urlencode($tags) : "";
     $path .= $years ? "&Years=" . $years : "";
+    $path .= $personIDs ? "&PersonIDs=" . $personIDs : "";
     $path .= !is_null($groupItems) ? "&GroupItems=" . ( $groupItems ? "true" : "false" ) : "";
     $path .= !is_null($isPlayed) ? "&IsPlayed=" . ( $isPlayed ? "true" : "false" ) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
@@ -128,11 +129,11 @@ function getNextUp($Limit, $startIndex = 0)
 }
 
 function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, $personIDs = null)
 {
     return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, "SortName", $type, 
         null, null, $recursive, $StartIndex, null, 
-        $genres, $nameStartsWith, $ratings, $tags, $years);
+        $genres, $nameStartsWith, $ratings, $tags, $years, $personIDs);
 }
 
 function getItem($Id) {
