@@ -159,28 +159,32 @@ function renderEpisodeHTML($episode, $indexInList)
         }
         $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
     }
-    
+
+    #region videoPlayLink setup
+    $attrs = array(
+        "class" => "TvLink secondaryText",
+        "id" => "a_e_" . $indexInList,
+        "onkeydownset" => "todown",
+        "onkeyrightset" => "toright",
+        "onkeyupset" => "toup",
+        "onkeyleftset" => "toleft",
+        "onmouseover" => "showEpisode(" . $indexInList . ")"
+    );
+    $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '</span>';
+    $linkName = "episode" . $indexInList;
+
+    if (CHECKIN) {
+        $callbackJS = "checkin();";
+        $callbackName = "playepisode" . $indexInList;
+        $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
+    }
+    #endregion
+
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
-                    onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
-                    <? if (CHECKIN) { ?>
-onclick="checkin();" href="#playepisode<?= $indexInList ?>"
-<?
-} else {
-    echo videoAttributes($episode) ."\n";
-} 
-?>
-                    onmouseover="showEpisode(<?= $indexInList ?>)" >
-                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
-                </a>
-<? if (CHECKIN) { ?>
-                <a onfocusload="" id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"
-                    <?= videoAttributes($episode); ?> >
-                </a>
-<? } ?>
+                <?= videoPlayLink($episode, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?> 
             </td>
         </tr>
     </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>

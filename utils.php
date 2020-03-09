@@ -42,6 +42,41 @@ function videoAttributes($item)
     return HTMLattributes($attrs);
 }
 
+function videoPlayLink($item, 
+    $linkHTML = null, $linkName = null, $additionalAttributes = null, 
+    $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null)
+{
+    //generate 1 link to play with no callback
+    //2 links to call server before playing video, to checkin/scrobble
+
+    $html = '<a ';
+    if ($linkName) {
+        $html .= 'name="' . $linkName . '" ';
+    }
+
+    $html .= HTMLattributes($additionalAttributes);
+
+    if ($callbackJS) {
+        $html .= 'onclick="' . $callbackJS . '" ';
+        $html .= 'href="#' . $callbackName . '" ';
+    } else {
+        $html .= videoAttributes($item);
+    }
+    
+    $html .= '>' . $linkHTML . '</a>';
+
+    if ($callbackJS) {
+        $html .= '<a onfocusload="" ';
+        $html .= 'name="' . $callbackName . '" ';
+        $html .= 'onfocusset="' . $linkName . '" ';
+        $html .= HTMLattributes($callbackAdditionalAttributes);      
+        $html .= videoAttributes($item);
+        $html .= '></a>';
+    }
+
+    return $html;
+}
+
 function escapeURL($url)
 {
     return implode("/", array_map("rawurlencode", explode("/", $url)));
