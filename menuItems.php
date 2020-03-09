@@ -162,15 +162,18 @@ function setDetailURL($item, $menuItem) {
 
 function getPosterID($item, $useSeasonImage = true) {
     global $indexStyle;
+    global $displayepisode;
     switch ($item->Type) {
         case "Season":
             $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
         case "Episode":
             //API
-            $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 
-                ($item->SeriesPrimaryImageTag ? $item->SeriesId : null); 
-            break;
+            if (!$displayepisode) {
+                $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 
+                    ($item->SeriesPrimaryImageTag ? $item->SeriesId : null); 
+                break;
+            }
         default:
             if ($item->ImageTags) {
                 $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
@@ -184,12 +187,15 @@ function getPosterID($item, $useSeasonImage = true) {
 
 function getUnplayedCount($item) {
     global $libraryBrowse;
+    global $displayepisode;
 
     switch ($item->Type) {
         case "Episode":
-            //API
-            $series = getItem($item->SeriesId);
-            $unplayedCount = $series->UserData->UnplayedItemCount;
+            if (!$displayepisode) {
+                //API
+                $series = getItem($item->SeriesId);
+                $unplayedCount = $series->UserData->UnplayedItemCount;
+            }
             break;
         default:
             $unplayedCount = $item->UserData->UnplayedItemCount;
