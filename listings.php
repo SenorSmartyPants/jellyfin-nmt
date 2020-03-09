@@ -86,7 +86,7 @@ function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
                     subtitle.firstChild.nodeValue = subX.nodeValue;
                 }
 <?
-                if (isset($indexStyle->popupHeight)) {
+                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
@@ -99,7 +99,7 @@ function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
                 title.firstChild.nodeValue = "\xa0";
                 subtitle.firstChild.nodeValue = "\xa0";
 <?
-                if (isset($indexStyle->popupHeight)) {
+                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
@@ -132,7 +132,7 @@ function printFooter()
         foreach ($menuItems as $key => $menuItem) {
             printTitleAndSubtitle($menuItem, 0, $key);
         }
-        if (isset($indexStyle->popupHeight)) {
+        if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($menuItems as $key => $menuItem) {
                 printPopup($menuItem, 0, $key);
