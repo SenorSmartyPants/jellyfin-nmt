@@ -21,7 +21,6 @@ const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
 const PCMENU = true;
-const CHECKIN = true;
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
