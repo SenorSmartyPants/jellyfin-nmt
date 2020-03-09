@@ -9,7 +9,7 @@ $items = getUsersViews()->Items;
 /* features needed
 Series name only for menuitem title
 */
-$indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup);
+$indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
 
 //960x540
 //(1096 - (n+1)*cellspacing) / n = w
@@ -37,9 +37,8 @@ if (count($items) <= 6) {
     $indexStyle->nbThumbnailsPerLine = 4; 
 }
 $indexStyle->moviesTableCellspacing = 16;
-$indexStyle->hoverFrame = null;
-$indexStyle->moviesTableVAlign = "top";
 $indexStyle->offsetY = 156;
+$indexStyle->ImageType = "Primary";
 
 setNumPagesAndIndexCount(count($items));
 
