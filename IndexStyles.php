@@ -12,6 +12,8 @@ abstract class IndexStyleEnum
     const TVBannerPopup6x2 = 7;
     const TVBannerPopup7x2 = 8;
     const PosterPopup = 9; //generic popups
+    const ThumbPopup = 10;
+    const ThumbPopup4x3AspectRatio = 11;
 }
 
 class IndexStyle {
@@ -64,7 +66,15 @@ class IndexStyle {
     
             case IndexStyleEnum::TVBannerPopup7x2:
                 $this->Limit = 14;
-                break;             
+                break;  
+  
+            case IndexStyleEnum::ThumbPopup:
+                $this->Limit = 4;
+                break;
+
+            case IndexStyleEnum::ThumbPopup4x3AspectRatio:
+                $this->Limit = 5;
+                break;                           
         }
     }
 
@@ -90,6 +100,8 @@ class IndexStyle {
             case IndexStyleEnum::PosterPopup6x2:
             case IndexStyleEnum::PosterPopup9x3:
             case IndexStyleEnum::PosterPopup:
+            case IndexStyleEnum::ThumbPopup:
+            case IndexStyleEnum::ThumbPopup4x3AspectRatio:
                 $retval = "css/grid.css.php?number=" . $this->indexCount . 
                     "&style=" . $this->styleEnum . 
                     "&numPerLine=" . $this->nbThumbnailsPerLine . 
@@ -184,6 +196,29 @@ class IndexStyle {
                 $this->ImageType = "Primary";
                 $this->moviesTableCellspacing = 4;
                 break;
+    
+            case IndexStyleEnum::ThumbPopup:
+            case IndexStyleEnum::ThumbPopup4x3AspectRatio:                
+                if ($this->styleEnum == IndexStyleEnum::ThumbPopup) {
+                    //16:9
+                    $this->aspectRatio = 1.78;
+                    $this->nbThumbnailsPerLine = 4;
+                    $this->thumbnailsWidth = 269;
+                } else {
+                    //4:3
+                    $this->aspectRatio = 1.33;
+                    $this->nbThumbnailsPerLine = 5;
+                    $this->thumbnailsWidth = 214;
+                }
+
+                $this->thumbnailsHeight = intval($this->thumbnailsWidth / $this->aspectRatio);
+
+                $this->popupWidth = intval($this->thumbnailsWidth * 1.25);
+                $this->popupHeight = intval($this->popupWidth / $this->aspectRatio);
+
+                $this->ImageType = "Thumb";
+                $this->moviesTableCellspacing = 4;
+                break;                 
     
             case IndexStyleEnum::TVBannerPopup4x2:
                 $this->popupWidth = 557;
