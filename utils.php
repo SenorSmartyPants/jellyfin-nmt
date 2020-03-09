@@ -20,14 +20,26 @@ function getBackdropIDandTag($item)
     return $retval;
 }
 
+function HTMLattributes($assocArray)
+{
+    if ($assocArray) {
+        foreach ($assocArray as $key => $value) {
+            $html .= $key . '="' . $value . '" ';
+        }
+    }
+    return $html;
+}
+
 function videoAttributes($item)
 {
-    $attrs = 'vod="" href="' . translatePathToNMT($item->Path) . '"';
+    $attrs = array('vod' => '', 
+        'href' => translatePathToNMT($item->Path));
+
     if ($item->VideoType != "VideoFile")
     {
-        $attrs .= ' zcd="2"';
+        $attrs['zcd'] = "2";
     }
-    return $attrs;
+    return HTMLattributes($attrs);
 }
 
 function escapeURL($url)
