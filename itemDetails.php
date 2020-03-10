@@ -17,7 +17,7 @@ setupChildData($item);
 
 printHeadEtc("play","itemDetails.css", $Title);
 
-render();
+render($item);
 
 printTitleTable();
 
@@ -105,9 +105,8 @@ function setNames($item)
     }
 }
     
-function render()
+function render($item)
 {
-    global $item;
     global $parentName, $itemName;
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
