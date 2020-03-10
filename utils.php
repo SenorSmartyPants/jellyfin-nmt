@@ -20,6 +20,26 @@ function getBackdropIDandTag($item)
     return $retval;
 }
 
+function getStreams($item)
+{
+    $retval = new stdClass();
+
+    $firstSource = $item->MediaSources[0];
+    if ($firstSource) {
+        $retval->Container = $firstSource->Container;
+        foreach ($firstSource->MediaStreams as $mediastream) {
+            if ($mediastream->Type == 'Video' && $mediastream->IsDefault) {
+                $retval->Video = $mediastream;
+            }
+        }
+        $retval->Audio = $firstSource->MediaStreams[$firstSource->DefaultAudioStreamIndex];
+        //can have subs without a default
+        $retval->Subtitle = $firstSource->MediaStreams[$firstSource->DefaultSubtitleStreamIndex];
+    }
+
+    return $retval;
+}
+
 function HTMLattributes($assocArray)
 {
     if ($assocArray) {

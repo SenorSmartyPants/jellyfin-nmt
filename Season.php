@@ -67,17 +67,7 @@ foreach($episodes as $key => $episode) {
 
 $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
-$firstSource = $selectedEpisode->MediaSources[0];
-if ($firstSource) {
-    foreach ($firstSource->MediaStreams as $mediastream) {
-        if ($mediastream->Type == 'Video') {
-            $videoStream = $mediastream;
-        }
-    }
-    $audioStream = $firstSource->MediaStreams[$firstSource->DefaultAudioStreamIndex];
-    //can have subs without a default
-    $subtitleStream = $firstSource->MediaStreams[$firstSource->DefaultSubtitleStreamIndex];
-}
+$streams = getStreams($selectedEpisode);
 
 printSeasonHeadEtc($selectedEpisodeArrayIndex);
 printTopBar();
@@ -328,7 +318,7 @@ function TopBarSpacerWidth($seasonIndexNumber)
 
 function printTopBar()
 {
-    global $series, $season, $videoStream, $audioStream, $firstSource;
+    global $series, $season, $streams;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
@@ -345,9 +335,9 @@ function printTopBar()
             <td width="20"></td>
             <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
             <td width="50"></td>
-            <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . "</td>\n"  : null ?>
+            <?= $ShowAudioCodec ? '<td>' . audioCodec($streams->Audio) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowContainer ? '<td>' . container($streams->Container) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowVideoOutput ? '<td>' . videoOutput($streams->Video) . "</td>\n"  : null ?>
             <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
             <td align="right" class="rating"><? 
                 if ($series->CommunityRating) 
