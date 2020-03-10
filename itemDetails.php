@@ -180,11 +180,12 @@ function render()
             ?><img width="$width" src="<?= getImageURL($item->Id, null, $width, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? 
         } else if ($item->ImageTags->Thumb) { 
             ?><img width="THUMB_WIDTH" src="<?= getImageURL($item->Id, null, THUMB_WIDTH, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? 
+        } else {
+            ?><img src="images/1x1.png" width="<?= POSTER_WIDTH ?>" /> <?
         } ?>
 
         </td>
-        <td width="30px">
-        </td>
+        <td><img src="images/1x1.png" width="30" height="1" /></td>
         <td>
 <?
     if ($parentName) {
@@ -311,6 +312,7 @@ function render()
     <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
     <? } ?>
 
+    <img src="images/1x1.png" width="<?= 1096-30-$width ?>" height="1" />
         </td>
     </tr>    
 
