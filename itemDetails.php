@@ -29,6 +29,27 @@ printLogo();
 
 printFooter();
 
+function setEpisodeIndexStyle($item)
+{
+    global $indexStyle, $displayepisode;
+    global $page, $startIndex;
+
+    $displayepisode = true;
+
+    if ($item->MediaStreams[0]->AspectRatio == "4:3") {
+        //4:3
+        $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup4x3AspectRatio);
+        $indexStyle->offsetY = 403;
+    } else {
+        //16x9
+        $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
+        $indexStyle->offsetY = 410;
+    }
+    $indexStyle->ImageType = "Primary";
+
+    $startIndex = ($page - 1) * $indexStyle->Limit;
+}
+
 function setupChildData($item)
 {
     global $indexStyle, $itemsToDisplay;
@@ -40,7 +61,7 @@ function setupChildData($item)
     //9x1
     $indexStyle->Limit = 9;
     $indexStyle->offsetY = 500;
-    
+
     $available_subitems = array();
 
     if ($item->Type == "Episode") {
@@ -66,6 +87,7 @@ function setupChildData($item)
 
     if ($subitems == "more") {
         if ($item->Type == "Episode") {
+            setEpisodeIndexStyle($item);
             //get episodes from this season
             $children = getItems($item->SeasonId, $startIndex, $indexStyle->Limit);
         } else {
@@ -90,13 +112,17 @@ function setupChildData($item)
             //filter items to ones where StudioID is included
             $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
         } else {
+            //if season, then display episode style
+            if ($item->Type == "Season") {
+                setEpisodeIndexStyle($item);
+            }
             //just get child items
             $children = getItems($item->Id, $startIndex, $indexStyle->Limit);
         }
         $itemsToDisplay = $children->Items;
         $totalItems = $children->TotalRecordCount;
     }
-    
+
     if ($itemsToDisplay) {
         setNumPagesAndIndexCount($totalItems);
     }
