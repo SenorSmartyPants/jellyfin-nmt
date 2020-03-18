@@ -31,23 +31,30 @@ $user_id = "USERID";
 - Browse to home.php to start. Use that page as a starting point on your NMT.
 
 ## Screenshots
-
-![Default YAMJ style TV Season Page](../assets/Season_YAMJ.png)
 YAMJ TV Season. Push RED button on remote to go to Item Details Season
+![Default YAMJ style TV Season Page](../assets/Season_YAMJ.png)
+
+### ItemDetails for TV Season
 ![ItemDetails style TV Season Page](../assets/Season.png)
-ItemDetails for TV Season
+
+### TV Series with seasons. Press RED to cycle thru different subitems
 ![ItemDetails style TV Series Page](../assets/Series.png)
-TV Series with seasons. Press RED to cycle thru different subitems
+
+### TV Series with people.
 ![ItemDetails style TV Series Page - people](../assets/Series_people.png)
-TV Series with people.
+
+### TV Series with more like this.
 ![ItemDetails style TV Series Page - more like this](../assets/Series_more.png)
-TV Series with more like this.
+
+### TV Episode details.
 ![ItemDetails style TV Episode Page](../assets/Episode.png)
-TV Episode details.
+
+### Movie.
 ![ItemDetails style Movie Page](../assets/Movie.png)
-Movie.
+
+### Actor.
 ![ItemDetails style Actor Page](../assets/Actor.png)
-Actor.
+
 
 ## CSS Stylesheet Notes
 - [Limited CSS support](http://files.syabas.com/networkedmediatank/www.networkedmediatank.com/download/docs/NMT_stylesheet_20080118.htm)
