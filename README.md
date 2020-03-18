@@ -2,13 +2,11 @@
 
 ![Next Up Screen shot](../assets/NextUp.png)
 
-This is a work in progress.
+## Running YAMJ is no longer necessary!
 
 Jellyfin-NMT uses the Jellyfin API to generate HTML compatible with the Popcorn hour Network Media Tank (NMT) player. The HTML generated is based on [YAMJ 2.0](https://github.com/YAMJ/yamj-v2) and its' skins, specifically [SabishGT](http://www.gt-projects.net/news.php).
 
-Currently only a few index pages have been implemented, so you still need to generate your YAMJ jukebox like you have been doing for years. My eventual goal is to completely replace the YAMJ generated pages with JS API based ones.
-
-Videos are not played through Jellyfin and so are not marked as watched. I use a modified YAMJ skin and a trakt proxy to mark videos as watched. JF then syncs with trakt.
+Videos are not played through Jellyfin and so are not marked as watched. I use a trakt proxy to mark videos as watched. JF then syncs with trakt. This is disabled by default, but can be changed with the CHECKIN constant.
 
 ## Setup
 
@@ -32,10 +30,28 @@ $user_id = "USERID";
 - Update secrets.php with APIKEY and USERID.
 - Browse to home.php to start. Use that page as a starting point on your NMT.
 
+## Screenshots
 
+![Default YAMJ style TV Season Page](../assets/Season_YAMJ.png)
+YAMJ TV Season. Push RED button on remote to go to Item Details Season
+![ItemDetails style TV Season Page](../assets/Season.png)
+ItemDetails for TV Season
+![ItemDetails style TV Series Page](../assets/Series.png)
+TV Series with seasons. Press RED to cycle thru different subitems
+![ItemDetails style TV Series Page - people](../assets/Series_people.png)
+TV Series with people.
+![ItemDetails style TV Series Page - more like this](../assets/Series_more.png)
+TV Series with more like this.
+![ItemDetails style TV Episode Page](../assets/Episode.png)
+TV Episode details.
+![ItemDetails style Movie Page](../assets/Movie.png)
+Movie.
+![ItemDetails style Actor Page](../assets/Actor.png)
+Actor.
 
 ## CSS Stylesheet Notes
 - [Limited CSS support](http://files.syabas.com/networkedmediatank/www.networkedmediatank.com/download/docs/NMT_stylesheet_20080118.htm)
+- [NMT development WIKI](http://www.networkedmediatank.com/wiki/index.php/Main_Page)
 - Applying multiple classes to style doesn't work on NMT
     ```css
     .abc, .xyz { margin-left: 20px; }
