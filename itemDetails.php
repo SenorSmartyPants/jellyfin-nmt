@@ -330,8 +330,21 @@ function render($item)
         }
 
         if ($item->MediaType) { //only display play button for single items
+            
+            #region videoPlayLink setup
+            $attrs = array("tvid"=>"play");
+            $linkName = "play";
+            $linkHTML = "Play";
+
+            if (CHECKIN) {
+                $callbackJS = "checkin();";
+                $callbackName = "playcallback";
+                $callbackAdditionalAttributes = null;
+            }
+            #endregion
+
 ?>  
-    <table class="nobuffer button" ><tr><td><a name="play" tvid="play" <?= videoAttributes($item) ?>>Play</a></td></tr></table>&nbsp;<br>
+    <table class="nobuffer button" ><tr><td><?= videoPlayLink($item, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
 <?
         }
 ?>    
