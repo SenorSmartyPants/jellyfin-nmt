@@ -7,6 +7,10 @@ td {
     font-size: 18pt;
 }
 
+td#title {
+    font-size: 18pt;
+}
+
 th {
     font-size: 22pt;
     text-align: left;
@@ -47,10 +51,25 @@ img {
     position: absolute;
 }
 
+div.border {
+    border-style: solid;
+    border-width: 1px;
+}
+
+table.nobuffer {
+    padding: 0px;
+    border-spacing: 0px;
+    border-width: 0px;
+}
+
+table.button {
+    padding: 12px;
+}
+
 @media screen {
     #popupWrapper {
         position: absolute;
-        top: 30px;
+        top: 36px;
     }
     /* 1096x648 usable area on NMT by default */
     body {
@@ -64,5 +83,10 @@ img {
     /* override from <theme>.css. Messed with debug background placement */
     html {
         background-color: transparent;
+    }
+
+    /* NMT does not have margins around headers */
+    h1,h2,h3,h4,h5,h6 {
+        margin: 0;
     }
 }

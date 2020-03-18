@@ -72,11 +72,20 @@ function getSubtitle($item) {
             }
             break;
         case "Series":
-            $subtitle = $item->ProductionYear . ' - ';
-            if ($item->EndDate) {
-                $subtitle .= gmdate("Y",strtotime($item->EndDate));
-            } else {
-                $subtitle .= 'Present';
+            $subtitle = ProductionRangeString($item);
+            break;
+        //PersonTypes
+        case "Actor":
+        case "Director":
+        case "Writer":
+        case "Producer":
+        case "GuestStar":
+        case "Composer":
+        case "Conductor":
+        case "Lyricist":
+            $subtitle = ($item->Role ? "as " . $item->Role : $item->Type);
+            if ($subtitle == "GuestStar") {
+                $subtitle = "Guest star";
             }
             break;
         default:
@@ -87,6 +96,7 @@ function getSubtitle($item) {
 }
 
 function setDetailURL($item, $menuItem) {
+    global $forceItemDetails;
     
     if ($item->IsFolder) {
         switch ($item->Type) {
@@ -107,12 +117,15 @@ function setDetailURL($item, $menuItem) {
                     ($menuItem->BackdropID ? "&backdropId=" . $menuItem->BackdropID : null);
                 break;
         }
+        if ($forceItemDetails) {
+            //default to itemDetails page
+            $detailURL = itemDetailsLink($item->Id);
+        }
     } else {
         switch ($item->MediaType) {
             case "Video":
                 switch ($item->Type) {
                     case "Movie":
-                        $detailURL = YAMJpath($item);
                         break; 
                     case "Episode":
                         //check for season info, very rarely an episode has no season IDs provided
@@ -125,8 +138,6 @@ function setDetailURL($item, $menuItem) {
                         }
                         break;
                     default:
-                        $detailURL = translatePathToNMT($item->Path);
-                        $menuItem->OnDemandTag = "VOD";
                         break; 
                 }
                 break;
@@ -141,22 +152,34 @@ function setDetailURL($item, $menuItem) {
             default:
                 break;
         }
+        if (!$detailURL || $forceItemDetails) {
+            //default to itemDetails page
+            $detailURL = itemDetailsLink($item->Id);
+        }
     }
     $menuItem->DetailURL = $detailURL;
 }
 
 function getPosterID($item, $useSeasonImage = true) {
     global $indexStyle;
+    global $displayepisode;
     switch ($item->Type) {
         case "Season":
             $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
         case "Episode":
             //API
-            $posterID = ($useSeasonImage && seasonPosterExists($item->SeasonId)) ? $item->SeasonId : $item->SeriesId;
-            break;
+            if (!$displayepisode) {
+                $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 
+                    ($item->SeriesPrimaryImageTag ? $item->SeriesId : null); 
+                break;
+            }
         default:
-            $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
+            if ($item->ImageTags) {
+                $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : null;
+            } else {
+                $posterID = $item->PrimaryImageTag ? $item->Id : null;
+            }
             break; 
     }
     return $posterID;
@@ -164,12 +187,15 @@ function getPosterID($item, $useSeasonImage = true) {
 
 function getUnplayedCount($item) {
     global $libraryBrowse;
+    global $displayepisode;
 
     switch ($item->Type) {
         case "Episode":
-            //API
-            $series = getItem($item->SeriesId);
-            $unplayedCount = $series->UserData->UnplayedItemCount;
+            if (!$displayepisode) {
+                //API
+                $series = getItem($item->SeriesId);
+                $unplayedCount = $series->UserData->UnplayedItemCount;
+            }
             break;
         default:
             $unplayedCount = $item->UserData->UnplayedItemCount;

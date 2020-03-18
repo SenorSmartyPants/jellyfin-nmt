@@ -21,7 +21,6 @@ const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
 const PCMENU = true;
-const CHECKIN = true;
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
@@ -68,17 +67,7 @@ foreach($episodes as $key => $episode) {
 
 $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
-$firstSource = $selectedEpisode->MediaSources[0];
-if ($firstSource) {
-    foreach ($firstSource->MediaStreams as $mediastream) {
-        if ($mediastream->Type == 'Video') {
-            $videoStream = $mediastream;
-        }
-    }
-    $audioStream = $firstSource->MediaStreams[$firstSource->DefaultAudioStreamIndex];
-    //can have subs without a default
-    $subtitleStream = $firstSource->MediaStreams[$firstSource->DefaultSubtitleStreamIndex];
-}
+$streams = getStreams($selectedEpisode);
 
 printSeasonHeadEtc($selectedEpisodeArrayIndex);
 printTopBar();
@@ -128,24 +117,6 @@ function truncatePlot($Plot, $JSescape = false)
     return $Plot;
 }
 
-function formatCast($cast)
-{
-    $links = array();
-    foreach ($cast as $person) {
-        $links[] = '<a href="itemDetails.php?id=' . $person->Id . '">' . $person->Name . '</a>';
-    }
-    return implode(' / ', $links);
-}
-
-function escapeURL($url)
-{
-    return implode("/", array_map("rawurlencode", explode("/", $url)));
-}
-
-function videoAttributes($path){
-    return 'vod="" href="' . translatePathToNMT(implode("/", array_map("rawurlencode", explode("/", $path)))) . '"';
-}
-
 function renderEpisodeJS($episode)
 {
     $Plot = truncatePlot($episode->Overview, true);
@@ -155,7 +126,7 @@ function renderEpisodeJS($episode)
         asEpisodeTitleCSS.push("<?= titleCSS(strlen($episode->Name)) ?>");
         asEpisodeTitleShort.push("<?= substr($episode->Name, 0, TITLETRUNCATE) ?>");
         asEpisodePlot.push("<?= $Plot ?>");
-        asEpisodeUrl.push("<?= translatePathToNMT(escapeURL($episode->Path)) ?>");
+        asEpisodeUrl.push("<?= translatePathToNMT($episode->Path) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
@@ -178,28 +149,32 @@ function renderEpisodeHTML($episode, $indexInList)
         }
         $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
     }
-    
+
+    #region videoPlayLink setup
+    $attrs = array(
+        "class" => "TvLink secondaryText",
+        "id" => "a_e_" . $indexInList,
+        "onkeydownset" => "todown",
+        "onkeyrightset" => "toright",
+        "onkeyupset" => "toup",
+        "onkeyleftset" => "toleft",
+        "onmouseover" => "showEpisode(" . $indexInList . ")"
+    );
+    $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '</span>';
+    $linkName = "episode" . $indexInList;
+
+    if (CHECKIN) {
+        $callbackJS = "checkin();";
+        $callbackName = "playepisode" . $indexInList;
+        $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
+    }
+    #endregion
+
 ?>
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <a class="TvLink secondaryText" id="a_e_<?= $indexInList ?>" name="episode<?= $indexInList ?>" 
-                    onkeydownset="todown" onkeyrightset="toright" onkeyupset="toup" onkeyleftset="toleft" 
-                    <? if (CHECKIN) { ?>
-onclick="checkin();" href="#playepisode<?= $indexInList ?>"
-<?
-} else {
-    echo videoAttributes($episode->Path) ."\n";
-} 
-?>
-                    onmouseover="showEpisode(<?= $indexInList ?>)" >
-                    <span class="tabTvShow" id="s_e_<?= $indexInList ?>"><?= $titleLine ?></span>
-                </a>
-<? if (CHECKIN) { ?>
-                <a onfocusload="" id="a2_e_<?= $indexInList ?>" name="playepisode<?= $indexInList ?>" onfocusset="episode<?= $indexInList ?>"
-                    <?= videoAttributes($episode->Path); ?> >
-                </a>
-<? } ?>
+                <?= videoPlayLink($episode, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?> 
             </td>
         </tr>
     </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
@@ -261,7 +236,7 @@ if ($episodeCount > EPISODESPERPAGE) {
     <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript">
         function checkin() {
-            var url = "http://rockpi:8123/trakt-proxy/checkin.php?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
+            var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
                 asSeasonNo[iEpisodeId] + "&episode=" + asEpisodeNo[iEpisodeId] + "&episode_id=" + asEpisodeTVDBID[iEpisodeId];
              
             document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
@@ -343,7 +318,7 @@ function TopBarSpacerWidth($seasonIndexNumber)
 
 function printTopBar()
 {
-    global $series, $season, $videoStream, $audioStream, $firstSource;
+    global $series, $season, $streams;
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
@@ -360,9 +335,9 @@ function printTopBar()
             <td width="20"></td>
             <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
             <td width="50"></td>
-            <?= $ShowAudioCodec ? '<td>' . audioCodec($audioStream) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowContainer ? '<td>' . container($firstSource->Container) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowVideoOutput ? '<td>' . videoOutput($videoStream) . "</td>\n"  : null ?>
+            <?= $ShowAudioCodec ? '<td>' . audioCodec($streams->Audio) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowContainer ? '<td>' . container($streams->Container) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowVideoOutput ? '<td>' . videoOutput($streams->Video) . "</td>\n"  : null ?>
             <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
             <td align="right" class="rating"><? 
                 if ($series->CommunityRating) 
@@ -432,7 +407,7 @@ Play all
         <!-- episode paging indicator -->
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
-                    <a href="" vod="" id="a_e_page" name="epispageCount" onfocus="" onmouseover="toggleRight()" class="TvLink secondaryText" >
+                    <a href="" id="a_e_page" name="epispageCount" onmouseover="toggleRight()" class="TvLink secondaryText" >
                     <span class="tabTvShow" id="pageCount"><? if ($epPages > 1) { echo $selectedPage . ' / ' . $epPages . ' (' . $episodeCount . ')'; } ?></span>
                     </a>
                 </td></tr>
@@ -489,11 +464,11 @@ function printPCMenu()
 
 function printSeasonFooter()
 {
-    global $series, $selectedEpisode;
+    global $series, $season, $selectedEpisode;
 ?>
         </table>  	
     <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
-    <a id="openEpisode" TVID="Play" href="<?= translatePathToNMT(escapeURL($selectedEpisode->Path)) ?>" vod=""></a>
+    <a id="openEpisode" TVID="Play" <?= videoAttributes($selectedEpisode) ?> ></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
@@ -509,6 +484,7 @@ function printSeasonFooter()
     <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 
+    <a TVID="RED" href="<?= itemDetailsLink($season->Id) ?>"></a>
     </body>
 
     </html>

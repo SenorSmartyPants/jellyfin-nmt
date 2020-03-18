@@ -38,7 +38,7 @@ function setNumPagesAndIndexCount($totalRecordCount)
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
 }
 
-function printHeadEtc($onloadset = null)
+function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
 {
     global $theme_css, $indexStyle;
     global $backdropId;
@@ -50,18 +50,25 @@ function printHeadEtc($onloadset = null)
     <head>
         <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Jellyfin NMT</title>
+        <title><?= $title ? $title . ' - ' : null ?>Jellyfin NMT</title>
 
 <?
         if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
+            //don't add any styles before the following. JS show/hide code depends on this these being first
 ?>
-        <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
         <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
 <?
         }
 ?>
         <link rel="StyleSheet" type="text/css" href="css/base.css" />
         <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
+        <?
+        if ($additionalCSS) {
+?>
+        <link rel="StyleSheet" type="text/css" href="css/<?= $additionalCSS ?>"/>
+<?
+        }
+?>      
 
         <script>
             var title = 1;
@@ -79,7 +86,7 @@ function printHeadEtc($onloadset = null)
                     subtitle.firstChild.nodeValue = subX.nodeValue;
                 }
 <?
-                if (isset($indexStyle->popupHeight)) {
+                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
@@ -92,7 +99,7 @@ function printHeadEtc($onloadset = null)
                 title.firstChild.nodeValue = "\xa0";
                 subtitle.firstChild.nodeValue = "\xa0";
 <?
-                if (isset($indexStyle->popupHeight)) {
+                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
 ?>
                 document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
                 document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
@@ -125,7 +132,7 @@ function printFooter()
         foreach ($menuItems as $key => $menuItem) {
             printTitleAndSubtitle($menuItem, 0, $key);
         }
-        if (isset($indexStyle->popupHeight)) {
+        if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($menuItems as $key => $menuItem) {
                 printPopup($menuItem, 0, $key);

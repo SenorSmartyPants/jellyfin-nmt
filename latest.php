@@ -10,8 +10,6 @@ $items = getLatest($Limit);
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);
 setNumPagesAndIndexCount(count($items));
 
-printHeadEtc();
-
 switch ($_GET["type"]) {
     case 'episode':
         $Title = "Latest TV";
@@ -25,6 +23,8 @@ switch ($_GET["type"]) {
         $Title = "Latest";
         break;
 }
+
+printHeadEtc(null, null, $Title);
 
 printNavbarAndPosters($Title, $items);
 

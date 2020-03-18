@@ -16,14 +16,14 @@ function apiCall($path, $debug = false)
     return json_decode(file_get_contents($url));
 }
 
-function seasonPosterExists($seasonId)
+function itemImageExists($itemId, $ImageType = 'Primary')
 {
-    if ($seasonId != '') {
-        $path =  "/Items/" . $seasonId . "/Images/?";
+    if ($itemId != '') {
+        $path =  "/Items/" . $itemId . "/Images/?";
         $images = apiCall($path);
 
-        $primarys = array_filter($images, function($image) { return $image->ImageType == 'Primary'; });
-        return (count($primarys) > 0);
+        $foundImages = array_filter($images, function($image) use ($ImageType) { return $image->ImageType == $ImageType; });
+        return (count($foundImages) > 0);
     } else {
         return false;
     }
@@ -73,7 +73,8 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
     $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
+    $personIDs = null, $studioIDs = null)
 {
     global $user_id;
 
@@ -92,6 +93,8 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
     $path .= $ratings ? "&OfficialRatings=" . $ratings : "";
     $path .= $tags ? "&Tags=" . urlencode($tags) : "";
     $path .= $years ? "&Years=" . $years : "";
+    $path .= $personIDs ? "&PersonIDs=" . $personIDs : "";
+    $path .= $studioIDs ? "&StudioIDs=" . $studioIDs : "";
     $path .= !is_null($groupItems) ? "&GroupItems=" . ( $groupItems ? "true" : "false" ) : "";
     $path .= !is_null($isPlayed) ? "&IsPlayed=" . ( $isPlayed ? "true" : "false" ) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
@@ -128,15 +131,24 @@ function getNextUp($Limit, $startIndex = 0)
 }
 
 function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null)
+    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
+    $personIDs = null, $studioIDs = null)
 {
     return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, "SortName", $type, 
         null, null, $recursive, $StartIndex, null, 
-        $genres, $nameStartsWith, $ratings, $tags, $years);
+        $genres, $nameStartsWith, $ratings, $tags, $years, $personIDs, $studioIDs);
 }
 
 function getItem($Id) {
     return getUsersItems($Id);
+}
+
+function getSimilarItems($Id, $limit = null)
+{
+    global $user_id;
+    $path =  "/Items/" . $Id . "/Similar?UserID=" . $user_id;
+    $path .= $limit ? "&Limit=" . $limit : "";
+    return apiCall($path);
 }
 
 function getFilters($parentID = null, $type = null, $Recursive = null) {
@@ -152,7 +164,8 @@ function getFilters($parentID = null, $type = null, $Recursive = null) {
 }
 
 function getImageURL($id, $height = null, $width = null, $imageType = null, $unplayedCount = null, 
-    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null)
+    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null,
+    $maxHeight = null, $maxWidth = null)
 {
     global $api_url; 
 
@@ -160,7 +173,9 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $imageType = $imageType ?? "Primary";
 
     $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
-        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
+        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 
+        ($maxHeight ? "&maxHeight=" . $maxHeight : null) . ($maxWidth ? "&maxWidth=" . $maxWidth : null) . 
+        ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
         ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
 
     return $URL;
