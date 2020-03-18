@@ -28,7 +28,7 @@ function getStreams($item)
     if ($firstSource) {
         $retval->Container = $firstSource->Container;
         foreach ($firstSource->MediaStreams as $mediastream) {
-            if ($mediastream->Type == 'Video' && $mediastream->IsDefault) {
+            if ($mediastream->Type == 'Video') {
                 $retval->Video = $mediastream;
             }
         }
