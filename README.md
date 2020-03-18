@@ -31,7 +31,8 @@ $user_id = "USERID";
 - Browse to home.php to start. Use that page as a starting point on your NMT.
 
 ## Screenshots
-YAMJ TV Season. Push RED button on remote to go to Item Details Season
+
+### YAMJ TV Season. Push RED button on remote to go to Item Details Season
 ![Default YAMJ style TV Season Page](../assets/Season_YAMJ.png)
 
 ### ItemDetails for TV Season
