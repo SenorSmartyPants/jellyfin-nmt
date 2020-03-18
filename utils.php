@@ -42,6 +42,7 @@ function getStreams($item)
 
 function HTMLattributes($assocArray)
 {
+    $html = null;
     if ($assocArray) {
         foreach ($assocArray as $key => $value) {
             $html .= $key . '="' . $value . '" ';
