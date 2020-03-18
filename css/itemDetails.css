@@ -2,6 +2,10 @@ td {
     font-size: 6pt;
 }
 
+td#page {
+    font-size: 12pt;
+}
+
 a {
     font-size: 12pt;
     text-decoration: none;

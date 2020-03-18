@@ -4,12 +4,16 @@ include_once 'listings.php';
 
 const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
+const MORE_TVID = "RED";
 
 $id = $_GET["id"];
 $item = getItem($id);
 
+$libraryBrowse = true;
 $useSeasonNameForMenuItems = false;
 $forceItemDetails = true;
+
+$QSBase = "?id=" . $id . "&subitems=" . $_GET["subitems"] . "&page=";
 
 setNames($item);
 
@@ -19,7 +23,7 @@ printHeadEtc("play","itemDetails.css", $Title);
 
 render($item);
 
-printTitleTable();
+printTitleTable($page, $numPages);
 
 printLogo();
 
@@ -28,6 +32,8 @@ printFooter();
 function setupChildData($item)
 {
     global $indexStyle, $itemsToDisplay;
+    global $subitems, $available_subitems, $selected_subitems_index;
+    global $page, $startIndex;
 
     //must be set before head so grid.css.php can run right
     $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
@@ -35,28 +41,64 @@ function setupChildData($item)
     $indexStyle->Limit = 9;
     $indexStyle->offsetY = 500;
     
-    //people displayed before children (series actors before seasons)
+    $available_subitems = array();
+
+    if ($item->Type == "Episode") {
+        //display more episodes, before cast
+        $available_subitems[] = "more";
+    }
+    if ($item->ChildCount) {
+        $available_subitems[] = "children";
+    }
     if (count($item->People) > 0) {
+        $available_subitems[] = "people";
+    }
+    //only display "more like this" for movies, series, episodes(more from this season), not seasons
+    //episodes list more, first, then crew...
+    if ($item->Type != "Season" && $item->Type != "Episode") {
+        $available_subitems[] = "more";
+    }
+
+    $selected_subitems_index = array_search($_GET["subitems"], $available_subitems) ?: 0;
+    $subitems = $available_subitems[$selected_subitems_index];
+
+    $startIndex = ($page - 1) * $indexStyle->Limit;
+
+    if ($subitems == "more") {
+        if ($item->Type == "Episode") {
+            //get episodes from this season
+            $children = getItems($item->SeasonId, $startIndex, $indexStyle->Limit);
+        } else {
+            $children = getSimilarItems($item->Id, $indexStyle->Limit);
+        }
+        $itemsToDisplay = $children->Items;
+        $totalItems = $children->TotalRecordCount;
+    } 
+    if ($subitems == "people") {
         //get first X cast and crew
         $itemsToDisplay = $item->People;
-        $itemsToDisplay = array_slice($itemsToDisplay, 0, $indexStyle->Limit);
-    } else if ($item->ChildCount) {
+        $totalItems = count($item->People);
+        //TODO: exclude writers and directors since they are already displayed on the page
+        $itemsToDisplay = array_slice($itemsToDisplay, $startIndex, $indexStyle->Limit);
+    }
+    if ($subitems == "children") {
         //get first X children
         if ($item->Type == "Person") {
             //filter items to ones where PersonID is included
-            $children = getItems(null, 0, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
+            $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
         } else if ($item->Type == "Studio") {
             //filter items to ones where StudioID is included
-            $children = getItems(null, 0, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
+            $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
         } else {
             //just get child items
-            $children = getItems($item->Id, 0, $indexStyle->Limit);
+            $children = getItems($item->Id, $startIndex, $indexStyle->Limit);
         }
         $itemsToDisplay = $children->Items;
+        $totalItems = $children->TotalRecordCount;
     }
     
     if ($itemsToDisplay) {
-        setNumPagesAndIndexCount(count($itemsToDisplay));
+        setNumPagesAndIndexCount($totalItems);
     }
     
 }
@@ -317,7 +359,15 @@ if ($itemsToDisplay) {
         </td>
     </tr>
 </table>
-
+<?
+global $available_subitems, $selected_subitems_index;
+if (count($available_subitems) > 1)
+    {
+?>
+    <a TVID="<?= MORE_TVID ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>">More</a>
+<?
+    }
+?>
    <!--
 
     <br/>
