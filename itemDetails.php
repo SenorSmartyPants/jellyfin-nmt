@@ -390,7 +390,7 @@ global $available_subitems, $selected_subitems_index;
 if (count($available_subitems) > 1)
     {
 ?>
-    <a TVID="<?= MORE_TVID ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>">More</a>
+    <a TVID="<?= MORE_TVID ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>"></a>
 <?
     }
 ?>
