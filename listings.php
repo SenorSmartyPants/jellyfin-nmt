@@ -233,7 +233,14 @@ function printPosterTD($menuItem, $gap, $position, $row)
     //end of row
     if (isEndOfRow($placement - 1)) {
         if ($placement != $indexStyle->Limit) {
-            echo "onkeyrightset=\"" . ($placement + 1) . "\"";
+            if (isLastRow($row)) {
+                if ($numPages == 1) {
+                    //go to first item
+                    echo 'onkeyrightset="1"';
+                }
+            } else {
+                echo "onkeyrightset=\"" . ($placement + 1) . "\"";
+            }
         } else {
             echo "onkeyrightset=\"pgdnload\"";
         }
