@@ -196,11 +196,11 @@ function printPopup($menuItem, $gap, $position)
 
     if ($menuItem->PosterURL) {
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" />
+        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLink(' . $placement . ');"' ?> />
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
-        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" />
+        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLink(<?= $placement ?>);" />
 <?php            
         }
     }
@@ -218,6 +218,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
         <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        id="<?= $placement ?>" 
 <?php
 
     //start of row
