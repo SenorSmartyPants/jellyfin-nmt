@@ -70,52 +70,12 @@ function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
         }
 ?>      
 
-        <script>
-            var title = 1;
-            var subtitle = 1;
-
-            function bind() {
-                if ( title == 1 ) title = document.getElementById('title');
-                if (subtitle == 1) subtitle = document.getElementById('subtitle');
-            }
-            function show(x) {
-                bind();
-                title.firstChild.nodeValue = document.getElementById('title'+x).firstChild.nodeValue;
-                var subX = document.getElementById('subtitle'+x).firstChild;
-                if (subX) {
-                    subtitle.firstChild.nodeValue = subX.nodeValue;
-                }
-<?
-                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
-?>
-                document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
-                document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
-<?
-                }
-?>            
-            }
-            function hide(x) {
-                bind();
-                title.firstChild.nodeValue = "\xa0";
-                subtitle.firstChild.nodeValue = "\xa0";
-<?
-                if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
-?>
-                document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
-                document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
-<?
-                }
-?>          
-            }
-
-            function initpage() {
-                return false;
-            }
-        </script>
+        <script type="text/javascript" src="js/listings.js"></script>
 
     </head>
 
-    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" onload="initpage()"
+    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" 
+    onload="initpage(<?= (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) ? 'true' : 'false' ?>)"
         <? if ($backdropId) { ?>background="<?= getImageURL($backdropId,720,1280,"Backdrop") ?>" <? } ?>>
 
     <?php
@@ -257,7 +217,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     if (!$menuItem->PosterURL) { 
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onmouseout="hide(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
 <?php
 
     //start of row
