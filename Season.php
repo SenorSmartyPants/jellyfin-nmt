@@ -218,7 +218,7 @@ foreach ($episodes as $episode) {
 
 ?>
     <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/season.js"></script>
+    <script type="text/javascript" src="js/season/season.js"></script>
 <?
 if ($episodeCount > EPISODESPERPAGE) {
 ?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
