@@ -69,7 +69,7 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-printSeasonHeadEtc($selectedEpisodeArrayIndex);
+printSeasonHeadEtc(($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -137,7 +137,7 @@ function renderEpisodeJS($episode)
 <?
 }
 
-function renderEpisodeHTML($episode, $indexInList)
+function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 {
     global $season;
     if ($episode) {
@@ -158,9 +158,9 @@ function renderEpisodeHTML($episode, $indexInList)
         "onkeyrightset" => "toright",
         "onkeyupset" => "toup",
         "onkeyleftset" => "toleft",
-        "onmouseover" => "showEpisode(" . $indexInList . ")"
+        "onmouseover" => "showEpisode(" . $episodeIndex . ")"
     );
-    $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '</span>';
+    $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = "episode" . $indexInList;
 
     if (CHECKIN) {
@@ -423,7 +423,7 @@ Play all
     $episodeOffset = ($selectedPage - 1) * EPISODESPERPAGE;
     for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) { 
         $episodeIndex = $episodeOffset + $i;
-        renderEpisodeHTML($episodes[$episodeIndex],$i+1);
+        renderEpisodeHTML($episodes[$episodeIndex], $i + 1, $episodeIndex + 1);
     }
 ?>			
 </td>
