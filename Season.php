@@ -147,7 +147,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
         } else {
             $titleLine = sprintf('%02d', $episode->IndexNumber);
         }
-        $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . substr($episode->Name, 0, TITLETRUNCATE);
+        $titleLine .= '. ' . ($episode->UserData->Played ? '* ' : '') . htmlentities(substr($episode->Name, 0, TITLETRUNCATE));
     }
 
     #region videoPlayLink setup
