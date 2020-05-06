@@ -192,6 +192,6 @@ function getLogoURL()
 {
     global $api_url; 
 
-    return $api_url . "/web/components/themes/logowhite.png";
+    return $api_url . "/web/assets/img/banner-light.png";
 }
 ?>
