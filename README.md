@@ -28,7 +28,8 @@ $user_id = "USERID";
 ```
 
 - Update secrets.php with APIKEY and USERID.
-- Browse to home.php to start. Use that page as a starting point on your NMT.
+- put all files in a directory served by a webserver with php
+- Browse to index.php to start. Use that page as a starting point on your NMT.
 
 ## Screenshots
 
