@@ -21,6 +21,7 @@ const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 40;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
+const EPISODE = 'episode';
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
@@ -29,7 +30,7 @@ $star_rating = true;
 $tvNumberRating = false;
 
 $id = $_GET["id"];
-$selectedEpisodeIndexNumber = $_GET["episode"];
+$selectedEpisodeIndexNumber = $_GET[EPISODE];
 
 //Banners don't inherit from parents
 //have to load season to find out if it has a banner
@@ -69,7 +70,7 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-printBaseHeadEtc('episode' . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
+printBaseHeadEtc(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -161,7 +162,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
         "onmouseover" => "showEpisode(" . $episodeIndex . ")"
     );
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
-    $linkName = "episode" . $indexInList;
+    $linkName = EPISODE . $indexInList;
 
     if (CHECKIN) {
         $callbackJS = "checkin();";
