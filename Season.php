@@ -18,7 +18,7 @@ include_once 'basepage.php';
 include_once 'templates.php';
 
 const TITLETRUNCATELONG = 56;
-const TITLETRUNCATE = 34;
+const TITLETRUNCATE = 40;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
 
