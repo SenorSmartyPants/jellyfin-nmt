@@ -44,22 +44,6 @@ class IndexStyle {
         $styleEnum = $styleEnum ?? $default_listing_style;
     
         switch ($styleEnum) {
-            case IndexStyleEnum::PosterPopup6x2:
-            case IndexStyleEnum::Poster6x2:
-            case IndexStyleEnum::TVBannerPopup6x2:
-                $this->Limit = 12;
-                break;
-        
-            case IndexStyleEnum::PosterPopup9x3:
-            case IndexStyleEnum::Poster9x3:
-            default:
-                $this->Limit = 27;
-                break;
-    
-            case IndexStyleEnum::Poster12x4:
-                $this->Limit = 48;
-                break;
-    
             case IndexStyleEnum::TVBannerPopup4x2:
                 $this->Limit = 8;      
                 break;
@@ -74,7 +58,24 @@ class IndexStyle {
 
             case IndexStyleEnum::ThumbPopup4x3AspectRatio:
                 $this->Limit = 5;
-                break;                           
+                break;
+
+            case IndexStyleEnum::PosterPopup6x2:
+            case IndexStyleEnum::Poster6x2:
+            case IndexStyleEnum::TVBannerPopup6x2:
+                $this->Limit = 12;
+                break;
+            
+            case IndexStyleEnum::Poster12x4:
+                $this->Limit = 48;
+                break;
+
+            case IndexStyleEnum::PosterPopup9x3:
+            case IndexStyleEnum::Poster9x3:
+            default:
+                $this->Limit = 27;
+                break;
+
         }
     }
 
@@ -97,11 +98,24 @@ class IndexStyle {
     {    
         $retval = null;
         switch ($this->styleEnum) {
+            case IndexStyleEnum::TVBannerPopup4x2:
+                $retval = "css/8TVBanners.css";        
+                break;
+    
+            case IndexStyleEnum::TVBannerPopup6x2:
+                $retval = "css/12TVBanners.css";
+                break;
+    
+            case IndexStyleEnum::TVBannerPopup7x2:
+                $retval = "css/14TVBanners.css";
+                break;
+               
             case IndexStyleEnum::PosterPopup6x2:
             case IndexStyleEnum::PosterPopup9x3:
             case IndexStyleEnum::PosterPopup:
             case IndexStyleEnum::ThumbPopup:
             case IndexStyleEnum::ThumbPopup4x3AspectRatio:
+            default:
                 $retval = "css/grid.css.php?number=" . $this->indexCount . 
                     "&style=" . $this->styleEnum . 
                     "&numPerLine=" . $this->nbThumbnailsPerLine . 
@@ -113,19 +127,7 @@ class IndexStyle {
                     "&OffsetY=" . $this->offsetY . 
                     "&align=" . $this->moviesTableAlign . 
                     "&vAlign=" . $this->moviesTableVAlign;
-                break;
-    
-            case IndexStyleEnum::TVBannerPopup4x2:
-                $retval = "css/8TVBanners.css";        
-                break;
-    
-            case IndexStyleEnum::TVBannerPopup6x2:
-                $retval = "css/12TVBanners.css";
-                break;
-    
-            case IndexStyleEnum::TVBannerPopup7x2:
-                $retval = "css/14TVBanners.css";
-                break;             
+                break;           
         }
         return $retval;
     }
@@ -156,6 +158,21 @@ class IndexStyle {
         $this->styleEnum = $styleEnum ?? $default_listing_style;
     
         switch ($this->styleEnum) {
+            default:
+            case IndexStyleEnum::PosterPopup9x3:
+                $this->popupWidth = 160;
+                $this->popupHeight = 237;
+    
+                $this->hoverFrame = "images/wall/hover-frame.png";
+            case IndexStyleEnum::Poster9x3:
+                $this->thumbnailsWidth = 117;
+                $this->thumbnailsHeight = 174;
+    
+                $this->nbThumbnailsPerLine = 9;
+                $this->ImageType = "Primary";
+                $this->moviesTableCellspacing = 4;
+                break;
+                        
             case IndexStyleEnum::PosterPopup6x2:
                 $this->popupWidth = 218;
                 $this->popupHeight = 323;
@@ -170,21 +187,6 @@ class IndexStyle {
                 $this->ImageType = "Primary";
                 $this->moviesTableAlign = "center";
                 $this->moviesTableVAlign = "middle";
-                $this->moviesTableCellspacing = 4;
-                break;
-        
-            case IndexStyleEnum::PosterPopup9x3:
-            default:
-                $this->popupWidth = 160;
-                $this->popupHeight = 237;
-    
-                $this->hoverFrame = "images/wall/hover-frame.png";
-            case IndexStyleEnum::Poster9x3:
-                $this->thumbnailsWidth = 117;
-                $this->thumbnailsHeight = 174;
-    
-                $this->nbThumbnailsPerLine = 9;
-                $this->ImageType = "Primary";
                 $this->moviesTableCellspacing = 4;
                 break;
     
