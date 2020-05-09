@@ -3,6 +3,7 @@ include_once 'IndexStyles.php';
 include_once 'config_listings.php';
 include_once 'secrets.php';
 include_once 'menuItems.php';
+include_once 'basepage.php';
 
 $menuItems = array();
 
@@ -23,6 +24,7 @@ $tags = $_GET["Tags"];
 $years = $_GET["Years"];
 
 $backdropId = $_GET["backdropId"];
+$backdrop = getBackdropIDandTag(null, $backdropId);
 
 $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&CollectionType=" . $collectionType . "&Name=" . urlencode($name) . 
     "&Genres=" . urlencode($genres) . "&Title=" . urlencode($nameStartsWith) . 
@@ -38,47 +40,18 @@ function setNumPagesAndIndexCount($totalRecordCount)
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
 }
 
+function printListingsInitJS()
+{
+?>
+        <script type="text/javascript" src="js/listings.js"></script>
+<?
+}
+
 function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
 {
-    global $theme_css, $indexStyle;
-    global $backdropId;
-
-    $onloadset = $onloadset ?? "1";
-    ?>
-    <html>
-
-    <head>
-        <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title><?= $title ? $title . ' - ' : null ?>Jellyfin NMT</title>
-
-<?
-        if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
-            //don't add any styles before the following. JS show/hide code depends on this these being first
-?>
-        <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
-<?
-        }
-?>
-        <link rel="StyleSheet" type="text/css" href="css/base.css" />
-        <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
-        <?
-        if ($additionalCSS) {
-?>
-        <link rel="StyleSheet" type="text/css" href="css/<?= $additionalCSS ?>"/>
-<?
-        }
-?>      
-
-        <script type="text/javascript" src="js/listings.js"></script>
-
-    </head>
-
-    <body bgproperties="fixed" onloadset="<?= $onloadset?>" FOCUSTEXT="#FFFFFF" focuscolor="#00a4dc" 
-    onload="initpage(<?= (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) ? 'true' : 'false' ?>)"
-        <? if ($backdropId) { ?>background="<?= getImageURL($backdropId,720,1280,"Backdrop") ?>" <? } ?>>
-
-    <?php
+    global $indexStyle;
+    $onload = "initpage(" . ((isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) ? 'true' : 'false') . ")";
+    printBaseHeadEtc($onloadset, $additionalCSS, $title, 'printListingsInitJS', $onload);
 }
 
 function printFooter()

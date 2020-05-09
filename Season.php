@@ -14,13 +14,13 @@ TODO:
 require_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
+include_once 'basepage.php';
 include_once 'templates.php';
 
 const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 34;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
-const PCMENU = true;
 
 $ShowAudioCodec = true;
 $ShowContainer = true;
@@ -69,7 +69,7 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-printSeasonHeadEtc(($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
+printBaseHeadEtc('episode' . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -252,49 +252,6 @@ if ($episodeCount > EPISODESPERPAGE) {
 
 }
 
-function printSeasonHeadEtc($onloadset = null)
-{
-    global $backdrop, $season;
-
-    global $theme_css, $indexStyle;
-    $onloadset = $onloadset ?? "1";
-    ?>
-    <html>
-
-    <head>
-        <link rel="shortcut icon" href="<?= getFavIconURL() ?>" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title><?= $season->Name . ' - ' . $season->SeriesName ?> - Jellyfin NMT</title>
-
-<?
-        if (isset($indexStyle) && null !== $indexStyle->cssFile()) {
-?>
-        <!-- don't add any styles before the following. JS show/hide code depends on this these being first -->
-        <link rel="StyleSheet" type="text/css" href="<?= $indexStyle->cssFile() ?>"/>
-<?
-        }
-?>
-        <link rel="StyleSheet" type="text/css" href="css/base.css" />
-        <link rel="StyleSheet" type="text/css" href="css/themes/<?= $theme_css ?>" />
-        <link rel="StyleSheet" type="text/css" href="css/Season.css" />
-<?
-    if (PCMENU) {
-        echo '        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />' . "\n";
-    }
-    printInitJS();
-?>
-    </head>
-
-    <body bgproperties="fixed" onloadset="episode<?= $onloadset ?>" onload="init()" bgcolor="#000000" focustext="#dddddd" FOCUSCOLOR="transparent" 
-    <? if ($backdrop->Tag) 
-    { 
-        ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
-    }
-    ?>>
-    <table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="images/season/background.png">
-<?
-}
-
 function TopBarSpacerWidth($seasonIndexNumber)
 {
     if ($seasonIndexNumber < 10) 
@@ -322,6 +279,7 @@ function printTopBar()
     global $ShowAudioCodec, $ShowContainer, $ShowVideoOutput, $star_rating, $tvNumberRating;
     global $bannerId;
 ?>
+<table height="656" width="1102" border="0" cellspacing="0" cellpadding="0" background="images/season/background.png">
 <tr>
     <td valign="top">
     <table border="0" cellspacing="0" cellpadding="0">

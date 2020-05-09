@@ -19,7 +19,7 @@ setNames($item);
 
 setupChildData($item);
 
-printHeadEtc("play","itemDetails.css", $Title);
+printBaseHeadEtc("play","itemDetails.css", $Title, 'printInitJS');
 
 render($item);
 
@@ -28,6 +28,16 @@ printTitleTable($page, $numPages);
 printLogo();
 
 printFooter();
+
+function printInitJS()
+{
+    global $item;
+
+    printListingsInitJS();
+    if (CHECKIN) {
+        CheckinJSItem($item);
+    }
+}
 
 function setEpisodeIndexStyle($item)
 {
