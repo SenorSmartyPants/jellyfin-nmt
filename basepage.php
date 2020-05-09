@@ -50,7 +50,7 @@ function printBaseHeadEtc($onloadset = null, $additionalCSS = null, $title = nul
         ?> onload="<?= $onload ?>" <?
     }
     ?>
-    <? if ($backdrop->Tag) 
+    <? if ($backdrop->Id) 
     { 
         ?> background="<?= getImageURL($backdrop->Id, 720, 1280, "Backdrop", null, null, $backdrop->Tag) ?>"<?   
     }
