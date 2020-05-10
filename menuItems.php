@@ -22,9 +22,7 @@ function parseSeries($item)
 
         $first_unwatched = $unwatched->Items[0];
         $first_unwatched->UserData->UnplayedItemCount = $item->UserData->UnplayedItemCount;
-        $menuItem = parse($first_unwatched);
-
-        return $menuItem;
+        return parse($first_unwatched);
     }
 }
 
@@ -189,33 +187,25 @@ function getUnplayedCount($item) {
     global $libraryBrowse;
     global $displayepisode;
 
-    switch ($item->Type) {
-        case ItemType::EPISODE:
-            if (!$displayepisode) {
-                //API
-                $series = getItem($item->SeriesId);
-                $unplayedCount = $series->UserData->UnplayedItemCount;
-            }
-            break;
-        default:
-            $unplayedCount = $item->UserData->UnplayedItemCount;
-            break; 
+    if ($item->Type == ItemType::EPISODE) {
+        if (!$displayepisode) {
+            //API
+            $series = getItem($item->SeriesId);
+            $unplayedCount = $series->UserData->UnplayedItemCount;
+        }
+    } else {
+        $unplayedCount = $item->UserData->UnplayedItemCount;
     }
     //libraryBrowse, but should be based on if watched are hidden, like always in next up, or sometimes in latest
     $minUnplayedCount = $libraryBrowse ? 0 : 1;
-    $unplayedCount = $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
-
-    return $unplayedCount;
+    return $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
 }
 
 function getMenuItem($item) {
-    switch ($item->Type) {
-        case ItemType::SERIES:
-            $menuItem = parseSeries($item);
-            break;
-        default:
-            $menuItem = parse($item);
-            break;                    
+    if ($item->Type == ItemType::SERIES) {
+        $menuItem = parseSeries($item);
+    } else {
+        $menuItem = parse($item);
     }
     return $menuItem;
 }
