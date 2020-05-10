@@ -22,6 +22,7 @@ switch ($styleEnum) {
         break;
     
     case IndexStyleEnum::PosterPopup9x3:
+    default:
         $frameDifferenceWidth = 10;
         $frameDifferenceHeight = 11;
         break;
