@@ -2,6 +2,8 @@
 
 include 'secrets.php';
 
+const ITEMSPATH = '/Items/';
+
 $apiCallCount = 0;
 
 abstract class ImageType
@@ -34,7 +36,9 @@ function apiCall($path, $debug = false)
     $apiCallCount++;
 
     $url = $api_url . '/emby' . $path . "&api_key=" . $api_key;
-    if ($debug) echo "<a href=\"" . $url . "\">url</a><br/>";
+    if ($debug) {
+        echo "<a href=\"" . $url . "\">url</a><br/>";
+    }
 
     return json_decode(file_get_contents($url));
 }
@@ -42,7 +46,7 @@ function apiCall($path, $debug = false)
 function itemImageExists($itemId, $ImageType = ImageType::PRIMARY)
 {
     if ($itemId != '') {
-        $path =  "/Items/" . $itemId . "/Images/?";
+        $path =  ITEMSPATH . $itemId . "/Images/?";
         $images = apiCall($path);
 
         $foundImages = array_filter($images, function($image) use ($ImageType) { return $image->ImageType == $ImageType; });
@@ -101,7 +105,7 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
 {
     global $user_id;
 
-    $path = "/Users/" . $user_id . "/Items/" . $suffix . "?";
+    $path = "/Users/" . $user_id . ITEMSPATH . $suffix . "?";
 
     $path .= $fields ? "Fields=" . $fields : "";
     $path .= $startIndex ? "&StartIndex=" . $startIndex : "";
@@ -169,7 +173,7 @@ function getItem($Id) {
 function getSimilarItems($Id, $limit = null)
 {
     global $user_id;
-    $path =  "/Items/" . $Id . "/Similar?UserID=" . $user_id;
+    $path =  ITEMSPATH . $Id . "/Similar?UserID=" . $user_id;
     $path .= $limit ? "&Limit=" . $limit : "";
     return apiCall($path);
 }
@@ -177,7 +181,7 @@ function getSimilarItems($Id, $limit = null)
 function getFilters($parentID = null, $type = null, $Recursive = null) {
     global $user_id;
 
-    $path = "/Items/Filters?UserID=" . $user_id;
+    $path = ITEMSPATH . "Filters?UserID=" . $user_id;
 
     $path .= $parentID ? "&ParentID=" . $parentID : "";
     $path .= $type ? "&IncludeItemTypes=" . $type : "";
