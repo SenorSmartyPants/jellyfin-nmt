@@ -16,12 +16,6 @@ abstract class IndexStyleEnum
     const ThumbPopup4x3AspectRatio = 11;
 }
 
-abstract class ImageType
-{
-    const PRIMARY = 'Primary';
-    const BANNER = 'Banner';
-}
-
 abstract class Alignment
 {
     const LEFT = 'left';
@@ -238,7 +232,7 @@ class IndexStyle {
                 $this->popupWidth = intval($this->thumbnailsWidth * 1.25);
                 $this->popupHeight = intval($this->popupWidth / $this->aspectRatio);
 
-                $this->ImageType = "Thumb";
+                $this->ImageType = ImageType::THUMB;
                 $this->moviesTableCellspacing = 4;
                 break;                 
     

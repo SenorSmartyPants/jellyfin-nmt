@@ -38,7 +38,7 @@ if (count($items) <= 6) {
 }
 $indexStyle->moviesTableCellspacing = 16;
 $indexStyle->offsetY = 156;
-$indexStyle->ImageType = "Primary";
+$indexStyle->ImageType = ImageType::PRIMARY;
 
 setNumPagesAndIndexCount(count($items));
 

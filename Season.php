@@ -133,7 +133,7 @@ function renderEpisodeJS($episode)
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
-        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, "Primary", null, null, $episode->ImageTags->Primary) : "images/wall/transparent.png" ?>");
+        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, ImageType::PRIMARY, null, null, $episode->ImageTags->Primary) : "images/wall/transparent.png" ?>");
     </script>
 <?
 }
@@ -287,7 +287,7 @@ function printTopBar()
         <tr height="62" valign="middle">
             <td width="18"></td>
             <td width="250"><? if ($bannerId) { ?> 
-                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, "Banner") ?>" />
+                <img width="244" height="45" src="<?= getImageURL($bannerId, 45, 244, ImageType::BANNER) ?>" />
             <? } ?></td>
             <td width="30"></td>
             <td align="center" class="tvseason"><?= ($season->IndexNumber > 0) ? "S" . $season->IndexNumber : "Sp" ?></td>
@@ -431,7 +431,7 @@ function printSeasonFooter()
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
-        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, "Primary", null, null, $selectedEpisode->ImageTags->Primary) : "images/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
+        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, null, 278, ImageType::PRIMARY, null, null, $selectedEpisode->ImageTags->Primary) : "images/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
         <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
     </div>
 <?

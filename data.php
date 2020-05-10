@@ -4,6 +4,13 @@ include 'secrets.php';
 
 $apiCallCount = 0;
 
+abstract class ImageType
+{
+    const PRIMARY = 'Primary';
+    const BANNER = 'Banner';
+    const THUMB = 'Thumb';
+}
+
 function apiCall($path, $debug = false)
 {
     global $api_url, $api_key, $apiCallCount;
@@ -16,7 +23,7 @@ function apiCall($path, $debug = false)
     return json_decode(file_get_contents($url));
 }
 
-function itemImageExists($itemId, $ImageType = 'Primary')
+function itemImageExists($itemId, $ImageType = ImageType::PRIMARY)
 {
     if ($itemId != '') {
         $path =  "/Items/" . $itemId . "/Images/?";
@@ -170,7 +177,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     global $api_url; 
 
     $itemsOrUsers = $itemsOrUsers ?? "Items";
-    $imageType = $imageType ?? "Primary";
+    $imageType = $imageType ?? ImageType::PRIMARY;
 
     $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
         ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 

@@ -55,7 +55,7 @@ function setEpisodeIndexStyle($item)
         $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
         $indexStyle->offsetY = 410;
     }
-    $indexStyle->ImageType = "Primary";
+    $indexStyle->ImageType = ImageType::PRIMARY;
 
     $startIndex = ($page - 1) * $indexStyle->Limit;
 }
@@ -245,9 +245,9 @@ function render($item)
             } else {
                 $width = THUMB_WIDTH;
             }
-            ?><img width="$width" src="<?= getImageURL($item->Id, null, $width, "Primary", null, null, $item->ImageTags->Primary) ?>" /> <? 
+            ?><img width="$width" src="<?= getImageURL($item->Id, null, $width, ImageType::PRIMARY, null, null, $item->ImageTags->Primary) ?>" /> <? 
         } else if ($item->ImageTags->Thumb) { 
-            ?><img width="THUMB_WIDTH" src="<?= getImageURL($item->Id, null, THUMB_WIDTH, "Thumb", null, null, $item->ImageTags->Thumb) ?>" /> <? 
+            ?><img width="THUMB_WIDTH" src="<?= getImageURL($item->Id, null, THUMB_WIDTH, ImageType::THUMB, null, null, $item->ImageTags->Thumb) ?>" /> <? 
         } else {
             ?><img src="images/1x1.png" width="<?= POSTER_WIDTH ?>" /> <?
         } ?>
