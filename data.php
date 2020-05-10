@@ -22,6 +22,11 @@ abstract class ItemType
     const STUDIO = 'Studio';
 }
 
+function strbool($value)
+{
+    return $value ? 'true' : 'false';
+}
+
 function apiCall($path, $debug = false)
 {
     global $api_url, $api_key, $apiCallCount;
@@ -113,9 +118,9 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
     $path .= $years ? "&Years=" . $years : "";
     $path .= $personIDs ? "&PersonIDs=" . $personIDs : "";
     $path .= $studioIDs ? "&StudioIDs=" . $studioIDs : "";
-    $path .= !is_null($groupItems) ? "&GroupItems=" . ( $groupItems ? "true" : "false" ) : "";
-    $path .= !is_null($isPlayed) ? "&IsPlayed=" . ( $isPlayed ? "true" : "false" ) : "";
-    $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
+    $path .= !is_null($groupItems) ? "&GroupItems=" . strbool($groupItems) : "";
+    $path .= !is_null($isPlayed) ? "&IsPlayed=" . strbool($isPlayed) : "";
+    $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
 
 
     return apiCall($path);
@@ -176,7 +181,7 @@ function getFilters($parentID = null, $type = null, $Recursive = null) {
 
     $path .= $parentID ? "&ParentID=" . $parentID : "";
     $path .= $type ? "&IncludeItemTypes=" . $type : "";
-    $path .= !is_null($Recursive) ? "&Recursive=" . ( $Recursive ? "true" : "false" ) : "";
+    $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
     
     return apiCall($path);
 }
