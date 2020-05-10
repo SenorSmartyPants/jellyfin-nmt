@@ -98,6 +98,15 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
+function addNonNullParameter($name, $value, $includeLeadingAmpersand = true, $urlencode = false)
+{
+    $amp = $includeLeadingAmpersand ? '&' : '';
+    if ($urlencode) {
+        $value = urlencode($value);
+    }
+    return $value ? $amp. $name . '=' . $value : '';
+}
+
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
     $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
@@ -108,25 +117,24 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
 
     $path = "/Users/" . $user_id . ITEMSPATH . $suffix . "?";
 
-    $path .= $fields ? "Fields=" . $fields : "";
-    $path .= $startIndex ? "&StartIndex=" . $startIndex : "";
-    $path .= $limit ? "&Limit=" . $limit : "";
-    $path .= $parentID ? "&ParentID=" . $parentID : "";
-    $path .= $parentIndexNumber ? "&ParentIndexNumber=" . $parentIndexNumber : "";
-    $path .= $type ? "&IncludeItemTypes=" . $type : "";
-    $path .= $excludeItemTypes ? "&ExcludeItemTypes=" . $excludeItemTypes : "";
-    $path .= $sortBy ? "&SortBy=" . $sortBy : "";
-    $path .= $genres ? "&Genres=" . urlencode($genres) : "";
-    $path .= $nameStartsWith ? "&NameStartsWith=" . urlencode($nameStartsWith) : "";
-    $path .= $ratings ? "&OfficialRatings=" . $ratings : "";
-    $path .= $tags ? "&Tags=" . urlencode($tags) : "";
-    $path .= $years ? "&Years=" . $years : "";
-    $path .= $personIDs ? "&PersonIDs=" . $personIDs : "";
-    $path .= $studioIDs ? "&StudioIDs=" . $studioIDs : "";
+    $path .= addNonNullParameter('Fields', $fields, false);
+    $path .= addNonNullParameter('StartIndex', $startIndex);
+    $path .= addNonNullParameter('Limit', $limit);
+    $path .= addNonNullParameter('ParentID', $parentID);
+    $path .= addNonNullParameter('ParentIndexNumber', $parentIndexNumber);
+    $path .= addNonNullParameter('IncludeItemTypes', $type);
+    $path .= addNonNullParameter('ExcludeItemTypes', $excludeItemTypes);
+    $path .= addNonNullParameter('SortBy', $sortBy);
+    $path .= addNonNullParameter('Genres', $genres, true, true);
+    $path .= addNonNullParameter('NameStartsWith', $nameStartsWith, true, true);
+    $path .= addNonNullParameter('OfficialRatings', $ratings);
+    $path .= addNonNullParameter('Tags', $tags, true, true);
+    $path .= addNonNullParameter('Years', $years);
+    $path .= addNonNullParameter('PersonIDs', $personIDs);
+    $path .= addNonNullParameter('StudioIDs', $studioIDs);
     $path .= !is_null($groupItems) ? "&GroupItems=" . strbool($groupItems) : "";
     $path .= !is_null($isPlayed) ? "&IsPlayed=" . strbool($isPlayed) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
-
 
     return apiCall($path);
 }
