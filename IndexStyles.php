@@ -16,6 +16,26 @@ abstract class IndexStyleEnum
     const ThumbPopup4x3AspectRatio = 11;
 }
 
+abstract class ImageType
+{
+    const PRIMARY = 'Primary';
+    const BANNER = 'Banner';
+}
+
+abstract class Alignment
+{
+    const LEFT = 'left';
+    const CENTER = 'center';
+    const RIGHT = 'right';
+}
+
+abstract class VerticalAlignment
+{
+    const TOP = 'top';
+    const MIDDLE = 'middle';
+    const BOTTOM = 'bottom';
+}
+
 class IndexStyle {
     private $styleEnum;
     private $indexCount;
@@ -82,12 +102,12 @@ class IndexStyle {
     public function __construct($styleEnum = null)
     {
         //set defaults
-        $this->ImageType = "Primary";
+        $this->ImageType = ImageType::PRIMARY;
 
         $this->setDataLimits($styleEnum);
 
-        $this->moviesTableVAlign = "top";
-        $this->moviesTableAlign = "left";
+        $this->moviesTableVAlign = VerticalAlignment::TOP;
+        $this->moviesTableAlign = Alignment::LEFT;
 
         $this->setIndexStyle($styleEnum);
     }
@@ -169,7 +189,7 @@ class IndexStyle {
                 $this->thumbnailsHeight = 174;
     
                 $this->nbThumbnailsPerLine = 9;
-                $this->ImageType = "Primary";
+                $this->ImageType = ImageType::PRIMARY;
                 $this->moviesTableCellspacing = 4;
                 break;
                         
@@ -184,9 +204,9 @@ class IndexStyle {
                 
                 $this->Limit = 12;
                 $this->nbThumbnailsPerLine = 6;
-                $this->ImageType = "Primary";
-                $this->moviesTableAlign = "center";
-                $this->moviesTableVAlign = "middle";
+                $this->ImageType = ImageType::PRIMARY;
+                $this->moviesTableAlign = Alignment::CENTER;
+                $this->moviesTableVAlign = VerticalAlignment::MIDDLE;
                 $this->moviesTableCellspacing = 4;
                 break;
     
@@ -195,7 +215,7 @@ class IndexStyle {
                 $this->thumbnailsHeight = 130;
     
                 $this->nbThumbnailsPerLine = 12;
-                $this->ImageType = "Primary";
+                $this->ImageType = ImageType::PRIMARY;
                 $this->moviesTableCellspacing = 4;
                 break;
     
@@ -233,8 +253,8 @@ class IndexStyle {
                 $this->thumbnailsHeight = 85;
                 
                 $this->nbThumbnailsPerLine = 2;
-                $this->ImageType = "Banner";
-                $this->moviesTableAlign = "center";           
+                $this->ImageType = ImageType::BANNER;
+                $this->moviesTableAlign = Alignment::CENTER;           
                 break;
     
             case IndexStyleEnum::TVBannerPopup6x2:
@@ -248,8 +268,8 @@ class IndexStyle {
                 $this->thumbnailsHeight = 89;
                 
                 $this->nbThumbnailsPerLine = 2;
-                $this->ImageType = "Banner";
-                $this->moviesTableAlign = "center";
+                $this->ImageType = ImageType::BANNER;
+                $this->moviesTableAlign = Alignment::CENTER;
                 break;
     
             case IndexStyleEnum::TVBannerPopup7x2:
@@ -263,8 +283,8 @@ class IndexStyle {
                 $this->thumbnailsHeight = 76;
                 
                 $this->nbThumbnailsPerLine = 2;
-                $this->ImageType = "Banner";
-                $this->moviesTableAlign = "center";
+                $this->ImageType = ImageType::BANNER;
+                $this->moviesTableAlign = Alignment::CENTER;
                 break;             
         }
     }
