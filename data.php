@@ -11,6 +11,7 @@ abstract class ImageType
     const PRIMARY = 'Primary';
     const BANNER = 'Banner';
     const THUMB = 'Thumb';
+    const LOGO = 'Logo';
 }
 
 abstract class ItemType

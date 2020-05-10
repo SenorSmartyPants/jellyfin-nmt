@@ -4,7 +4,8 @@ include_once 'listings.php';
 
 const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
-const MORE_TVID = "RED";
+const MORE_TVID = 'RED';
+const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
 $id = $_GET["id"];
 $item = getItem($id);
@@ -155,7 +156,7 @@ function printLogo()
         ?>
         <div id="popupWrapper">
                 <img class="abs" id="logo" 
-                 src="<?= getImageURL($logoId, null, null, "Logo", null, null, $logoTag, null, null, 155, 400) ?>" />
+                 src="<?= getImageURL($logoId, null, null, ImageType::LOGO, null, null, $logoTag, null, null, 155, 400) ?>" />
         </div>
         <? 
     }
@@ -332,9 +333,9 @@ function render($item)
         if ($item->MediaType) { //only display play button for single items
 ?>          
         <div id="mediainfo">
-        <?= $streams->Video ? $streams->Video->Type . ': ' . $streams->Video->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
-        <?= $streams->Audio ? $streams->Audio->Type . ': ' . $streams->Audio->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
-        <?= $streams->Subtitle ? $streams->Subtitle->Type . ': ' . $streams->Subtitle->DisplayTitle . '&nbsp;&nbsp;&nbsp;' : null ?>
+        <?= $streams->Video ? $streams->Video->Type . ': ' . $streams->Video->DisplayTitle . THREESPACES : null ?>
+        <?= $streams->Audio ? $streams->Audio->Type . ': ' . $streams->Audio->DisplayTitle . THREESPACES : null ?>
+        <?= $streams->Subtitle ? $streams->Subtitle->Type . ': ' . $streams->Subtitle->DisplayTitle . THREESPACES : null ?>
         </div>&nbsp;<br>
 <?
         }
