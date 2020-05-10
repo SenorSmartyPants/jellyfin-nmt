@@ -39,7 +39,7 @@ function parse($item) {
     $menuItem->PosterID = getPosterID($item);
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
-    $played = ($item->Type == "Series" || $item->Type == "Season" ? null : $item->UserData->Played);
+    $played = ($item->Type == ItemType::SERIES || $item->Type == ItemType::SEASON ? null : $item->UserData->Played);
 
     if ($menuItem->PosterID) {
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, 
@@ -100,10 +100,10 @@ function setDetailURL($item, $menuItem) {
     
     if ($item->IsFolder) {
         switch ($item->Type) {
-            case "Season":
+            case ItemType::SEASON:
                 $detailURL = "Season.php?id=" . $item->Id;
                 break;   
-            case "Series":
+            case ItemType::SERIES:
                 //go directly to season page, or continue to default
                 if ($item->ChildCount == 1) {
                     $detailURL = "seasonRedirect.php?SeriesId=" . $item->Id;
@@ -125,9 +125,9 @@ function setDetailURL($item, $menuItem) {
         switch ($item->MediaType) {
             case "Video":
                 switch ($item->Type) {
-                    case "Movie":
+                    case ItemType::MOVIE:
                         break; 
-                    case "Episode":
+                    case ItemType::EPISODE:
                         //check for season info, very rarely an episode has no season IDs provided
                         if ($item->SeasonId) {
                             $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
@@ -164,10 +164,10 @@ function getPosterID($item, $useSeasonImage = true) {
     global $indexStyle;
     global $displayepisode;
     switch ($item->Type) {
-        case "Season":
+        case ItemType::SEASON:
             $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
-        case "Episode":
+        case ItemType::EPISODE:
             //API
             if (!$displayepisode) {
                 $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 

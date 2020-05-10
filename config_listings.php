@@ -14,12 +14,12 @@ function overrideIndexStyle($folderType, $collectionType)
             $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
             break;
 
-        case 'BoxSet/':
-        case 'Series/':
+        case ItemType::BOXSET . '/':
+        case ItemType::SERIES . '/':
             $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
             //override style options
-            $indexStyle->moviesTableAlign = "center";
-            $indexStyle->moviesTableVAlign = "bottom";
+            $indexStyle->moviesTableAlign = Alignment::CENTER;
+            $indexStyle->moviesTableVAlign = VerticalAlignment::BOTTOM;
             $indexStyle->Limit = 9;
             break;
 

@@ -120,7 +120,7 @@ function CheckinJSItem($item)
                 }
 ?>
                 var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($item->SeriesName) ?>&year=<?= $series->ProductionYear ?>&season=<?= $item->ParentIndexNumber ?>&episode=<?= $item->IndexNumber ?>&episode_id=<?= $item->ProviderIds->Tvdb ?>";
-<?          } else if ($item->Type == "Movie") {?>
+<?          } else if ($item->Type == ItemType::MOVIE) {?>
                 var url = "<?= CHECKIN_URL ?>?imdb_id=<?= $item->ProviderIds->Imdb ?>&title=<?= rawurlencode($item->Name) ?>&year=<?= $item->ProductionYear ?>";
 <?          }
             ?>

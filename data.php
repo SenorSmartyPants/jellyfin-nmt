@@ -11,6 +11,16 @@ abstract class ImageType
     const THUMB = 'Thumb';
 }
 
+abstract class ItemType
+{
+    const BOXSET = 'BoxSet';
+    const SERIES = 'Series';
+    const SEASON = 'Season';
+    const EPISODE = 'Episode';
+    const MOVIE = 'Movie';
+    const PERSON = 'Person';    
+}
+
 function apiCall($path, $debug = false)
 {
     global $api_url, $api_key, $apiCallCount;
@@ -54,7 +64,7 @@ function firstEpisodeFromSeries($seriesId)
 
 function firstSeasonFromSeries($seriesId)
 {
-    $seasons = getUsersItems(null, null, 1, $seriesId, null, null, "season");
+    $seasons = getUsersItems(null, null, 1, $seriesId, null, null, ItemType::SEASON);
 
     return $seasons->Items[0];
 }

@@ -8,11 +8,11 @@ $useSeasonImage = false;
 switch ($collectionType) {
     case "tvshows":
         $recursive = true;
-        $type = "series";
+        $type = ItemType::SERIES;
         break;
     case "movies":
         $recursive = true;
-        $type = "movie";
+        $type = ItemType::MOVIE;
         break;
     case "search": //searching from categories page
         $recursive = true;

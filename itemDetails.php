@@ -74,7 +74,7 @@ function setupChildData($item)
 
     $available_subitems = array();
 
-    if ($item->Type == "Episode") {
+    if ($item->Type == ItemType::EPISODE) {
         //display more episodes, before cast
         $available_subitems[] = "more";
     }
@@ -86,7 +86,7 @@ function setupChildData($item)
     }
     //only display "more like this" for movies, series, episodes(more from this season), not seasons
     //episodes list more, first, then crew...
-    if ($item->Type != "Season" && $item->Type != "Episode") {
+    if ($item->Type != ItemType::SEASON && $item->Type != ItemType::EPISODE) {
         $available_subitems[] = "more";
     }
 
@@ -96,7 +96,7 @@ function setupChildData($item)
     $startIndex = ($page - 1) * $indexStyle->Limit;
 
     if ($subitems == "more") {
-        if ($item->Type == "Episode") {
+        if ($item->Type == ItemType::EPISODE) {
             setEpisodeIndexStyle($item);
             //get episodes from this season
             $children = getItems($item->SeasonId, $startIndex, $indexStyle->Limit);
@@ -123,7 +123,7 @@ function setupChildData($item)
             $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
         } else {
             //if season, then display episode style
-            if ($item->Type == "Season") {
+            if ($item->Type == ItemType::SEASON) {
                 setEpisodeIndexStyle($item);
             }
             //just get child items
@@ -166,12 +166,12 @@ function setNames($item)
     global $parentName, $itemName, $Title;
 
     switch ($item->Type) {
-        case 'Season':
+        case ItemType::SEASON:
             $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName);
             $itemName = $item->Name;
             $Title = $item->Name . ' - ' . $item->SeriesName;
             break;
-        case 'Episode':
+        case ItemType::EPISODE:
             $parentName = itemDetailsLink($item->SeriesId, false, $item->SeriesName) . ' - ' . itemDetailsLink($item->SeasonId, false, $item->SeasonName);
             $itemName = $item->IndexNumber . '. ' . $item->Name;
             $Title = $item->Name . ' - ' . $item->SeasonName . ' - ' . $item->SeriesName;
@@ -195,13 +195,13 @@ function render($item)
 
 
     switch ($item->Type) {
-        case 'Movie':
+        case ItemType::MOVIE:
             $date = $item->ProductionYear;
             break;
-        case 'Series':
+        case ItemType::SERIES:
             $date = ProductionRangeString($item);
             break;
-        case 'Season':
+        case ItemType::SEASON:
             $date = null;
             break;               
         default:
