@@ -111,7 +111,7 @@ function CheckinJSItem($item)
         <script type="text/javascript">
             function checkin() { 
 <? 
-            if ($item->Type == "Episode") { 
+            if ($item->Type == ItemType::EPISODE) { 
                 //some data is series based - year, tvdb_id
                 //but only episode TVDBID is used if present
                 if (!$item->ProviderIds->Tvdb) {

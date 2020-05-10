@@ -115,10 +115,10 @@ function setupChildData($item)
     }
     if ($subitems == "children") {
         //get first X children
-        if ($item->Type == "Person") {
+        if ($item->Type == ItemType::PERSON) {
             //filter items to ones where PersonID is included
             $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
-        } else if ($item->Type == "Studio") {
+        } else if ($item->Type == ItemType::STUDIO) {
             //filter items to ones where StudioID is included
             $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
         } else {
@@ -273,7 +273,7 @@ function render($item)
 <? 
     }
 
-    if ($item->Type != "Person" && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
+    if ($item->Type != ItemType::PERSON && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
 ?>
 
     <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr>
@@ -368,7 +368,7 @@ function render($item)
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
-    <? if ($item->Type == "Person") {
+    <? if ($item->Type == ItemType::PERSON) {
         if ($date) { 
             ?>
 		    <div>Born: <?= $date ?></div>&nbsp;<br>

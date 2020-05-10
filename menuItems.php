@@ -18,7 +18,7 @@ function parseSeries($item)
         //sorting by Premiere Date - not quite right for dvd ordered series
         //but next up doesn't work right after show is deleted
         $unwatched = getUsersItems(null, null, 1, $item->Id, null,
-            "PremiereDate", "Episode", true, false, true);
+            "PremiereDate", ItemType::EPISODE, true, false, true);
 
         $first_unwatched = $unwatched->Items[0];
         $first_unwatched->UserData->UnplayedItemCount = $item->UserData->UnplayedItemCount;
@@ -53,7 +53,7 @@ function parse($item) {
 }
 
 function getName($item) {
-    if ($item->Type == 'Episode') {
+    if ($item->Type == ItemType::EPISODE) {
         $name = $item->SeriesName;
     } else {
         $name = $item->Name;
@@ -64,14 +64,14 @@ function getName($item) {
 function getSubtitle($item) {
     global $useSeasonNameForMenuItems;
     switch ($item->Type) {
-        case "Episode":
+        case ItemType::EPISODE:
             if ($useSeasonNameForMenuItems) {
                 $subtitle = $item->SeasonName;
             } else {
                 $subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
             }
             break;
-        case "Series":
+        case ItemType::SERIES:
             $subtitle = ProductionRangeString($item);
             break;
         //PersonTypes
@@ -190,7 +190,7 @@ function getUnplayedCount($item) {
     global $displayepisode;
 
     switch ($item->Type) {
-        case "Episode":
+        case ItemType::EPISODE:
             if (!$displayepisode) {
                 //API
                 $series = getItem($item->SeriesId);
@@ -210,7 +210,7 @@ function getUnplayedCount($item) {
 
 function getMenuItem($item) {
     switch ($item->Type) {
-        case "Series":
+        case ItemType::SERIES:
             $menuItem = parseSeries($item);
             break;
         default:

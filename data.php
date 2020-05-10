@@ -18,7 +18,8 @@ abstract class ItemType
     const SEASON = 'Season';
     const EPISODE = 'Episode';
     const MOVIE = 'Movie';
-    const PERSON = 'Person';    
+    const PERSON = 'Person';
+    const STUDIO = 'Studio';
 }
 
 function apiCall($path, $debug = false)
@@ -57,7 +58,7 @@ function firstEpisodeFromSeason($seasonId, $seasonNumber)
 
 function firstEpisodeFromSeries($seriesId)
 {
-    $all_episodes = getUsersItems(null, "Path", 1, $seriesId, null, null, "episode", null, null, true);
+    $all_episodes = getUsersItems(null, "Path", 1, $seriesId, null, null, ItemType::EPISODE, null, null, true);
 
     return $all_episodes->Items[0];
 }

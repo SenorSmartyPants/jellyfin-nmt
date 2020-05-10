@@ -11,11 +11,11 @@ $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);
 setNumPagesAndIndexCount(count($items));
 
 switch ($_GET["type"]) {
-    case 'episode':
+    case ItemType::EPISODE:
         $Title = "Latest TV";
         break;
 
-    case 'movie':
+    case ItemType::MOVIE:
         $Title = "Latest Movies";
         break;
     
