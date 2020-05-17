@@ -61,8 +61,7 @@ class PlaybackReporting
         $this->playing->LastPositionUpdate = time();
 
         //save state to file
-        $json = json_encode($this->playing);
-        file_put_contents("playstate/" . $this->sessionId . ".json", $json);
+        file_put_contents("playstate/" . $this->sessionId . ".json", json_encode($this->playing));
     }
 
     private function loadPlaystate()
