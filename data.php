@@ -25,6 +25,27 @@ abstract class ItemType
     const STUDIO = 'Studio';
 }
 
+const CLIENTNAME = 'Jellyfin-NMT';
+const CLIENTVERSION = '0.2.0';
+
+class Device
+{
+    public $name = 'My testbed class';
+    public $id = 1;
+
+    function __construct() {
+        $this->id = $_SERVER['REMOTE_ADDR'];
+
+        if (stripos($_SERVER['HTTP_USER_AGENT'],"Chrome")!==false) {
+            $this->name = 'Chrome';
+        } else if (stripos($_SERVER['HTTP_USER_AGENT'],"Syabas")!==false) {
+            $this->name = 'Popcorn Hour';
+        } else {
+            $this->name = $_SERVER['HTTP_USER_AGENT'];
+        }        
+    }
+}
+
 function strbool($value)
 {
     return $value ? 'true' : 'false';
@@ -45,6 +66,44 @@ function apiCall($path, $debug = false, $includeAPIKey = true)
     }
 
     return json_decode(file_get_contents($url));
+}
+
+function apiCallPost($path, $post = null, $contentType = 'application/x-www-form-urlencoded')
+{
+    global $api_url;
+
+    $authHeaderFormat = 'X-Emby-Authorization: MediaBrowser Client="%s", Version="%s", Device="%s", DeviceId="%s"';
+    $tokenFormat = ', Token="%s"';
+
+    $dev = new Device;
+
+    $authHeader = sprintf($authHeaderFormat, CLIENTNAME, CLIENTVERSION, $dev->name, $dev->id);
+    if ($_SESSION["accessToken"]) {
+        //add token if exists to header
+        $authHeader .= sprintf($tokenFormat, $_SESSION["accessToken"]);
+    }
+
+    $opts = array('http' =>
+        array(
+            'method'  => 'POST',
+            'header'  => 'Content-Type: ' . $contentType . "\r\n" . $authHeader
+        )
+    );
+
+    if ($post) {
+        if ($contentType == 'application/x-www-form-urlencoded') 
+        {
+            $postdata = http_build_query($post);
+            $opts['http']['content'] = $postdata;
+        } else {
+            $opts['http']['content'] = $post;
+        }
+    }    
+    
+    $context = stream_context_create($opts);
+
+    $url = $api_url . '/emby' . $path;
+    return json_decode(file_get_contents($url, false, $context));
 }
 
 function itemImageExists($itemId, $ImageType = ImageType::PRIMARY)
