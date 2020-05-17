@@ -145,22 +145,6 @@ class PlaybackReporting
         }
     }
 
-    // A-100 had no way to call pause
-    private function Pause($PositionInSeconds)
-    {
-        $this->playing->PositionInSeconds = $PositionInSeconds;
-        //pause progress update only does not pause in dashboard
-        //need isPaused
-        $payload = self::getPlaybackPayload('Pause');
-        $payload['IsPaused'] = true;
-    
-        self::apiJSON(
-            '/Sessions/Playing/Progress',
-            $payload,
-            $this->playing->PositionInSeconds
-        );
-    }
-    
     private function apiJSON($apiendpoint, $payload, $PositionInSeconds, $playState = PlayState::PLAYING)
     {
         apiCallPost(
