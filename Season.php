@@ -356,12 +356,8 @@ function printLowerTable()
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 <tr>
-<td height="10">
-<a class="TvLink secondaryText" id="gtPlay" name="Play" onkeydownset="episode1" onkeyupset="episode1" >
-Play all
-</a>
-</td>
-		<td height="10"><!--random play episode link goes here --></td>
+        <td></td>
+		<td></td>
 		<td align="right" width="70">
         <!-- episode paging indicator -->
 			<table border="0" cellpadding="0" cellspacing="0">
