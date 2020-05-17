@@ -30,13 +30,16 @@ function strbool($value)
     return $value ? 'true' : 'false';
 }
 
-function apiCall($path, $debug = false)
+function apiCall($path, $debug = false, $includeAPIKey = true)
 {
     global $api_url, $api_key, $apiCallCount;
 
     $apiCallCount++;
 
-    $url = $api_url . '/emby' . $path . "&api_key=" . $api_key;
+    $url = $api_url . '/emby' . $path;
+    if ($includeAPIKey) {
+        $url .= "&api_key=" . $api_key;
+    }
     if ($debug) {
         echo "<a href=\"" . $url . "\">url</a><br/>";
     }
