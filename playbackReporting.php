@@ -67,8 +67,13 @@ class PlaybackReporting
     private function loadPlaystate()
     {
         $this->playing = json_decode(file_get_contents("playstate/" . $this->sessionId . ".json"));
-    }    
+    }
     
+    public function deletePlaystate()
+    {
+        unlink("playstate/" . $this->sessionId . ".json");
+    }
+
     private function calculateCurrentPosition()
     {
         $secondsSinceUpdate = time() - $this->playing->LastPositionUpdate;
