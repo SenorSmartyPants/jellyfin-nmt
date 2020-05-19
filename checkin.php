@@ -51,6 +51,10 @@ $duration = $_GET['duration'];
 
 $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration);
 
+if (isset($_GET["JS"])) 
+{
+    echo "callback('outputTest2','Trakt Checkin callback');";
+}
 //close reponse before starting play, let play run in the background
 closeResponse();
 

@@ -130,6 +130,8 @@ function renderEpisodeJS($episode)
         asEpisodeUrl.push("<?= translatePathToNMT($episode->Path) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
+        asEpisodeId.push("<?= $episode->Id ?>");
+        asEpisodeDuration.push("<?= intval($episode->RunTimeTicks / 10000000) ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
@@ -202,6 +204,8 @@ function printInitJS()
         asEpisodePlot = new Array('0');
         asEpisodeUrl = new Array('0');
         asSeasonNo = new Array('0');
+        asEpisodeId = new Array('0');
+        asEpisodeDuration = new Array('0');
         asEpisodeNo = new Array('0');
         asEpisodeTVDBID = new Array('0');
         asEpisodeImage = new Array('0');
@@ -237,8 +241,7 @@ if ($episodeCount > EPISODESPERPAGE) {
     <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
     <script type="text/javascript">
         function checkin() {
-            var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
-                asSeasonNo[iEpisodeId] + "&episode=" + asEpisodeNo[iEpisodeId] + "&episode_id=" + asEpisodeTVDBID[iEpisodeId];
+            var url = "<?= CHECKIN_URL ?>?id=" + asEpisodeId[iEpisodeId] + "&duration=" + asEpisodeDuration[iEpisodeId];
              
             document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
         }
