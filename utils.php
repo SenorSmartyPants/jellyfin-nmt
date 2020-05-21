@@ -96,6 +96,7 @@ function videoPlayLink($item,
         $html .= 'onfocusset="' . $linkName . '" ';
         $html .= HTMLattributes($callbackAdditionalAttributes);      
         $html .= videoAttributes($item);
+        $html .= 'onfocus="stop();" '; //call stop method
         $html .= '></a>';
     }
 
@@ -127,6 +128,11 @@ function CheckinJSItem($item)
                 document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
             }
     
+            function stop() {
+                var url = 'checkin.php?action=stop';
+                document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
+            }
+            
             function callback(id, inlineMsg) {
                 document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
             }
