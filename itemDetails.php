@@ -20,7 +20,7 @@ setNames($item);
 
 setupChildData($item);
 
-printBaseHeadEtc("play","itemDetails.css", $Title, 'printInitJS');
+Page::printHead("play","itemDetails.css", $Title, 'printInitJS');
 
 render($item);
 

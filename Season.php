@@ -14,7 +14,7 @@ TODO:
 require_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
-include_once 'basepage.php';
+include_once 'page.php';
 include_once 'templates.php';
 
 const TITLETRUNCATELONG = 56;
@@ -70,7 +70,7 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-printBaseHeadEtc(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
+Page::printHead(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -424,9 +424,7 @@ function printSeasonFooter()
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 
     <a TVID="RED" href="<?= itemDetailsLink($season->Id) ?>"></a>
-    </body>
-
-    </html>
 <?
+    Page::printFooter();
 }
 ?>
