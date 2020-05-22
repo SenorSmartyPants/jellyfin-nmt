@@ -133,7 +133,6 @@ function renderEpisodeJS($episode)
         asEpisodeId.push("<?= $episode->Id ?>");
         asEpisodeDuration.push("<?= TicksToSeconds($episode->RunTimeTicks) ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
-        asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
         asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, ImageType::PRIMARY, null, null, $episode->ImageTags->Primary) : "images/wall/transparent.png" ?>");
     </script>
@@ -205,7 +204,6 @@ function printInitJS()
         asEpisodeId = new Array('0');
         asEpisodeDuration = new Array('0');
         asEpisodeNo = new Array('0');
-        asEpisodeTVDBID = new Array('0');
         asEpisodeImage = new Array('0');
         //the following are only used for episode paging
         asEpisodeTitleShort = new Array('0');
