@@ -131,7 +131,7 @@ function renderEpisodeJS($episode)
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
         asEpisodeId.push("<?= $episode->Id ?>");
-        asEpisodeDuration.push("<?= intval($episode->RunTimeTicks / 10000000) ?>");
+        asEpisodeDuration.push("<?= TicksToSeconds($episode->RunTimeTicks) ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
@@ -166,11 +166,9 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
-    if (CHECKIN) {
-        $callbackJS = "checkin();";
-        $callbackName = "playepisode" . $indexInList;
-        $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
-    }
+    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId]);";
+    $callbackName = "playepisode" . $indexInList;
+    $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
     #endregion
 
 ?>
@@ -237,23 +235,8 @@ if ($episodeCount > EPISODESPERPAGE) {
         var fWatch = true;
         var fTVplaylist = false;
     </script>
-<? if (CHECKIN) { ?>
-    <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
-    <script type="text/javascript">
-        function checkin() {
-            var url = "<?= CHECKIN_URL ?>?id=" + asEpisodeId[iEpisodeId] + "&duration=" + asEpisodeDuration[iEpisodeId];
-             
-            document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
-        }
-
-        function callback(id, inlineMsg) {
-            document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
-        }
-    </script>  
-
 <?
-    }
-
+    CheckinJS();
 }
 
 function TopBarSpacerWidth($seasonIndexNumber)

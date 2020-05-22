@@ -223,7 +223,6 @@ function getNextUp($Limit, $startIndex = 0)
 
     $path = "/Shows/NextUp?UserID=" . $user_id .
         "&Fields=Path&Limit=" . $Limit . "&StartIndex=" . $startIndex;
-    //TODO: ProviderID could be added to fields for play/checkin from browse screen
 
     return apiCall($path);
 }

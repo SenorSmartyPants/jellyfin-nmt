@@ -6,7 +6,7 @@
 
 Jellyfin-NMT uses the Jellyfin API to generate HTML compatible with the Popcorn hour Network Media Tank (NMT) player. The HTML generated is based on [YAMJ 2.0](https://github.com/YAMJ/yamj-v2) and its' skins, specifically [SabishGT](http://www.gt-projects.net/news.php).
 
-Videos are not played through Jellyfin and so are not marked as watched. I use a trakt proxy to mark videos as watched. JF then syncs with trakt. This is disabled by default, but can be changed with the CHECKIN constant.
+Videos are direct played via mounted filesystem on NMT. Playback status is reported to JF. Start and Stop events are reported to JF. There's no way that I'm aware of to capture seeks or pauses on A-100 and sync those to JF.
 
 ## Setup
 
