@@ -7,7 +7,7 @@ const THUMB_WIDTH = 396;
 const MORE_TVID = 'RED';
 const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
-$id = $_GET["id"];
+$id = htmlspecialchars($_GET["id"]);
 $item = getItem($id);
 
 $libraryBrowse = true;

@@ -1,9 +1,9 @@
 <?php
 include 'data.php';
 
-$SeriesId = $_GET["SeriesId"];
-$SeasonId = $_GET["SeasonId"];
-$IndexNumber = $_GET["IndexNumber"];
+$SeriesId = htmlspecialchars($_GET["SeriesId"]);
+$SeasonId = htmlspecialchars($_GET["SeasonId"]);
+$IndexNumber = htmlspecialchars($_GET["IndexNumber"]);
 
 //If seriesID is passed in then we don't know the season ID
 if ($SeriesId) {

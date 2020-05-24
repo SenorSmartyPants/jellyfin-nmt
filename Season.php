@@ -29,8 +29,8 @@ $ShowVideoOutput = true;
 $star_rating = true;
 $tvNumberRating = false;
 
-$id = $_GET["id"];
-$selectedEpisodeIndexNumber = $_GET[EPISODE];
+$id = htmlspecialchars($_GET["id"]);
+$selectedEpisodeIndexNumber = htmlspecialchars($_GET[EPISODE]);
 
 //Banners don't inherit from parents
 //have to load season to find out if it has a banner

@@ -215,7 +215,7 @@ function getLatest($Limit)
 {
     global $GroupItems;
 
-    $type = $_GET["type"];
+    $type = htmlspecialchars($_GET["type"]);
     return getUsersItems("Latest", "Path", $Limit, null, null, null, $type, $GroupItems);
 }
 
