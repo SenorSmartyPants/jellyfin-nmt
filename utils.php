@@ -96,43 +96,38 @@ function videoPlayLink($item,
         $html .= 'onfocusset="' . $linkName . '" ';
         $html .= HTMLattributes($callbackAdditionalAttributes);      
         $html .= videoAttributes($item);
+        $html .= 'onfocus="stop();" '; //call stop method
         $html .= '></a>';
     }
 
     return $html;
 }
 
-function CheckinJSItem($item)
+function CheckinJS()
 {
-//TODO: need generic way to handle multiple checkins per page
-//pass parameters
-    if (CHECKIN) { ?>
+?>
         <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
         <script type="text/javascript">
-            function checkin() { 
-<? 
-            if ($item->Type == ItemType::EPISODE) { 
-                //some data is series based - year, tvdb_id
-                //but only episode TVDBID is used if present
-                if (!$item->ProviderIds->Tvdb) {
-                    //load series, if no episode id present
-                    $series = getItem($item->SeriesId);
-                }
-?>
-                var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($item->SeriesName) ?>&year=<?= $series->ProductionYear ?>&season=<?= $item->ParentIndexNumber ?>&episode=<?= $item->IndexNumber ?>&episode_id=<?= $item->ProviderIds->Tvdb ?>";
-<?          } else if ($item->Type == ItemType::MOVIE) {?>
-                var url = "<?= CHECKIN_URL ?>?imdb_id=<?= $item->ProviderIds->Imdb ?>&title=<?= rawurlencode($item->Name) ?>&year=<?= $item->ProductionYear ?>";
-<?          }
-            ?>
+            function checkin(itemId, duration) { 
+                var url = "checkin.php?id=" + itemId + "&duration=" + duration;
                 document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
             }
     
+            function stop() {
+                var url = 'checkin.php?action=stop';
+                document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
+            }
+            
             function callback(id, inlineMsg) {
                 document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
             }
         </script>
-    <?
-    }
+<?
+}
+
+function TicksToSeconds($ticks)
+{
+    return intval($ticks / 10000000);
 }
 
 function escapeURL($url)

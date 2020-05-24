@@ -14,7 +14,7 @@ TODO:
 require_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
-include_once 'basepage.php';
+include_once 'page.php';
 include_once 'templates.php';
 
 const TITLETRUNCATELONG = 56;
@@ -70,7 +70,7 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-printBaseHeadEtc(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
+Page::printHead(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -130,8 +130,9 @@ function renderEpisodeJS($episode)
         asEpisodeUrl.push("<?= translatePathToNMT($episode->Path) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
+        asEpisodeId.push("<?= $episode->Id ?>");
+        asEpisodeDuration.push("<?= TicksToSeconds($episode->RunTimeTicks) ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
-        asEpisodeTVDBID.push("<?= $episode->ProviderIds->Tvdb ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
         asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, null, 278, ImageType::PRIMARY, null, null, $episode->ImageTags->Primary) : "images/wall/transparent.png" ?>");
     </script>
@@ -164,11 +165,9 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
-    if (CHECKIN) {
-        $callbackJS = "checkin();";
-        $callbackName = "playepisode" . $indexInList;
-        $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
-    }
+    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId]);";
+    $callbackName = "playepisode" . $indexInList;
+    $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
     #endregion
 
 ?>
@@ -202,8 +201,9 @@ function printInitJS()
         asEpisodePlot = new Array('0');
         asEpisodeUrl = new Array('0');
         asSeasonNo = new Array('0');
+        asEpisodeId = new Array('0');
+        asEpisodeDuration = new Array('0');
         asEpisodeNo = new Array('0');
-        asEpisodeTVDBID = new Array('0');
         asEpisodeImage = new Array('0');
         //the following are only used for episode paging
         asEpisodeTitleShort = new Array('0');
@@ -233,24 +233,8 @@ if ($episodeCount > EPISODESPERPAGE) {
         var fWatch = true;
         var fTVplaylist = false;
     </script>
-<? if (CHECKIN) { ?>
-    <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
-    <script type="text/javascript">
-        function checkin() {
-            var url = "<?= CHECKIN_URL ?>?tvdb_id=<?= $series->ProviderIds->Tvdb ?>&title=<?= rawurlencode($series->Name) ?>&year=<?= $series->ProductionYear ?>&season=" + 
-                asSeasonNo[iEpisodeId] + "&episode=" + asEpisodeNo[iEpisodeId] + "&episode_id=" + asEpisodeTVDBID[iEpisodeId];
-             
-            document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
-        }
-
-        function callback(id, inlineMsg) {
-            document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
-        }
-    </script>  
-
 <?
-    }
-
+    CheckinJS();
 }
 
 function TopBarSpacerWidth($seasonIndexNumber)
@@ -440,9 +424,7 @@ function printSeasonFooter()
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 
     <a TVID="RED" href="<?= itemDetailsLink($season->Id) ?>"></a>
-    </body>
-
-    </html>
 <?
+    Page::printFooter();
 }
 ?>

@@ -20,7 +20,7 @@ setNames($item);
 
 setupChildData($item);
 
-printBaseHeadEtc("play","itemDetails.css", $Title, 'printInitJS');
+Page::printHead("play","itemDetails.css", $Title, 'printInitJS');
 
 render($item);
 
@@ -32,12 +32,8 @@ printFooter();
 
 function printInitJS()
 {
-    global $item;
-
     printListingsInitJS();
-    if (CHECKIN) {
-        CheckinJSItem($item);
-    }
+    CheckinJS();
 }
 
 function setEpisodeIndexStyle($item)
@@ -347,11 +343,9 @@ function render($item)
             $linkName = "play";
             $linkHTML = "Play";
 
-            if (CHECKIN) {
-                $callbackJS = "checkin();";
-                $callbackName = "playcallback";
-                $callbackAdditionalAttributes = null;
-            }
+            $callbackJS = "checkin('" . $item->Id . "', " . TicksToSeconds($item->RunTimeTicks) . ");";
+            $callbackName = "playcallback";
+            $callbackAdditionalAttributes = null;
             #endregion
 
 ?>  

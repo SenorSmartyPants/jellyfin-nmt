@@ -3,7 +3,7 @@ include_once 'IndexStyles.php';
 include_once 'config_listings.php';
 include_once 'secrets.php';
 include_once 'menuItems.php';
-include_once 'basepage.php';
+include_once 'page.php';
 
 $menuItems = array();
 
@@ -51,7 +51,7 @@ function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
 {
     global $indexStyle;
     $onload = "initpage(" . ((isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) ? 'true' : 'false') . ")";
-    printBaseHeadEtc($onloadset, $additionalCSS, $title, 'printListingsInitJS', $onload);
+    Page::printHead($onloadset, $additionalCSS, $title, 'printListingsInitJS', $onload);
 }
 
 function printFooter()
@@ -77,11 +77,8 @@ function printFooter()
             <a href="index.php" TVID="HOME"></a>
             <a href="categories.php" TVID="info"></a><br/>
         </div>
-
-    </body>
-
-    </html>
 <?php
+    Page::printFooter();
 }
 
 function printNavbarAndPosters($title, $items)
