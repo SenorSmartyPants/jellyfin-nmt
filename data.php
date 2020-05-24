@@ -3,6 +3,7 @@
 include 'secrets.php';
 
 const ITEMSPATH = '/Items/';
+const USERSPATH = '/Users/';
 
 $apiCallCount = 0;
 
@@ -30,18 +31,19 @@ const CLIENTVERSION = '0.2.0';
 
 class Device
 {
+    private const HTTP_USER_AGENT = 'HTTP_USER_AGENT';
     public $name = 'My testbed class';
     public $id = 1;
 
     function __construct() {
         $this->id = $_SERVER['REMOTE_ADDR'];
 
-        if (stripos($_SERVER['HTTP_USER_AGENT'],"Chrome")!==false) {
+        if (stripos($_SERVER[self::HTTP_USER_AGENT],"Chrome")!==false) {
             $this->name = 'Chrome';
-        } else if (stripos($_SERVER['HTTP_USER_AGENT'],"Syabas")!==false) {
+        } else if (stripos($_SERVER[self::HTTP_USER_AGENT],"Syabas")!==false) {
             $this->name = 'Popcorn Hour';
         } else {
-            $this->name = $_SERVER['HTTP_USER_AGENT'];
+            $this->name = $_SERVER[self::HTTP_USER_AGENT];
         }        
     }
 }
@@ -177,7 +179,7 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
 {
     global $user_id;
 
-    $path = "/Users/" . $user_id . ITEMSPATH . $suffix . "?";
+    $path = USERSPATH . $user_id . ITEMSPATH . $suffix . "?";
 
     $path .= addNonNullParameter('Fields', $fields, false);
     $path .= addNonNullParameter('StartIndex', $startIndex);
@@ -205,7 +207,7 @@ function getUsersViews()
 {
     global $user_id;
 
-    $path = "/Users/" . $user_id . "/Views/?IncludeExternalContent=false";
+    $path = USERSPATH . $user_id . "/Views/?IncludeExternalContent=false";
     return apiCall($path);
 }
 

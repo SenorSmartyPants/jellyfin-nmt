@@ -25,6 +25,8 @@ class PlayingMedia
 class PlaybackReporting  
 {
     private const PROGRESSUPDATEFREQUENCY = 60;
+    private const PLAYSTATEDIR = 'playstate/';
+    private const JSONEXT = '.json';
     private $playing;
     private $sessionId;
 
@@ -61,17 +63,17 @@ class PlaybackReporting
         $this->playing->LastPositionUpdate = time();
 
         //save state to file
-        file_put_contents("playstate/" . $this->sessionId . ".json", json_encode($this->playing));
+        file_put_contents(self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT, json_encode($this->playing));
     }
 
     private function loadPlaystate()
     {
-        $this->playing = json_decode(file_get_contents("playstate/" . $this->sessionId . ".json"));
+        $this->playing = json_decode(file_get_contents(self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT));
     }
     
     public function deletePlaystate()
     {
-        unlink("playstate/" . $this->sessionId . ".json");
+        unlink(self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT);
     }
 
     private function calculateCurrentPosition()
