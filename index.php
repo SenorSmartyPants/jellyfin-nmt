@@ -1,5 +1,5 @@
 <?php
-
+include_once 'page.php';
 include 'listings.php';
 
 $useSeasonNameForMenuItems = true;
@@ -42,23 +42,24 @@ $indexStyle->ImageType = ImageType::PRIMARY;
 
 setNumPagesAndIndexCount(count($items));
 
+$pageObj = new Page('Home');
+$pageObj->indexStyle = $indexStyle;
+
 printHeadEtc("nextup");
 
-printNavbarAndPostersHome("Home", $items);
+printNavbarAndPostersHome($items);
 
-printTitleTable();
+$pageObj->printTitleTable();
 
 printFooter();
 
 
-function printNavbarAndPostersHome($title, $items)
+function printNavbarAndPostersHome($items)
 {
-    ?>
-    
-    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td height="598">
-    <?php  
-    printNavbar($title);
-    ?>
+    global $pageObj;
+    $pageObj->printNavbar();
+?>
+    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td height="542">
     <a href="nextUp.php" name="nextup">Next Up ></a>
     <br clear="all"/>
     <a href="latest.php?type=episode">Latest TV Shows ></a>
@@ -72,8 +73,6 @@ function printNavbarAndPostersHome($title, $items)
 ?>
     </td></tr>
     </table>
-
-    
 <?php    
 }
 

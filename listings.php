@@ -31,9 +31,13 @@ $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&Collection
     "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
     "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
 
+$pageObj = new Page('');
+$pageObj->backdrop = $backdrop;
+
 function setNumPagesAndIndexCount($totalRecordCount)
 {
-    global $page, $numPages, $indexStyle;
+    global $page, $numPages, $indexStyle, $pageObj;
+    $pageObj->indexStyle = $indexStyle;
     $numPages = ceil($totalRecordCount / $indexStyle->Limit);
     $indexStyle->setIndexCount($page < $numPages ? 
                 $indexStyle->Limit : 
@@ -47,11 +51,13 @@ function printListingsInitJS()
 <?
 }
 
-function printHeadEtc($onloadset = null, $additionalCSS = null, $title = null)
+function printHeadEtc($onloadset = null)
 {
-    global $indexStyle;
-    $onload = "initpage(" . ((isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) ? 'true' : 'false') . ")";
-    Page::printHead($onloadset, $additionalCSS, $title, 'printListingsInitJS', $onload);
+    global $pageObj;
+    $pageObj->onloadset = $onloadset;
+    $pageObj->InitJSFunction = 'printListingsInitJS';
+    $pageObj->onload = "initpage(" . ((isset($pageObj->indexStyle->popupHeight) || isset($pageObj->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
+    $pageObj->printHead();
 }
 
 function printFooter()
@@ -73,23 +79,19 @@ function printFooter()
         }
 ?>
         </div>
-        <div class="hidden" id="navigationlinks">
-            <a href="index.php" TVID="HOME"></a>
-            <a href="categories.php" TVID="info"></a><br/>
-        </div>
 <?php
     Page::printFooter();
 }
 
-function printNavbarAndPosters($title, $items)
+function printNavbarAndPosters($items)
 {
-    global $indexStyle;
+    global $pageObj;
     ?>
     <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td>
     <?php  
-    printNavbar($title);
+    $pageObj->printNavbar();
 ?>
-    </td></tr><tr valign="<?= $indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
+    </td></tr><tr valign="<?= $pageObj->indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
 <? 
     printPosterTable($items);
 ?>
@@ -101,11 +103,11 @@ function printPosterTable($items)
 {
     global $menuItems, $lastRow;
 
-    global $indexStyle;
+    global $pageObj;
 
-    $lastRow = ceil(count($items) / $indexStyle->nbThumbnailsPerLine);
+    $lastRow = ceil(count($items) / $pageObj->indexStyle->nbThumbnailsPerLine);
     ?>
-    <table class="movies" border="0" cellpadding="<?= $indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $indexStyle->moviesTableAlign ?>">
+    <table class="movies" border="0" cellpadding="<?= $pageObj->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $pageObj->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $pageObj->indexStyle->moviesTableAlign ?>">
         <?php
         $i = 0;
         foreach ($items as $item) {
@@ -115,7 +117,7 @@ function printPosterTable($items)
             }
             $menuItem = getMenuItem($item);
             if ($menuItem) {
-                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $indexStyle->nbThumbnailsPerLine));
+                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $pageObj->indexStyle->nbThumbnailsPerLine));
                 //add menuItem to menuItems list for later
                 array_push($menuItems, $menuItem);
 
@@ -242,65 +244,4 @@ function printPosterTD($menuItem, $gap, $position, $row)
     </td>
 <?php
 }
-
-function printNavbar($title)
-{
-    global $user_switch_url, $user_ids, $current_users;
-
-    ?>
-    <table class="main" border="0" cellpadding="0" cellspacing="0">
-        <tr valign="top">
-            <td class="indexname" id="indexmenuleft" align="left" valign="top">
-                <?= $title ?>
-            </td>
-            <td id="indexmenuright" align="right">&nbsp;
-            <a onkeydownset="1" href="<?= $user_switch_url ?>"><?php
-foreach($current_users as $user) {
-?><img src="<?=getImageURL($user_ids[$user],45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
-}
-?></a>&nbsp;
-            </td>
-        </tr>
-    </table>
-<?php
-}
-
-function printTitleTable($currentPage = 1, $numPages = 1)
-{
-    global $apiCallCount, $QSBase, $include_jellyfin_logo_when_backdrop_present;
-    global $backdropId;
-    ?>
-    <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
-        <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$backdropId) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
-            <td width="60%" align="center" valign="top">
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td align="center" id="title" valign="top">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td align="center" id="subtitle" valign="top" class="secondaryText">&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-
-
-            <td width="20%" align="right" id="page" valign="top"><? 
-            if ($numPages > 1) { 
-                //pgup on first page, wraps around to last page
-                $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
-                echo "\n" . '               <a name="pgupload" onfocusload="" TVID="PGUP" href="' . $_SERVER['PHP_SELF'] . $QSBase . $page . "\" >" . $currentPage . "</a> / ";
-                //pgdn on last page wraps to first page
-                $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
-                echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="PGDN" href="' . $_SERVER['PHP_SELF'] . $QSBase . $page  . "\" >" . $numPages . "</a>";
-            }
-?>
-                <!-- API call count = <?= $apiCallCount ?> -->
-            </td>
-        </tr>
-
-    </table>
-<?php
-}
-
 ?>

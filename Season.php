@@ -70,7 +70,15 @@ $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-Page::printHead(EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1), "Season.css", $season->Name . ' - ' . $season->SeriesName, 'printInitJS', 'init()', 'transparent');
+$pageObj = new Page($season->Name . ' - ' . $season->SeriesName);
+$pageObj->backdrop = $backdrop;
+$pageObj->indexStyle = $indexStyle;
+$pageObj->onloadset = EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
+$pageObj->additionalCSS = 'Season.css';
+$pageObj->InitJSFunction = 'printInitJS';
+$pageObj->onload ='init()';
+$pageObj->focuscolor ='transparent';
+$pageObj->printHead();
 printTopBar();
 printSpacerTable();
 printLowerTable();
@@ -419,7 +427,6 @@ function printSeasonFooter()
         printPCMenu();
     }
 ?>
-    <a TVID="HOME" href="index.php"></a>
     <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
     <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
 

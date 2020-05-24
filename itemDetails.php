@@ -20,11 +20,16 @@ setNames($item);
 
 setupChildData($item);
 
-Page::printHead("play","itemDetails.css", $Title, 'printInitJS');
+$pageObj = new Page($Title);
+$pageObj->indexStyle = $indexStyle;
+$pageObj->onloadset = 'play';
+$pageObj->additionalCSS = 'itemDetails.css';
+$pageObj->InitJSFunction = 'printInitJS';
+$pageObj->printHead();
 
 render($item);
 
-printTitleTable($page, $numPages);
+$pageObj->printTitleTable($page, $numPages);
 
 printLogo();
 
