@@ -1,5 +1,4 @@
 <?php
-include_once 'page.php';
 include 'listings.php';
 
 $GroupItems = "true";
@@ -24,15 +23,8 @@ switch ($_GET["type"]) {
         break;
 }
 
-$pageObj = new Page($Title);
+$pageObj->title = $Title;
 $pageObj->indexStyle = $indexStyle;
-
-printHeadEtc();
-
-printNavbarAndPosters($items);
-
-$pageObj->printTitleTable();
-
-printFooter();
-
+$pageObj->items = $items;
+$pageObj->render();
 ?>
