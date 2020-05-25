@@ -73,7 +73,11 @@ class PlaybackReporting
     
     public function deletePlaystate()
     {
-        unlink(self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT);
+        $filepath = self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT;
+        if (file_exists($filepath)) 
+        {
+            unlink($filepath);
+        }
     }
 
     private function calculateCurrentPosition()
