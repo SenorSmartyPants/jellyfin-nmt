@@ -1,5 +1,4 @@
 <?php
-
 include 'listings.php';
 
 $libraryBrowse = true;
@@ -36,12 +35,7 @@ $items = $itemsAndCount->Items;
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 $pageObj->title = $name;
-printHeadEtc();
-
-printNavbarAndPosters($items);
-
-$pageObj->printTitleTable($page, $numPages);
-
-printFooter();
-
+$pageObj->indexStyle = $indexStyle;
+$pageObj->items = $items;
+$pageObj->render();
 ?>

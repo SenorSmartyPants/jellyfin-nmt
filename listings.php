@@ -31,8 +31,59 @@ $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&Collection
     "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
     "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
 
-$pageObj = new Page('');
+class ListingsPage extends Page
+{
+    public $items;
+    public $menuItems;
+
+    public function printHead()
+    {
+        $this->InitJSFunction = 'printListingsInitJS';
+        $this->onload = "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
+        parent::printHead();
+    }
+
+    public function printContentWrapperStart() 
+    {
+?>
+        <table border="0" cellpadding="0" cellspacing="0" align="<?= $this->indexStyle->moviesTableAlign ?>">
+        <tr valign="<?= $this->indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
+<? 
+    }
+
+    public function printContent()
+    {
+        global $menuItems;
+
+        printPosterTable($this->items);
+        $this->menuItems = $menuItems;   
+    }
+
+    public function printFooter()
+    {
+?>
+            <div id="popupWrapper">
+<?
+        //print popups last of all, so they have highest z-index on NMT
+        foreach ($this->menuItems as $key => $menuItem) {
+            printTitleAndSubtitle($menuItem, 0, $key);
+        }
+        if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
+            //print popups last of all, so they have highest z-index on NMT
+            foreach ($this->menuItems as $key => $menuItem) {
+                printPopup($menuItem, 0, $key);
+            }
+        }
+?>
+            </div>
+<?
+        parent::printFooter();
+    }
+}
+
+$pageObj = new ListingsPage('');
 $pageObj->backdrop = $backdrop;
+
 
 function setNumPagesAndIndexCount($totalRecordCount)
 {
@@ -49,54 +100,6 @@ function printListingsInitJS()
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
-}
-
-function printHeadEtc($onloadset = null)
-{
-    global $pageObj;
-    $pageObj->onloadset = $onloadset;
-    $pageObj->InitJSFunction = 'printListingsInitJS';
-    $pageObj->onload = "initpage(" . ((isset($pageObj->indexStyle->popupHeight) || isset($pageObj->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
-    $pageObj->printHead();
-}
-
-function printFooter()
-{
-    global $menuItems, $indexStyle;
-
-?>
-        <div id="popupWrapper">
-<?
-        //print popups last of all, so they have highest z-index on NMT
-        foreach ($menuItems as $key => $menuItem) {
-            printTitleAndSubtitle($menuItem, 0, $key);
-        }
-        if (isset($indexStyle->popupHeight) || isset($indexStyle->popupWidth)) {
-            //print popups last of all, so they have highest z-index on NMT
-            foreach ($menuItems as $key => $menuItem) {
-                printPopup($menuItem, 0, $key);
-            }
-        }
-?>
-        </div>
-<?php
-    Page::printFooter();
-}
-
-function printNavbarAndPosters($items)
-{
-    global $pageObj;
-    ?>
-    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td>
-    <?php  
-    $pageObj->printNavbar();
-?>
-    </td></tr><tr valign="<?= $pageObj->indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
-<? 
-    printPosterTable($items);
-?>
-    </td></tr></table>
-<?php    
 }
 
 function printPosterTable($items)

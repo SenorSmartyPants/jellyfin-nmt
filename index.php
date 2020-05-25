@@ -1,5 +1,4 @@
 <?php
-include_once 'page.php';
 include 'listings.php';
 
 $useSeasonNameForMenuItems = true;
@@ -42,38 +41,29 @@ $indexStyle->ImageType = ImageType::PRIMARY;
 
 setNumPagesAndIndexCount(count($items));
 
-$pageObj = new Page('Home');
-$pageObj->indexStyle = $indexStyle;
-
-printHeadEtc("nextup");
-
-printNavbarAndPostersHome($items);
-
-$pageObj->printTitleTable();
-
-printFooter();
-
-
-function printNavbarAndPostersHome($items)
+class IndexPage extends ListingsPage
 {
-    global $pageObj;
-    $pageObj->printNavbar();
-?>
-    <table border="0" cellpadding="0" cellspacing="0" align="left"><tr valign="top"><td height="542">
-    <a href="nextUp.php" name="nextup">Next Up ></a>
-    <br clear="all"/>
-    <a href="latest.php?type=episode">Latest TV Shows ></a>
-    <br clear="all"/>
-    <a href="latest.php?type=movie">Latest Movies ></a>
-    <br clear="all"/>
-    <a href="categories.php">Categories ></a>
-    <br clear="all"/>
-<?php 
-    printPosterTable($items);
-?>
-    </td></tr>
-    </table>
-<?php    
+    public function printContent()
+    {
+        global $menuItems;
+    ?>
+        <a href="nextUp.php" name="nextup">Next Up ></a>
+        <br clear="all"/>
+        <a href="latest.php?type=episode">Latest TV Shows ></a>
+        <br clear="all"/>
+        <a href="latest.php?type=movie">Latest Movies ></a>
+        <br clear="all"/>
+        <a href="categories.php">Categories ></a>
+        <br clear="all"/>
+    <?php 
+        printPosterTable($this->items);
+        $this->menuItems = $menuItems;  
+    }
 }
 
+$pageObj = new IndexPage('Home');
+$pageObj->onloadset = 'nextup';
+$pageObj->indexStyle = $indexStyle;
+$pageObj->items = $items;
+$pageObj->render();
 ?>

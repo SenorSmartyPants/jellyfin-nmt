@@ -49,6 +49,7 @@ class Page
 
     public function render()
     {
+        global $page, $numPages;
         $this->printHead();
         if ($this->includeNavbar)
         {
@@ -59,7 +60,7 @@ class Page
         $this->printContentWrapperEnd();
         if ($this->includeTitleTable)
         {
-            $this->printTitleTable();
+            $this->printTitleTable($page, $numPages);
         }
         $this->printFooter();
     }

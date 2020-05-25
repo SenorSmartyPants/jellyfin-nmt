@@ -1,5 +1,4 @@
 <?php
-
 include 'listings.php';
 
 $useSeasonNameForMenuItems = false;
@@ -12,13 +11,8 @@ $items = $itemsAndCount->Items;
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 $pageObj->title = 'Next Up';
-
-printHeadEtc();
-
-printNavbarAndPosters($items);
-
-$pageObj->printTitleTable($page, $numPages);
-
-printFooter();
+$pageObj->indexStyle = $indexStyle;
+$pageObj->items = $items;
+$pageObj->render();
 
 ?>

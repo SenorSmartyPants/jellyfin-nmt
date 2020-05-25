@@ -1,5 +1,4 @@
 <?
-include_once 'data.php';
 include_once 'listings.php';
 
 const POSTER_WIDTH = 276;
@@ -20,7 +19,7 @@ setNames($item);
 
 setupChildData($item);
 
-$pageObj = new Page($Title);
+$pageObj = new ListingsPage($Title);
 $pageObj->indexStyle = $indexStyle;
 $pageObj->onloadset = 'play';
 $pageObj->additionalCSS = 'itemDetails.css';
@@ -28,12 +27,13 @@ $pageObj->InitJSFunction = 'printInitJS';
 $pageObj->printHead();
 
 render($item);
+$pageObj->menuItems = $menuItems;
 
 $pageObj->printTitleTable($page, $numPages);
 
 printLogo();
 
-printFooter();
+$pageObj->printFooter();
 
 function printInitJS()
 {
