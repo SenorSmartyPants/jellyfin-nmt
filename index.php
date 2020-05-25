@@ -45,7 +45,6 @@ class IndexPage extends ListingsPage
 {
     public function printContent()
     {
-        global $menuItems;
     ?>
         <a href="nextUp.php" name="nextup">Next Up ></a>
         <br clear="all"/>
@@ -55,9 +54,8 @@ class IndexPage extends ListingsPage
         <br clear="all"/>
         <a href="categories.php">Categories ></a>
         <br clear="all"/>
-    <?php 
-        printPosterTable($this->items);
-        $this->menuItems = $menuItems;  
+    <?
+        $this->printPosterTable($this->items);
     }
 }
 

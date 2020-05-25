@@ -27,7 +27,6 @@ $pageObj->InitJSFunction = 'printInitJS';
 $pageObj->printHead();
 
 render($item);
-$pageObj->menuItems = $menuItems;
 
 $pageObj->printTitleTable($page, $numPages);
 

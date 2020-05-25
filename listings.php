@@ -5,8 +5,6 @@ include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
 
-$menuItems = array();
-
 $page = $_GET["page"];
 $page = $page ?? 1;
 
@@ -34,7 +32,7 @@ $QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&Collection
 class ListingsPage extends Page
 {
     public $items;
-    public $menuItems;
+    public $menuItems = array();
 
     public function printHead()
     {
@@ -53,11 +51,41 @@ class ListingsPage extends Page
 
     public function printContent()
     {
-        global $menuItems;
-
-        printPosterTable($this->items);
-        $this->menuItems = $menuItems;   
+        $this->printPosterTable($this->items);  
     }
+
+    function printPosterTable($items)
+    {
+        global $lastRow;
+    
+        $lastRow = ceil(count($items) / $this->indexStyle->nbThumbnailsPerLine);
+        ?>
+        <table class="movies" border="0" cellpadding="<?= $this->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $this->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $this->indexStyle->moviesTableAlign ?>">
+            <?
+            $i = 0;
+            foreach ($items as $item) {
+                //first item in row
+                if (isStartOfRow($i)) {
+                    echo "<tr>";
+                }
+                $menuItem = getMenuItem($item);
+                if ($menuItem) {
+                    printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine));
+                    //add menuItem to menuItems list for later
+                    array_push($this->menuItems, $menuItem);
+    
+                    //last item in row
+                    if (isEndOfRow($i)) {
+                        echo "</tr>";
+                    }
+    
+                    $i++;
+                }
+            }
+            ?>
+        </table>
+        <?
+    }    
 
     public function printFooter()
     {
@@ -100,41 +128,6 @@ function printListingsInitJS()
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
-}
-
-function printPosterTable($items)
-{
-    global $menuItems, $lastRow;
-
-    global $pageObj;
-
-    $lastRow = ceil(count($items) / $pageObj->indexStyle->nbThumbnailsPerLine);
-    ?>
-    <table class="movies" border="0" cellpadding="<?= $pageObj->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $pageObj->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $pageObj->indexStyle->moviesTableAlign ?>">
-        <?php
-        $i = 0;
-        foreach ($items as $item) {
-            //first item in row
-            if (isStartOfRow($i)) {
-                echo "<tr>";
-            }
-            $menuItem = getMenuItem($item);
-            if ($menuItem) {
-                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $pageObj->indexStyle->nbThumbnailsPerLine));
-                //add menuItem to menuItems list for later
-                array_push($menuItems, $menuItem);
-
-                //last item in row
-                if (isEndOfRow($i)) {
-                    echo "</tr>";
-                }
-
-                $i++;
-            }
-        }
-        ?>
-    </table>
-<?php
 }
 
 function isStartOfRow($position)
