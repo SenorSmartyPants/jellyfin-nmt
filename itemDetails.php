@@ -399,9 +399,9 @@ function render($item)
     <tr height="182">
         <td colspan="3" align="center">
 <?
-global $itemsToDisplay;
+global $itemsToDisplay, $pageObj;
 if ($itemsToDisplay) {
-    printPosterTable($itemsToDisplay);
+    $pageObj->printPosterTable($itemsToDisplay);
 }
 ?>
         </td>
