@@ -211,6 +211,13 @@ function getUsersViews()
     return apiCall($path);
 }
 
+
+function getUsersPublic()
+{
+    $path = USERSPATH . 'Public';
+    return apiCall($path, false, false);
+}
+
 function getLatest($Limit)
 {
     global $GroupItems;
