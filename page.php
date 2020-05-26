@@ -1,6 +1,7 @@
 <?php
 include_once 'config.php';
 include_once 'data.php';
+include_once 'auth.php';
 const PCMENU = false;
 
 class Page 
@@ -8,6 +9,7 @@ class Page
     private $theme_css;
     protected $includeNavbar = true;
     protected $includeTitleTable = true;
+    protected $authRequired = true;
 
 
     public $title;
@@ -20,12 +22,21 @@ class Page
     public $indexStyle;
     public $backdrop;
 
+    public $auth;
 
     public function __construct($title)
     {
         global $theme_css;
         $this->theme_css = $theme_css;
-        $this->title = $title;      
+        $this->title = $title;
+        $this->auth = new Authentication();
+        if ($this->authRequired && !$this->auth->IsAuthenticated())
+        {
+            //no accessToken
+            //redirect to login page
+            header('Location: login.php');
+            die();
+        }
     }
 
     public function printContentWrapperStart()
