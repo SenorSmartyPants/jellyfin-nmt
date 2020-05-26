@@ -132,7 +132,7 @@ class Page
 
     public function printNavbar()
     {
-        global $user_switch_url, $user_ids, $current_users;
+        global $user_switch_url;
     
         ?>
         <table class="main" border="0" cellpadding="0" cellspacing="0">
@@ -140,9 +140,12 @@ class Page
                 <td class="indexname" id="indexmenuleft" align="left" valign="top"><?= $this->title ?></td>
                 <td id="indexmenuright" align="right">&nbsp;
                 <a onkeydownset="1" href="<?= $user_switch_url ?>"><?php
-    foreach($current_users as $user) {
-    ?><img src="<?=getImageURL($user_ids[$user],45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
-    }
+        if ($this->auth->IsAuthenticated())
+        {
+            foreach($this->auth->userIDs as $userID) {
+                ?><img src="<?=getImageURL($userID,45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
+            }
+        }
     ?></a>&nbsp;
                 </td>
             </tr>
