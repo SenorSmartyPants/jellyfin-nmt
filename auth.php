@@ -8,6 +8,8 @@ class Authentication
     public $user_id;
     public $userIDs;
 
+    private const USERIDS = 'userIDs';
+
     private function setUserID($ID)
     {
         global $user_id;
@@ -19,8 +21,8 @@ class Authentication
     {
         // Start the session
         session_start();
-        $this->setUserID($_SESSION['userIDs'][0]);
-        $this->userIDs = $_SESSION['userIDs'];
+        $this->setUserID($_SESSION[self::USERIDS][0]);
+        $this->userIDs = $_SESSION[self::USERIDS];
     }
 
     public function IsAuthenticated()
@@ -71,7 +73,7 @@ class Authentication
                 self::addUserToSession($_SESSION['ID'], $user);
             }
         }
-        $_SESSION['userIDs'] = $userIDs;
+        $_SESSION[self::USERIDS] = $userIDs;
         $this->userIDs = $userIDs;
     }
     
