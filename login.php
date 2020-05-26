@@ -30,7 +30,6 @@ class LoginPage extends Page
         {    
             ?>
             <p>User is currently set to:</p>
-                <!--<?= var_dump($this->auth->userIDs) ?>-->
             <?    
             foreach($this->auth->userIDs as $userID) {
                 ?><img src="<?=getImageURL($userID,100,100,null,null,null,null,null,"Users") ?>" width="100" height="100" /><?php
