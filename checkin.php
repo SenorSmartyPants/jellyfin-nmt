@@ -28,23 +28,9 @@ function closeResponse()
     flush();
 }
 
-// get current users from trakt-proxy code
-// this will get eliminated later
-global $user_ids, $current_users;
-$users = array();
-foreach ($current_users as $username) {
-    $users[] = $user_ids[$username];
-}
-
 startReponse();
 
 $auth = new Authentication();
-
-if (!$auth->IsAuthenticated($users))
-{
-    $auth->login2($users);
-}
-session_write_close();
 
 $itemId = $_GET['id'];
 $duration = $_GET['duration'];
@@ -53,7 +39,7 @@ $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration);
 
 if (isset($_GET["JS"])) 
 {
-    echo "callback('outputTest2','Trakt Checkin callback');";
+    echo "callback('outputTest2','Checkin callback');";
 }
 //close reponse before starting play, let play run in the background
 closeResponse();
