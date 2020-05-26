@@ -32,17 +32,24 @@ $tvNumberRating = false;
 $id = htmlspecialchars($_GET["id"]);
 $selectedEpisodeIndexNumber = htmlspecialchars($_GET[EPISODE]);
 
+$pageObj = new Page('');
+$pageObj->additionalCSS = 'Season.css';
+$pageObj->InitJSFunction = 'printInitJS';
+$pageObj->onload ='init()';
+$pageObj->focuscolor ='transparent';
+
 //Banners don't inherit from parents
 //have to load season to find out if it has a banner
 $season = getItem($id);
 $series = getItem($season->SeriesId);
+$pageObj->title = $season->Name . ' - ' . $season->SeriesName;
 $bannerId = null;
 if ($season->ImageTags->Banner) {
     $bannerId = $season->Id;
 } elseif ($series->ImageTags->Banner) {
     $bannerId = $season->SeriesId;
 }
-$backdrop = getBackdropIDandTag($season);
+$pageObj->backdrop = getBackdropIDandTag($season);
 
 $episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
 $episodes = $episodesAndCount->Items;
@@ -65,19 +72,12 @@ foreach($episodes as $key => $episode) {
     }
 }
 
+$pageObj->onloadset = EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
 
 $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
 
 $streams = getStreams($selectedEpisode);
 
-$pageObj = new Page($season->Name . ' - ' . $season->SeriesName);
-$pageObj->backdrop = $backdrop;
-$pageObj->indexStyle = $indexStyle;
-$pageObj->onloadset = EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
-$pageObj->additionalCSS = 'Season.css';
-$pageObj->InitJSFunction = 'printInitJS';
-$pageObj->onload ='init()';
-$pageObj->focuscolor ='transparent';
 $pageObj->printHead();
 printTopBar();
 printSpacerTable();
