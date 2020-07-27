@@ -82,6 +82,13 @@ class Page
         return 671 - ($this->includeNavbar ? 56 : 0) - ($this->includeTitleTable ? 73 : 0);
     }
 
+    public function printJavascript() 
+    {
+        if ($this->InitJSFunction) {
+            call_user_func($this->InitJSFunction);
+        }
+    }
+
     public function printHead()
     {
         ?>
@@ -110,9 +117,7 @@ class Page
                 echo '        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />' . "\n";
             }
             
-            if ($this->InitJSFunction) {
-                call_user_func($this->InitJSFunction);
-            }
+            $this->printJavascript();
 ?>
     </head>
 

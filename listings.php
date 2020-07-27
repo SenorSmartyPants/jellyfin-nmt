@@ -34,9 +34,15 @@ class ListingsPage extends Page
     public $items;
     public $menuItems = array();
 
+    public function printJavascript() 
+    {
+?>
+        <script type="text/javascript" src="js/listings.js"></script>
+<?
+    }
+
     public function printHead()
     {
-        $this->InitJSFunction = 'printListingsInitJS';
         $this->onload = "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
         parent::printHead();
     }
@@ -121,13 +127,6 @@ function setNumPagesAndIndexCount($totalRecordCount)
     $indexStyle->setIndexCount($page < $numPages ? 
                 $indexStyle->Limit : 
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
-}
-
-function printListingsInitJS()
-{
-?>
-        <script type="text/javascript" src="js/listings.js"></script>
-<?
 }
 
 function isStartOfRow($position)

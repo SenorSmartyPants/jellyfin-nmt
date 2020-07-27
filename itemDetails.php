@@ -19,11 +19,19 @@ setNames($item);
 
 setupChildData($item);
 
-$pageObj = new ListingsPage($Title);
+class ItemDetailsPage extends ListingsPage
+{
+    public function printJavascript() 
+    {
+        parent::printJavascript();
+        CheckinJS();
+    }  
+}
+
+$pageObj = new ItemDetailsPage($Title);
 $pageObj->indexStyle = $indexStyle;
 $pageObj->onloadset = 'play';
 $pageObj->additionalCSS = 'itemDetails.css';
-$pageObj->InitJSFunction = 'printInitJS';
 $pageObj->printHead();
 
 render($item);
@@ -33,12 +41,6 @@ $pageObj->printTitleTable($page, $numPages);
 printLogo();
 
 $pageObj->printFooter();
-
-function printInitJS()
-{
-    printListingsInitJS();
-    CheckinJS();
-}
 
 function setEpisodeIndexStyle($item)
 {
