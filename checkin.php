@@ -10,6 +10,8 @@ function startReponse()
 
 function closeResponse()
 {
+    session_write_close();
+
     // Get the size of the output.
     $size = ob_get_length();
 
