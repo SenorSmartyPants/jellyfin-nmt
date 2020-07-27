@@ -34,9 +34,9 @@ class CategoriesPage extends Page
         $titleLetters = range("A","Z");
         array_unshift($titleLetters,"#");
         $this->printCategory("Title", $titleLetters);
-        $this->printCategory("Tags", $this->filters->Tags);
         $this->printCategory("Ratings", $this->filters->OfficialRatings);
         $this->printCategory("Years", $this->filters->Years);
+        $this->printCategory("Tags", $this->filters->Tags);
     }
 
     private function printCategory($name, $items) 
