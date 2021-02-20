@@ -1,4 +1,5 @@
 <?php
+include_once 'utils.php';
 include_once 'page.php';
 
 /* TODO: decades?
@@ -55,8 +56,9 @@ class CategoriesPage extends Page
             <td class="secondaryText">
 <?
             for ($i=0; $i < count($items); $i++) { 
+                $url = categoryBrowseURL($name, $items[$i]);
 ?>
-                <a href="browse.php?CollectionType=search&Name=<?= urlencode($items[$i]) ?>&<?= $name . "=" . urlencode($items[$i]) ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
+                <a href="<?= $url ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
 <?
             }
 ?>

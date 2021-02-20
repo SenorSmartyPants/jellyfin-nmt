@@ -181,7 +181,12 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     } else {
         return '<a href="' . $url . '">' . $linkText . '</a>';
     }
-    
+}
+
+function categoryBrowseURL($categoryName, $searchTerm)
+{
+    $searchTerm = urlencode($searchTerm);
+    return "browse.php?CollectionType=search&Name=$searchTerm&$categoryName=$searchTerm";
 }
 
 ?>

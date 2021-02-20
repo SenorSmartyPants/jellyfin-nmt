@@ -45,6 +45,20 @@ class ListingsPage extends Page
     {
         $this->onload = "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
         parent::printHead();
+
+        //speed dial TVIDs
+        $name = "Title";
+        $titleLetters = range("A","Z");
+        array_unshift($titleLetters,"#");
+        $tvids = [1,2,22,222,3,33,333,4,44,444,5,55,555,6,66,666,7,77,777,7777,8,88,888,9,99,999,9999];
+
+        for ($i=0; $i < count($titleLetters); $i++) { 
+            $url = categoryBrowseURL($name, $titleLetters[$i]);
+?>
+            <a href="<?= $url ?>" tvid="<?= $tvids[$i] ?>"></a>
+<?
+        }
+
     }
 
     public function printContentWrapperStart() 
