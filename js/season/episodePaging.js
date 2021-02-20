@@ -58,6 +58,9 @@ function toggletab() {
             if (iMainSeason != asSeasonNo[noNew]) {
                 iEpisodeNoNew = 'S' + iEpisodeNoNew;
             }
+            if (asEpisodeNoEnd[noNew]) {
+                iEpisodeNoNew += '-' + asEpisodeNoEnd[noNew];
+            }
 
             var sWatched = '';
             if (asEpisodeWatched[noNew]) {
