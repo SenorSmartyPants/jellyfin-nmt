@@ -292,9 +292,9 @@ function printTopBar()
             <td width="20"></td>
             <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
             <td width="50"></td>
-            <?= $ShowAudioCodec ? '<td>' . audioCodec($streams->Audio) . '</td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowVideoOutput ? '<td>' . videoOutput($streams->Video) . '</td><td width="9"></td>' . "\n" : null ?>
             <?= $ShowContainer ? '<td>' . container($streams->Container) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowVideoOutput ? '<td>' . videoOutput($streams->Video) . "</td>\n"  : null ?>
+            <?= $ShowAudioCodec ? '<td>' . audioCodec($streams->Audio) . '</td>' . "\n" : null ?>
             <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
             <td align="right" class="rating"><? 
                 if ($series->CommunityRating) 
