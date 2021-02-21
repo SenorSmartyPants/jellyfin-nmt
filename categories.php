@@ -16,7 +16,7 @@ foreach ($filters->Years as $year) {
 
 class CategoriesPage extends Page
 {
-    public $filters;
+    protected $filters;
 
     public function __construct()
     {
