@@ -34,6 +34,32 @@ class ListingsPage extends Page
     public $items;
     public $menuItems = array();
 
+    protected $filters;
+    protected $titleLetters;
+    protected $singleLetterTVIDs;
+    protected $letterToNumber;
+
+    public function __construct($title)
+    {
+        parent::__construct($title);  
+        $this->filters = getFilters(null, "movie,series,boxset", true);
+        
+        $this->titleLetters = range("A","Z");
+        array_unshift($this->titleLetters,"#");
+
+        $this->letterToNumber = ['',2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,7,8,8,8,9,9,9,9];
+        $this->singleLetterTVIDs = array("#"=>"1", 
+            "A"=>"2", "B"=>"22", "C"=>"222", 
+            "D"=>"3", "E"=>"33", "F"=>"333",
+            "G"=>"4", "H"=>"44", "I"=>"444",
+            "J"=>"5", "K"=>"55", "L"=>"555",
+            "M"=>"6", "N"=>"66", "O"=>"666",
+            "P"=>"7", "Q"=>"77", "R"=>"777", "S"=>"7777",
+            "T"=>"8", "U"=>"88", "V"=>"888",
+            "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
+        );
+    }
+
     public function printJavascript() 
     {
 ?>
@@ -47,21 +73,43 @@ class ListingsPage extends Page
         parent::printHead();
     }
 
+    private function toSingleLetterNumberpad($str)
+    {
+        return $this->singleLetterTVIDs[$str];
+    }
+
+    private function toNumberpad($str, $length = 3)
+    {
+        //remove spaces
+        $str = str_replace(' ', '', $str);
+        return substr(str_ireplace($this->titleLetters, $this->letterToNumber, $str), 0, $length);
+    }
+
+    private function printTVIDLink($url, $tvid)
+    {
+        print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
+    }
+
+    private function printTVIDLinks($name, $items, $getTVID)
+    {
+        foreach ($items as $item) {
+            ListingsPage::printTVIDLink(categoryBrowseURL($name, $item), call_user_func($getTVID, $item)); 
+        }
+    }
+
+    private function printSpeedDial()
+    {
+        //TODO: check for TVID collision
+        //speed dial TVIDs
+        ListingsPage::printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        ListingsPage::printTVIDLinks("Genres", $this->filters->Genres, 'ListingsPage::toNumberpad');
+        ListingsPage::printTVIDLinks("Years", $this->filters->Years, 'strval');
+    }
+
     public function printNavbar()
     {
         parent::printNavbar();
-        //speed dial TVIDs
-        $name = "Title";
-        $titleLetters = range("A","Z");
-        array_unshift($titleLetters,"#");
-        $tvids = [1,2,22,222,3,33,333,4,44,444,5,55,555,6,66,666,7,77,777,7777,8,88,888,9,99,999,9999];
-
-        for ($i=0; $i < count($titleLetters); $i++) { 
-            $url = categoryBrowseURL($name, $titleLetters[$i]);
-?>
-        <a href="<?= $url ?>" tvid="<?= $tvids[$i] ?>"></a>
-<?
-        }
+        $this->printSpeedDial();
     }
 
     public function printContentWrapperStart() 
