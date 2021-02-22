@@ -25,6 +25,32 @@ class LoginPage extends Page
 
     public function printContent()
     {
+        global $api_url, $api_key;
+
+        if (!$api_url) {
+            ?>
+            ERROR: $api_url not set in secrets.php<br/>
+            <?
+            $error = true;
+        }
+
+        if (!$api_key) {
+            ?>
+            ERROR: $api_key not set in secrets.php</br>
+            <?
+            $error = true;
+        }
+
+        if (count($this->users) == 0) {
+            ?>
+            ERROR: No public users returned from Jellyfin</br>
+            <?
+            $error = true;
+        }
+
+        if ($error) {
+            exit;
+        }
 
         if ($this->auth->IsAuthenticated())
         {    
