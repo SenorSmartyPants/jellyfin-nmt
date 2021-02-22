@@ -137,7 +137,7 @@ class Page
 
     public function printNavbar()
     {
-        global $user_switch_url;
+        $user_switch_url = 'login.php';
     
         ?>
         <table class="main" border="0" cellpadding="0" cellspacing="0">
