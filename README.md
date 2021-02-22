@@ -11,23 +11,17 @@ Videos are direct played via mounted filesystem on NMT. Playback status is repor
 ## Setup
 
 - Create an API key in Jellyfin
-- Look up the id of the user you will use at http://localhost:8096/emby/Users/?api_key=APIKEY
 - Create a secrets.php file based on this template, save it in the root of the application folder.
 
 ```php
 <?php
-//url to YAMJ generated files
-$jukebox_url = "http://192.168.1.1/New/Jukebox/";
-
 $api_url = "http://localhost:8096";
 $api_key = "APIKEY";
-
-$user_id = "USERID";
-
 ?>
 ```
 
-- Update secrets.php with APIKEY and USERID.
+- Update secrets.php with APIKEY.
+- Update secrets.php $api_url if you are running Jellyfin on a different machine than the one you are running JF-NMT
 - put all files in a directory served by a webserver with php
 - Browse to index.php to start. Use that page as a starting point on your NMT.
 
