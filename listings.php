@@ -93,7 +93,7 @@ class ListingsPage extends Page
     private function printTVIDLinks($name, $items, $getTVID)
     {
         foreach ($items as $item) {
-            ListingsPage::printTVIDLink(categoryBrowseURL($name, $item), call_user_func($getTVID, $item)); 
+            $this->printTVIDLink(categoryBrowseURL($name, $item), call_user_func($getTVID, $item)); 
         }
     }
 
@@ -101,9 +101,9 @@ class ListingsPage extends Page
     {
         //TODO: check for TVID collision
         //speed dial TVIDs
-        ListingsPage::printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
-        ListingsPage::printTVIDLinks("Genres", $this->filters->Genres, 'ListingsPage::toNumberpad');
-        ListingsPage::printTVIDLinks("Years", $this->filters->Years, 'strval');
+        $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        $this->printTVIDLinks("Genres", $this->filters->Genres, 'ListingsPage::toNumberpad');
+        $this->printTVIDLinks("Years", $this->filters->Years, 'strval');
     }
 
     public function printNavbar()
