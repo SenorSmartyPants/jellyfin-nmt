@@ -2,6 +2,7 @@
 include_once 'config.php';
 include_once 'data.php';
 include_once 'auth.php';
+include_once 'navbar.php';
 const PCMENU = false;
 
 class Page 
@@ -62,10 +63,7 @@ class Page
     {
         global $page, $numPages;
         $this->printHead();
-        if ($this->includeNavbar)
-        {
-            $this->printNavbar();
-        }
+        $this->printNavbar();
         $this->printContentWrapperStart();
         $this->printContent();
         $this->printContentWrapperEnd();
@@ -79,7 +77,7 @@ class Page
     public function getAvailableHeight()
     {
         // determine height available for main content
-        return 671 - ($this->includeNavbar ? 56 : 0) - ($this->includeTitleTable ? 73 : 0);
+        return 671 - ($this->includeNavbar ? navbar::getHeight() : 0) - ($this->includeTitleTable ? 73 : 0);
     }
 
     public function printJavascript() 
@@ -137,25 +135,10 @@ class Page
 
     public function printNavbar()
     {
-        $user_switch_url = 'login.php';
-    
-        ?>
-        <table class="main" border="0" cellpadding="0" cellspacing="0">
-            <tr valign="top">
-                <td class="indexname" id="indexmenuleft" align="left" valign="top"><?= $this->title ?></td>
-                <td id="indexmenuright" align="right">&nbsp;
-                <a onkeydownset="1" href="<?= $user_switch_url ?>"><?php
-        if ($this->auth->IsAuthenticated())
+        if ($this->includeNavbar)
         {
-            foreach($this->auth->userIDs as $userID) {
-                ?><img src="<?=getImageURL($userID,45,45,null,null,null,null,null,"Users") ?>" width="45" height="45" /><?php
-            }
+            navbar::printNavbar($this->title, $this->auth);
         }
-    ?></a>&nbsp;
-                </td>
-            </tr>
-        </table>
-<?php
     }
 
     public function printTitleTable($currentPage = 1, $numPages = 1)
