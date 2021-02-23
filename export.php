@@ -2,8 +2,6 @@
 //exports next up episodes and screenshots to USB drive
 //For Roku
 
-//TODO: Mark as watched after copy?
-
 include 'data.php';
 
 $drive = $_GET["drive"] ?: "F:";
