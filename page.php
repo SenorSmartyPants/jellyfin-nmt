@@ -3,7 +3,7 @@ include_once 'config.php';
 include_once 'data.php';
 include_once 'auth.php';
 include_once 'navbar.php';
-const PCMENU = false;
+const PCMENU = true;
 
 class Page 
 {
@@ -112,7 +112,7 @@ class Page
             }
             
             if (PCMENU) {
-                echo '        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />' . "\n";
+                echo '        <link rel="StyleSheet" type="text/css" href="css/no_nmt.css" media="screen" />' . "\n";
             }
             
             $this->printJavascript();

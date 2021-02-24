@@ -1,0 +1,129 @@
+@media screen {
+  body {}
+  
+  td#titleTop
+	{
+		position: absolute;
+		left: -70px;
+		top: 0;
+		width: 1280px;
+	}
+
+
+  #noNMT
+  {
+    position: absolute;
+    left: 1050px;
+    top: 100px;
+    z-index: 100;
+    width: 260px;
+    height: 320px;
+    background: url(../images/no_nmt_back.png) no-repeat;
+    color: #ffffff;
+    visibility: visible;
+    display: block;
+    padding: 40px 0 0 40px
+
+  }
+
+  #detailPage #noNMT
+  {
+    height: 420px;
+    background-image: url(../images/no_nmt_detail_back.png);
+  }
+
+  #noNMT a
+  {
+    color: #ffffff;
+    font-size: 18px;
+    display: block;
+    padding-left: 32px;
+    margin-bottom: 5px;
+    background: url(../images/no_nmt_img.png) no-repeat 0 0;
+    height: 24px;
+    outline: none;
+    visibility: visible;
+  }
+  #noNMT a:hover
+  {
+    color: gold;
+    background-position: 0 -34px;
+  }
+
+
+  #noNMT a.clickPoster { background-position: 0 -544px; }
+  #noNMT a:hover.clickPoster { background-position: 0 -578px; }
+
+  #noNMT a:hover.pageUp { background-position: 0 -340px; }
+  #noNMT a.pageUp { background-position: 0 -374px; }
+
+  #noNMT a:hover.pageDown { background-position: 0 -408px; }
+  #noNMT a.pageDown { background-position: 0 -442px; }
+
+  #noNMT a.clickIndex { background-position: 0 -272px; }
+  #noNMT a:hover.clickIndex { background-position: 0 -307px; }
+
+  #noNMT a.clickUp { background-position: 0 -136px; }
+  #noNMT a:hover.clickUp { background-position: 0 -170px; }
+
+  #noNMT a.clickDown { background-position: 0 -204px; }
+  #noNMT a:hover.clickDown { background-position: 0 -238px; }
+
+  #noNMT a.clickInfos { background-position: 0 -68px; }
+  #noNMT a:hover.clickInfos { background-position: 0 -102px; }
+
+  .menuImage { position: absolute; }
+
+
+  #menuLinks { display: none; }
+  body.menu #menuLinks
+  {
+    display: block;
+    margin-left: 32px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #noNMT #menuLinks a
+  {
+    font-size: 14px;
+    display: inline;
+    padding-left: 0;
+    margin-bottom: 0;
+    background: transparent;
+    height: auto;
+  }
+  
+  #menuLinkTbl 
+	{
+		border: none;
+		padding: 0;
+		margin: 0;	
+		width: 95px;
+	}
+	
+	#menuLinkTbl td { padding-left: 10px; }
+	
+	#menuLinkTbl td.leftTd
+	{
+		width: 54px;
+		border-right: 1px solid white;	
+		padding-left: 0;	
+	}
+	
+	.selectLink
+	{
+		border-top: 1px solid white;	
+	}
+	
+	.menuLinkActive, .menuLink { padding-left: 20px; }
+
+
+
+  .menuLinkLeft { float: left; width: 34%;}
+  .menuLinkRight { float: left; width: 78px;}
+
+  img.overlay { cursor: pointer; }
+
+
+}
