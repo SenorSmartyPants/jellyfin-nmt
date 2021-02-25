@@ -47,5 +47,6 @@ function openLink(x) {
 
 function initpage(enablePopups) {
     PopupsEnabled = enablePopups;
+    initMenu();
     return false;
 }

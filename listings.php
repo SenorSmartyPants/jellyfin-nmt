@@ -4,6 +4,7 @@ include_once 'config_listings.php';
 include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
+include_once 'filterMenu.php';
 
 $page = $_GET["page"];
 $page = $page ?? 1;
@@ -62,6 +63,7 @@ class ListingsPage extends Page
     {
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
+        <script type="text/javascript" src="js/filter.js"></script>
 <?
     }
 
@@ -161,8 +163,46 @@ class ListingsPage extends Page
         <?
     }    
 
+    function printPCMenu()
+    {
+    ?>
+        <div id="popupWrapper"><div id="noNMT">
+        <a href="#" onclick="toggleMenu(); toggleMenuLinks(); return false;">menu</a>
+        <div id="menuLinks">
+            <table id="menuLinkTbl" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="leftTd"><a href="#" onclick="catUp(); return false;">Up</a></td>
+                    <td><a href="#" onclick="genUp(); return false;">Up</a></td>
+                </tr>
+                <tr>
+                    <td class="leftTd"><a href="#" onclick="catDown(); return false;">Down</a></td>
+                    <td><a href="#" onclick="genDown(); return false;">Down</a></td>
+                </tr>
+                <tr>
+                    <td class="leftTd">&#160;</td>
+                    <td class="selectLink"><a href="#" onclick="openLink('genLink5'); return false;">Select</a></td>
+                </tr>
+            </table>
+        </div>
+
+        </div></div>
+
+    <?
+    }
+
     public function printFooter()
     {
+        ?>
+        <div id="popupWrapper">
+<?
+        FilterMenu::printFooter();
+        ?>
+        </div>
+<?        
+        if (PCMENU) {
+            $this->printPCMenu();
+        }
+
 ?>
             <div id="popupWrapper">
 <?
@@ -185,6 +225,7 @@ class ListingsPage extends Page
 
 $pageObj = new ListingsPage('');
 $pageObj->backdrop = $backdrop;
+$pageObj->additionalCSS = 'filter.css';
 
 
 function setNumPagesAndIndexCount($totalRecordCount)

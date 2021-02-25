@@ -119,7 +119,7 @@ class Page
 ?>
     </head>
 
-    <body bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
+    <body id="body" bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
         if ($this->onload) 
         { 
             ?>onload="<?= $this->onload ?>" <?
