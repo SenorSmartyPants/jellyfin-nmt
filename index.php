@@ -52,7 +52,7 @@ class IndexPage extends ListingsPage
         <br clear="all"/>
         <a href="latest.php?type=<?= ItemType::MOVIE ?>">Latest Movies ></a>
         <br clear="all"/>
-        <a href="categories.php">Categories ></a>
+        <a href="categoriesHTML.php">Categories ></a>
         <br clear="all"/>
     <?
         $this->printPosterTable($this->items);

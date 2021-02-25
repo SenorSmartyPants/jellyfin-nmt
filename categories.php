@@ -29,7 +29,7 @@ class CategoriesPage extends Page
         $this->printCategories();
     }
 
-    private function printCategories() 
+    protected function printCategories() 
     {   
         $this->printCategory("Genres", $this->filters->Genres);
         $titleLetters = range("A","Z");
@@ -40,7 +40,7 @@ class CategoriesPage extends Page
         $this->printCategory("Tags", $this->filters->Tags);
     }
 
-    private function printCategory($name, $items) 
+    protected function printCategory($name, $items) 
     {
         if (!empty($items)) {
 ?>
@@ -77,7 +77,4 @@ class CategoriesPage extends Page
         }
     }
 }
-
-$page = new CategoriesPage();
-$page->render();
 ?>

@@ -181,7 +181,7 @@ class Page
 ?>
         <div class="hidden" id="navigationlinks">
             <a href="index.php" TVID="HOME"></a>
-            <a href="categories.php" TVID="info"></a>
+            <a href="categoriesHTML.php" TVID="info"></a>
         </div>
     </body>
 </html>
