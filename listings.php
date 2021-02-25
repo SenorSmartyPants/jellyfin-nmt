@@ -57,6 +57,8 @@ class ListingsPage extends Page
             "T"=>"8", "U"=>"88", "V"=>"888",
             "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
         );
+
+        $this->additionalCSS = 'filter.css';
     }
 
     public function printJavascript() 
@@ -225,7 +227,6 @@ class ListingsPage extends Page
 
 $pageObj = new ListingsPage('');
 $pageObj->backdrop = $backdrop;
-$pageObj->additionalCSS = 'filter.css';
 
 
 function setNumPagesAndIndexCount($totalRecordCount)
