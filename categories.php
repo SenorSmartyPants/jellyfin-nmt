@@ -77,4 +77,37 @@ class CategoriesPage extends Page
         }
     }
 }
+
+class CategoriesJSPage extends CategoriesPage
+{
+    protected function printCategory($name, $items)
+    {
+?>
+        asCatNames.push('<?= $name ?>');
+        asFilters['<?= $name ?>'] = new Array();
+        asFilterNames['<?= $name ?>']  = new Array();
+
+<?
+        foreach ($items as $item) {
+            $url = categoryBrowseURL($name, $item);
+?>
+        asFilters['<?= $name ?>'].push("<?= $url ?>");
+        asFilterNames['<?= $name ?>'].push("<?= $item ?>");
+<?
+        }      
+    }
+
+    public function render()
+    {
+        header('Content-type: text/javascript');
+?>
+        var sActiveCat = 'Genres';
+
+        var asCatNames = new Array();
+        var asFilters = new Object();
+        var asFilterNames = new Object();   
+<?      
+        $this->printContent();
+    }
+}
 ?>
