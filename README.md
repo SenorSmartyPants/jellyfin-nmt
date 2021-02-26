@@ -17,6 +17,11 @@ Videos are direct played via mounted filesystem on NMT. Playback status is repor
 <?php
 $api_url = "http://localhost:8096";
 $api_key = "APIKEY";
+
+//NMT player path
+$NMT_path = "/storage/media/Videos/"; //server based path to share to NMT
+$NMT_playerpath = "file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/media/Videos/";  //NMT path to the share
+
 ?>
 ```
 
