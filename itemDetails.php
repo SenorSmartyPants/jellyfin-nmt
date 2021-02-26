@@ -1,4 +1,5 @@
 <?
+include_once 'utils.php';
 include_once 'listings.php';
 
 const POSTER_WIDTH = 276;
@@ -319,7 +320,8 @@ function render($item)
     if ($item->GenreItems && count($item->GenreItems) > 0) {
         echo '<div id="genres">Genres: ';
         foreach ($item->GenreItems as $genre) {
-            printf('<a href="browse.php?CollectionType=search&Name=%1$s&Genres=%1$s">%1$s</a>', $genre->Name);
+            $url = categoryBrowseURL('Genres', $genre->Name);
+            printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
             if ($genre != end($item->GenreItems)) {
                 echo ', ';
             }
