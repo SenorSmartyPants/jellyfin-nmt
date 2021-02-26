@@ -42,12 +42,10 @@ class ListingsPage extends Page
     public function __construct($title)
     {
         parent::__construct($title);  
-        $this->filters = getFilters(null, "movie,series,boxset", true);
         
         $this->titleLetters = range("A","Z");
         array_unshift($this->titleLetters,"#");
 
-        $this->letterToNumber = ['',2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,7,8,8,8,9,9,9,9];
         $this->singleLetterTVIDs = array("#"=>"1", 
             "A"=>"2", "B"=>"22", "C"=>"222", 
             "D"=>"3", "E"=>"33", "F"=>"333",
@@ -102,8 +100,6 @@ class ListingsPage extends Page
         //TODO: check for TVID collision
         //speed dial TVIDs
         $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
-        $this->printTVIDLinks("Genres", $this->filters->Genres, 'ListingsPage::toNumberpad');
-        $this->printTVIDLinks("Years", $this->filters->Years, 'strval');
     }
 
     public function printNavbar()
