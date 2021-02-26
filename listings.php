@@ -221,6 +221,9 @@ class ListingsPage extends Page
         }
 ?>
             </div>
+            <div class="hidden" id="navigationlinks">
+                <a TVID="TAB" name="showMenu" onfocusset="catLink5" href="#" onclick="toggleMenu()"></a>
+            </div>            
 <?
         parent::printFooter();
     }
