@@ -90,8 +90,9 @@ class ListingsPage extends Page
 
     private function printTVIDLinks($name, $items, $getTVID)
     {
+        global $collectionType;
         foreach ($items as $item) {
-            $this->printTVIDLink(categoryBrowseURL($name, $item), call_user_func($getTVID, $item)); 
+            $this->printTVIDLink(categoryBrowseURL($name, $item, $collectionType), call_user_func($getTVID, $item)); 
         }
     }
 

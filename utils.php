@@ -183,10 +183,10 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm)
+function categoryBrowseURL($categoryName, $searchTerm, $CollectionType = 'search')
 {
     $searchTerm = urlencode($searchTerm);
-    return "browse.php?CollectionType=search&Name=$searchTerm&$categoryName=$searchTerm";
+    return "browse.php?CollectionType=$CollectionType&Name=$searchTerm&$categoryName=$searchTerm";
 }
 
 ?>
