@@ -10,10 +10,12 @@ function overrideIndexStyle($folderType, $collectionType)
     global $indexStyle;
 
     switch ($folderType . '/' . $collectionType) {
+        // example to change listings style for TV shows
+        /*
         case 'CollectionFolder/tvshows':
-            $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
+            $indexStyle = new IndexStyle(IndexStyleEnum::TVBannerPopup7x2);
             break;
-
+        */
         case ItemType::BOXSET . '/':
         case ItemType::SERIES . '/':
             $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
