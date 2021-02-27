@@ -7,9 +7,9 @@ include 'data.php';
 $drive = $_GET["drive"] ?: "F:";
 
 $nextup = $_GET["nextup"];
-$id = $_GET["id"];
-$parentID = $_GET["parentID"];
-$user_id = $_GET["user_id"]; //override system selected user_id
+$id = htmlspecialchars($_GET["id"]);
+$parentID = htmlspecialchars($_GET["parentID"]);
+$user_id = htmlspecialchars($_GET["user_id"]); //override system selected user_id
 
 if ($id || $parentID || $nextup) {
     header("Content-Type: text/plain");
