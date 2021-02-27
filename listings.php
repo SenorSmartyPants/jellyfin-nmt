@@ -42,12 +42,10 @@ class ListingsPage extends Page
     public function __construct($title)
     {
         parent::__construct($title);  
-        $this->filters = getFilters(null, "movie,series,boxset", true);
         
         $this->titleLetters = range("A","Z");
         array_unshift($this->titleLetters,"#");
 
-        $this->letterToNumber = ['',2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,7,8,8,8,9,9,9,9];
         $this->singleLetterTVIDs = array("#"=>"1", 
             "A"=>"2", "B"=>"22", "C"=>"222", 
             "D"=>"3", "E"=>"33", "F"=>"333",
@@ -90,10 +88,25 @@ class ListingsPage extends Page
         print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
     }
 
-    private function printTVIDLinks($name, $items, $getTVID)
+    private function printTVIDLinks($categoryName, $items, $getTVID)
     {
+        global $collectiontypeNames;
+
+        //look at first item returned to guess collection type
+        $collectionType = mapItemTypeToCollectionType($this->items[0]->Type);
+
         foreach ($items as $item) {
-            $this->printTVIDLink(categoryBrowseURL($name, $item), call_user_func($getTVID, $item)); 
+            if (isset($collectionType)) {
+                //filter by the displayed collectiontype, tv, movie, boxset...
+                $url = categoryBrowseURLEx($collectiontypeNames[$collectionType] . ' - ' . $item, 
+                    'CollectionFolder', $collectionType, null, 
+                    null, $categoryName, $item);
+            } else {
+                //top level, just link on the category page
+                $url = categoryBrowseURL($categoryName, $item);
+            }
+
+            $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }
 
@@ -102,8 +115,6 @@ class ListingsPage extends Page
         //TODO: check for TVID collision
         //speed dial TVIDs
         $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
-        $this->printTVIDLinks("Genres", $this->filters->Genres, 'ListingsPage::toNumberpad');
-        $this->printTVIDLinks("Years", $this->filters->Years, 'strval');
     }
 
     public function printNavbar()
@@ -249,7 +260,7 @@ function printPosterTD($menuItem, $gap, $position, $row)
     if (!$menuItem->PosterURL) { 
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" TVID="<?= $placement ?>" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
         id="<?= $placement ?>" 
 <?php
 

@@ -5,14 +5,18 @@ $libraryBrowse = true;
 $useSeasonImage = false;
 
 switch ($collectionType) {
-    case "tvshows":
+    case CollectionType::TvShows:
         $recursive = true;
         $type = ItemType::SERIES;
         break;
-    case "movies":
+    case CollectionType::Movies:
         $recursive = true;
         $type = ItemType::MOVIE;
         break;
+    case CollectionType::BoxSets:
+        $recursive = true;
+        $type = ItemType::BOXSET;
+        break;        
     case "search": //searching from categories page
         $recursive = true;
         //exclude season and episodes to match JF behavior

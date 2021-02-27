@@ -1,30 +1,11 @@
 <?php
-
-include 'secrets.php';
+include_once 'enums.php';
+include_once 'secrets.php';
 
 const ITEMSPATH = '/Items/';
 const USERSPATH = '/Users/';
 
 $apiCallCount = 0;
-
-abstract class ImageType
-{
-    const PRIMARY = 'Primary';
-    const BANNER = 'Banner';
-    const THUMB = 'Thumb';
-    const LOGO = 'Logo';
-}
-
-abstract class ItemType
-{
-    const BOXSET = 'BoxSet';
-    const SERIES = 'Series';
-    const SEASON = 'Season';
-    const EPISODE = 'Episode';
-    const MOVIE = 'Movie';
-    const PERSON = 'Person';
-    const STUDIO = 'Studio';
-}
 
 const CLIENTNAME = 'Jellyfin-NMT';
 const CLIENTVERSION = '0.2.0';
@@ -46,6 +27,15 @@ class Device
             $this->name = $_SERVER[self::HTTP_USER_AGENT];
         }        
     }
+}
+
+function mapItemTypeToCollectionType($itemType)
+{
+    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TvShows, 
+        ItemType::SEASON => CollectionType::TvShows, ItemType::EPISODE => CollectionType::TvShows,
+        ItemType::MOVIE => CollectionType::Movies, ItemType::BOXSET => CollectionType::BoxSets);
+
+    return $itemTypeToCollectionType[$itemType];
 }
 
 function strbool($value)

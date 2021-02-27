@@ -108,11 +108,9 @@ function setDetailURL($item, $menuItem) {
                     break;
                 }   
             default:
-                $detailURL = "browse.php?parentId=" . $item->Id . 
-                    "&FolderType=" . $item->Type .
-                    "&CollectionType=" . $item->CollectionType .
-                    "&Name=" . $item->Name .
-                    ($menuItem->BackdropID ? "&backdropId=" . $menuItem->BackdropID : null);
+                $detailURL = categoryBrowseURLEx($item->Name, 
+                        $item->Type, $item->CollectionType,
+                        $item->Id, $menuItem->BackdropID);
                 break;
         }
         if ($forceItemDetails) {

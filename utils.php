@@ -1,9 +1,5 @@
 <?
 
-//NMT player path
-$NMT_path = "/storage/media/Videos/"; //server based path to share to NMT
-$NMT_playerpath = "file:///opt/sybhttpd/localhost.drives/NETWORK_SHARE/storage/media/Videos/";  //NMT path to the share
-
 function getBackdropIDandTag($item, $backdropID = null)
 {
     $retval = new stdClass();
@@ -183,10 +179,26 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm)
+function categoryBrowseURL($categoryName, $searchTerm, $CollectionType = 'search')
 {
-    $searchTerm = urlencode($searchTerm);
-    return "browse.php?CollectionType=search&Name=$searchTerm&$categoryName=$searchTerm";
+    return categoryBrowseURLEx($searchTerm, null, $CollectionType, null, null,
+        $categoryName, $searchTerm);
+}
+
+function categoryBrowseURLEx($Name, 
+    $FolderType = null, $CollectionType = null,
+    $parentId = null, $backdropId = null,
+    $categoryName = null, $searchTerm = null)
+{
+    $query = array(
+        'Name' => $Name,
+        'parentId' => $parentId,
+        'FolderType' => $FolderType,
+        'CollectionType' => $CollectionType,
+        'backdropId' => $backdropId,
+        $categoryName => $searchTerm);
+        
+    return 'browse.php?' . http_build_query($query);
 }
 
 ?>
