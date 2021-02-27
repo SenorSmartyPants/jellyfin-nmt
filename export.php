@@ -196,11 +196,9 @@ function exportCommands($item)
                 $thumbnailURL = getImageURL($item->ParentBackdropItemId, null, null, "Backdrop", null, null, $item->ParentBackdropImageTags[0], null, null, null, 1000);
                 downloadCommand($thumbnailURL, $dirname, "folder.jpg");
             }
-        } else if ($FolderImageType == ImageType::PRIMARY) {
-            if ($item->SeriesPrimaryImageTag) {
-                $thumbnailURL = getImageURL($item->SeriesId, null, null, $FolderImageType, null, null, $item->SeriesPrimaryImageTag, null, null, null, 1000);
-                downloadCommand($thumbnailURL, $dirname, "folder.jpg");
-            }
+        } else if ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
+            $thumbnailURL = getImageURL($item->SeriesId, null, null, $FolderImageType, null, null, $item->SeriesPrimaryImageTag, null, null, null, 1000);
+            downloadCommand($thumbnailURL, $dirname, "folder.jpg");
         }
     }
 
