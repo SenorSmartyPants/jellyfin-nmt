@@ -4,6 +4,8 @@
 
 include 'data.php';
 
+const FOLDERJPG = 'folder.jpg';
+
 $drive = $_GET["drive"] ?: "F:";
 
 $nextup = $_GET["nextup"];
@@ -191,14 +193,14 @@ function exportCommands($item)
         if ($FolderImageType == ImageType::THUMB) {
             if ($item->ParentThumbImageTag) {
                 $thumbnailURL = getImageURL($item->ParentThumbItemId, null, null, $FolderImageType, null, null, $item->ParentThumbImageTag, null, null, null, 1000);
-                downloadCommand($thumbnailURL, $dirname, "folder.jpg");
+                downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             } else if ($item->ParentBackdropImageTags[0]) {
                 $thumbnailURL = getImageURL($item->ParentBackdropItemId, null, null, "Backdrop", null, null, $item->ParentBackdropImageTags[0], null, null, null, 1000);
-                downloadCommand($thumbnailURL, $dirname, "folder.jpg");
+                downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             }
         } else if ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
             $thumbnailURL = getImageURL($item->SeriesId, null, null, $FolderImageType, null, null, $item->SeriesPrimaryImageTag, null, null, null, 1000);
-            downloadCommand($thumbnailURL, $dirname, "folder.jpg");
+            downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
         }
     }
 
