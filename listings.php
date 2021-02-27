@@ -76,13 +76,6 @@ class ListingsPage extends Page
         return $this->singleLetterTVIDs[$str];
     }
 
-    private function toNumberpad($str, $length = 3)
-    {
-        //remove spaces
-        $str = str_replace(' ', '', $str);
-        return substr(str_ireplace($this->titleLetters, $this->letterToNumber, $str), 0, $length);
-    }
-
     private function printTVIDLink($url, $tvid)
     {
         print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
@@ -112,7 +105,6 @@ class ListingsPage extends Page
 
     private function printSpeedDial()
     {
-        //TODO: check for TVID collision
         //speed dial TVIDs
         $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
     }
