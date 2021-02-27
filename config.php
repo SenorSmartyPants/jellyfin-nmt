@@ -9,5 +9,5 @@ $theme_css = "dark.css";
 //Collection type names. Users can localize for non-english
 //only used on page title for filtered views.
 //example 'TV Shows - M'
-$collectiontypeNames = array(CollectionType::TvShows=>"TV Shows", CollectionType::Movies=>"Movies", CollectionType::BoxSets=>"Collections");
+$collectiontypeNames = array(CollectionType::TVSHOWS=>"TV Shows", CollectionType::MOVIES=>"Movies", CollectionType::BOXSETS=>"Collections");
 ?>

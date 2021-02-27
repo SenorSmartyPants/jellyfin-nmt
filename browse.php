@@ -5,15 +5,15 @@ $libraryBrowse = true;
 $useSeasonImage = false;
 
 switch ($collectionType) {
-    case CollectionType::TvShows:
+    case CollectionType::TVSHOWS:
         $recursive = true;
         $type = ItemType::SERIES;
         break;
-    case CollectionType::Movies:
+    case CollectionType::MOVIES:
         $recursive = true;
         $type = ItemType::MOVIE;
         break;
-    case CollectionType::BoxSets:
+    case CollectionType::BOXSETS:
         $recursive = true;
         $type = ItemType::BOXSET;
         break;        

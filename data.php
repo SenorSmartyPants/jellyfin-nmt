@@ -31,9 +31,9 @@ class Device
 
 function mapItemTypeToCollectionType($itemType)
 {
-    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TvShows, 
-        ItemType::SEASON => CollectionType::TvShows, ItemType::EPISODE => CollectionType::TvShows,
-        ItemType::MOVIE => CollectionType::Movies, ItemType::BOXSET => CollectionType::BoxSets);
+    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS, 
+        ItemType::SEASON => CollectionType::TVSHOWS, ItemType::EPISODE => CollectionType::TVSHOWS,
+        ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS);
 
     return $itemTypeToCollectionType[$itemType];
 }

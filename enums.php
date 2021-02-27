@@ -20,17 +20,12 @@ abstract class ItemType
 
 abstract class CollectionType
 {
-    const Movies = 'movies';
-    const TvShows = 'tvshows';
-    const Music = 'music';
-    const MusicVideos = 'musicvideos';
-    //const Trailers = 'trailers';
-    const HomeVideos = 'homevideos';
-    const BoxSets = 'boxsets';
-    //const Books = 'books';
-    //const Photos = 'photos';
-    //const LiveTv = 'livetv';
-    //const Playlists = 'playlists';
-    const Folders = 'folders';
+    const MOVIES = 'movies';
+    const TVSHOWS = 'tvshows';
+    const MUSIC = 'music';
+    const MUSICVIDEOS = 'musicvideos';
+    const HOMEVIDEOS = 'homevideos';
+    const BOXSETS = 'boxsets';
+    const FOLDERS = 'folders';
 }
 ?>
