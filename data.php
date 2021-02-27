@@ -26,6 +26,22 @@ abstract class ItemType
     const STUDIO = 'Studio';
 }
 
+abstract class CollectionType
+{
+    const Movies = 'movies';
+    const TvShows = 'tvshows';
+    const Music = 'music';
+    const MusicVideos = 'musicvideos';
+    //const Trailers = 'trailers';
+    const HomeVideos = 'homevideos';
+    const BoxSets = 'boxsets';
+    //const Books = 'books';
+    //const Photos = 'photos';
+    //const LiveTv = 'livetv';
+    //const Playlists = 'playlists';
+    const Folders = 'folders';
+}
+
 const CLIENTNAME = 'Jellyfin-NMT';
 const CLIENTVERSION = '0.2.0';
 
@@ -46,6 +62,15 @@ class Device
             $this->name = $_SERVER[self::HTTP_USER_AGENT];
         }        
     }
+}
+
+function mapItemTypeToCollectionType($itemType)
+{
+    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TvShows, 
+        ItemType::SEASON => CollectionType::TvShows, ItemType::EPISODE => CollectionType::TvShows,
+        ItemType::MOVIE => CollectionType::Movies, ItemType::BOXSET => CollectionType::BoxSets);
+
+    return $itemTypeToCollectionType[$itemType];
 }
 
 function strbool($value)
