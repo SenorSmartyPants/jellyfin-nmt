@@ -42,7 +42,7 @@ class CategoriesPage extends Page
 
     private function printCategory($name, $items) 
     {
-        if (count($items) > 0) {
+        if (!empty($items)) {
 ?>
         <table class="categories" border="0" cellspacing="0" cellpadding="0">
         <tr>
