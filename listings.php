@@ -88,11 +88,25 @@ class ListingsPage extends Page
         print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
     }
 
-    private function printTVIDLinks($name, $items, $getTVID)
+    private function printTVIDLinks($categoryName, $items, $getTVID)
     {
-        global $collectionType;
+        global $collectiontypeNames;
+
+        //look at first item returned to guess collection type
+        $collectionType = mapItemTypeToCollectionType($this->items[0]->Type);
+
         foreach ($items as $item) {
-            $this->printTVIDLink(categoryBrowseURL($name, $item, $collectionType), call_user_func($getTVID, $item)); 
+            if (isset($collectionType)) {
+                //filter by the displayed collectiontype, tv, movie, boxset...
+                $url = categoryBrowseURLEx($collectiontypeNames[$collectionType] . ' - ' . $item, 
+                    'CollectionFolder', $collectionType, null, 
+                    null, $categoryName, $item);
+            } else {
+                //top level, just link on the category page
+                $url = categoryBrowseURL($categoryName, $item);
+            }
+
+            $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }
 
