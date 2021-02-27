@@ -66,7 +66,7 @@ class ListingsPage extends Page
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
         <script type="text/javascript" src="js/filter/filters.js.php"></script>
-        <script type="text/javascript" src="js/filter.js"></script>
+        <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
     }
 
