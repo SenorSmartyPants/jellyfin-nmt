@@ -1,4 +1,5 @@
 <?php
+include_once 'enums.php';
 
 date_default_timezone_set('America/Chicago');
 

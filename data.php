@@ -1,46 +1,11 @@
 <?php
-
-include 'secrets.php';
+include_once 'enums.php';
+include_once 'secrets.php';
 
 const ITEMSPATH = '/Items/';
 const USERSPATH = '/Users/';
 
 $apiCallCount = 0;
-
-abstract class ImageType
-{
-    const PRIMARY = 'Primary';
-    const BANNER = 'Banner';
-    const THUMB = 'Thumb';
-    const LOGO = 'Logo';
-}
-
-abstract class ItemType
-{
-    const BOXSET = 'BoxSet';
-    const SERIES = 'Series';
-    const SEASON = 'Season';
-    const EPISODE = 'Episode';
-    const MOVIE = 'Movie';
-    const PERSON = 'Person';
-    const STUDIO = 'Studio';
-}
-
-abstract class CollectionType
-{
-    const Movies = 'movies';
-    const TvShows = 'tvshows';
-    const Music = 'music';
-    const MusicVideos = 'musicvideos';
-    //const Trailers = 'trailers';
-    const HomeVideos = 'homevideos';
-    const BoxSets = 'boxsets';
-    //const Books = 'books';
-    //const Photos = 'photos';
-    //const LiveTv = 'livetv';
-    //const Playlists = 'playlists';
-    const Folders = 'folders';
-}
 
 const CLIENTNAME = 'Jellyfin-NMT';
 const CLIENTVERSION = '0.2.0';
