@@ -1,7 +1,6 @@
 //functions from ppp3.1 YAMJ skin
 
 var fMenu = false;
-var iActiveItem = 1;
 var fInit = false;
 
 var iActiveCat = 0;
@@ -41,8 +40,7 @@ function hideMenu()
     //document.getElementById('body').setAttribute('background', 'pictures/'+ sBackground);
     document.getElementById('body').removeAttribute('background');
     fMenu = false;
-    //TODO: setting focus back to active menu item...?
-    //setFocus('x'+iActiveItem);
+    setFocus(iActiveItem);
 }
 
 function toggleMenu()
