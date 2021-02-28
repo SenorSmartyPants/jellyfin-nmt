@@ -1,4 +1,5 @@
 <?
+include_once 'config.php';
 
 function getBackdropIDandTag($item, $backdropID = null)
 {
@@ -181,8 +182,26 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
 
 function categoryBrowseURL($categoryName, $searchTerm, $CollectionType = 'search')
 {
-    return categoryBrowseURLEx($searchTerm, null, $CollectionType, null, null,
-        $categoryName, $searchTerm);
+    global $collectiontypeNames;
+    
+    if (empty($CollectionType)) {
+        $CollectionType = 'search';
+    }
+
+    if ($CollectionType === 'search') {
+        //top level, just link on the category page
+        $url = categoryBrowseURLEx($searchTerm, 
+            null, 
+            $CollectionType, null, null,
+            $categoryName, $searchTerm);  
+    } else {
+        //filter by the displayed collectiontype, tv, movie, boxset...
+        $url = categoryBrowseURLEx($collectiontypeNames[$CollectionType] . ' - ' . $searchTerm, 
+            'CollectionFolder', 
+            $CollectionType, null, null, 
+            $categoryName, $searchTerm);
+    }
+    return $url;
 }
 
 function categoryBrowseURLEx($Name, 
