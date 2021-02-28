@@ -163,15 +163,6 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
-function addNonNullParameter($name, $value, $includeLeadingAmpersand = true, $urlencode = false)
-{
-    $amp = $includeLeadingAmpersand ? '&' : '';
-    if ($urlencode) {
-        $value = urlencode($value);
-    }
-    return $value ? $amp. $name . '=' . $value : '';
-}
-
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
     $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
@@ -180,28 +171,28 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
 {
     global $user_id;
 
-    $path = USERSPATH . $user_id . ITEMSPATH . $suffix . "?";
+    $path = USERSPATH . $user_id . ITEMSPATH . $suffix . '?';
 
-    $path .= addNonNullParameter('Fields', $fields, false);
-    $path .= addNonNullParameter('StartIndex', $startIndex);
-    $path .= addNonNullParameter('Limit', $limit);
-    $path .= addNonNullParameter('ParentID', $parentID);
-    $path .= addNonNullParameter('ParentIndexNumber', $parentIndexNumber);
-    $path .= addNonNullParameter('IncludeItemTypes', $type);
-    $path .= addNonNullParameter('ExcludeItemTypes', $excludeItemTypes);
-    $path .= addNonNullParameter('SortBy', $sortBy);
-    $path .= addNonNullParameter('Genres', $genres, true, true);
-    $path .= addNonNullParameter('NameStartsWith', $nameStartsWith, true, true);
-    $path .= addNonNullParameter('OfficialRatings', $ratings);
-    $path .= addNonNullParameter('Tags', $tags, true, true);
-    $path .= addNonNullParameter('Years', $years);
-    $path .= addNonNullParameter('PersonIDs', $personIDs);
-    $path .= addNonNullParameter('StudioIDs', $studioIDs);
-    $path .= !is_null($groupItems) ? "&GroupItems=" . strbool($groupItems) : "";
-    $path .= !is_null($isPlayed) ? "&IsPlayed=" . strbool($isPlayed) : "";
-    $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
+    $params = http_build_query(['Fields' => $fields,
+        'StartIndex' => $startIndex ?: null,
+        'Limit' => $limit ?: null,
+        'ParentID' => $parentID ?: null,
+        'ParentIndexNumber' => $parentIndexNumber ?: null,
+        'IncludeItemTypes' => $type ?: null,
+        'ExcludeItemTypes' => $excludeItemTypes ?: null,
+        'SortBy' => $sortBy ?: null,
+        'Genres' => $genres ?: null,
+        'NameStartsWith' => $nameStartsWith ?: null,
+        'OfficialRatings' => $ratings ?: null,
+        'Tags' => $tags ?: null,
+        'Years' => $years ?: null,
+        'PersonIDs' => $personIDs ?: null,
+        'StudioIDs' => $studioIDs ?: null,
+        'GroupItems' => !is_null($groupItems) ? strbool($groupItems) : null,
+        'IsPlayed' => !is_null($isPlayed) ? strbool($isPlayed) : null,
+        'Recursive' => !is_null($Recursive) ? strbool($Recursive) : null]);
 
-    return apiCall($path);
+    return apiCall($path . $params);
 }
 
 function getUsersViews()
@@ -276,16 +267,21 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
 {
     global $api_url; 
 
-    $itemsOrUsers = $itemsOrUsers ?? "Items";
+    $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $URL = $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
-        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 
-        ($maxHeight ? "&maxHeight=" . $maxHeight : null) . ($maxWidth ? "&maxWidth=" . $maxWidth : null) . 
-        ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
-        ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
+    $URL = $api_url . '/emby/' . $itemsOrUsers . '/' . $id . '/Images/' . $imageType .'?';
 
-    return $URL;
+    $params = http_build_query(['UnplayedCount' => $unplayedCount ?: null,
+        'Height' => $height ?: null,
+        'Width' => $width ?: null,
+        'maxHeight' => $maxHeight ?: null,
+        'maxWidth' => $maxWidth ?: null,
+        'AddPlayedIndicator' => !is_null($playedIndicator) ? strbool($playedIndicator) : null,
+        'tag' => $tag ?: null,
+        'quality' => $quality ?: null]);
+
+    return $URL . $params;
 }
 
 function getFavIconURL()
