@@ -27,7 +27,6 @@ function showMenu()
     hide(iActiveItem);
     //filter.css showMenu
     document.styleSheets[3].cssRules[0].style.visibility="visible";
-    document.getElementById('body').setAttribute('background', 'images/filter/filter_background.gif');
     window.setTimeout("setFocus('catLink5')", 1);
     fMenu = true;
 
@@ -36,9 +35,6 @@ function hideMenu()
 {
     //filter.css showMenu
     document.styleSheets[3].cssRules[0].style.visibility="hidden";
-    //TODO: do I want to swap backgrounds, or alter menu.png to not have dark transparency
-    //document.getElementById('body').setAttribute('background', 'pictures/'+ sBackground);
-    document.getElementById('body').removeAttribute('background');
     fMenu = false;
     setFocus(iActiveItem);
 }
