@@ -277,7 +277,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
         'Width' => $width ?: null,
         'maxHeight' => $maxHeight ?: null,
         'maxWidth' => $maxWidth ?: null,
-        'AddPlayedIndicator' => !is_null($playedIndicator) ? strbool($playedIndicator) : null,
+        'AddPlayedIndicator' => $playedIndicator ? strbool($playedIndicator) : null,
         'tag' => $tag ?: null,
         'quality' => $quality ?: null]);
 
