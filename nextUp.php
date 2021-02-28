@@ -10,7 +10,8 @@ $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
-$collectionType = 'tvshows';
+$folderType = ItemType::COLLECTIONFOLDER;
+$collectionType = CollectionType::TVSHOWS;
 $pageObj->title = 'Next Up';
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;

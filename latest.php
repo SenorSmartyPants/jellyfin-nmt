@@ -12,10 +12,14 @@ setNumPagesAndIndexCount(count($items));
 switch ($_GET["type"]) {
     case ItemType::EPISODE:
         $Title = "Latest TV";
+        $folderType = ItemType::COLLECTIONFOLDER;
+        $collectionType = CollectionType::TVSHOWS;
         break;
 
     case ItemType::MOVIE:
         $Title = "Latest Movies";
+        $folderType = ItemType::COLLECTIONFOLDER;
+        $collectionType = CollectionType::MOVIES;
         break;
     
     default:
