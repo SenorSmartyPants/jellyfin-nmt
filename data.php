@@ -210,12 +210,11 @@ function getUsersPublic()
     return apiCall($path, false, false);
 }
 
-function getLatest($Limit)
+function getLatest($itemType, $Limit)
 {
     global $GroupItems;
 
-    $type = htmlspecialchars($_GET["type"]);
-    return getUsersItems("Latest", "Path", $Limit, null, null, null, $type, $GroupItems);
+    return getUsersItems("Latest", "Path", $Limit, null, null, null, $itemType, $GroupItems);
 }
 
 function getNextUp($Limit, $startIndex = 0)
