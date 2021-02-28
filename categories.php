@@ -17,11 +17,13 @@ foreach ($filters->Years as $year) {
 class CategoriesPage extends Page
 {
     protected $filters;
+    protected $itemTypes;
 
-    public function __construct()
+    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET))
     {
         parent::__construct('Categories');  
-        $this->filters = getFilters(null, "movie,series,boxset", true);     
+        $this->itemTypes = $itemTypes;
+        $this->filters = getFilters(null, $itemTypes, true);     
     }
 
     public function printContent()
@@ -82,19 +84,27 @@ class CategoriesJSPage extends CategoriesPage
 {
     protected function printCategory($name, $items)
     {
-?>
-        asCatNames.push('<?= $name ?>');
-        asFilters['<?= $name ?>'] = new Array();
-        asFilterNames['<?= $name ?>']  = new Array();
+        if (!empty($items)) {
+            if (count($this->itemTypes) == 1) {
+                $collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
+            } else {
+                $collectionType = null;
+            }
 
-<?
-        foreach ($items as $item) {
-            $url = categoryBrowseURL($name, $item);
-?>
-        asFilters['<?= $name ?>'].push("<?= $url ?>");
-        asFilterNames['<?= $name ?>'].push("<?= $item ?>");
-<?
-        }      
+    ?>
+            asCatNames.push('<?= $name ?>');
+            asFilters['<?= $name ?>'] = new Array();
+            asFilterNames['<?= $name ?>']  = new Array();
+
+    <?
+            foreach ($items as $item) {
+                $url = categoryBrowseURL($name, $item, $collectionType);
+    ?>
+            asFilters['<?= $name ?>'].push("<?= $url ?>");
+            asFilterNames['<?= $name ?>'].push("<?= $item ?>");
+    <?
+            }
+        }    
     }
 
     public function render()

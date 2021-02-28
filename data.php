@@ -251,13 +251,13 @@ function getSimilarItems($Id, $limit = null)
     return apiCall($path);
 }
 
-function getFilters($parentID = null, $type = null, $Recursive = null) {
+function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
     global $user_id;
 
     $path = ITEMSPATH . "Filters?UserID=" . $user_id;
 
     $path .= $parentID ? "&ParentID=" . $parentID : "";
-    $path .= $type ? "&IncludeItemTypes=" . $type : "";
+    $path .= $itemTypes ? "&IncludeItemTypes=" . implode(",", $itemTypes) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
     
     return apiCall($path);

@@ -12,7 +12,7 @@ $page = $page ?? 1;
 $parentId = $_GET["parentId"];
 
 $folderType = $_GET["FolderType"];
-$collectionType = $_GET["CollectionType"];
+$collectionType = htmlspecialchars($_GET["CollectionType"]);
 
 $name = $_GET["Name"];
 
@@ -63,9 +63,10 @@ class ListingsPage extends Page
 
     public function printJavascript() 
     {
+        global $collectionType;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
-        <script type="text/javascript" src="js/filter/filters.js.php"></script>
+        <script type="text/javascript" src="js/filter/filters.js.php?itemType=<?= mapCollectionTypeToItemType($collectionType) ?>"></script>
         <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
     }
