@@ -213,7 +213,11 @@ class ListingsPage extends Page
 ?>
             </div>
             <div class="hidden" id="navigationlinks">
-                <a TVID="TAB" name="showMenu" onfocusset="catLink5" href="#" onclick="toggleMenu()"></a>
+                <a TVID="TAB" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
+                <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
+                <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>
+                <a name="genLinkUp"   href="#" onfocusset="genLink5" onfocus="genUp();" onfocusload=""></a>
+                <a name="genLinkDown" href="#" onfocusset="genLink5" onfocus="genDown();" onfocusload=""></a>
             </div>            
 <?
         parent::printFooter();
