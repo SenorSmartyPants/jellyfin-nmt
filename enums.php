@@ -16,6 +16,7 @@ abstract class ItemType
     const MOVIE = 'Movie';
     const PERSON = 'Person';
     const STUDIO = 'Studio';
+    const COLLECTIONFOLDER = 'CollectionFolder';
 }
 
 abstract class CollectionType

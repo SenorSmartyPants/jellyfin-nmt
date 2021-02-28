@@ -39,12 +39,19 @@ function mapItemTypeToCollectionType($itemType)
     return $itemTypeToCollectionType[$itemType];
 }
 
-function mapCollectionTypeToItemType($collectionType)
+function mapFolderTypeToSingleItemType($folderType, $collectionType)
 {
     $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES, 
         CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET);
 
-    return $collectionTypeToItemType[$collectionType];
+    //folders are itemtypes
+    if ($folderType == ItemType::COLLECTIONFOLDER) {
+        return $collectionTypeToItemType[$collectionType];
+    } else {
+        return $folderType;
+    }
+
+    
 }
 
 function strbool($value)

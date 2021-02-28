@@ -11,7 +11,7 @@ $page = $page ?? 1;
 
 $parentId = $_GET["parentId"];
 
-$folderType = $_GET["FolderType"];
+$folderType = htmlspecialchars($_GET["FolderType"]);
 $collectionType = htmlspecialchars($_GET["CollectionType"]);
 
 $name = $_GET["Name"];
@@ -63,10 +63,10 @@ class ListingsPage extends Page
 
     public function printJavascript() 
     {
-        global $collectionType;
+        global $folderType, $collectionType;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
-        <script type="text/javascript" src="js/filter/filters.js.php?itemType=<?= mapCollectionTypeToItemType($collectionType) ?>"></script>
+        <script type="text/javascript" src="js/filter/filters.js.php?itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
         <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
     }
@@ -89,17 +89,12 @@ class ListingsPage extends Page
 
     private function printTVIDLinks($categoryName, $items, $getTVID)
     {
-        global $collectionType;
+        global $folderType, $collectionType;
+        $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
         foreach ($items as $item) {
-            if (!empty($collectionType)) {
-                //filter by the displayed collectiontype, tv, movie, boxset...
-                $url = categoryBrowseURL($categoryName, $item, $collectionType);
-            } else {
-                //top level, just link on the category page
-                $url = categoryBrowseURL($categoryName, $item);
-            }
-
+            //filter by the displayed folder/collectiontype, tv, movie, boxset...
+            $url = categoryBrowseURL($categoryName, $item, $browseType);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }
