@@ -18,8 +18,8 @@ function show(x) {
 
     if (PopupsEnabled) {
         showOverlay(x);
-        iActiveItem = x;
     }
+    iActiveItem = x;
 }
 
 function hide(x) {
