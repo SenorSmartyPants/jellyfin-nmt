@@ -39,6 +39,14 @@ function mapItemTypeToCollectionType($itemType)
     return $itemTypeToCollectionType[$itemType];
 }
 
+function mapCollectionTypeToItemType($collectionType)
+{
+    $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES, 
+        CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET);
+
+    return $collectionTypeToItemType[$collectionType];
+}
+
 function strbool($value)
 {
     return $value ? 'true' : 'false';
