@@ -84,7 +84,7 @@ class ListingsPage extends Page
 
     private function printTVIDLink($url, $tvid)
     {
-        print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
+        print("<a href=\"$url\" tvid=\"$tvid\" tabindex=\"-1\" ></a>\n");
     }
 
     private function printTVIDLinks($categoryName, $items, $getTVID)
