@@ -9,6 +9,7 @@ $apiCallCount = 0;
 
 const CLIENTNAME = 'Jellyfin-NMT';
 const CLIENTVERSION = '0.2.0';
+const POSTCONTENTTYPE = 'application/json';
 
 class Device
 {
@@ -60,7 +61,8 @@ function apiCall($path, $debug = false, $includeAPIKey = true)
     return json_decode(file_get_contents($url));
 }
 
-function apiCallPost($path, $post = null, $contentType = 'application/x-www-form-urlencoded')
+//JF 10.7.0+ only supports JSON post calls
+function apiCallPost($path, $post = null)
 {
     global $api_url;
 
@@ -78,18 +80,12 @@ function apiCallPost($path, $post = null, $contentType = 'application/x-www-form
     $opts = array('http' =>
         array(
             'method'  => 'POST',
-            'header'  => 'Content-Type: ' . $contentType . "\r\n" . $authHeader
+            'header'  => 'Content-Type: ' . POSTCONTENTTYPE . "\r\n" . $authHeader
         )
     );
 
     if ($post) {
-        if ($contentType == 'application/x-www-form-urlencoded') 
-        {
-            $postdata = http_build_query($post);
-            $opts['http']['content'] = $postdata;
-        } else {
-            $opts['http']['content'] = $post;
-        }
+        $opts['http']['content'] = json_encode($post);
     }    
     
     $context = stream_context_create($opts);

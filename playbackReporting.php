@@ -157,11 +157,7 @@ class PlaybackReporting
 
     private function apiJSON($apiendpoint, $payload, $PositionInSeconds, $playState = PlayState::PLAYING)
     {
-        apiCallPost(
-            $apiendpoint,
-            json_encode($payload),
-            'application/json'
-        );
+        apiCallPost($apiendpoint, $payload);
     
         self::updatePlaystate($PositionInSeconds, $playState);    
     }
