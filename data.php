@@ -49,7 +49,7 @@ function apiCall($path, $debug = false, $includeAPIKey = true)
 
     $apiCallCount++;
 
-    $url = $api_url . '/emby' . $path;
+    $url = $api_url . $path;
     if ($includeAPIKey) {
         $url .= "&api_key=" . $api_key;
     }
@@ -94,7 +94,7 @@ function apiCallPost($path, $post = null, $contentType = 'application/x-www-form
     
     $context = stream_context_create($opts);
 
-    $url = $api_url . '/emby' . $path;
+    $url = $api_url . $path;
     return json_decode(file_get_contents($url, false, $context));
 }
 
@@ -268,7 +268,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? "Items";
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $URL = $api_url . "/emby/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
+    $URL = $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
         ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 
         ($maxHeight ? "&maxHeight=" . $maxHeight : null) . ($maxWidth ? "&maxWidth=" . $maxWidth : null) . 
         ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
