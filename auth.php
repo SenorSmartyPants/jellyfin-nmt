@@ -47,28 +47,27 @@ class Authentication
 
     }
 
-    public function login($userID)
+    public function login($userID, $username)
     {
         // end any other sessions that may be active
         self::logout();
 
         $post = array(
-            'Pw' => '',
-            'Password' => ''
+            'Username' => $username
         );
         
-        $result = apiCallPost('/Users/' . $userID . '/Authenticate', $post);
+        $result = apiCallPost('/Users/AuthenticateByName', $post);
     
         $_SESSION['accessToken'] = $result->AccessToken;
         $_SESSION['ID'] = $result->SessionInfo->Id;
         $this->setUserID($userID);
     }
 
-    public function login2($userIDs)
+    public function login2($userIDs, $userNames)
     {
         foreach ($userIDs as $index => $user) {
             if ($index == 0) {
-                self::login($user);
+                self::login($user, $userNames[0]);
             } else {
                 self::addUserToSession($_SESSION['ID'], $user);
             }

@@ -17,7 +17,7 @@ class LoginPage extends Page
     {
         if (isset($_GET['id'])) 
         {
-            $this->auth->login2(explode(",", $_GET['id']));
+            $this->auth->login2(explode(",", $_GET['id']), explode(",", $_GET['name']));
             header('Location: index.php');
             die();            
         }
@@ -67,13 +67,13 @@ class LoginPage extends Page
         if (count($this->users) > 1) { 
             //if more than 1 user, display first 2 users together in order to watch shows together
         ?>
-        <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
+        <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
         <?
         }
 
         foreach ($this->users as $user) {
             ?>
-            <p><a href="login.php?id=<?= $user->Id ?>"><?= $user->Name ?></a></p>
+            <p><a href="login.php?id=<?= $user->Id ?>&name=<?= $user->Name ?>"><?= $user->Name ?></a></p>
             <?
         }
     }
