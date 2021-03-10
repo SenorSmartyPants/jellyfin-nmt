@@ -80,7 +80,7 @@ class Authentication
     {
         //response is empty, 200 if successful
         apiCallPost(
-            '/Sessions/' . $sessionID . '/Users/' . $userID,
+            '/Sessions/' . $sessionID . '/User/' . $userID,
             array('non' => 'empty'));
     }
 }
