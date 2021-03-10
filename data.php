@@ -269,7 +269,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $URL = $api_url . '/emby/' . $itemsOrUsers . '/' . $id . '/Images/' . $imageType .'?';
+    $URL = $api_url . '/' . $itemsOrUsers . '/' . $id . '/Images/' . $imageType .'?';
 
     $params = http_build_query(['UnplayedCount' => $unplayedCount ?: null,
         'Height' => $height ?: null,
