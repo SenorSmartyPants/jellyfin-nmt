@@ -16,6 +16,8 @@ abstract class ItemType
     const MOVIE = 'Movie';
     const PERSON = 'Person';
     const STUDIO = 'Studio';
+    const COLLECTIONFOLDER = 'CollectionFolder';
+    const PLAYLIST = 'Playlist';
 }
 
 abstract class CollectionType
@@ -27,5 +29,6 @@ abstract class CollectionType
     const HOMEVIDEOS = 'homevideos';
     const BOXSETS = 'boxsets';
     const FOLDERS = 'folders';
+    const PLAYLISTS = 'playlists';
 }
 ?>
