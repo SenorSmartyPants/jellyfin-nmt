@@ -45,7 +45,7 @@ switch ($folderType) {
 overrideIndexStyle($folderType, $collectionType);
 
 $itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexStyle->Limit, $type, $recursive, 
-    $genres, $nameStartsWith, $ratings, $tags, $years, null, null, $sortBy);
+    $Genres, $Title, $Ratings, $Tags, $Years, null, null, $sortBy);
 $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
