@@ -85,7 +85,7 @@ function setupChildData($item)
     if ($item->ChildCount) {
         $available_subitems[] = "children";
     }
-    if (count($item->People) > 0) {
+    if (!empty($item->People)) {
         $available_subitems[] = "people";
     }
     //only display "more like this" for movies, series, episodes(more from this season), not seasons
@@ -330,8 +330,8 @@ function render($item)
     }
     ?>
 
-        <?= count($directors) > 0 ? '<div id="directors">Directed by: ' . formatCast($directors, 4, ', ') . '</div>&nbsp;<br>' : null ?>
-        <?= count($writers) > 0 ? '<div id="writers">Written by: ' . formatCast($writers, 4, ', ') . '</div>&nbsp;<br>'  : null ?>
+        <?= !empty($directors) ? '<div id="directors">Directed by: ' . formatCast($directors, 4, ', ') . '</div>&nbsp;<br>' : null ?>
+        <?= !empty($writers) ? '<div id="writers">Written by: ' . formatCast($writers, 4, ', ') . '</div>&nbsp;<br>'  : null ?>
 
 <?
         if ($item->MediaType) { //only display play button for single items
