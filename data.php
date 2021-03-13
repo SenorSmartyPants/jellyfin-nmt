@@ -261,7 +261,7 @@ function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
 }
 
 function getImageURL($id, $height = null, $width = null, $imageType = null, $unplayedCount = null, 
-    $playedIndicator = false, $tag = null, $quality = null, $itemsOrUsers = null,
+    $AddPlayedIndicator = null, $tag = null, $quality = null, $itemsOrUsers = null,
     $maxHeight = null, $maxWidth = null)
 {
     global $api_url; 
@@ -269,18 +269,10 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $URL = $api_url . '/' . $itemsOrUsers . '/' . $id . '/Images/' . $imageType .'?';
-
-    $params = http_build_query(['UnplayedCount' => $unplayedCount ?: null,
-        'Height' => $height ?: null,
-        'Width' => $width ?: null,
-        'maxHeight' => $maxHeight ?: null,
-        'maxWidth' => $maxWidth ?: null,
-        'AddPlayedIndicator' => $playedIndicator ? strbool($playedIndicator) : null,
-        'tag' => $tag ?: null,
-        'quality' => $quality ?: null]);
-
-    return $URL . $params;
+    $AddPlayedIndicator = ($AddPlayedIndicator ? 'true' : null);
+   
+    return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" 
+        . http_build_query(compact('height', 'width', 'maxHeight', 'maxWidth', 'quality', 'tag', 'unplayedCount', 'AddPlayedIndicator'));
 }
 
 function getFavIconURL()
