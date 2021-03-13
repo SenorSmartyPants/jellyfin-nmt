@@ -4,28 +4,40 @@ include 'listings.php';
 $libraryBrowse = true;
 $useSeasonImage = false;
 
-switch ($collectionType) {
-    case CollectionType::TVSHOWS:
-        $recursive = true;
-        $type = ItemType::SERIES;
+//common options
+$recursive = true;
+$type = null;
+
+switch ($folderType) {
+    case ItemType::PLAYLIST:
+        $sortBy = null;
         break;
-    case CollectionType::MOVIES:
-        $recursive = true;
-        $type = ItemType::MOVIE;
-        break;
-    case CollectionType::BOXSETS:
-        $recursive = true;
-        $type = ItemType::BOXSET;
-        break;        
-    case "search": //searching from categories page
-        $recursive = true;
-        //exclude season and episodes to match JF behavior
-        $type = "movie,series,boxset";
-        break;
-    default: //browsing. boxsets,music,games,books,musicvideos,homevideos,livetv,channels
+
+    case ItemType::BOXSET:
         $recursive = false;
-        $type = null;
-        break;
+        $sortBy = null;
+        break;        
+    
+    default:
+        $sortBy = 'SortName';
+        switch ($collectionType) {
+            case CollectionType::TVSHOWS:
+                $type = ItemType::SERIES;
+                break;
+            case CollectionType::MOVIES:
+                $type = ItemType::MOVIE;
+                break;
+            case CollectionType::BOXSETS:
+                $type = ItemType::BOXSET;
+                break;           
+            case "search": //searching from categories page
+                //exclude season and episodes to match JF behavior
+                $type = "movie,series,boxset";
+                break;
+            default: //browsing. music,games,books,musicvideos,homevideos,livetv,channels
+                $recursive = false;
+                break;
+        }
 }
 
 //paging with dynamic style causes issues
@@ -33,7 +45,7 @@ switch ($collectionType) {
 overrideIndexStyle($folderType, $collectionType);
 
 $itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexStyle->Limit, $type, $recursive, 
-    $genres, $nameStartsWith, $ratings, $tags, $years);
+    $genres, $nameStartsWith, $ratings, $tags, $years, null, null, $sortBy);
 $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
