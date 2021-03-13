@@ -264,13 +264,17 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
     $itemsOrUsers = $itemsOrUsers ?? "Items";
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $URL = $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . ($unplayedCount ? "&UnplayedCount=" . $unplayedCount : null) .
-        ($height ? "&Height=" . $height : null) . ($width ? "&Width=" . $width : null) . 
-        ($maxHeight ? "&maxHeight=" . $maxHeight : null) . ($maxWidth ? "&maxWidth=" . $maxWidth : null) . 
-        ($playedIndicator ? "&AddPlayedIndicator=true" : null) .
-        ($tag ? "&tag=" . $tag : null) . ($quality ? "&quality=" . $quality : null);
-
-    return $URL;
+    $query = array(
+        'Height' => $height,
+        'Width' => $width,
+        'maxHeight' => $maxHeight,
+        'maxWidth' => $maxWidth,
+        'quality' => $quality,
+        'tag' => $tag,
+        'UnplayedCount' => $unplayedCount,     
+        'AddPlayedIndicator' => ($playedIndicator ? 'true' : null));
+   
+    return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" . http_build_query($query);
 }
 
 function getFavIconURL()
