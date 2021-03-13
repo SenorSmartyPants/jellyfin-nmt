@@ -163,11 +163,11 @@ class Page
         if ($numPages > 1) { 
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
-            $url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING);
-            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="PGUP" href="' . $url . $QSBase . $page . "\" >" . $currentPage . "</a> / ";
+            $url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) . '?';
+            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="PGUP" href="' . $url . $QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
             //pgdn on last page wraps to first page
             $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
-            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="PGDN" href="' . $url . $QSBase . $page  . "\" >" . $numPages . "</a>";
+            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="PGDN" href="' . $url . $QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
         }
 ?>
             </td>

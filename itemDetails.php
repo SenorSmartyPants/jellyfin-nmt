@@ -14,7 +14,7 @@ $libraryBrowse = true;
 $useSeasonNameForMenuItems = false;
 $forceItemDetails = true;
 
-$QSBase = "?id=" . $id . "&subitems=" . $_GET["subitems"] . "&page=";
+$QSBase = "id=" . $id . "&subitems=" . $_GET["subitems"];
 
 setNames($item);
 

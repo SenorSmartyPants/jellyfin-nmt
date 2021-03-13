@@ -179,25 +179,20 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm, $CollectionType = 'search')
+function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search')
 {
-    return categoryBrowseURLEx($searchTerm, null, $CollectionType, null, null,
+    return categoryBrowseURLEx($searchTerm, null, $collectionType, null, null,
         $categoryName, $searchTerm);
 }
 
-function categoryBrowseURLEx($Name, 
-    $FolderType = null, $CollectionType = null,
+function categoryBrowseURLEx($name, 
+    $folderType = null, $collectionType = null,
     $parentId = null, $backdropId = null,
     $categoryName = null, $searchTerm = null)
 {
-    $query = array(
-        'Name' => $Name,
-        'parentId' => $parentId,
-        'FolderType' => $FolderType,
-        'CollectionType' => $CollectionType,
-        'backdropId' => $backdropId,
-        $categoryName => $searchTerm);
-        
+    $query = compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId');
+    $query[$categoryName] = $searchTerm;
+
     return 'browse.php?' . http_build_query($query);
 }
 

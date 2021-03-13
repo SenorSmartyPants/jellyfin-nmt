@@ -5,29 +5,27 @@ include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
 
-$page = $_GET["page"];
+$page = $_GET['page'];
 $page = $page ?? 1;
 
-$parentId = $_GET["parentId"];
+$parentId = $_GET['parentId'];
 
-$folderType = $_GET["FolderType"];
-$collectionType = $_GET["CollectionType"];
+$folderType = $_GET['folderType'];
+$collectionType = $_GET['collectionType'];
 
-$name = $_GET["Name"];
+$name = $_GET['name'];
 
-$genres = $_GET["Genres"];
-$nameStartsWith = $_GET["Title"];
-$ratings = $_GET["Ratings"];
-$tags = $_GET["Tags"];
-$years = $_GET["Years"];
-
-$backdropId = $_GET["backdropId"];
+$backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
 
-$QSBase = "?parentId=" . $parentId . "&FolderType=" . $folderType . "&CollectionType=" . $collectionType . "&Name=" . urlencode($name) . 
-    "&Genres=" . urlencode($genres) . "&Title=" . urlencode($nameStartsWith) . 
-    "&Ratings=" . $ratings . "&Tags=" . urlencode($tags) .
-    "&Years=" . $years . "&backdropId=" . $backdropId . "&page=";
+//Category Names
+$Genres = $_GET['Genres'];
+$Title = $_GET['Title'];
+$Ratings = $_GET['Ratings'];
+$Tags = $_GET['Tags'];
+$Years = $_GET['Years'];
+
+$QSBase = http_build_query(compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
 
 class ListingsPage extends Page
 {
