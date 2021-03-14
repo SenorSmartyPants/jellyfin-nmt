@@ -129,13 +129,14 @@ class CategoriesJSPage extends CategoriesPage
     {
         header('Content-type: text/javascript');
 ?>
-        var sActiveCat = 'Genres';
-
         var asCatNames = new Array();
         var asFilters = new Object();
         var asFilterNames = new Object();   
 <?      
         $this->printContent();
+?>
+        var sActiveCat = asCatNames[0];        
+<?
     }
 }
 ?>
