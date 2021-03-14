@@ -37,7 +37,8 @@ class CategoriesPage extends Page
         Conclusion: parentId for everything, except Series/tvshows, then item type
     */
 
-        if (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1)) {
+        if (empty($topParentId) || 
+            (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1))) {
             $this->filters = getFilters(null, $itemTypes, true);
         } else {
             $this->filters = getFilters($topParentId, null, true);
