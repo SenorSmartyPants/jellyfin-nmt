@@ -40,6 +40,10 @@ switch ($folderType) {
         }
 }
 
+
+
+//echo ($folderType . '/' . $collectionType);
+
 //paging with dynamic style causes issues
 //$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
 overrideIndexStyle($folderType, $collectionType);
