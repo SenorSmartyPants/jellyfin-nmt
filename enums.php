@@ -18,6 +18,8 @@ abstract class ItemType
     const STUDIO = 'Studio';
     const COLLECTIONFOLDER = 'CollectionFolder';
     const PLAYLIST = 'Playlist';
+    const USERVIEW = 'UserView';
+    const MUSICVIDEO = 'MusicVideo';
 }
 
 abstract class CollectionType

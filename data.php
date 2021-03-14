@@ -34,7 +34,8 @@ function mapItemTypeToCollectionType($itemType)
 {
     $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS, 
         ItemType::SEASON => CollectionType::TVSHOWS, ItemType::EPISODE => CollectionType::TVSHOWS,
-        ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS);
+        ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS,
+        ItemType::PLAYLIST => CollectionType::PLAYLISTS, ItemType::MUSICVIDEO  => CollectionType::MUSICVIDEOS);
 
     return $itemTypeToCollectionType[$itemType];
 }
@@ -42,10 +43,11 @@ function mapItemTypeToCollectionType($itemType)
 function mapFolderTypeToSingleItemType($folderType, $collectionType)
 {
     $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES, 
-        CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET);
+        CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET,
+        CollectionType::PLAYLISTS => ItemType::PLAYLIST, CollectionType::MUSICVIDEOS => ItemType::MUSICVIDEO);
 
     //folders are itemtypes
-    if ($folderType == ItemType::COLLECTIONFOLDER) {
+    if ($folderType == ItemType::COLLECTIONFOLDER || $folderType == ItemType::USERVIEW) {
         return $collectionTypeToItemType[$collectionType];
     } else {
         return $folderType;
