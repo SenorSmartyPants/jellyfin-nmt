@@ -180,7 +180,7 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search')
+function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null)
 {
     global $collectiontypeNames;
     
@@ -193,13 +193,13 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
         $url = categoryBrowseURLEx($searchTerm, 
             null, 
             $collectionType, null, null,
-            $categoryName, $searchTerm);  
+            $categoryName, $searchTerm, $topParentId);  
     } else {
         //filter by the displayed collectiontype, tv, movie, boxset...
         $url = categoryBrowseURLEx($collectiontypeNames[$collectionType] . ' - ' . $searchTerm, 
             'CollectionFolder', 
             $collectionType, null, null, 
-            $categoryName, $searchTerm);
+            $categoryName, $searchTerm, $topParentId);
     }
     return $url;
 }
@@ -207,9 +207,10 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
 function categoryBrowseURLEx($name, 
     $folderType = null, $collectionType = null,
     $parentId = null, $backdropId = null,
-    $categoryName = null, $searchTerm = null)
+    $categoryName = null, $searchTerm = null,
+    $topParentId = null)
 {
-    $query = compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId');
+    $query = compact('name', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId');
     $query[$categoryName] = $searchTerm;
 
     return 'browse.php?' . http_build_query($query);

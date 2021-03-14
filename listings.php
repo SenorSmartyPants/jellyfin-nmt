@@ -10,6 +10,11 @@ $page = $_GET['page'];
 $page = $page ?? 1;
 
 $parentId = $_GET['parentId'];
+$topParentId = $_GET['topParentId'];
+
+if (empty($parentId)) {
+    $parentId = $topParentId;
+}
 
 $folderType = $_GET['folderType'];
 $collectionType = $_GET['collectionType'];
@@ -26,7 +31,7 @@ $Ratings = $_GET['Ratings'];
 $Tags = $_GET['Tags'];
 $Years = $_GET['Years'];
 
-$QSBase = http_build_query(compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
+$QSBase = http_build_query(compact('name', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
 
 class ListingsPage extends Page
 {
@@ -62,9 +67,10 @@ class ListingsPage extends Page
     public function printJavascript() 
     {
         global $folderType, $collectionType;
+        global $topParentId;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
-        <script type="text/javascript" src="js/filter/filters.js.php?itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
+        <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
         <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
     }
@@ -87,12 +93,12 @@ class ListingsPage extends Page
 
     private function printTVIDLinks($categoryName, $items, $getTVID)
     {
-        global $folderType, $collectionType;
+        global $folderType, $collectionType, $topParentId;
         $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
-            $url = categoryBrowseURL($categoryName, $item, $browseType);
+            $url = categoryBrowseURL($categoryName, $item, $browseType, $topParentId);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }

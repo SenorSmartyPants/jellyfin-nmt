@@ -18,12 +18,30 @@ class CategoriesPage extends Page
 {
     protected $filters;
     protected $itemTypes;
+    protected $topParentId;
 
-    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET))
+    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null)
     {
         parent::__construct('Categories');  
         $this->itemTypes = $itemTypes;
-        $this->filters = getFilters(null, $itemTypes, true);     
+        $this->topParentId = $topParentId;
+
+    /*
+        performance notes
+        Movie item type is slow(~2000ms). parentId is much faster (~500ms)
+        Series item type is fast (~50-150ms). parentId is slow (~1200-1500ms)
+        BoxSet item type returns no filters. parentId = ~250-400ms
+        Playlist item type returns no filters. under 100ms with 1 playlist
+        MusicVideo, no metadata for my library
+
+        Conclusion: parentId for everything, except Series/tvshows, then item type
+    */
+
+        if (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1)) {
+            $this->filters = getFilters(null, $itemTypes, true);
+        } else {
+            $this->filters = getFilters($topParentId, null, true);
+        }
     }
 
     public function printContent()
@@ -85,7 +103,7 @@ class CategoriesJSPage extends CategoriesPage
     protected function printCategory($name, $items)
     {
         if (!empty($items)) {
-            if (count($this->itemTypes) == 1) {
+            if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
                 $collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
             } else {
                 $collectionType = null;
@@ -98,7 +116,7 @@ class CategoriesJSPage extends CategoriesPage
 
     <?
             foreach ($items as $item) {
-                $url = categoryBrowseURL($name, $item, $collectionType);
+                $url = categoryBrowseURL($name, $item, $collectionType, $this->topParentId);
     ?>
             asFilters['<?= $name ?>'].push("<?= $url ?>");
             asFilterNames['<?= $name ?>'].push("<?= $item ?>");

@@ -1,12 +1,17 @@
 <?php
 include_once '../../categories.php';
 
-if (empty($_GET["itemType"]))
+$itemType = $_GET["itemType"];
+$topParentId = $_GET["topParentId"];
+
+if (empty($itemType) && empty($topParentId))
 {
     $pageObj = new CategoriesJSPage();
 } else {
-    $itemTypes = array(htmlspecialchars($_GET["itemType"]));
-    $pageObj = new CategoriesJSPage($itemTypes);    
+    if (!empty($itemType)) {
+        $itemTypes = array(htmlspecialchars($itemType));
+    }
+    $pageObj = new CategoriesJSPage($itemTypes, $topParentId);
 }
 
 $pageObj->render();

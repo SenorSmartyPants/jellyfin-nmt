@@ -108,9 +108,11 @@ function setDetailURL($item, $menuItem) {
                     break;
                 }   
             default:
+                //get topParentId from querystring
                 $detailURL = categoryBrowseURLEx($item->Name, 
                         $item->Type, $item->CollectionType,
-                        $item->Id, $menuItem->BackdropID);
+                        $item->Id, $menuItem->BackdropID,
+                        null, null, $_GET['topParentId']);
                 break;
         }
         if ($forceItemDetails) {
