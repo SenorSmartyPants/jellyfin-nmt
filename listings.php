@@ -38,30 +38,36 @@ class ListingsPage extends Page
     public $items;
     public $menuItems = array();
 
+    protected $renderFiltering;
+
     protected $filters;
     protected $titleLetters;
     protected $singleLetterTVIDs;
     protected $letterToNumber;
 
-    public function __construct($title)
+    public function __construct($title, $renderFiltering = true)
     {
-        parent::__construct($title);  
-        
-        $this->titleLetters = range("A","Z");
-        array_unshift($this->titleLetters,"#");
+        parent::__construct($title);
 
-        $this->singleLetterTVIDs = array("#"=>"1", 
-            "A"=>"2", "B"=>"22", "C"=>"222", 
-            "D"=>"3", "E"=>"33", "F"=>"333",
-            "G"=>"4", "H"=>"44", "I"=>"444",
-            "J"=>"5", "K"=>"55", "L"=>"555",
-            "M"=>"6", "N"=>"66", "O"=>"666",
-            "P"=>"7", "Q"=>"77", "R"=>"777", "S"=>"7777",
-            "T"=>"8", "U"=>"88", "V"=>"888",
-            "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
-        );
+        $this->renderFiltering = $renderFiltering;
+        if ($renderFiltering) {
+            $this->titleLetters = range("A","Z");
+            array_unshift($this->titleLetters,"#");
+    
+            $this->singleLetterTVIDs = array("#"=>"1", 
+                "A"=>"2", "B"=>"22", "C"=>"222", 
+                "D"=>"3", "E"=>"33", "F"=>"333",
+                "G"=>"4", "H"=>"44", "I"=>"444",
+                "J"=>"5", "K"=>"55", "L"=>"555",
+                "M"=>"6", "N"=>"66", "O"=>"666",
+                "P"=>"7", "Q"=>"77", "R"=>"777", "S"=>"7777",
+                "T"=>"8", "U"=>"88", "V"=>"888",
+                "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
+            );
+    
+            $this->additionalCSS = 'filter.css';
+        }
 
-        $this->additionalCSS = 'filter.css';
     }
 
     public function printJavascript() 
@@ -70,9 +76,18 @@ class ListingsPage extends Page
         global $topParentId;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
-        <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
-        <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
+        if ($this->renderFiltering) {
+?>
+            <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
+            <script type="text/javascript" src="js/filter/filter.js"></script>
+<?
+        } else {
+            //empty initMenu function to prevent JS error
+?>
+        <script type="text/javascript">function initMenu() {}</script>
+<?
+        }
     }
 
     public function printHead()
@@ -105,8 +120,10 @@ class ListingsPage extends Page
 
     private function printSpeedDial()
     {
-        //speed dial TVIDs
-        $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        if ($this->renderFiltering) {
+            //speed dial TVIDs
+            $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        }
     }
 
     public function printNavbar()
@@ -190,6 +207,7 @@ class ListingsPage extends Page
 
     public function printFooter()
     {
+        if ($this->renderFiltering) {
         ?>
         <div id="popupWrapper">
 <?
@@ -197,12 +215,12 @@ class ListingsPage extends Page
         ?>
         </div>
 <?        
-        if (PCMENU) {
-            $this->printPCMenu();
+            if (PCMENU) {
+                $this->printPCMenu();
+            }
         }
-
 ?>
-            <div id="popupWrapper">
+        <div id="popupWrapper">
 <?
         //print popups last of all, so they have highest z-index on NMT
         foreach ($this->menuItems as $key => $menuItem) {
@@ -215,7 +233,10 @@ class ListingsPage extends Page
             }
         }
 ?>
-            </div>
+        </div>
+<?        
+        if ($this->renderFiltering) {
+?>           
             <div class="hidden" id="navigationlinks">
                 <a TVID="TAB" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
                 <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
@@ -224,6 +245,7 @@ class ListingsPage extends Page
                 <a name="genLinkDown" href="#" onfocusset="genLink5" onfocus="genDown();" onfocusload=""></a>
             </div>            
 <?
+        }
         parent::printFooter();
     }
 }
