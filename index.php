@@ -59,7 +59,7 @@ class IndexPage extends ListingsPage
     }
 }
 
-$pageObj = new IndexPage('Home');
+$pageObj = new IndexPage('Home', false);
 $pageObj->onloadset = 'nextup';
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
