@@ -196,8 +196,9 @@ function setNames($item)
 
 function printCastRow($cast, $castDivId, $castLabel)
 {
+    $castLabel .= count($cast) > 1 ? 's' : null;
 ?>
-    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . (count($cast) > 1 ? 's' : null) . THREESPACES . '</div></td><td colspan="5"><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
+    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . THREESPACES . '</div></td><td colspan="5"><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
 <?
 }
 
