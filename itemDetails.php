@@ -197,7 +197,14 @@ function setNames($item)
 function printCastRow($cast, $castDivId, $castLabel)
 {
 ?>
-    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . (count($cast) > 1 ? 's' : null) . THREESPACES . '</div></td><td><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
+    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . (count($cast) > 1 ? 's' : null) . THREESPACES . '</div></td><td colspan="5"><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
+<?
+}
+
+function printStreamInfo($stream)
+{
+?>
+    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td><div id="mediainfo">' . $stream->DisplayTitle . THREESPACES . THREESPACES . '</div></td>' : null ?>
 <?
 }
 
@@ -348,18 +355,20 @@ function render($item)
     }
     printCastRow($directors, 'directors', 'Director');
     printCastRow($writers, 'writers', 'Writer');
+
+    if ($item->MediaType) { //only display play button for single items
+?>          
+        <tr>
+        <? printStreamInfo($streams->Video) ?>
+        <? printStreamInfo($streams->Audio) ?>
+        <? printStreamInfo($streams->Subtitle) ?>
+        </tr><tr><td>&nbsp;<br></td></tr>
+<?
+    }
+
     ?>
     </table>
     <?
-        if ($item->MediaType) { //only display play button for single items
-?>          
-        <div id="mediainfo">
-        <?= $streams->Video ? $streams->Video->Type . ': ' . $streams->Video->DisplayTitle . THREESPACES : null ?>
-        <?= $streams->Audio ? $streams->Audio->Type . ': ' . $streams->Audio->DisplayTitle . THREESPACES : null ?>
-        <?= $streams->Subtitle ? $streams->Subtitle->Type . ': ' . $streams->Subtitle->DisplayTitle . THREESPACES : null ?>
-        </div>&nbsp;<br>
-<?
-        }
 
         if ($item->MediaType) { //only display play button for single items
             
