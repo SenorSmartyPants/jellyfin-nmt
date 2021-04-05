@@ -180,6 +180,13 @@ function setNames($item)
             $itemName = $item->IndexNumber . '. ' . $item->Name;
             $Title = $item->Name . ' - ' . $item->SeasonName . ' - ' . $item->SeriesName;
             break;
+        case ItemType::MUSICVIDEO:
+            if (!empty($item->ArtistItems)) {
+                $parentName = $item->Name;
+                $itemName = itemDetailsLink($item->ArtistItems[0]->Id, false, $item->ArtistItems[0]->Name);
+                $Title = $item->Name . ' - ' . $item->ArtistItems[0]->Name;
+                break;
+            } // else fall thru to default
         default:
             $itemName = $item->Name;
             $Title = $item->Name;
@@ -211,6 +218,8 @@ function render($item)
         default:
             if ($item->PremiereDate) {
                 $date = formatDate($item->PremiereDate);
+            } else if ($item->ProductionYear) {
+                $date = $item->ProductionYear;
             }
             break;
     }
