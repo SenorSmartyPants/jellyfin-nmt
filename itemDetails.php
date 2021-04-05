@@ -193,7 +193,14 @@ function setNames($item)
             break;
     }
 }
-    
+
+function printCastRow($cast, $castDivId, $castLabel)
+{
+?>
+    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . (count($cast) > 1 ? 's' : null) . THREESPACES . '</div></td><td><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
+<?
+}
+
 function render($item)
 {
     global $parentName, $itemName;
@@ -325,9 +332,11 @@ function render($item)
     </tr></table>&nbsp;<br>
     <?   
     }
-
+    ?>
+    <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
+    <?
     if ($item->GenreItems && count($item->GenreItems) > 0) {
-        echo '<div id="genres">Genres: ';
+        echo '<tr><td><div>Genres' . THREESPACES . '</div></td><td><div id="genres">';
         foreach ($item->GenreItems as $genre) {
             $url = categoryBrowseURL('Genres', $genre->Name);
             printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
@@ -335,14 +344,13 @@ function render($item)
                 echo ', ';
             }
         }
-        echo '</div>&nbsp;<br>';
+        echo '</div></td></tr><tr><td>&nbsp;<br></td></tr>';
     }
+    printCastRow($directors, 'directors', 'Director');
+    printCastRow($writers, 'writers', 'Writer');
     ?>
-
-        <?= !empty($directors) ? '<div id="directors">Directed by: ' . formatCast($directors, 4, ', ') . '</div>&nbsp;<br>' : null ?>
-        <?= !empty($writers) ? '<div id="writers">Written by: ' . formatCast($writers, 4, ', ') . '</div>&nbsp;<br>'  : null ?>
-
-<?
+    </table>
+    <?
         if ($item->MediaType) { //only display play button for single items
 ?>          
         <div id="mediainfo">
