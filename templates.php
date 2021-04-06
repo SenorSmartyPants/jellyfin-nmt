@@ -67,7 +67,13 @@ function audioCodec($audioStream)
             $channelFile = "audch_61.png";
             break;
         default:
-            $channelFile = "../1x1.png";
+            # channelLayout empty or doesn't match known layouts
+            # use count to guess
+            if ($audioStream->Channels == 6) {
+                $channelFile = "audch_51.png";
+            } else {
+                $channelFile = $audioStream->Channels . "../1x1.png";
+            }
     }
     return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
     . '<img align="top" src="images/flags/' . $codecFile 

@@ -1,5 +1,7 @@
 # Jellyfin-NMT
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SenorSmartyPants_jellyfin-nmt&metric=alert_status)](https://sonarcloud.io/dashboard?id=SenorSmartyPants_jellyfin-nmt)
+
 ![Next Up Screen shot](../assets/NextUp.png)
 
 ## Running YAMJ is no longer necessary!

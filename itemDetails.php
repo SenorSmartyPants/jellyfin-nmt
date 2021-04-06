@@ -85,7 +85,7 @@ function setupChildData($item)
     if ($item->ChildCount) {
         $available_subitems[] = "children";
     }
-    if (count($item->People) > 0) {
+    if (!empty($item->People)) {
         $available_subitems[] = "people";
     }
     //only display "more like this" for movies, series, episodes(more from this season), not seasons
@@ -180,13 +180,56 @@ function setNames($item)
             $itemName = $item->IndexNumber . '. ' . $item->Name;
             $Title = $item->Name . ' - ' . $item->SeasonName . ' - ' . $item->SeriesName;
             break;
+        case ItemType::MUSICVIDEO:
+            if (!empty($item->ArtistItems)) {
+                $parentName = $item->Name;
+                $itemName = itemDetailsLink($item->ArtistItems[0]->Id, false, $item->ArtistItems[0]->Name);
+                $Title = $item->Name . ' - ' . $item->ArtistItems[0]->Name;
+                break;
+            } // else fall thru to default
         default:
             $itemName = $item->Name;
             $Title = $item->Name;
             break;
     }
 }
-    
+
+function printCastRow($cast, $castDivId, $castLabel)
+{
+    $castLabel .= count($cast) > 1 ? 's' : null;
+?>
+    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . THREESPACES . '</div></td><td colspan="5"><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
+<?
+}
+
+function printStreamInfo($stream)
+{
+?>
+    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td><div id="mediainfo">' . $stream->DisplayTitle . THREESPACES . THREESPACES . '</div></td>' : null ?>
+<?
+}
+
+function printPlayButton($mediaSource, $index, $isMultiple)
+{     
+    #region videoPlayLink setup
+    $attrs = array('tvid'=>'play');
+    $linkName = 'play' . $index;
+    if ($isMultiple) {
+        $linkHTML = 'Play - ' . $mediaSource->Name;
+    } else {
+        $linkHTML = 'Play';
+    }
+
+    $callbackJS = "checkin('" . $mediaSource->Id . "', " . TicksToSeconds($mediaSource->RunTimeTicks) . ');';
+    $callbackName = 'playcallback' . $index;
+    $callbackAdditionalAttributes = null;
+    #endregion
+
+?>  
+<table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
+<?
+}
+
 function render($item)
 {
     global $parentName, $itemName;
@@ -211,6 +254,8 @@ function render($item)
         default:
             if ($item->PremiereDate) {
                 $date = formatDate($item->PremiereDate);
+            } else if ($item->ProductionYear) {
+                $date = $item->ProductionYear;
             }
             break;
     }
@@ -316,9 +361,11 @@ function render($item)
     </tr></table>&nbsp;<br>
     <?   
     }
-
+    ?>
+    <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
+    <?
     if ($item->GenreItems && count($item->GenreItems) > 0) {
-        echo '<div id="genres">Genres: ';
+        echo '<tr><td><div>Genres' . THREESPACES . '</div></td><td><div id="genres">';
         foreach ($item->GenreItems as $genre) {
             $url = categoryBrowseURL('Genres', $genre->Name);
             printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
@@ -326,39 +373,34 @@ function render($item)
                 echo ', ';
             }
         }
-        echo '</div>&nbsp;<br>';
+        echo '</div></td></tr><tr><td>&nbsp;<br></td></tr>';
     }
-    ?>
+    printCastRow($directors, 'directors', 'Director');
+    printCastRow($writers, 'writers', 'Writer');
 
-        <?= count($directors) > 0 ? '<div id="directors">Directed by: ' . formatCast($directors, 4, ', ') . '</div>&nbsp;<br>' : null ?>
-        <?= count($writers) > 0 ? '<div id="writers">Written by: ' . formatCast($writers, 4, ', ') . '</div>&nbsp;<br>'  : null ?>
-
-<?
-        if ($item->MediaType) { //only display play button for single items
+    if ($item->MediaType) { //only display play button for single items
 ?>          
-        <div id="mediainfo">
-        <?= $streams->Video ? $streams->Video->Type . ': ' . $streams->Video->DisplayTitle . THREESPACES : null ?>
-        <?= $streams->Audio ? $streams->Audio->Type . ': ' . $streams->Audio->DisplayTitle . THREESPACES : null ?>
-        <?= $streams->Subtitle ? $streams->Subtitle->Type . ': ' . $streams->Subtitle->DisplayTitle . THREESPACES : null ?>
-        </div>&nbsp;<br>
+        <tr>
+        <? printStreamInfo($streams->Video) ?>
+        <? printStreamInfo($streams->Audio) ?>
+        <? printStreamInfo($streams->Subtitle) ?>
+        </tr><tr><td>&nbsp;<br></td></tr>
 <?
-        }
+    }
 
+    ?>
+    </table>
+    <?
         if ($item->MediaType) { //only display play button for single items
-            
-            #region videoPlayLink setup
-            $attrs = array("tvid"=>"play");
-            $linkName = "play";
-            $linkHTML = "Play";
-
-            $callbackJS = "checkin('" . $item->Id . "', " . TicksToSeconds($item->RunTimeTicks) . ");";
-            $callbackName = "playcallback";
-            $callbackAdditionalAttributes = null;
-            #endregion
-
-?>  
-    <table class="nobuffer button" ><tr><td><?= videoPlayLink($item, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
-<?
+            $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+            if ($isMultiple) {
+                //sort versions by name
+                $col = array_column($item->MediaSources, 'Name');
+                array_multisort($col, SORT_ASC, $item->MediaSources);
+            }
+            foreach ($item->MediaSources as $index => $mediaSource) {
+                printPlayButton($mediaSource, $index, $isMultiple);
+            }
         }
 ?>    
 
