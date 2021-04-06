@@ -51,19 +51,21 @@ function HTMLattributes($assocArray)
     return $html;
 }
 
-function videoAttributes($item)
+function videoAttributes($mediaSource)
 {
     $attrs = array('vod' => '', 
-        'href' => translatePathToNMT($item->Path));
+        'href' => translatePathToNMT($mediaSource->Path));
 
-    if ($item->VideoType != "VideoFile")
+    if ($mediaSource->VideoType != "VideoFile")
     {
         $attrs['zcd'] = "2";
     }
     return HTMLattributes($attrs);
 }
 
-function videoPlayLink($item, 
+//pass mediasource instead of item when multiple versions
+//item currently has Path and VideoType for first version, so item can still be passed, like for episodes
+function videoPlayLink($mediaSource, 
     $linkHTML = null, $linkName = null, $additionalAttributes = null, 
     $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null)
 {
@@ -81,7 +83,7 @@ function videoPlayLink($item,
         $html .= 'onclick="' . $callbackJS . '" ';
         $html .= 'href="#' . $callbackName . '" ';
     } else {
-        $html .= videoAttributes($item);
+        $html .= videoAttributes($mediaSource);
     }
     
     $html .= '>' . $linkHTML . '</a>';
@@ -91,7 +93,7 @@ function videoPlayLink($item,
         $html .= 'name="' . $callbackName . '" ';
         $html .= 'onfocusset="' . $linkName . '" ';
         $html .= HTMLattributes($callbackAdditionalAttributes);      
-        $html .= videoAttributes($item);
+        $html .= videoAttributes($mediaSource);
         $html .= 'onfocus="stop();" '; //call stop method
         $html .= '></a>';
     }

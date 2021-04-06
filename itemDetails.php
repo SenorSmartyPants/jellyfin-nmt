@@ -209,6 +209,27 @@ function printStreamInfo($stream)
 <?
 }
 
+function printPlayButton($mediaSource, $index, $isMultiple)
+{     
+    #region videoPlayLink setup
+    $attrs = array('tvid'=>'play');
+    $linkName = 'play' . $index;
+    if ($isMultiple) {
+        $linkHTML = 'Play - ' . $mediaSource->Name;
+    } else {
+        $linkHTML = 'Play';
+    }
+
+    $callbackJS = "checkin('" . $mediaSource->Id . "', " . TicksToSeconds($mediaSource->RunTimeTicks) . ');';
+    $callbackName = 'playcallback' . $index;
+    $callbackAdditionalAttributes = null;
+    #endregion
+
+?>  
+<table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
+<?
+}
+
 function render($item)
 {
     global $parentName, $itemName;
@@ -370,22 +391,16 @@ function render($item)
     ?>
     </table>
     <?
-
         if ($item->MediaType) { //only display play button for single items
-            
-            #region videoPlayLink setup
-            $attrs = array("tvid"=>"play");
-            $linkName = "play";
-            $linkHTML = "Play";
-
-            $callbackJS = "checkin('" . $item->Id . "', " . TicksToSeconds($item->RunTimeTicks) . ");";
-            $callbackName = "playcallback";
-            $callbackAdditionalAttributes = null;
-            #endregion
-
-?>  
-    <table class="nobuffer button" ><tr><td><?= videoPlayLink($item, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
-<?
+            $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+            if ($isMultiple) {
+                //sort versions by name
+                $col = array_column($item->MediaSources, 'Name');
+                array_multisort($col, SORT_ASC, $item->MediaSources);
+            }
+            foreach ($item->MediaSources as $index => $mediaSource) {
+                printPlayButton($mediaSource, $index, $isMultiple);
+            }
         }
 ?>    
 
