@@ -51,16 +51,30 @@ function HTMLattributes($assocArray)
     return $html;
 }
 
+function videoAttributesByUrl($url, $vod = null)
+{
+    //translate if not http
+    if (substr($url, 0, 4) != 'http') {
+        $url  = translatePathToNMT($url);
+    }
+    $attrs['href'] = $url;
+
+    if ($vod == 'zcd') {
+        $vod = null;
+        $attrs['zcd'] = '2';
+    }
+    $attrs['vod'] = $vod;
+
+    return HTMLattributes($attrs);
+}
+
 function videoAttributes($mediaSource)
 {
-    $attrs = array('vod' => '', 
-        'href' => translatePathToNMT($mediaSource->Path));
-
-    if ($mediaSource->VideoType != "VideoFile")
-    {
-        $attrs['zcd'] = "2";
+    if ($mediaSource->VideoType != "VideoFile") {
+        return videoAttributesByUrl($mediaSource->Path, 'zcd');
+    } else {
+        return videoAttributesByUrl($mediaSource->Path);
     }
-    return HTMLattributes($attrs);
 }
 
 //pass mediasource instead of item when multiple versions
