@@ -12,6 +12,8 @@ setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 $folderType = ItemType::COLLECTIONFOLDER;
 $collectionType = CollectionType::TVSHOWS;
+$topParentName = $collectiontypeNames[$collectionType];
+
 $pageObj->title = 'Next Up';
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
