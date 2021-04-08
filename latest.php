@@ -27,6 +27,8 @@ switch ($_GET["type"]) {
         break;
 }
 
+$topParentName = $collectiontypeNames[$collectionType];
+
 $pageObj->title = $Title;
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;

@@ -104,7 +104,7 @@ function setDetailURL($item, $menuItem) {
                 $detailURL = categoryBrowseURLEx($item->Name, 
                     $item->Type, $item->CollectionType,
                     $item->Id, $menuItem->BackdropID, 
-                    null, null, $item->Id);
+                    null, null, $item->Id, $item->Name);
                 break;            
             case ItemType::SEASON:
                 $detailURL = "Season.php?id=" . $item->Id;
@@ -120,7 +120,7 @@ function setDetailURL($item, $menuItem) {
                 $detailURL = categoryBrowseURLEx($item->Name, 
                         $item->Type, $item->CollectionType,
                         $item->Id, $menuItem->BackdropID,
-                        null, null, $_GET['topParentId']);
+                        null, null, $_GET['topParentId'], $_GET['topParentName']);
                 break;
         }
         if ($forceItemDetails) {

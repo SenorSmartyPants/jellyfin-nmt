@@ -50,7 +50,10 @@ $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
-$pageObj->title = $name;
+if (!empty($topParentName) && $topParentName != $name) {
+    $pageObj->title = $topParentName . ' - ';
+}
+$pageObj->title .= $name;
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();

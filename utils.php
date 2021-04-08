@@ -182,10 +182,8 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null)
+function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null, $topParentName = null)
 {
-    global $collectiontypeNames;
-    
     if (empty($collectionType)) {
         $collectionType = 'search';
     }
@@ -195,13 +193,13 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
         $url = categoryBrowseURLEx($searchTerm, 
             null, 
             $collectionType, null, null,
-            $categoryName, $searchTerm, $topParentId);  
+            $categoryName, $searchTerm, $topParentId, $topParentName);  
     } else {
         //filter by the displayed collectiontype, tv, movie, boxset...
-        $url = categoryBrowseURLEx($collectiontypeNames[$collectionType] . ' - ' . $searchTerm, 
+        $url = categoryBrowseURLEx($searchTerm, 
             'CollectionFolder', 
             $collectionType, null, null, 
-            $categoryName, $searchTerm, $topParentId);
+            $categoryName, $searchTerm, $topParentId, $topParentName);
     }
     return $url;
 }
@@ -210,9 +208,9 @@ function categoryBrowseURLEx($name,
     $folderType = null, $collectionType = null,
     $parentId = null, $backdropId = null,
     $categoryName = null, $searchTerm = null,
-    $topParentId = null)
+    $topParentId = null, $topParentName = null)
 {
-    $query = compact('name', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId');
+    $query = compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId');
     $query[$categoryName] = $searchTerm;
 
     return 'browse.php?' . http_build_query($query);

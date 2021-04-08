@@ -20,6 +20,7 @@ $folderType = $_GET['folderType'];
 $collectionType = $_GET['collectionType'];
 
 $name = $_GET['name'];
+$topParentName = $_GET['topParentName'];
 
 $backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
@@ -31,7 +32,7 @@ $Ratings = $_GET['Ratings'];
 $Tags = $_GET['Tags'];
 $Years = $_GET['Years'];
 
-$QSBase = http_build_query(compact('name', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
+$QSBase = http_build_query(compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
 
 class ListingsPage extends Page
 {
@@ -73,13 +74,13 @@ class ListingsPage extends Page
     public function printJavascript() 
     {
         global $folderType, $collectionType;
-        global $topParentId;
+        global $topParentId, $topParentName;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
         if ($this->renderFiltering) {
 ?>
-            <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
+            <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
             <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
         } else {
@@ -108,12 +109,12 @@ class ListingsPage extends Page
 
     private function printTVIDLinks($categoryName, $items, $getTVID)
     {
-        global $folderType, $collectionType, $topParentId;
+        global $folderType, $collectionType, $topParentId, $topParentName;
         $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
-            $url = categoryBrowseURL($categoryName, $item, $browseType, $topParentId);
+            $url = categoryBrowseURL($categoryName, $item, $browseType, $topParentId, $topParentName);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }

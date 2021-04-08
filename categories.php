@@ -19,12 +19,14 @@ class CategoriesPage extends Page
     protected $filters;
     protected $itemTypes;
     protected $topParentId;
+    protected $topParentName;
 
-    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null)
+    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
         parent::__construct('Categories');  
         $this->itemTypes = $itemTypes;
         $this->topParentId = $topParentId;
+        $this->topParentName = $topParentName;
 
     /*
         performance notes
@@ -117,7 +119,7 @@ class CategoriesJSPage extends CategoriesPage
 
     <?
             foreach ($items as $item) {
-                $url = categoryBrowseURL($name, $item, $collectionType, $this->topParentId);
+                $url = categoryBrowseURL($name, $item, $collectionType, $this->topParentId, $this->topParentName);
     ?>
             asFilters['<?= $name ?>'].push("<?= $url ?>");
             asFilterNames['<?= $name ?>'].push("<?= $item ?>");
