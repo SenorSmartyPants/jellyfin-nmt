@@ -231,10 +231,10 @@ function getNextUp($Limit, $startIndex = 0)
 
 function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
     $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
-    $personIDs = null, $studioIDs = null, $sortBy = 'SortName')
+    $personIDs = null, $studioIDs = null, $sortBy = 'SortName', $excludeItemTypes = null)
 {
     return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, $sortBy, $type, 
-        null, null, $recursive, $StartIndex, null, 
+        null, null, $recursive, $StartIndex, $excludeItemTypes, 
         $genres, $nameStartsWith, $ratings, $tags, $years, $personIDs, $studioIDs);
 }
 

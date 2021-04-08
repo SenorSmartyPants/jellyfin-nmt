@@ -5,21 +5,21 @@ $libraryBrowse = true;
 $useSeasonImage = false;
 
 //common options
-$recursive = true;
+$recursive = false;
 $type = null;
+$sortBy = 'SortName';
 
 switch ($folderType) {
     case ItemType::PLAYLIST:
+        $recursive = true;
         $sortBy = null;
         break;
 
     case ItemType::BOXSET:
-        $recursive = false;
         $sortBy = null;
-        break;        
+        break;
     
     default:
-        $sortBy = 'SortName';
         switch ($collectionType) {
             case CollectionType::TVSHOWS:
                 $type = ItemType::SERIES;
@@ -27,20 +27,16 @@ switch ($folderType) {
             case CollectionType::MOVIES:
                 $type = ItemType::MOVIE;
                 break;
-            case CollectionType::BOXSETS:
-                $type = ItemType::BOXSET;
-                break;           
-            case "search": //searching from categories page
-                //exclude season and episodes to match JF behavior
-                $type = "movie,series,boxset";
-                break;
-            default: //browsing. music,games,books,musicvideos,homevideos,livetv,channels
-                $recursive = false;
-                break;
         }
 }
 
 
+//if filtering parameters are set, then search recursively
+if ($collectionType === 'search' || !empty($Genres) || !empty($Title) || !empty($Ratings) || !empty($Tags) || !empty($Years)) {
+    //exclude season and episodes to match JF behavior
+    $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
+    $recursive = true;
+}
 
 //echo ($folderType . '/' . $collectionType);
 
@@ -49,7 +45,7 @@ switch ($folderType) {
 overrideIndexStyle($folderType, $collectionType);
 
 $itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexStyle->Limit, $type, $recursive, 
-    $Genres, $Title, $Ratings, $Tags, $Years, null, null, $sortBy);
+    $Genres, $Title, $Ratings, $Tags, $Years, null, null, $sortBy, $excludeItemTypes);
 $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
