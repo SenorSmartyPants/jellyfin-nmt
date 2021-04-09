@@ -25,7 +25,7 @@ class FilterMenu
                 if ($type == 'category') {
                     echo 'onclick="setFocus(\'genLink5\'); return false;" onkeyrightset="genLink5" onkeyleftset="genLink5"';
                 } else {
-                    echo "onclick=\"openLink('$LinkId$i'); return false;\" onkeyrightset=\"catLink5\" onkeyleftset=\"catLink5\"";
+                    echo "onclick=\"setFocus(iActiveItem);openLink('$LinkId$i'); return false;\" onkeyrightset=\"catLink5\" onkeyleftset=\"catLink5\"";
                 }
                 echo '><img src="images/filter/menu_link.png" ONFOCUSSRC="images/filter/menu_active.png" class="menuImage" border="0" />';
                 echo '</a>';
