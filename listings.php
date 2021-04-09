@@ -127,11 +127,6 @@ class ListingsPage extends Page
         }
     }
 
-    public function printNavbar()
-    {
-        parent::printNavbar();
-    }
-
     public function printContentWrapperStart() 
     {
 ?>
