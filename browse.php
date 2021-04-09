@@ -20,13 +20,10 @@ switch ($folderType) {
         break;
     
     default:
-        switch ($collectionType) {
-            case CollectionType::TVSHOWS:
-                $type = ItemType::SERIES;
-                break;
-            case CollectionType::MOVIES:
-                $type = ItemType::MOVIE;
-                break;
+        if ($collectionType == CollectionType::TVSHOWS) {
+            $type = ItemType::SERIES;
+        } elseif ($collectionType == CollectionType::MOVIES) {
+            $type = ItemType::MOVIE;
         }
 }
 
@@ -37,8 +34,6 @@ if ($collectionType === 'search' || !empty($Genres) || !empty($Title) || !empty(
     $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
     $recursive = true;
 }
-
-//echo ($folderType . '/' . $collectionType);
 
 //paging with dynamic style causes issues
 //$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
