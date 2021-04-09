@@ -404,14 +404,14 @@ function printLowerTable()
 function printPCMenu()
 {
 ?>
-    <div id="noNMT">
+    <div id="popupWrapper"><div id="noNMT">
         <a href="#" class="clickInfos" onclick="showSeasonInfo(); return false;">Season Summary</a>
         <a href="#" class="clickUp" onclick="clickUp(); return false;">Click Up</a>
         <a href="#" class="clickDown" onclick="clickDown(); return false;">Click Down</a><br />
         <a href="#" class="pageUp" onclick="toggleLeft(); return false;">Previous Page</a>
         <a href="#" class="pageDown" onclick="toggleRight(); return false;">Next Page</a><br />
         <a class="clickIndex" href="">Index</a><br />
-    </div>
+    </div></div>
 <?
 }
 

@@ -1,0 +1,37 @@
+.showMenu {visibility:hidden;}
+
+.category { left: 360px;  }
+.genre { left: 534px;  }
+
+.mnuBack { left: 1px; top: 1px; }
+.mnuBackTop { left: 361px; top: 126px; }
+.mnuBackBot { left: 361px; top: 301px; }
+
+.mnuItem
+{
+  width: 150px;
+  height: 30px;
+  font-size: 20px;
+}
+
+.menuImage
+{
+  background: url(../images/filter/menu_active.png);
+}
+
+.menuLink { font-size: 25px; color: #AAAAAA; text-decoration: none; }
+.menuLinkActive { font-size: 25px; color: #FFFFFF; text-decoration: none; }
+
+/*
+originally dynamically generated, but static
+($i -1) * 35 +135
+*/
+.mnuLine1 { top: 135px; }
+.mnuLine2 { top: 170px; }
+.mnuLine3 { top: 205px; }
+.mnuLine4 { top: 240px; }
+.mnuLine5 { top: 275px; }
+.mnuLine6 { top: 310px; }
+.mnuLine7 { top: 345px; }
+.mnuLine8 { top: 380px; }
+.mnuLine9 { top: 415px; }

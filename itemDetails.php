@@ -29,7 +29,7 @@ class ItemDetailsPage extends ListingsPage
     }  
 }
 
-$pageObj = new ItemDetailsPage($Title);
+$pageObj = new ItemDetailsPage($Title, false);
 $pageObj->indexStyle = $indexStyle;
 $pageObj->onloadset = 'play';
 $pageObj->additionalCSS = 'itemDetails.css';

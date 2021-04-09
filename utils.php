@@ -1,4 +1,5 @@
 <?
+include_once 'config.php';
 
 function getBackdropIDandTag($item, $backdropID = null)
 {
@@ -195,18 +196,35 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
-function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search')
+function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null, $topParentName = null)
 {
-    return categoryBrowseURLEx($searchTerm, null, $collectionType, null, null,
-        $categoryName, $searchTerm);
+    if (empty($collectionType)) {
+        $collectionType = 'search';
+    }
+
+    if ($collectionType === 'search') {
+        //top level, just link on the category page
+        $url = categoryBrowseURLEx($searchTerm, 
+            null, 
+            $collectionType, null, null,
+            $categoryName, $searchTerm, $topParentId, $topParentName);  
+    } else {
+        //filter by the displayed collectiontype, tv, movie, boxset...
+        $url = categoryBrowseURLEx($searchTerm, 
+            'CollectionFolder', 
+            $collectionType, null, null, 
+            $categoryName, $searchTerm, $topParentId, $topParentName);
+    }
+    return $url;
 }
 
 function categoryBrowseURLEx($name, 
     $folderType = null, $collectionType = null,
     $parentId = null, $backdropId = null,
-    $categoryName = null, $searchTerm = null)
+    $categoryName = null, $searchTerm = null,
+    $topParentId = null, $topParentName = null)
 {
-    $query = compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId');
+    $query = compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId');
     $query[$categoryName] = $searchTerm;
 
     return 'browse.php?' . http_build_query($query);

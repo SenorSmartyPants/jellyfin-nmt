@@ -3,7 +3,7 @@ include_once 'config.php';
 include_once 'data.php';
 include_once 'auth.php';
 include_once 'navbar.php';
-const PCMENU = false;
+const PCMENU = true;
 
 class Page 
 {
@@ -112,14 +112,14 @@ class Page
             }
             
             if (PCMENU) {
-                echo '        <link rel="StyleSheet" type="text/css" href="/New/Jukebox/no_nmt.css" media="screen" />' . "\n";
+                echo '        <link rel="StyleSheet" type="text/css" href="css/no_nmt.css" media="screen" />' . "\n";
             }
             
             $this->printJavascript();
 ?>
     </head>
 
-    <body bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
+    <body id="body" bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
         if ($this->onload) 
         { 
             ?>onload="<?= $this->onload ?>" <?
@@ -181,7 +181,7 @@ class Page
 ?>
         <div class="hidden" id="navigationlinks">
             <a href="index.php" TVID="HOME"></a>
-            <a href="categories.php" TVID="info"></a>
+            <a href="categoriesHTML.php" TVID="info"></a>
         </div>
     </body>
 </html>

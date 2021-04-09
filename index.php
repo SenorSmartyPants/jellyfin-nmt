@@ -1,5 +1,5 @@
 <?php
-include 'listings.php';
+include_once 'listings.php';
 
 $useSeasonNameForMenuItems = true;
 
@@ -52,14 +52,14 @@ class IndexPage extends ListingsPage
         <br clear="all"/>
         <a href="latest.php?type=<?= ItemType::MOVIE ?>">Latest Movies ></a>
         <br clear="all"/>
-        <a href="categories.php">Categories ></a>
+        <a href="categoriesHTML.php">Categories ></a>
         <br clear="all"/>
     <?
         $this->printPosterTable($this->items);
     }
 }
 
-$pageObj = new IndexPage('Home');
+$pageObj = new IndexPage('Home', false);
 $pageObj->onloadset = 'nextup';
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;

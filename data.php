@@ -34,9 +34,26 @@ function mapItemTypeToCollectionType($itemType)
 {
     $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS, 
         ItemType::SEASON => CollectionType::TVSHOWS, ItemType::EPISODE => CollectionType::TVSHOWS,
-        ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS);
+        ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS,
+        ItemType::PLAYLIST => CollectionType::PLAYLISTS, ItemType::MUSICVIDEO  => CollectionType::MUSICVIDEOS);
 
     return $itemTypeToCollectionType[$itemType];
+}
+
+function mapFolderTypeToSingleItemType($folderType, $collectionType)
+{
+    $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES, 
+        CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET,
+        CollectionType::PLAYLISTS => ItemType::PLAYLIST, CollectionType::MUSICVIDEOS => ItemType::MUSICVIDEO);
+
+    //folders are itemtypes
+    if ($folderType == ItemType::COLLECTIONFOLDER || $folderType == ItemType::USERVIEW) {
+        return $collectionTypeToItemType[$collectionType];
+    } else {
+        return $folderType;
+    }
+
+    
 }
 
 function strbool($value)
@@ -148,15 +165,6 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
-function addNonNullParameter($name, $value, $includeLeadingAmpersand = true, $urlencode = false)
-{
-    $amp = $includeLeadingAmpersand ? '&' : '';
-    if ($urlencode) {
-        $value = urlencode($value);
-    }
-    return $value ? $amp. $name . '=' . $value : '';
-}
-
 function getUsersItems($suffix = null, $fields = null, $limit = null, 
     $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
     $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
@@ -165,28 +173,28 @@ function getUsersItems($suffix = null, $fields = null, $limit = null,
 {
     global $user_id;
 
-    $path = USERSPATH . $user_id . ITEMSPATH . $suffix . "?";
+    $path = USERSPATH . $user_id . ITEMSPATH . $suffix . '?';
 
-    $path .= addNonNullParameter('Fields', $fields, false);
-    $path .= addNonNullParameter('StartIndex', $startIndex);
-    $path .= addNonNullParameter('Limit', $limit);
-    $path .= addNonNullParameter('ParentID', $parentID);
-    $path .= addNonNullParameter('ParentIndexNumber', $parentIndexNumber);
-    $path .= addNonNullParameter('IncludeItemTypes', $type);
-    $path .= addNonNullParameter('ExcludeItemTypes', $excludeItemTypes);
-    $path .= addNonNullParameter('SortBy', $sortBy);
-    $path .= addNonNullParameter('Genres', $genres, true, true);
-    $path .= addNonNullParameter('NameStartsWith', $nameStartsWith, true, true);
-    $path .= addNonNullParameter('OfficialRatings', $ratings);
-    $path .= addNonNullParameter('Tags', $tags, true, true);
-    $path .= addNonNullParameter('Years', $years);
-    $path .= addNonNullParameter('PersonIDs', $personIDs);
-    $path .= addNonNullParameter('StudioIDs', $studioIDs);
-    $path .= !is_null($groupItems) ? "&GroupItems=" . strbool($groupItems) : "";
-    $path .= !is_null($isPlayed) ? "&IsPlayed=" . strbool($isPlayed) : "";
-    $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
+    $params = http_build_query(['Fields' => $fields,
+        'StartIndex' => $startIndex ?: null,
+        'Limit' => $limit ?: null,
+        'ParentID' => $parentID ?: null,
+        'ParentIndexNumber' => $parentIndexNumber ?: null,
+        'IncludeItemTypes' => $type ?: null,
+        'ExcludeItemTypes' => $excludeItemTypes ?: null,
+        'SortBy' => $sortBy ?: null,
+        'Genres' => $genres ?: null,
+        'NameStartsWith' => $nameStartsWith ?: null,
+        'OfficialRatings' => $ratings ?: null,
+        'Tags' => $tags ?: null,
+        'Years' => $years ?: null,
+        'PersonIDs' => $personIDs ?: null,
+        'StudioIDs' => $studioIDs ?: null,
+        'GroupItems' => !is_null($groupItems) ? strbool($groupItems) : null,
+        'IsPlayed' => !is_null($isPlayed) ? strbool($isPlayed) : null,
+        'Recursive' => !is_null($Recursive) ? strbool($Recursive) : null]);
 
-    return apiCall($path);
+    return apiCall($path . $params);
 }
 
 function getUsersViews()
@@ -204,12 +212,11 @@ function getUsersPublic()
     return apiCall($path, false, false);
 }
 
-function getLatest($Limit)
+function getLatest($itemType, $Limit)
 {
     global $GroupItems;
 
-    $type = htmlspecialchars($_GET["type"]);
-    return getUsersItems("Latest", "Path", $Limit, null, null, null, $type, $GroupItems);
+    return getUsersItems("Latest", "Path", $Limit, null, null, null, $itemType, $GroupItems);
 }
 
 function getNextUp($Limit, $startIndex = 0)
@@ -224,10 +231,10 @@ function getNextUp($Limit, $startIndex = 0)
 
 function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
     $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
-    $personIDs = null, $studioIDs = null, $sortBy = 'SortName')
+    $personIDs = null, $studioIDs = null, $sortBy = 'SortName', $excludeItemTypes = null)
 {
     return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, $sortBy, $type, 
-        null, null, $recursive, $StartIndex, null, 
+        null, null, $recursive, $StartIndex, $excludeItemTypes, 
         $genres, $nameStartsWith, $ratings, $tags, $years, $personIDs, $studioIDs);
 }
 
@@ -243,13 +250,13 @@ function getSimilarItems($Id, $limit = null)
     return apiCall($path);
 }
 
-function getFilters($parentID = null, $type = null, $Recursive = null) {
+function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
     global $user_id;
 
     $path = ITEMSPATH . "Filters?UserID=" . $user_id;
 
     $path .= $parentID ? "&ParentID=" . $parentID : "";
-    $path .= $type ? "&IncludeItemTypes=" . $type : "";
+    $path .= $itemTypes ? "&IncludeItemTypes=" . implode(",", $itemTypes) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
     
     return apiCall($path);
@@ -261,7 +268,7 @@ function getImageURL($id, $height = null, $width = null, $imageType = null, $unp
 {
     global $api_url; 
 
-    $itemsOrUsers = $itemsOrUsers ?? "Items";
+    $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
     $AddPlayedIndicator = ($AddPlayedIndicator ? 'true' : null);

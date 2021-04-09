@@ -18,8 +18,8 @@ function show(x) {
 
     if (PopupsEnabled) {
         showOverlay(x);
-        iActiveItem = x;
     }
+    iActiveItem = x;
 }
 
 function hide(x) {
@@ -47,5 +47,6 @@ function openLink(x) {
 
 function initpage(enablePopups) {
     PopupsEnabled = enablePopups;
+    initMenu();
     return false;
 }

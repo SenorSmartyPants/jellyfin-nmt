@@ -98,6 +98,14 @@ function setDetailURL($item, $menuItem) {
     
     if ($item->IsFolder) {
         switch ($item->Type) {
+            case ItemType::COLLECTIONFOLDER:
+            case ItemType::USERVIEW:
+                //set topParentId from Id
+                $detailURL = categoryBrowseURLEx($item->Name, 
+                    $item->Type, $item->CollectionType,
+                    $item->Id, $menuItem->BackdropID, 
+                    null, null, $item->Id, $item->Name);
+                break;            
             case ItemType::SEASON:
                 $detailURL = "Season.php?id=" . $item->Id;
                 break;   
@@ -108,9 +116,11 @@ function setDetailURL($item, $menuItem) {
                     break;
                 }   
             default:
+                //get topParentId from querystring
                 $detailURL = categoryBrowseURLEx($item->Name, 
                         $item->Type, $item->CollectionType,
-                        $item->Id, $menuItem->BackdropID);
+                        $item->Id, $menuItem->BackdropID,
+                        null, null, $_GET['topParentId'], $_GET['topParentName']);
                 break;
         }
         if ($forceItemDetails) {

@@ -4,16 +4,23 @@ include_once 'config_listings.php';
 include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
+include_once 'filterMenu.php';
 
 $page = $_GET['page'];
 $page = $page ?? 1;
 
 $parentId = $_GET['parentId'];
+$topParentId = $_GET['topParentId'];
+
+if (empty($parentId)) {
+    $parentId = $topParentId;
+}
 
 $folderType = $_GET['folderType'];
 $collectionType = $_GET['collectionType'];
 
 $name = $_GET['name'];
+$topParentName = $_GET['topParentName'];
 
 $backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
@@ -25,42 +32,63 @@ $Ratings = $_GET['Ratings'];
 $Tags = $_GET['Tags'];
 $Years = $_GET['Years'];
 
-$QSBase = http_build_query(compact('name', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
+$QSBase = http_build_query(compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
 
 class ListingsPage extends Page
 {
     public $items;
     public $menuItems = array();
 
+    protected $renderFiltering;
+
     protected $filters;
     protected $titleLetters;
     protected $singleLetterTVIDs;
     protected $letterToNumber;
 
-    public function __construct($title)
+    public function __construct($title, $renderFiltering = true)
     {
-        parent::__construct($title);  
-        
-        $this->titleLetters = range("A","Z");
-        array_unshift($this->titleLetters,"#");
+        parent::__construct($title);
 
-        $this->singleLetterTVIDs = array("#"=>"1", 
-            "A"=>"2", "B"=>"22", "C"=>"222", 
-            "D"=>"3", "E"=>"33", "F"=>"333",
-            "G"=>"4", "H"=>"44", "I"=>"444",
-            "J"=>"5", "K"=>"55", "L"=>"555",
-            "M"=>"6", "N"=>"66", "O"=>"666",
-            "P"=>"7", "Q"=>"77", "R"=>"777", "S"=>"7777",
-            "T"=>"8", "U"=>"88", "V"=>"888",
-            "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
-        );
+        $this->renderFiltering = $renderFiltering;
+        if ($renderFiltering) {
+            $this->titleLetters = range("A","Z");
+            array_unshift($this->titleLetters,"#");
+    
+            $this->singleLetterTVIDs = array("#"=>"1", 
+                "A"=>"2", "B"=>"22", "C"=>"222", 
+                "D"=>"3", "E"=>"33", "F"=>"333",
+                "G"=>"4", "H"=>"44", "I"=>"444",
+                "J"=>"5", "K"=>"55", "L"=>"555",
+                "M"=>"6", "N"=>"66", "O"=>"666",
+                "P"=>"7", "Q"=>"77", "R"=>"777", "S"=>"7777",
+                "T"=>"8", "U"=>"88", "V"=>"888",
+                "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
+            );
+    
+            $this->additionalCSS = 'filter.css';
+        }
+
     }
 
     public function printJavascript() 
     {
+        global $folderType, $collectionType;
+        global $topParentId, $topParentName;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
+        if ($this->renderFiltering) {
+?>
+            <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
+            <script type="text/javascript" src="js/filter/filter.js"></script>
+<?
+        } else {
+            //empty initMenu function to prevent JS error
+?>
+        <script type="text/javascript">function initMenu() {}</script>
+<?
+        }
     }
 
     public function printHead()
@@ -76,41 +104,32 @@ class ListingsPage extends Page
 
     private function printTVIDLink($url, $tvid)
     {
-        print("<a href=\"$url\" tvid=\"$tvid\"></a>\n");
+        print("<a href=\"$url\" tvid=\"$tvid\" tabindex=\"-1\" ></a>\n");
     }
 
     private function printTVIDLinks($categoryName, $items, $getTVID)
     {
-        global $collectiontypeNames;
-
-        //look at first item returned to guess collection type
-        $collectionType = mapItemTypeToCollectionType($this->items[0]->Type);
+        global $folderType, $collectionType, $topParentId, $topParentName;
+        $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
         foreach ($items as $item) {
-            if (isset($collectionType)) {
-                //filter by the displayed collectiontype, tv, movie, boxset...
-                $url = categoryBrowseURLEx($collectiontypeNames[$collectionType] . ' - ' . $item, 
-                    'CollectionFolder', $collectionType, null, 
-                    null, $categoryName, $item);
-            } else {
-                //top level, just link on the category page
-                $url = categoryBrowseURL($categoryName, $item);
-            }
-
+            //filter by the displayed folder/collectiontype, tv, movie, boxset...
+            $url = categoryBrowseURL($categoryName, $item, $browseType, $topParentId, $topParentName);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }
 
     private function printSpeedDial()
     {
-        //speed dial TVIDs
-        $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        if ($this->renderFiltering) {
+            //speed dial TVIDs
+            $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+        }
     }
 
     public function printNavbar()
     {
         parent::printNavbar();
-        $this->printSpeedDial();
     }
 
     public function printContentWrapperStart() 
@@ -159,10 +178,49 @@ class ListingsPage extends Page
         <?
     }    
 
+    function printPCMenu()
+    {
+    ?>
+        <div id="popupWrapper"><div id="noNMT">
+        <a href="#" onclick="toggleMenu(); toggleMenuLinks(); return false;">menu</a>
+        <div id="menuLinks">
+            <table id="menuLinkTbl" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="leftTd"><a href="#" onclick="catUp(); return false;">Up</a></td>
+                    <td><a href="#" onclick="genUp(); return false;">Up</a></td>
+                </tr>
+                <tr>
+                    <td class="leftTd"><a href="#" onclick="catDown(); return false;">Down</a></td>
+                    <td><a href="#" onclick="genDown(); return false;">Down</a></td>
+                </tr>
+                <tr>
+                    <td class="leftTd">&#160;</td>
+                    <td class="selectLink"><a href="#" onclick="openLink('genLink5'); return false;">Select</a></td>
+                </tr>
+            </table>
+        </div>
+
+        </div></div>
+
+    <?
+    }
+
     public function printFooter()
     {
+        if ($this->renderFiltering) {
+        ?>
+        <div id="popupWrapper">
+<?
+        FilterMenu::printFooter();
+        ?>
+        </div>
+<?        
+            if (PCMENU) {
+                $this->printPCMenu();
+            }
+        }
 ?>
-            <div id="popupWrapper">
+        <div id="popupWrapper">
 <?
         //print popups last of all, so they have highest z-index on NMT
         foreach ($this->menuItems as $key => $menuItem) {
@@ -175,8 +233,20 @@ class ListingsPage extends Page
             }
         }
 ?>
-            </div>
+        </div>
+<?        
+        if ($this->renderFiltering) {
+?>           
+            <div class="hidden" id="navigationlinks">
+                <a TVID="TAB" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
+                <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
+                <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>
+                <a name="genLinkUp"   href="#" onfocusset="genLink5" onfocus="genUp();" onfocusload=""></a>
+                <a name="genLinkDown" href="#" onfocusset="genLink5" onfocus="genDown();" onfocusload=""></a>
+            </div>            
 <?
+            $this->printSpeedDial();
+        }
         parent::printFooter();
     }
 }
