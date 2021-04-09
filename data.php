@@ -56,6 +56,15 @@ function mapFolderTypeToSingleItemType($folderType, $collectionType)
     
 }
 
+function strboolNull($value)
+{
+    if (is_null($value)) {
+        return null;
+    } else {
+        return strbool($value);
+    }
+}
+
 function strbool($value)
 {
     return $value ? 'true' : 'false';
@@ -165,34 +174,40 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
-function getUsersItems($suffix = null, $fields = null, $limit = null, 
-    $parentID = null, $parentIndexNumber = null, $sortBy = null, $type = null,
-    $groupItems = null, $isPlayed = null, $Recursive = null, $startIndex = 0, $excludeItemTypes = null,
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
-    $personIDs = null, $studioIDs = null)
+function getUsersItems($suffix = null, $Fields = null, $Limit = null, 
+    $ParentID = null, $ParentIndexNumber = null, $SortBy = null, $IncludeItemTypes = null,
+    $GroupItems = null, $IsPlayed = null, $Recursive = null, $StartIndex = 0, $ExcludeItemTypes = null,
+    $Genres = null, $NameStartsWith = null, $OfficialRatings = null, $Tags = null, $Years = null, 
+    $PersonIDs = null, $StudioIDs = null)
 {
     global $user_id;
 
     $path = USERSPATH . $user_id . ITEMSPATH . $suffix . '?';
 
-    $params = http_build_query(['Fields' => $fields,
-        'StartIndex' => $startIndex ?: null,
-        'Limit' => $limit ?: null,
-        'ParentID' => $parentID ?: null,
-        'ParentIndexNumber' => $parentIndexNumber ?: null,
-        'IncludeItemTypes' => $type ?: null,
-        'ExcludeItemTypes' => $excludeItemTypes ?: null,
-        'SortBy' => $sortBy ?: null,
-        'Genres' => $genres ?: null,
-        'NameStartsWith' => $nameStartsWith ?: null,
-        'OfficialRatings' => $ratings ?: null,
-        'Tags' => $tags ?: null,
-        'Years' => $years ?: null,
-        'PersonIDs' => $personIDs ?: null,
-        'StudioIDs' => $studioIDs ?: null,
-        'GroupItems' => !is_null($groupItems) ? strbool($groupItems) : null,
-        'IsPlayed' => !is_null($isPlayed) ? strbool($isPlayed) : null,
-        'Recursive' => !is_null($Recursive) ? strbool($Recursive) : null]);
+    $GroupItems = strboolNull($GroupItems);
+    $IsPlayed = strboolNull($IsPlayed);
+    $Recursive = strboolNull($Recursive);
+
+    $params = http_build_query(compact(
+        'Fields',
+        'StartIndex',
+        'Limit',
+        'ParentID',
+        'ParentIndexNumber',
+        'IncludeItemTypes',
+        'ExcludeItemTypes',
+        'SortBy',
+        'Genres',
+        'NameStartsWith',
+        'OfficialRatings',
+        'Tags',
+        'Years',
+        'PersonIDs',
+        'StudioIDs',
+        'GroupItems',
+        'IsPlayed',
+        'Recursive'
+    ));
 
     return apiCall($path . $params);
 }
