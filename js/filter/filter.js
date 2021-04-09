@@ -37,6 +37,7 @@ function hideMenu()
     document.styleSheets[3].cssRules[0].style.visibility="hidden";
     fMenu = false;
     setFocus(iActiveItem);
+    show(iActiveItem);
 }
 
 function toggleMenu()
