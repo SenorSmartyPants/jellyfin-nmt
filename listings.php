@@ -130,7 +130,6 @@ class ListingsPage extends Page
     public function printNavbar()
     {
         parent::printNavbar();
-        $this->printSpeedDial();
     }
 
     public function printContentWrapperStart() 
@@ -246,6 +245,7 @@ class ListingsPage extends Page
                 <a name="genLinkDown" href="#" onfocusset="genLink5" onfocus="genDown();" onfocusload=""></a>
             </div>            
 <?
+            $this->printSpeedDial();
         }
         parent::printFooter();
     }
