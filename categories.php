@@ -103,28 +103,38 @@ class CategoriesPage extends Page
 
 class CategoriesJSPage extends CategoriesPage
 {
+    private $catName;
+    private $collectionType;
+
+    protected function getCatBrowseURLCallback($searchTerm)
+    {
+        return categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName);
+    }
+
     protected function printCategory($name, $items)
     {
         if (!empty($items)) {
             if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
-                $collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
+                $this->collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
             } else {
-                $collectionType = null;
+                $this->collectionType = null;
             }
+            
+            $this->catName = $name;
+            $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
 
-    ?>
-            asCatNames.push('<?= $name ?>');
-            asFilters['<?= $name ?>'] = new Array();
-            asFilterNames['<?= $name ?>']  = new Array();
-
-    <?
-            foreach ($items as $item) {
-                $url = categoryBrowseURL($name, $item, $collectionType, $this->topParentId, $this->topParentName);
-    ?>
-            asFilters['<?= $name ?>'].push("<?= $url ?>");
-            asFilterNames['<?= $name ?>'].push("<?= $item ?>");
-    <?
+            //NMT has 2048 character limit per line of JS code in JS file
+            //if more than 100 items, put each item on one line so we don't hit the limit
+            if (count($items) > 100) {
+                $padding = "\n\t\t\t";
+            } else {
+                $padding = null;
             }
+?>
+        asFilterNames['<?= $name ?>'] = ["<?= implode("\"," . $padding . "\"", $items);  ?>"];
+        asFilters['<?= $name ?>'] = ["<?= implode("\",\n\t\t\t\"", $urls);  ?>"];            
+
+<?
         }    
     }
 
@@ -132,9 +142,10 @@ class CategoriesJSPage extends CategoriesPage
     {
         header('Content-type: text/javascript');
 ?>
-        var asCatNames = new Array();
+        var asCatNames = ["Genres","Title","Ratings","Years","Tags"];
         var asFilters = new Object();
         var asFilterNames = new Object();   
+
 <?      
         $this->printContent();
 ?>
