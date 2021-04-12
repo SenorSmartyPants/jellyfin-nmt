@@ -1,16 +1,16 @@
 <?php
 include_once '../../categories.php';
 
-$itemType = $_GET["itemType"];
-$topParentId = $_GET["topParentId"];
-$topParentName = $_GET['topParentName'];
+$itemType = htmlspecialchars($_GET["itemType"]);
+$topParentId = htmlspecialchars($_GET["topParentId"]);
+$topParentName = htmlspecialchars($_GET['topParentName']);
 
 if (empty($itemType) && empty($topParentId))
 {
     $pageObj = new CategoriesJSPage();
 } else {
     if (!empty($itemType)) {
-        $itemTypes = array(htmlspecialchars($itemType));
+        $itemTypes = array($itemType);
     }
     $pageObj = new CategoriesJSPage($itemTypes, $topParentId, $topParentName);
 }
