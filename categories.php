@@ -17,6 +17,7 @@ foreach ($filters->Years as $year) {
 class CategoriesPage extends Page
 {
     protected $filters;
+    protected $titleLetters;
     protected $itemTypes;
     protected $topParentId;
     protected $topParentName;
@@ -45,6 +46,9 @@ class CategoriesPage extends Page
         } else {
             $this->filters = getFilters($topParentId, null, true);
         }
+
+        $this->titleLetters = range("A","Z");
+        array_unshift($this->titleLetters,"#");
     }
 
     public function printContent()
@@ -55,9 +59,7 @@ class CategoriesPage extends Page
     protected function printCategories() 
     {   
         $this->printCategory("Genres", $this->filters->Genres);
-        $titleLetters = range("A","Z");
-        array_unshift($titleLetters,"#");
-        $this->printCategory("Title", $titleLetters);
+        $this->printCategory("Title", $this->titleLetters);
         $this->printCategory("Ratings", $this->filters->OfficialRatings);
         $this->printCategory("Years", $this->filters->Years);
         $this->printCategory("Tags", $this->filters->Tags);
