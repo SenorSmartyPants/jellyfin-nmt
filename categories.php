@@ -109,6 +109,7 @@ class CategoriesJSPage extends CategoriesPage
     private $catName;
     private $collectionType;
     private $baseurl;
+    private $includeTags = true;
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
@@ -147,12 +148,32 @@ class CategoriesJSPage extends CategoriesPage
         }    
     }
 
+    private function getCategoriesJSArrayString()
+    {
+        $Categories = array();
+
+        if (!empty($this->filters->Genres)) {
+            $Categories[] = 'Genres';
+        }
+        $Categories[] = 'Title';
+        if (!empty($this->filters->OfficialRatings)) {
+            $Categories[] = 'Ratings';
+        }
+        if (!empty($this->filters->Years)) {
+            $Categories[] = 'Years';
+        }
+        if ($this->includeTags && !empty($this->filters->Tags)) {
+            $Categories[] = 'Tags';
+        }
+        return '["' . implode("\",\"", $Categories) . '"]';
+    }
+
     public function render()
     {
         header('Content-type: text/javascript');
         $this->baseurl = categoryBrowseURL(null, null, $this->collectionType, $this->topParentId, $this->topParentName);
 ?>
-        var asCatNames = ["Genres","Title","Ratings","Years","Tags"];
+        var asCatNames = <?= $this->getCategoriesJSArrayString() ?>;
         var asFilters = new Object();
         var asFilterNames = new Object();   
         var baseURL = '<?= $this->baseurl ?>';
