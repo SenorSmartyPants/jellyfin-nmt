@@ -26,8 +26,9 @@ class CategoriesPage extends Page
     {
         parent::__construct('Categories');  
         $this->itemTypes = $itemTypes;
-        $this->topParentId = $topParentId;
-        $this->topParentName = $topParentName;
+        //test for empty string, convert to null
+        $this->topParentId = $topParentId === '' ? null : $topParentId;
+        $this->topParentName = $topParentName === '' ? null : $topParentName;
 
     /*
         performance notes

@@ -224,7 +224,7 @@ function categoryBrowseURLEx($name,
     $categoryName = null, $searchTerm = null,
     $topParentId = null, $topParentName = null)
 {
-    $query = compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId');
+    $query = compact('topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'name', 'backdropId');
     $query[$categoryName] = $searchTerm;
 
     return 'browse.php?' . http_build_query($query);
