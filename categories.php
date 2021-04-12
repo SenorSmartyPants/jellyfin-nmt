@@ -109,6 +109,16 @@ class CategoriesJSPage extends CategoriesPage
     private $catName;
     private $collectionType;
 
+    public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
+    {
+        parent::__construct($itemTypes, $topParentId, $topParentName);  
+        if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
+            $this->collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
+        } else {
+            $this->collectionType = null;
+        }
+    }
+
     protected function getCatBrowseURLCallback($searchTerm)
     {
         return categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName);
@@ -117,11 +127,6 @@ class CategoriesJSPage extends CategoriesPage
     protected function printCategory($name, $items)
     {
         if (!empty($items)) {
-            if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
-                $this->collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
-            } else {
-                $this->collectionType = null;
-            }
             
             $this->catName = $name;
             $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
