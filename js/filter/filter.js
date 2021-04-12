@@ -64,7 +64,7 @@ function showCatLinks()
 {
   var i = 0;
 
-	if (asCatNames.length > 4 && iActiveCat + 4 >= iMaxCats)
+	if (iCats > 4 && iActiveCat + 4 >= iMaxCats)
     i = iActiveCat - 4;
 
   for (var t = 1; t <= iMaxCats; t++)
@@ -72,7 +72,7 @@ function showCatLinks()
     var sCat = ' ';
 
 		// beim Zeiger iLinkMinCat Kategorien auf Inhalt prüfen 
-    if (t >= iLinkMinCat && i < asCatNames.length)
+    if (t >= iLinkMinCat && i < iCats)
     {
       if (asCatNames[i] != 'undefined')
       {
@@ -128,7 +128,7 @@ function showGenres()
 function catDown()
 {
   // letzte Kategorie
-  if (iActiveCat + 1 >= asCatNames.length)
+  if (iActiveCat + 1 >= iCats)
   {
     iActiveCat = -1;
     iLinkMinCat = 6;
@@ -152,8 +152,8 @@ function catUp()
   // erste Kategorie
   if (iActiveCat == 0 )
   {
-    iActiveCat = asCatNames.length;
-    var iTemp = 5 - asCatNames.length;
+    iActiveCat = iCats;
+    var iTemp = 5 - iCats;
     iLinkMinCat = 1;
     if (iTemp > 0)
     	iLinkMinCat =  iTemp;
@@ -225,11 +225,11 @@ function genUp()
 
 function initMenu()
 {
-  if ((iLinkMinCat + asCatNames.length) < iMaxCats)
-    iMaxCats = iLinkMinCat + asCatNames.length;
+  if ((iLinkMinCat + iCats) < iMaxCats)
+    iMaxCats = iLinkMinCat + iCats;
     
 
-  for (var t = 0; t < asCatNames.length; t++)
+  for (var t = 0; t < iCats; t++)
   {
   	if (asCatNames[t] == sActiveCat)
   	{
