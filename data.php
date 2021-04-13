@@ -37,6 +37,7 @@ class UserItemsParams
     public $GroupItems = null;
     public $ExcludeItemTypes = null;
     public $IncludeItemTypes = null;
+    public $IsFavorite = null;
     public $IsPlayed = null;
     public $Limit = null;
     public $NameStartsWith = null;
@@ -222,6 +223,7 @@ function getUsersItems(UserItemsParams $params, $suffix = null)
     $path = USERSPATH . $user_id . ITEMSPATH . $suffix . '?';
 
     $params->GroupItems = strboolNull($params->GroupItems);
+    $params->IsFavorite = strboolNull($params->IsFavorite);
     $params->IsPlayed = strboolNull($params->IsPlayed);
     $params->Recursive = strboolNull($params->Recursive);
 
