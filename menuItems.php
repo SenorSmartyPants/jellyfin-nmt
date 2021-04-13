@@ -106,14 +106,20 @@ function setDetailURL($item, $menuItem) {
     global $forceItemDetails;
     
     if ($item->IsFolder) {
+        //set up default browsing params
+        $cbp = new CategoryBrowseParams();
+        $cbp->name = $item->Name;
+        $cbp->folderType = $item->Type;
+        $cbp->collectionType = $item->CollectionType;
+        $cbp->parentId = $item->Id;
+        $cbp->backdropId = $menuItem->BackdropID;
         switch ($item->Type) {
             case ItemType::COLLECTIONFOLDER:
             case ItemType::USERVIEW:
                 //set topParentId from Id
-                $detailURL = categoryBrowseURLEx($item->Name, 
-                    $item->Type, $item->CollectionType,
-                    $item->Id, $menuItem->BackdropID, 
-                    null, null, $item->Id, $item->Name);
+                $cbp->topParentId = $item->Id;
+                $cbp->topParentName = $item->Name;
+                $detailURL = categoryBrowseURLEx($cbp);
                 break;            
             case ItemType::SEASON:
                 $detailURL = "Season.php?id=" . $item->Id;
@@ -126,10 +132,9 @@ function setDetailURL($item, $menuItem) {
                 }   
             default:
                 //get topParentId from querystring
-                $detailURL = categoryBrowseURLEx($item->Name, 
-                        $item->Type, $item->CollectionType,
-                        $item->Id, $menuItem->BackdropID,
-                        null, null, $_GET['topParentId'], $_GET['topParentName']);
+                $cbp->topParentId = $_GET['topParentId'];
+                $cbp->topParentName = $_GET['topParentName'];
+                $detailURL = categoryBrowseURLEx($cbp);
                 break;
         }
         if ($forceItemDetails) {

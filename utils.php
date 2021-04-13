@@ -196,38 +196,48 @@ function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
     }
 }
 
+class CategoryBrowseParams
+{
+    public $topParentName = null;
+    public $topParentId = null;
+    public $parentId = null;
+    public $folderType = null;
+    public $collectionType = 'search';
+
+    public $name;
+    public $backdropId = null;
+
+    public $categoryName = null;
+    public $searchTerm = null;
+}
+
 function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null, $topParentName = null)
 {
     if (empty($collectionType)) {
         $collectionType = 'search';
     }
 
-    if ($collectionType === 'search') {
-        //top level, just link on the category page
-        $url = categoryBrowseURLEx($searchTerm, 
-            null, 
-            $collectionType, null, null,
-            $categoryName, $searchTerm, $topParentId, $topParentName);  
+    $cbp = new CategoryBrowseParams();
+    $cbp->name = $searchTerm;
+    $cbp->searchTerm = $searchTerm;
+    $cbp->categoryName = $categoryName;
+    $cbp->collectionType = $collectionType;
+    $cbp->topParentName = $topParentName;
+    $cbp->topParentId = $topParentId;
+
+    if ($cbp->collectionType === 'search') {
+        //top level, just link on the category page 
     } else {
         //filter by the displayed collectiontype, tv, movie, boxset...
-        $url = categoryBrowseURLEx($searchTerm, 
-            'CollectionFolder', 
-            $collectionType, null, null, 
-            $categoryName, $searchTerm, $topParentId, $topParentName);
+        $cbp->folderType = 'CollectionFolder'; 
     }
+    $url = categoryBrowseURLEx($cbp);
     return $url;
 }
 
-function categoryBrowseURLEx($name, 
-    $folderType = null, $collectionType = null,
-    $parentId = null, $backdropId = null,
-    $categoryName = null, $searchTerm = null,
-    $topParentId = null, $topParentName = null)
+function categoryBrowseURLEx(CategoryBrowseParams $cbp)
 {
-    $query = compact('topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'name', 'backdropId');
-    $query[$categoryName] = $searchTerm;
-
-    return 'browse.php?' . http_build_query($query);
+    return 'browse.php?' . http_build_query($cbp);
 }
 
 ?>

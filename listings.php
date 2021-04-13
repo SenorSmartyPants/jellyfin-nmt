@@ -25,14 +25,21 @@ $topParentName = $_GET['topParentName'];
 $backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
 
-//Category Names
-$Genres = $_GET['Genres'];
-$Title = $_GET['Title'];
-$Ratings = $_GET['Ratings'];
-$Tags = $_GET['Tags'];
-$Years = $_GET['Years'];
+$cbp = new CategoryBrowseParams();
 
-$QSBase = http_build_query(compact('name', 'topParentName', 'topParentId', 'parentId', 'folderType', 'collectionType', 'backdropId', 'Genres', 'Title', 'Ratings', 'Tags', 'Years'));
+$cbp->topParentName = $topParentName;
+$cbp->topParentId = $topParentId;
+$cbp->parentId = $parentId;
+$cbp->folderType = $folderType;
+$cbp->collectionType = $collectionType;
+
+$cbp->name = $name;
+$cbp->backdropId = $backdropId;
+
+$cbp->categoryName = $_GET['categoryName'];
+$cbp->searchTerm = $_GET['searchTerm'];
+
+$QSBase = http_build_query($cbp);
 
 class ListingsPage extends Page
 {
@@ -112,9 +119,19 @@ class ListingsPage extends Page
         global $folderType, $collectionType, $topParentId, $topParentName;
         $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
+        $cbp = new CategoryBrowseParams();
+        $cbp->topParentName = $topParentName;
+        $cbp->topParentId = $topParentId;
+        $cbp->folderType = $folderType;
+        $cbp->collectionType = $browseType;    
+        $cbp->categoryName = $categoryName;
+
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
-            $url = categoryBrowseURL($categoryName, $item, $browseType, $topParentId, $topParentName);
+            $cbp->name = $item;
+            $cbp->searchTerm = $item;
+
+            $url = categoryBrowseURLEx($cbp);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }

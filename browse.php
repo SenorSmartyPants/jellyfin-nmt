@@ -29,7 +29,7 @@ switch ($folderType) {
 
 
 //if filtering parameters are set, then search recursively
-if ($collectionType === 'search' || !empty($Genres) || !empty($Title) || !empty($Ratings) || !empty($Tags) || !empty($Years)) {
+if ($collectionType === 'search' || !empty($cbp->searchTerm)) {
     //exclude season and episodes to match JF behavior
     $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
     $recursive = true;
@@ -45,13 +45,10 @@ $params->StartIndex = ($page - 1) * $indexStyle->Limit;
 $params->Limit = $indexStyle->Limit;
 $params->IncludeItemTypes = $type;
 $params->Recursive = $recursive;
-$params->Genres = $Genres;
-$params->NameStartsWith = $Title;
-$params->OfficialRatings = $Ratings;
-$params->Tags = $Tags;
-$params->Years = $Years;
 $params->SortBy = $sortBy;
 $params->ExcludeItemTypes = $excludeItemTypes;
+$categoryName = $cbp->categoryName;
+$params->$categoryName = $cbp->searchTerm;
 
 $itemsAndCount = getItems($params);
 
