@@ -156,6 +156,9 @@ class CategoriesJSPage extends CategoriesPage
         $Categories = array();
 
         $Categories[] = 'Filters';
+        if ($this->collectionType == CollectionType::TVSHOWS) {
+            $Categories[] = 'Status';
+        }
 
         if (!empty($this->filters->Genres)) {
             $Categories[] = 'Genres';
@@ -186,6 +189,13 @@ class CategoriesJSPage extends CategoriesPage
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played"];
         asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed"];
 <?      
+        if ($this->collectionType == CollectionType::TVSHOWS) {
+?>
+        asFilterNames['Status'] = ["Continuing", "Ended"];
+        asFilters['Status'] = ["&name=Continuing&categoryName=seriesStatus&searchTerm=Continuing", "&name=Ended&categoryName=seriesStatus&searchTerm=Ended"];
+
+<?
+        }
         $this->printContent();
 ?>
         var sActiveCat = asCatNames[0];        
