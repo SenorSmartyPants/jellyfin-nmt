@@ -140,7 +140,7 @@ class ListingsPage extends Page
     {
         if ($this->renderFiltering) {
             //speed dial TVIDs
-            $this->printTVIDLinks("Title", $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
+            $this->printTVIDLinks('NameStartsWith', $this->titleLetters, 'ListingsPage::toSingleLetterNumberpad');
         }
     }
 

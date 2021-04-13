@@ -59,17 +59,17 @@ class CategoriesPage extends Page
     }
 
     protected function printCategories() 
-    {   
-        $this->printCategory("Genres", $this->filters->Genres);
-        $this->printCategory("Title", $this->titleLetters);
-        $this->printCategory("Ratings", $this->filters->OfficialRatings);
-        $this->printCategory("Years", $this->filters->Years);
+    {
+        $this->printCategory('Genres', 'Genres', $this->filters->Genres);
+        $this->printCategory('Title', 'NameStartsWith', $this->titleLetters);
+        $this->printCategory('Ratings', 'OfficialRatings', $this->filters->OfficialRatings);
+        $this->printCategory('Years', 'Years', $this->filters->Years);
         if ($this->includeTags) {
-            $this->printCategory("Tags", $this->filters->Tags);
+            $this->printCategory('Tags', 'Tags', $this->filters->Tags);
         }
     }
 
-    protected function printCategory($name, $items) 
+    protected function printCategory($heading, $categoryName, $items) 
     {
         if (!empty($items)) {
 ?>
@@ -81,13 +81,13 @@ class CategoriesPage extends Page
         </tr>
         <tr>
             <td background="images/wall/cat-l.png"></td>
-            <th width="120" valign="top"><?= $name ?></th>
+            <th width="120" valign="top"><?= $heading ?></th>
             <td class="secondaryText">
 <?
             for ($i=0; $i < count($items); $i++) { 
-                $url = categoryBrowseURL($name, $items[$i]);
+                $url = categoryBrowseURL($categoryName, $items[$i]);
 ?>
-                <a href="<?= $url ?>" <? if ($name == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
+                <a href="<?= $url ?>" <? if ($heading == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
 <?
             }
 ?>
@@ -129,11 +129,11 @@ class CategoriesJSPage extends CategoriesPage
         return str_replace($this->baseurl, '', categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName));
     }
 
-    protected function printCategory($name, $items)
+    protected function printCategory($heading, $categoryName, $items) 
     {
         if (!empty($items)) {
             
-            $this->catName = $name;
+            $this->catName = $categoryName;
             $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
 
             //NMT has 2048 character limit per line of JS code in JS file
@@ -144,8 +144,8 @@ class CategoriesJSPage extends CategoriesPage
                 $padding = null;
             }
 ?>
-        asFilterNames['<?= $name ?>'] = ["<?= implode("\"," . $padding . "\"", $items);  ?>"];
-        asFilters['<?= $name ?>'] = ["<?= implode("\",\n\t\t\t\"", $urls);  ?>"];            
+        asFilterNames['<?= $heading ?>'] = ["<?= implode("\"," . $padding . "\"", $items);  ?>"];
+        asFilters['<?= $heading ?>'] = ["<?= implode("\",\n\t\t\t\"", $urls);  ?>"];            
 
 <?
         }    
