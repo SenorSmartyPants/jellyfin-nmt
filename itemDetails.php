@@ -103,7 +103,11 @@ function setupChildData($item)
         if ($item->Type == ItemType::EPISODE) {
             setEpisodeIndexStyle($item);
             //get episodes from this season
-            $children = getItems($item->SeasonId, $startIndex, $indexStyle->Limit);
+            $params = new UserItemsParams();
+            $params->StartIndex = $startIndex;
+            $params->Limit = $indexStyle->Limit;
+            $params->ParentID = $item->SeasonId;
+            $children = getItems($params);
         } else {
             $children = getSimilarItems($item->Id, $indexStyle->Limit);
         }
@@ -119,19 +123,29 @@ function setupChildData($item)
     }
     if ($subitems == "children") {
         //get first X children
+        $params = new UserItemsParams();
+        $params->StartIndex = $startIndex;
+        $params->Limit = $indexStyle->Limit;
         if ($item->Type == ItemType::PERSON) {
             //filter items to ones where PersonID is included
-            $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, $item->Id);
+            $params->Recursive = true;
+            $params->PersonIDs = $item->Id;
+            $children = getItems($params);
         } else if ($item->Type == ItemType::STUDIO) {
             //filter items to ones where StudioID is included
-            $children = getItems(null, $startIndex, $indexStyle->Limit, null, true, null, null, null, null, null, null, $item->Id);
+            $params->Recursive = true;
+            $params->StudioIDs = $item->Id;
+            $children = getItems($params);
         } else {
             //if season, then display episode style
             if ($item->Type == ItemType::SEASON) {
                 setEpisodeIndexStyle($item);
+                $params->StartIndex = $startIndex;
+                $params->Limit = $indexStyle->Limit;
             }
             //just get child items
-            $children = getItems($item->Id, $startIndex, $indexStyle->Limit);
+            $params->ParentID = $item->Id;
+            $children = getItems($params);
         }
         $itemsToDisplay = $children->Items;
         $totalItems = $children->TotalRecordCount;

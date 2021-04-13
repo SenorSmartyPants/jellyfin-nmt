@@ -33,19 +33,17 @@ if ($nextup) {
     if ($_GET["unwatched"]) {
         $IsPlayed  = false;
     }
-    $itemsAndCount = getUsersItems(
-        null,
-        "Path",
-        50,
-        $parentID,
-        null,
-        "SortName",
-        ItemType::EPISODE,
-        null,
-        $IsPlayed,
-        true,
-        0
-    );
+
+    $params = new UserItemsParams();
+    $params->Fields = 'Path';
+    $params->Limit = 50;
+    $params->ParentID = $parentID;
+    $params->SortBy = 'SortName';
+    $params->IncludeItemTypes = ItemType::EPISODE;
+    $params->IsPlayed = $IsPlayed;
+    $params->Recursive = true;
+
+    $itemsAndCount = getUsersItems($params);
 } else {
     //no parameters - display input form
 ?>

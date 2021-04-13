@@ -30,6 +30,29 @@ class Device
     }
 }
 
+class UserItemsParams
+{
+    public $Fields = null;
+    public $Genres = null;
+    public $GroupItems = null;
+    public $ExcludeItemTypes = null;
+    public $IncludeItemTypes = null;
+    public $IsPlayed = null;
+    public $Limit = null;
+    public $NameStartsWith = null;
+    public $OfficialRatings = null;
+    public $ParentID = null;
+    public $ParentIndexNumber = null;    
+    public $PersonIDs = null;
+    public $Recursive = null;
+    public $SortBy = null;
+    public $StartIndex = null;
+    public $StudioIDs = null;
+    public $Tags = null;
+    public $Years = null;
+}
+
+
 function mapItemTypeToCollectionType($itemType)
 {
     $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS, 
@@ -136,7 +159,13 @@ function itemImageExists($itemId, $ImageType = ImageType::PRIMARY)
 function firstEpisodeFromSeason($seasonId, $seasonNumber)
 {
     //seasonNumber - don't include specials in regular seasons
-    $all_episodes = getUsersItems(null, "Path", 1, $seasonId, $seasonNumber);
+    $params = new UserItemsParams();
+    $params->Fields = 'Path';
+    $params->Limit = 1;
+    $params->ParentID = $seasonId;
+    $params->ParentIndexNumber = $seasonNumber;
+
+    $all_episodes = getUsersItems($params);
 
     //return first
     return $all_episodes->Items[0];
@@ -144,14 +173,26 @@ function firstEpisodeFromSeason($seasonId, $seasonNumber)
 
 function firstEpisodeFromSeries($seriesId)
 {
-    $all_episodes = getUsersItems(null, "Path", 1, $seriesId, null, null, ItemType::EPISODE, null, null, true);
+    $params = new UserItemsParams();
+    $params->Fields = 'Path';
+    $params->Limit = 1;
+    $params->ParentID = $seriesId;
+    $params->IncludeItemTypes = ItemType::EPISODE;
+    $params->Recursive = true;
+
+    $all_episodes = getUsersItems($params);
 
     return $all_episodes->Items[0];
 }
 
 function firstSeasonFromSeries($seriesId)
 {
-    $seasons = getUsersItems(null, null, 1, $seriesId, null, null, ItemType::SEASON);
+    $params = new UserItemsParams();
+    $params->Limit = 1;
+    $params->ParentID = $seriesId;
+    $params->IncludeItemTypes = ItemType::SEASON;
+
+    $seasons = getUsersItems($params);
 
     return $seasons->Items[0];
 }
@@ -174,42 +215,19 @@ function getSeasonURL($SeasonId, $ParentIndexNumber)
     return YAMJpath(firstEpisodeFromSeason($SeasonId, $ParentIndexNumber));
 }
 
-function getUsersItems($suffix = null, $Fields = null, $Limit = null, 
-    $ParentID = null, $ParentIndexNumber = null, $SortBy = null, $IncludeItemTypes = null,
-    $GroupItems = null, $IsPlayed = null, $Recursive = null, $StartIndex = 0, $ExcludeItemTypes = null,
-    $Genres = null, $NameStartsWith = null, $OfficialRatings = null, $Tags = null, $Years = null, 
-    $PersonIDs = null, $StudioIDs = null)
+function getUsersItems(UserItemsParams $params, $suffix = null)
 {
     global $user_id;
 
     $path = USERSPATH . $user_id . ITEMSPATH . $suffix . '?';
 
-    $GroupItems = strboolNull($GroupItems);
-    $IsPlayed = strboolNull($IsPlayed);
-    $Recursive = strboolNull($Recursive);
+    $params->GroupItems = strboolNull($params->GroupItems);
+    $params->IsPlayed = strboolNull($params->IsPlayed);
+    $params->Recursive = strboolNull($params->Recursive);
 
-    $params = http_build_query(compact(
-        'Fields',
-        'StartIndex',
-        'Limit',
-        'ParentID',
-        'ParentIndexNumber',
-        'IncludeItemTypes',
-        'ExcludeItemTypes',
-        'SortBy',
-        'Genres',
-        'NameStartsWith',
-        'OfficialRatings',
-        'Tags',
-        'Years',
-        'PersonIDs',
-        'StudioIDs',
-        'GroupItems',
-        'IsPlayed',
-        'Recursive'
-    ));
+    $querystring = http_build_query($params);
 
-    return apiCall($path . $params);
+    return apiCall($path . $querystring);
 }
 
 function getUsersViews()
@@ -231,7 +249,13 @@ function getLatest($itemType, $Limit)
 {
     global $GroupItems;
 
-    return getUsersItems("Latest", "Path", $Limit, null, null, null, $itemType, $GroupItems);
+    $params = new UserItemsParams();
+    $params->Fields = 'Path';
+    $params->Limit = $Limit;
+    $params->IncludeItemTypes = $itemType;
+    $params->GroupItems = $GroupItems;    
+
+    return getUsersItems($params, 'Latest');
 }
 
 function getNextUp($Limit, $startIndex = 0)
@@ -244,17 +268,18 @@ function getNextUp($Limit, $startIndex = 0)
     return apiCall($path);
 }
 
-function getItems($parentID, $StartIndex, $Limit, $type = null, $recursive = null, 
-    $genres = null, $nameStartsWith = null, $ratings = null, $tags = null, $years = null, 
-    $personIDs = null, $studioIDs = null, $sortBy = 'SortName', $excludeItemTypes = null)
+function getItems(UserItemsParams $params)
 {
-    return getUsersItems(null, "Path,ChildCount", $Limit, $parentID, null, $sortBy, $type, 
-        null, null, $recursive, $StartIndex, $excludeItemTypes, 
-        $genres, $nameStartsWith, $ratings, $tags, $years, $personIDs, $studioIDs);
+    //set defaults
+    $params->Fields = $params->Fields ?? 'Path,ChildCount';
+    $params->SortBy = $params->SortBy ?? 'SortName';
+
+    return getUsersItems($params);
 }
 
 function getItem($Id) {
-    return getUsersItems($Id);
+    $params = new UserItemsParams();
+    return getUsersItems($params, $Id);
 }
 
 function getSimilarItems($Id, $limit = null)

@@ -51,7 +51,11 @@ if ($season->ImageTags->Banner) {
 }
 $pageObj->backdrop = getBackdropIDandTag($season);
 
-$episodesAndCount = getUsersItems(null, "Path,Overview,Height,Width,MediaSources,ProviderIds", null, $id);
+$params = new UserItemsParams();
+$params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds';
+$params->ParentID = $id;
+
+$episodesAndCount = getUsersItems($params);
 $episodes = $episodesAndCount->Items;
 $episodeCount = $episodesAndCount->TotalRecordCount;
 

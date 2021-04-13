@@ -39,8 +39,22 @@ if ($collectionType === 'search' || !empty($Genres) || !empty($Title) || !empty(
 //$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
 overrideIndexStyle($folderType, $collectionType);
 
-$itemsAndCount = getItems($parentId, ($page - 1) * $indexStyle->Limit, $indexStyle->Limit, $type, $recursive, 
-    $Genres, $Title, $Ratings, $Tags, $Years, null, null, $sortBy, $excludeItemTypes);
+$params = new UserItemsParams();
+$params->ParentID = $parentId;
+$params->StartIndex = ($page - 1) * $indexStyle->Limit;
+$params->Limit = $indexStyle->Limit;
+$params->IncludeItemTypes = $type;
+$params->Recursive = $recursive;
+$params->Genres = $Genres;
+$params->NameStartsWith = $Title;
+$params->OfficialRatings = $Ratings;
+$params->Tags = $Tags;
+$params->Years = $Years;
+$params->SortBy = $sortBy;
+$params->ExcludeItemTypes = $excludeItemTypes;
+
+$itemsAndCount = getItems($params);
+
 $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
