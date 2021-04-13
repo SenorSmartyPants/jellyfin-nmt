@@ -231,8 +231,7 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
         //filter by the displayed collectiontype, tv, movie, boxset...
         $cbp->folderType = 'CollectionFolder'; 
     }
-    $url = categoryBrowseURLEx($cbp);
-    return $url;
+    return categoryBrowseURLEx($cbp);
 }
 
 function categoryBrowseURLEx(CategoryBrowseParams $cbp)
