@@ -155,6 +155,8 @@ class CategoriesJSPage extends CategoriesPage
     {
         $Categories = array();
 
+        $Categories[] = 'Filters';
+
         if (!empty($this->filters->Genres)) {
             $Categories[] = 'Genres';
         }
@@ -181,6 +183,8 @@ class CategoriesJSPage extends CategoriesPage
         var asFilterNames = new Object();   
         var baseURL = '<?= $this->baseurl ?>';
 
+        asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played"];
+        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed"];
 <?      
         $this->printContent();
 ?>
