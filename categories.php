@@ -21,6 +21,7 @@ class CategoriesPage extends Page
     protected $itemTypes;
     protected $topParentId;
     protected $topParentName;
+    protected $includeTags = true;
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
@@ -63,7 +64,9 @@ class CategoriesPage extends Page
         $this->printCategory("Title", $this->titleLetters);
         $this->printCategory("Ratings", $this->filters->OfficialRatings);
         $this->printCategory("Years", $this->filters->Years);
-        $this->printCategory("Tags", $this->filters->Tags);
+        if ($this->includeTags) {
+            $this->printCategory("Tags", $this->filters->Tags);
+        }
     }
 
     protected function printCategory($name, $items) 
@@ -109,11 +112,11 @@ class CategoriesJSPage extends CategoriesPage
     private $catName;
     private $collectionType;
     private $baseurl;
-    private $includeTags = true;
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
         parent::__construct($itemTypes, $topParentId, $topParentName);  
+        $this->includeTags = false;
         if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
             $this->collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
         } else {
