@@ -186,8 +186,8 @@ class CategoriesJSPage extends CategoriesPage
         var asFilterNames = new Object();   
         var baseURL = '<?= $this->baseurl ?>';
 
-        asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played"];
-        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed"];
+        asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
+        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed", ""];
 <?      
         if ($this->collectionType == CollectionType::TVSHOWS) {
 ?>
