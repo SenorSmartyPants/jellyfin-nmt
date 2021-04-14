@@ -29,7 +29,8 @@ switch ($folderType) {
 
 
 //if filtering parameters are set, then search recursively
-if ($collectionType === 'search' || !empty($cbp->searchTerm)) {
+//or no parentID set
+if ($collectionType === 'search' || !empty($cbp->searchTerm) || empty($parentId)) {
     //exclude season and episodes to match JF behavior
     $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
     $recursive = true;
