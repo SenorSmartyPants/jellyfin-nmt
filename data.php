@@ -274,7 +274,6 @@ function getItems(UserItemsParams $params)
 {
     //set defaults
     $params->Fields = $params->Fields ?? 'Path,ChildCount';
-    $params->SortBy = $params->SortBy ?? 'SortName';
 
     return getUsersItems($params);
 }
