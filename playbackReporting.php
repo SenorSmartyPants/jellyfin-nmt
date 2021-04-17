@@ -15,6 +15,7 @@ class PlayingMedia
     public $PlayState;
     public $PositionInSeconds;
     public $LastPositionUpdate;
+    public $trimSeconds;
 
     public function __construct($itemId, $duration) {
         $this->itemId = $itemId;
@@ -30,9 +31,9 @@ class PlaybackReporting
     private $playing;
     private $sessionId;
 
-    public function __construct($sessionId, $itemId, $duration) {
+    public function __construct($sessionId, $itemId, $duration, $trimSeconds = 0) {
         $this->sessionId = $sessionId;
-        $this->playing = new PlayingMedia($itemId, $duration);   
+        $this->playing = new PlayingMedia($itemId, $duration, $trimSeconds);   
     }    
 
     private function getPlaybackPayload($eventName = null)
@@ -146,6 +147,13 @@ class PlaybackReporting
         if ($this->playing->PlayState == PlayState::PLAYING) 
         {
             $this->playing->PositionInSeconds = self::calculateCurrentPosition();
+            //add trim seconds to current position
+            $trimmedPosition = $this->playing->PositionInSeconds + $this->playing->trimSeconds;
+            //if result is >90% resume
+            if ($trimmedPosition / $this->playing->Duration >= 0.9) {
+                //set current position to be trimmed position
+                $this->playing->PositionInSeconds = $trimmedPosition;
+            }
             self::apiJSON(
                 '/Sessions/Playing/Stopped',
                 self::getPlaybackPayload(),
