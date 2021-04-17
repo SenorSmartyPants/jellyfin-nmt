@@ -223,7 +223,7 @@ function printStreamInfo($stream)
 <?
 }
 
-function printPlayButton($mediaSource, $index, $isMultiple)
+function printPlayButton($mediaSource, $index, $isMultiple, $skipTrim)
 {     
     #region videoPlayLink setup
     $attrs = array('tvid'=>'play');
@@ -234,7 +234,8 @@ function printPlayButton($mediaSource, $index, $isMultiple)
         $linkHTML = 'Play';
     }
 
-    $callbackJS = "checkin('" . $mediaSource->Id . "', " . TicksToSeconds($mediaSource->RunTimeTicks) . ');';
+    $callbackJS = "checkin('" . $mediaSource->Id . "', " . TicksToSeconds($mediaSource->RunTimeTicks) 
+        . ", " . $skipTrim->skipSeconds . ", " . $skipTrim->trimSeconds . ');';
     $callbackName = 'playcallback' . $index;
     $callbackAdditionalAttributes = null;
     #endregion
@@ -412,8 +413,19 @@ function render($item)
                 $col = array_column($item->MediaSources, 'Name');
                 array_multisort($col, SORT_ASC, $item->MediaSources);
             }
+
+            //get skip and trim from tags
+            if ($item->Type == ItemType::EPISODE) {
+                //use series for skip and trim
+                $series = getItem($item->SeriesId);
+                $skipTrim = new SkipAndTrim($series);
+            } else {
+                $skipTrim = new SkipAndTrim($item);
+            }
+            
+            //check season if video is episode
             foreach ($item->MediaSources as $index => $mediaSource) {
-                printPlayButton($mediaSource, $index, $isMultiple);
+                printPlayButton($mediaSource, $index, $isMultiple, $skipTrim);
             }
         }
 ?>    

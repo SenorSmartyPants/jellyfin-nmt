@@ -51,6 +51,9 @@ if ($season->ImageTags->Banner) {
 }
 $pageObj->backdrop = getBackdropIDandTag($season);
 
+//find nmt-skip|trim tags
+$skipTrim = new SkipAndTrim($series);
+
 $params = new UserItemsParams();
 $params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds';
 $params->ParentID = $id;
@@ -154,7 +157,7 @@ function renderEpisodeJS($episode)
 
 function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 {
-    global $season;
+    global $season, $skipTrim;
     if ($episode) {
         if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
             //Special episode, not displaying special season, then list episode as SX. Title
@@ -182,7 +185,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
-    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId]);";
+    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId], $skipTrim->skipSeconds, $skipTrim->trimSeconds);";
     $callbackName = "playepisode" . $indexInList;
     $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
     #endregion
