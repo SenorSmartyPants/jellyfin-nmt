@@ -9,6 +9,8 @@ $tvid_page_index = 'HOME';
 $tvid_page_categories = 'INFO';
 $tvid_page_pgup = 'PGUP';
 $tvid_page_pgdn = 'PGDN';
+//to map a button to javascript:window.history.back();
+$tvid_page_back = '';
 
 $tvid_filter_menu = 'TAB';
 

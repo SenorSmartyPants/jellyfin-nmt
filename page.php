@@ -179,11 +179,12 @@ class Page
 
     public function printFooter()
     {
-        global $tvid_page_index, $tvid_page_categories;
+        global $tvid_page_index, $tvid_page_categories, $tvid_page_back;
 ?>
         <div class="hidden" id="navigationlinks">
-            <a href="index.php" TVID="<?= $tvid_page_index ?>"></a>
-            <a href="categoriesHTML.php" TVID="<?= $tvid_page_categories ?>"></a>
+            <a TVID="<?= $tvid_page_index ?>" href="index.php"></a>
+            <a TVID="<?= $tvid_page_categories ?>" href="categoriesHTML.php"></a>
+            <a TVID="<?= $tvid_page_back ?>" href="javascript:window.history.back();"></a>            
         </div>
     </body>
 </html>
