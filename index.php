@@ -43,8 +43,25 @@ setNumPagesAndIndexCount(count($items));
 
 class IndexPage extends ListingsPage
 {
+    private $continueWatching;
+
+    public function __construct($title)
+    {
+        parent::__construct($title, false);
+        //check if there are continueWatching items
+        $this->continueWatching = (getResume(1)->TotalRecordCount) > 0;
+        if ($this->continueWatching) {
+            $this->onloadset = 'continue';
+        } else {
+            $this->onloadset = 'nextup';
+        }
+    }
+
     public function printContent()
     {
+        if ($this->continueWatching) {
+            echo '<a href="continueWatching.php" name="continue">Continue Watching ></a>';
+        } 
     ?>
         <a href="nextUp.php" name="nextup">Next Up ></a>
         <br clear="all"/>
@@ -59,8 +76,7 @@ class IndexPage extends ListingsPage
     }
 }
 
-$pageObj = new IndexPage('Home', false);
-$pageObj->onloadset = 'nextup';
+$pageObj = new IndexPage('Home');
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
