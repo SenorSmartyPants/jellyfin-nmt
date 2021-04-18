@@ -4,7 +4,6 @@ include_once 'listings.php';
 
 const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
-const MORE_TVID = 'RED';
 const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
 $id = htmlspecialchars($_GET["id"]);
@@ -225,8 +224,9 @@ function printStreamInfo($stream)
 
 function printPlayButton($mediaSource, $index, $isMultiple, $skipTrim)
 {     
+    global $tvid_itemdetails_play;
     #region videoPlayLink setup
-    $attrs = array('tvid'=>'play');
+    $attrs = array('tvid'=>$tvid_itemdetails_play);
     $linkName = 'play' . $index;
     if ($isMultiple) {
         $linkHTML = 'Play - ' . $mediaSource->Name;
@@ -480,11 +480,11 @@ if ($itemsToDisplay) {
     </tr>
 </table>
 <?
-global $available_subitems, $selected_subitems_index;
+global $available_subitems, $selected_subitems_index, $tvid_itemdetails_more;
 if (count($available_subitems) > 1)
     {
 ?>
-    <a TVID="<?= MORE_TVID ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>"></a>
+    <a TVID="<?= $tvid_itemdetails_more ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>"></a>
 <?
     }
 ?>

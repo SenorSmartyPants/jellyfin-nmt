@@ -3,3 +3,4 @@ secrets\.php
 
 index\.xsl
 playstate*
+config_local.php

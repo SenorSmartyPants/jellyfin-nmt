@@ -145,6 +145,7 @@ class Page
     {
         global $QSBase, $include_jellyfin_logo_when_backdrop_present;
         global $backdropId;
+        global $tvid_page_pgup, $tvid_page_pgdn;
 ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
@@ -164,10 +165,10 @@ class Page
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
             $url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) . '?';
-            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="PGUP" href="' . $url . $QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
+            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $url . $QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
             //pgdn on last page wraps to first page
             $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
-            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="PGDN" href="' . $url . $QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
+            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $url . $QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
         }
 ?>
             </td>
@@ -178,10 +179,11 @@ class Page
 
     public function printFooter()
     {
+        global $tvid_page_index, $tvid_page_categories;
 ?>
         <div class="hidden" id="navigationlinks">
-            <a href="index.php" TVID="HOME"></a>
-            <a href="categoriesHTML.php" TVID="info"></a>
+            <a href="index.php" TVID="<?= $tvid_page_index ?>"></a>
+            <a href="categoriesHTML.php" TVID="<?= $tvid_page_categories ?>"></a>
         </div>
     </body>
 </html>

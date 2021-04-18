@@ -219,6 +219,7 @@ class ListingsPage extends Page
 
     public function printFooter()
     {
+        global $tvid_filter_menu;
         if ($this->renderFiltering) {
         ?>
         <div id="popupWrapper">
@@ -250,7 +251,7 @@ class ListingsPage extends Page
         if ($this->renderFiltering) {
 ?>           
             <div class="hidden" id="navigationlinks">
-                <a TVID="TAB" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
+                <a TVID="<?= $tvid_filter_menu ?>" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
                 <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
                 <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>
                 <a name="genLinkUp"   href="#" onfocusset="genLink5" onfocus="genUp();" onfocusload=""></a>

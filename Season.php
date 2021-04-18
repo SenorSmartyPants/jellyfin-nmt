@@ -425,10 +425,13 @@ function printPCMenu()
 function printSeasonFooter()
 {
     global $series, $season, $selectedEpisode;
+    global $tvid_season_info, $tvid_season_play, 
+        $tvid_season_pgup, $tvid_season_pgdn,
+        $tvid_season_itemdetails;
 ?>
         </table>  	
-    <a TVID="INFO" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
-    <a id="openEpisode" TVID="Play" <?= videoAttributes($selectedEpisode) ?> ></a>
+    <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
+    <a id="openEpisode" TVID="<?= $tvid_season_play ?>" <?= videoAttributes($selectedEpisode) ?> ></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
@@ -440,10 +443,10 @@ function printSeasonFooter()
         printPCMenu();
     }
 ?>
-    <a TVID="PGDN" ONFOCUSLOAD="" name="pgdn" href=""></a>
-    <a TVID="PGUP" ONFOCUSLOAD="" name="pgup" href=""></a>
+    <a TVID="<?= $tvid_season_pgup ?>" ONFOCUSLOAD="" name="pgdn" href=""></a>
+    <a TVID="<?= $tvid_season_pgdn ?>" ONFOCUSLOAD="" name="pgup" href=""></a>
 
-    <a TVID="RED" href="<?= itemDetailsLink($season->Id) ?>"></a>
+    <a TVID="<?= $tvid_season_itemdetails ?>" href="<?= itemDetailsLink($season->Id) ?>"></a>
 <?
     Page::printFooter();
 }
