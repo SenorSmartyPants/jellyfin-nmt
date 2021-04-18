@@ -17,9 +17,10 @@ class PlayingMedia
     public $LastPositionUpdate;
     public $trimSeconds;
 
-    public function __construct($itemId, $duration) {
+    public function __construct($itemId, $duration, $trimSeconds) {
         $this->itemId = $itemId;
         $this->Duration = $duration;       
+        $this->trimSeconds = $trimSeconds;        
     }
 }
 
