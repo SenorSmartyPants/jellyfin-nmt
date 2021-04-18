@@ -260,6 +260,16 @@ function getLatest($itemType, $Limit)
     return getUsersItems($params, 'Latest');
 }
 
+function getResume($Limit, $StartIndex = 0)
+{
+    $params = new UserItemsParams();
+    $params->Fields = 'Path';
+    $params->Limit = $Limit;
+    $params->StartIndex = $StartIndex;
+
+    return getUsersItems($params, 'Resume');
+}
+
 function getNextUp($Limit, $startIndex = 0)
 {
     global $user_id;
