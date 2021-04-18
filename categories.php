@@ -2,18 +2,6 @@
 include_once 'utils.php';
 include_once 'page.php';
 
-/* TODO: decades?
-//make a comma delimited list of years in the decade
-$decades = array();
-foreach ($filters->Years as $year) {
-    # code...
-    $decade = intval(floor($year / 10) * 10);
-    if (!in_array($decade, $decades)) {
-        array_push($decades,$decade);
-    }
-}
-*/
-
 class CategoriesPage extends Page
 {
     protected $filters;
