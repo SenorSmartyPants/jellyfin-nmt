@@ -36,8 +36,17 @@ $auth = new Authentication();
 
 $itemId = $_GET['id'];
 $duration = $_GET['duration'];
+$position = $_GET['position'];
+$trim = $_GET['trim'];
 
-$report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration);
+if (empty($position)) {
+    $position = 0;
+}
+if (empty($trim)) {
+    $trim = 0;
+}
+
+$report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $trim);
 
 if (isset($_GET["JS"])) 
 {
@@ -49,7 +58,7 @@ closeResponse();
 if ($_GET['action'] == 'stop') {
     $report->Stop();
 } else {
-    $report->Start();
+    $report->Start($position);
 }
 
 ?>

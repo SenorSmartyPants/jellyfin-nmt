@@ -116,13 +116,45 @@ function videoPlayLink($mediaSource,
     return $html;
 }
 
+class SkipAndTrim
+{
+    public $skipSeconds = 0;
+    public $trimSeconds = 0;
+
+    public function __construct($item) {
+        $this->getSkipAndTrim($item);   
+    }     
+
+    static private function getSecondsFromSkipTrimTag(String $tag)
+    {
+            $amountStr = substr($tag, 9);
+            preg_match('/((?<minutes>\d{1,2})m)?((?<seconds>\d{1,2})s)?/', $amountStr, $skipArray);
+            return $skipArray['minutes'] * 60 + $skipArray['seconds'];
+    }
+    
+    private function getSkipAndTrim($item)
+    {
+        //find nmt-skip|trim tags
+        foreach ($item->Tags as $tag) {
+            if (substr($tag, 0, 8) === 'nmt-skip') {
+                //skip tag found, should only be one
+                $this->skipSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
+            }
+            if (substr($tag, 0, 8) === 'nmt-trim') {
+                //trim tag found, should only be one
+                $this->trimSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
+            }
+        }
+    }    
+}
+
 function CheckinJS()
 {
 ?>
         <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
         <script type="text/javascript">
-            function checkin(itemId, duration) { 
-                var url = "checkin.php?id=" + itemId + "&duration=" + duration;
+            function checkin(itemId, duration, position, trim) { 
+                var url = "checkin.php?id=" + itemId + "&duration=" + duration + "&position=" + position + "&trim=" + trim;
                 document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
             }
     
