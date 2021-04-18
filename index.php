@@ -60,7 +60,7 @@ class IndexPage extends ListingsPage
     public function printContent()
     {
         if ($this->continueWatching) {
-            echo '<a href="continueWatching.php" name="continue">Continue Watching ></a>';
+            echo '<a href="continueWatching.php" name="continue">Continue Watching ></a>&nbsp;';
         } 
     ?>
         <a href="nextUp.php" name="nextup">Next Up ></a>
