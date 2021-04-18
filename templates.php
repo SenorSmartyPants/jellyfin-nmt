@@ -141,7 +141,6 @@ function container($containerID)
 
 function videoOutput($videoStream)
 {
-    //TODO testing
     //JF reports HDHR vdeos as 720i
     $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
     switch ($output) {
@@ -156,25 +155,6 @@ function videoOutput($videoStream)
     }
     return '<img src="images/flags/output_' .  $url . '"/>';
 }
-/*
-<xsl:template name="videoOutput">
-<xsl:variable name="tmp">
-  <xsl:choose>
-    <xsl:when test="contains(videoOutput,'720p')">output_720p.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'1080p')">output_1080p.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'1080')">output_1080i.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'NTSC') or contains(videoOutput,'24p')">output_ntsc.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'PAL')">output_pal.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'480i')">output_480i.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'480p')">output_480p.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'576i')">output_576i.png</xsl:when>
-    <xsl:when test="contains(videoOutput,'SDTV')">output_sdtv.png</xsl:when>
-    <xsl:otherwise>unknownvideo.png</xsl:otherwise>
-  </xsl:choose>
-</xsl:variable>
-<img><xsl:attribute name="src"><xsl:value-of select="concat('pictures/flags/', $tmp)" /></xsl:attribute></img>
-</xsl:template>
-*/
 
 function officialRating($rating)
 {
