@@ -8,7 +8,7 @@ const USERSPATH = '/Users/';
 $apiCallCount = 0;
 
 const CLIENTNAME = 'Jellyfin-NMT';
-const CLIENTVERSION = '0.3.1';
+const CLIENTVERSION = '0.4.0';
 const POSTCONTENTTYPE = 'application/json';
 
 class Device
