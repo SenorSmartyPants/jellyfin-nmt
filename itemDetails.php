@@ -245,6 +245,58 @@ function printPlayButton($mediaSource, $index, $isMultiple, $skipTrim)
 <?
 }
 
+function printPlayButtons($item)
+{
+    if ($item->MediaType) { //only display play button for single items
+        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        if ($isMultiple) {
+            //sort versions by name
+            $col = array_column($item->MediaSources, 'Name');
+            array_multisort($col, SORT_ASC, $item->MediaSources);
+        }
+
+        //get skip and trim from tags
+        if ($item->Type == ItemType::EPISODE) {
+            //use series for skip and trim
+            $series = getItem($item->SeriesId);
+            $skipTrim = new SkipAndTrim($series);
+        } else {
+            $skipTrim = new SkipAndTrim($item);
+        }
+        
+        $previousPlayButtons = 0;
+        foreach ($item->MediaSources as $mediaSource) {
+            printPlayButton($mediaSource, $previousPlayButtons++, $isMultiple, $skipTrim);
+        }
+
+        //check for ExtrasTypes
+        //what is intro count attribute?
+        if ($item->PartCount && $item->PartCount > 0) {
+            echo '<h4>Additional Parts</h4>';
+            $additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
+            foreach ($additionalparts as $part) {
+                //display a small name 'Part X'
+                $part->MediaSources[0]->Name = 'Part ' . (1 + $previousPlayButtons);
+                printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
+            }   
+        }            
+        if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
+            echo '<h4>Trailers</h4>';
+            $trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
+            foreach ($trailers as $part) {
+                printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
+            }
+        }
+        if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
+            echo '<h4>Special Features</h4>';
+            $specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
+            foreach ($specialfeatures as $part) {
+                printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
+            }
+        }
+    }
+}
+
 function render($item)
 {
     global $parentName, $itemName;
@@ -406,28 +458,7 @@ function render($item)
     ?>
     </table>
     <?
-        if ($item->MediaType) { //only display play button for single items
-            $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
-            if ($isMultiple) {
-                //sort versions by name
-                $col = array_column($item->MediaSources, 'Name');
-                array_multisort($col, SORT_ASC, $item->MediaSources);
-            }
-
-            //get skip and trim from tags
-            if ($item->Type == ItemType::EPISODE) {
-                //use series for skip and trim
-                $series = getItem($item->SeriesId);
-                $skipTrim = new SkipAndTrim($series);
-            } else {
-                $skipTrim = new SkipAndTrim($item);
-            }
-            
-            //check season if video is episode
-            foreach ($item->MediaSources as $index => $mediaSource) {
-                printPlayButton($mediaSource, $index, $isMultiple, $skipTrim);
-            }
-        }
+        printPlayButtons($item);
 ?>    
 
 
