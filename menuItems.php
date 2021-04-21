@@ -127,7 +127,7 @@ function setDetailURL($item, $menuItem) {
             case ItemType::SERIES:
                 //go directly to season page, or continue to default
                 if ($item->ChildCount == 1) {
-                    $detailURL = "seasonRedirect.php?SeriesId=" . $item->Id;
+                    $detailURL = "seasonRedirect.php?SeasonType=first&SeriesId=" . $item->Id;
                     break;
                 }   
             default:
@@ -152,8 +152,9 @@ function setDetailURL($item, $menuItem) {
                         if ($item->SeasonId) {
                             $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
                         } else {
-                            //try season redirect, probably only one season
-                            $detailURL = "seasonRedirect.php?SeriesId=" . $item->SeriesId
+                            //try season redirect, latest season will probably be the one that doesn't have all metadata
+                            //I think this is why an episode won't have a seasonID
+                            $detailURL = "seasonRedirect.php?SeasonType=latest&SeriesId=" . $item->SeriesId
                                 . "&IndexNumber=" . $item->IndexNumber;
                         }
                         break;

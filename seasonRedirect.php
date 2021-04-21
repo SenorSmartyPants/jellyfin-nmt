@@ -17,7 +17,14 @@ class SeasonRedirectPage extends Page
         
         //If seriesID is passed in then we don't know the season ID
         if ($SeriesId) {
-            $season = firstSeasonFromSeries($SeriesId);
+            $SeasonType = htmlspecialchars($_GET["SeasonType"]);
+            if ($SeasonType == 'first') {
+                $season = firstSeasonFromSeries($SeriesId);
+            }
+            if ($SeasonType == 'latest') {
+                $season = latestSeasonFromSeries($SeriesId);
+            }
+
             $SeasonId = $season->Id;
         }
         $DetailURL = "Season.php?id=" . $SeasonId . "&episode=" . $IndexNumber;

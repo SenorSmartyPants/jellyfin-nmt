@@ -198,6 +198,17 @@ function firstSeasonFromSeries($seriesId)
     return $seasons->Items[0];
 }
 
+function latestSeasonFromSeries($seriesId)
+{
+    $params = new UserItemsParams();
+    $params->ParentID = $seriesId;
+    $params->IncludeItemTypes = ItemType::SEASON;
+
+    $seasons = getUsersItems($params);
+
+    return $seasons->Items[$seasons->TotalRecordCount-1];
+}
+
 function YAMJpath($item) {
     global $jukebox_url;
     
