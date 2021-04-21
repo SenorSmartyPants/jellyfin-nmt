@@ -4,6 +4,7 @@ include_once 'secrets.php';
 
 const ITEMSPATH = '/Items/';
 const USERSPATH = '/Users/';
+const VIDEOSPATH = '/Videos/';
 
 $apiCallCount = 0;
 
@@ -302,6 +303,21 @@ function getItems(UserItemsParams $params)
 function getItem($Id) {
     $params = new UserItemsParams();
     return getUsersItems($params, $Id);
+}
+
+function getItemExtras($Id, $ExtrasType)
+{
+    global $user_id;
+
+    $params = new UserItemsParams();
+    if ($ExtrasType == ExtrasType::ADDITIONALPARTS) {
+        $path = VIDEOSPATH . $Id . '/' . ExtrasType::ADDITIONALPARTS . '?UserID=' . $user_id;
+        //returns an Items block with counts and index
+        //just return Items so it's the same as other calls
+        return apiCall($path)->Items;
+    } else {
+        return getUsersItems($params, $Id . '/' . $ExtrasType);
+    }
 }
 
 function getSimilarItems($Id, $limit = null)

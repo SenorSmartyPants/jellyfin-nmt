@@ -33,4 +33,12 @@ abstract class CollectionType
     const FOLDERS = 'folders';
     const PLAYLISTS = 'playlists';
 }
+
+abstract class ExtrasType
+{
+    const SPECIALFEATURES = 'SpecialFeatures';
+    const LOCALTRAILERS = 'LocalTrailers';
+    const INTROS = 'Intros';
+    const ADDITIONALPARTS = 'AdditionalParts';
+}
 ?>
