@@ -222,7 +222,7 @@ function printStreamInfo($stream)
 <?
 }
 
-function printPlayButton($mediaSource, $index, $isMultiple, $skipTrim)
+function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
 {     
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
@@ -245,7 +245,20 @@ function printPlayButton($mediaSource, $index, $isMultiple, $skipTrim)
 <?
 }
 
-function printPlayButtons($item)
+function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons = 0)
+{
+    foreach ($items as $item) {
+        if ($item->MediaSources) {
+            $mediaSource = $item->MediaSources[0];
+        } else {
+            $mediaSource = $item;
+        }
+        printPlayButton($mediaSource, $skipTrim, $isMultiple, $previousPlayButtons++);
+    }
+    return $previousPlayButtons;
+}
+
+function printPlayButtonGroups($item)
 {
     $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
     if ($isMultiple) {
@@ -263,35 +276,28 @@ function printPlayButtons($item)
         $skipTrim = new SkipAndTrim($item);
     }
     
-    $previousPlayButtons = 0;
-    foreach ($item->MediaSources as $mediaSource) {
-        printPlayButton($mediaSource, $previousPlayButtons++, $isMultiple, $skipTrim);
-    }
+    $previousPlayButtons = printPlayButtons($item->MediaSources, $skipTrim, $isMultiple);
 
     //check for ExtrasTypes
     //what is intro count attribute?
     if ($item->PartCount && $item->PartCount > 0) {
         echo '<h4>Additional Parts</h4>';
         $additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
-        foreach ($additionalparts as $part) {
+        foreach ($additionalparts as $index => $part) {
             //display a small name 'Part X'
-            $part->MediaSources[0]->Name = 'Part ' . (1 + $previousPlayButtons);
-            printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
-        }   
+            $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
+        }
+        $previousPlayButtons = printPlayButtons($additionalparts, $skipTrim, true, $previousPlayButtons);   
     }            
     if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
         echo '<h4>Trailers</h4>';
         $trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
-        foreach ($trailers as $part) {
-            printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
-        }
+        $previousPlayButtons = printPlayButtons($trailers, $skipTrim, true, $previousPlayButtons);
     }
     if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
         echo '<h4>Special Features</h4>';
         $specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
-        foreach ($specialfeatures as $part) {
-            printPlayButton($part->MediaSources[0], $previousPlayButtons++, true, $skipTrim);
-        }
+        $previousPlayButtons = printPlayButtons($specialfeatures, $skipTrim, true, $previousPlayButtons);
     }
 }
 
@@ -457,7 +463,7 @@ function render($item)
     </table>
     <?
         if ($item->MediaType) { //only display play button for single items
-            printPlayButtons($item);
+            printPlayButtonGroups($item);
         }
 ?>    
 
