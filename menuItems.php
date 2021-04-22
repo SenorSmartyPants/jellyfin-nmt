@@ -152,22 +152,16 @@ function getNonFolderURL($item, $menuItem)
 
     switch ($item->MediaType) {
         case "Video":
-            switch ($item->Type) {
-                case ItemType::MOVIE:
-                    break; 
-                case ItemType::EPISODE:
-                    //check for season info, very rarely an episode has no season IDs provided
-                    if ($item->SeasonId) {
-                        $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
-                    } else {
-                        //try season redirect, latest season will probably be the one that doesn't have all metadata
-                        //I think this is why an episode won't have a seasonID
-                        $detailURL = "seasonRedirect.php?SeasonType=latest&SeriesId=" . $item->SeriesId
-                            . "&IndexNumber=" . $item->IndexNumber;
-                    }
-                    break;
-                default:
-                    break; 
+            if ($item->Type == ItemType::EPISODE) {
+                //check for season info, very rarely an episode has no season IDs provided
+                if ($item->SeasonId) {
+                    $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
+                } else {
+                    //try season redirect, latest season will probably be the one that doesn't have all metadata
+                    //I think this is why an episode won't have a seasonID
+                    $detailURL = "seasonRedirect.php?SeasonType=latest&SeriesId=" . $item->SeriesId
+                        . "&IndexNumber=" . $item->IndexNumber;
+                }
             }
             break;
         case "Audio":
