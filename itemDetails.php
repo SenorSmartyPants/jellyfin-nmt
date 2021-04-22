@@ -363,8 +363,8 @@ function render($item)
     <tr valign="top">
         <td width="<?= POSTER_WIDTH ?>px" height="416px">
         <? 
+        $imageProps = new ImageParams();
         if ($item->ImageTags->Primary) { 
-            $imageProps = new ImageParams();
             $imageProps->tag = $item->ImageTags->Primary;
             if ($item->PrimaryImageAspectRatio < 1) {
                 $imageProps->width = POSTER_WIDTH;
@@ -507,7 +507,7 @@ function render($item)
     <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
     <? } ?>
 
-    <img src="images/1x1.png" width="<?= 1096-30-$width ?>" height="1" />
+    <img src="images/1x1.png" width="<?= 1096-30-$imageProps->width ?>" height="1" />
         </td>
     </tr>    
 
