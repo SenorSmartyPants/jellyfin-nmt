@@ -104,81 +104,95 @@ function getSubtitle($item) {
     return $subtitle;
 }
 
-function setDetailURL($item, $menuItem) {
+function getFolderURL($item, $menuItem)
+{
     global $forceItemDetails;
-    
-    if ($item->IsFolder) {
-        //set up default browsing params
-        $cbp = new CategoryBrowseParams();
-        $cbp->name = $item->Name;
-        $cbp->folderType = $item->Type;
-        $cbp->collectionType = $item->CollectionType;
-        $cbp->parentId = $item->Id;
-        $cbp->backdropId = $menuItem->BackdropID;
-        switch ($item->Type) {
-            case ItemType::COLLECTIONFOLDER:
-            case ItemType::USERVIEW:
-                //set topParentId from Id
-                $cbp->topParentId = $item->Id;
-                $cbp->topParentName = $item->Name;
-                $detailURL = categoryBrowseURLEx($cbp);
-                break;            
-            case ItemType::SEASON:
-                $detailURL = "Season.php?id=" . $item->Id;
-                break;   
-            case ItemType::SERIES:
-                //go directly to season page, or continue to default
-                if ($item->ChildCount == 1) {
-                    $detailURL = "seasonRedirect.php?SeasonType=first&SeriesId=" . $item->Id;
+
+    //set up default browsing params
+    $cbp = new CategoryBrowseParams();
+    $cbp->name = $item->Name;
+    $cbp->folderType = $item->Type;
+    $cbp->collectionType = $item->CollectionType;
+    $cbp->parentId = $item->Id;
+    $cbp->backdropId = $menuItem->BackdropID;
+    switch ($item->Type) {
+        case ItemType::COLLECTIONFOLDER:
+        case ItemType::USERVIEW:
+            //set topParentId from Id
+            $cbp->topParentId = $item->Id;
+            $cbp->topParentName = $item->Name;
+            $detailURL = categoryBrowseURLEx($cbp);
+            break;            
+        case ItemType::SEASON:
+            $detailURL = "Season.php?id=" . $item->Id;
+            break;   
+        case ItemType::SERIES:
+            //go directly to season page, or continue to default
+            if ($item->ChildCount == 1) {
+                $detailURL = "seasonRedirect.php?SeasonType=first&SeriesId=" . $item->Id;
+                break;
+            }   
+        default:
+            //get topParentId from querystring
+            $cbp->topParentId = $_GET['topParentId'];
+            $cbp->topParentName = $_GET['topParentName'];
+            $detailURL = categoryBrowseURLEx($cbp);
+            break;
+    }
+    if ($forceItemDetails) {
+        //default to itemDetails page
+        $detailURL = itemDetailsLink($item->Id);
+    }
+    return $detailURL;
+}
+
+function getNonFolderURL($item, $menuItem)
+{
+    global $forceItemDetails;
+
+    switch ($item->MediaType) {
+        case "Video":
+            switch ($item->Type) {
+                case ItemType::MOVIE:
+                    break; 
+                case ItemType::EPISODE:
+                    //check for season info, very rarely an episode has no season IDs provided
+                    if ($item->SeasonId) {
+                        $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
+                    } else {
+                        //try season redirect, latest season will probably be the one that doesn't have all metadata
+                        //I think this is why an episode won't have a seasonID
+                        $detailURL = "seasonRedirect.php?SeasonType=latest&SeriesId=" . $item->SeriesId
+                            . "&IndexNumber=" . $item->IndexNumber;
+                    }
                     break;
-                }   
-            default:
-                //get topParentId from querystring
-                $cbp->topParentId = $_GET['topParentId'];
-                $cbp->topParentName = $_GET['topParentName'];
-                $detailURL = categoryBrowseURLEx($cbp);
-                break;
-        }
-        if ($forceItemDetails) {
-            //default to itemDetails page
-            $detailURL = itemDetailsLink($item->Id);
-        }
+                default:
+                    break; 
+            }
+            break;
+        case "Audio":
+            $detailURL = translatePathToNMT($item->Path);
+            $menuItem->OnDemandTag = "AOD";
+            break;
+        case "Photo":
+            $detailURL = translatePathToNMT($item->Path);
+            $menuItem->OnDemandTag = "POD";
+            break;                
+        default:
+            break;
+    }
+    if (!$detailURL || $forceItemDetails) {
+        //default to itemDetails page
+        $detailURL = itemDetailsLink($item->Id);
+    }
+    return $detailURL; 
+}
+
+function setDetailURL($item, $menuItem) {   
+    if ($item->IsFolder) {
+        $detailURL = getFolderURL($item, $menuItem);
     } else {
-        switch ($item->MediaType) {
-            case "Video":
-                switch ($item->Type) {
-                    case ItemType::MOVIE:
-                        break; 
-                    case ItemType::EPISODE:
-                        //check for season info, very rarely an episode has no season IDs provided
-                        if ($item->SeasonId) {
-                            $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
-                        } else {
-                            //try season redirect, latest season will probably be the one that doesn't have all metadata
-                            //I think this is why an episode won't have a seasonID
-                            $detailURL = "seasonRedirect.php?SeasonType=latest&SeriesId=" . $item->SeriesId
-                                . "&IndexNumber=" . $item->IndexNumber;
-                        }
-                        break;
-                    default:
-                        break; 
-                }
-                break;
-            case "Audio":
-                $detailURL = translatePathToNMT($item->Path);
-                $menuItem->OnDemandTag = "AOD";
-                break;
-            case "Photo":
-                $detailURL = translatePathToNMT($item->Path);
-                $menuItem->OnDemandTag = "POD";
-                break;                
-            default:
-                break;
-        }
-        if (!$detailURL || $forceItemDetails) {
-            //default to itemDetails page
-            $detailURL = itemDetailsLink($item->Id);
-        }
+        $detailURL = getNonFolderURL($item, $menuItem);
     }
     $menuItem->DetailURL = $detailURL;
 }
