@@ -169,10 +169,14 @@ function printLogo()
     }
 
     if ($logoId) { 
+        $imageProps = new ImageParams();
+        $imageProps->tag = $logoTag; 
+        $imageProps->maxHeight = 155;
+        $imageProps->maxWidth = 400;
         ?>
         <div id="popupWrapper">
                 <img class="abs" id="logo" 
-                 src="<?= getImageURL($logoId, null, null, ImageType::LOGO, null, null, $logoTag, null, null, 155, 400) ?>" />
+                 src="<?= getImageURL($logoId, $imageProps, ImageType::LOGO) ?>" />
         </div>
         <? 
     }
@@ -360,14 +364,16 @@ function render($item)
         <td width="<?= POSTER_WIDTH ?>px" height="416px">
         <? 
         if ($item->ImageTags->Primary) { 
+            $imageProps = new ImageParams();
+            $imageProps->tag = $item->ImageTags->Primary;
             if ($item->PrimaryImageAspectRatio < 1) {
-                $width = POSTER_WIDTH;
+                $imageProps->width = POSTER_WIDTH;
             } else {
-                $width = THUMB_WIDTH;
+                $imageProps->width = THUMB_WIDTH;
             }
-            ?><img width="$width" src="<?= getImageURL($item->Id, null, $width, ImageType::PRIMARY, null, null, $item->ImageTags->Primary) ?>" /> <? 
+            ?><img width="<?= $imageProps->width ?>" src="<?= getImageURL($item->Id, $imageProps, ImageType::PRIMARY) ?>" /> <? 
         } else if ($item->ImageTags->Thumb) { 
-            ?><img width="THUMB_WIDTH" src="<?= getImageURL($item->Id, null, THUMB_WIDTH, ImageType::THUMB, null, null, $item->ImageTags->Thumb) ?>" /> <? 
+            ?><img width="<?= THUMB_WIDTH ?>" src="<?= getImageURL($item->Id, new ImageParams(null, THUMB_WIDTH, $item->ImageTags->Thumb), ImageType::THUMB) ?>" /> <? 
         } else {
             ?><img src="images/1x1.png" width="<?= POSTER_WIDTH ?>" /> <?
         } ?>

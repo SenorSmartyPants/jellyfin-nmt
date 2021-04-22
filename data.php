@@ -54,6 +54,23 @@ class UserItemsParams
     public $Years = null;
 }
 
+class ImageParams
+{
+    public $height = null;
+    public $width = null;
+    public $maxHeight = null;
+    public $maxWidth = null;
+    public $quality = null;
+    public $tag = null;
+    public $unplayedCount = null;
+    public $AddPlayedIndicator = null;
+
+    function __construct($height = null, $width = null, $tag = null) {
+        $this->height = $height;
+        $this->width = $width;
+        $this->tag = $tag;     
+    }    
+}
 
 function mapItemTypeToCollectionType($itemType)
 {
@@ -340,19 +357,17 @@ function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
     return apiCall($path);
 }
 
-function getImageURL($id, $height = null, $width = null, $imageType = null, $unplayedCount = null, 
-    $AddPlayedIndicator = null, $tag = null, $quality = null, $itemsOrUsers = null,
-    $maxHeight = null, $maxWidth = null)
+function getImageURL($id, ImageParams $imageProperties, $imageType = null, $itemsOrUsers = null)
 {
     global $api_url; 
 
     $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
-    $AddPlayedIndicator = ($AddPlayedIndicator ? 'true' : null);
+    $imageProperties->AddPlayedIndicator = ($imageProperties->AddPlayedIndicator ? 'true' : null);
    
     return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" 
-        . http_build_query(compact('height', 'width', 'maxHeight', 'maxWidth', 'quality', 'tag', 'unplayedCount', 'AddPlayedIndicator'));
+        . http_build_query($imageProperties);
 }
 
 function getFavIconURL()

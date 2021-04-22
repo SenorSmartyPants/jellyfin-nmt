@@ -127,7 +127,7 @@ class Page
 ?>
 <?      if ($this->backdrop->Id) 
         { 
-            ?> background="<?= getImageURL($this->backdrop->Id, 720, 1280, "Backdrop", null, null, $this->backdrop->Tag) ?>"<?   
+            ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), 'Backdrop') ?>"<?   
         }
         ?>>
 <?

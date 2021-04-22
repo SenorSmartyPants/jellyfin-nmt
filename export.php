@@ -190,31 +190,43 @@ function exportCommands($item)
         $FolderImageType = $_GET["FolderImageType"];
         if ($FolderImageType == ImageType::THUMB) {
             if ($item->ParentThumbImageTag) {
-                $thumbnailURL = getImageURL($item->ParentThumbItemId, null, null, $FolderImageType, null, null, $item->ParentThumbImageTag, null, null, null, 1000);
+                $imageProps = new ImageParams();
+                $imageProps->maxWidth = 1000;
+                $imageProps->tag = $item->ParentThumbImageTag;   
+                $thumbnailURL = getImageURL($item->ParentThumbItemId, $imageProps, $FolderImageType);
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             } else if ($item->ParentBackdropImageTags[0]) {
-                $thumbnailURL = getImageURL($item->ParentBackdropItemId, null, null, "Backdrop", null, null, $item->ParentBackdropImageTags[0], null, null, null, 1000);
+                $imageProps = new ImageParams();
+                $imageProps->maxWidth = 1000;
+                $imageProps->tag = $item->ParentBackdropImageTags[0];
+                $thumbnailURL = getImageURL($item->ParentBackdropItemId, $imageProps, "Backdrop");
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             }
         } else if ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
-            $thumbnailURL = getImageURL($item->SeriesId, null, null, $FolderImageType, null, null, $item->SeriesPrimaryImageTag, null, null, null, 1000);
+            $imageProps = new ImageParams();
+            $imageProps->maxWidth = 1000;
+            $imageProps->tag = $item->SeriesPrimaryImageTag;
+            $thumbnailURL = getImageURL($item->SeriesId, $imageProps, $FolderImageType);
             downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
         }
     }
 
     //video image
     if ($FolderImageType != "None") {
-	    $ImageType = ImageType::PRIMARY;
-	    if ($item->Type == ItemType::MOVIE) {
-		$ImageType = ImageType::THUMB;
-	    }
+        $ImageType = ImageType::PRIMARY;
+        if ($item->Type == ItemType::MOVIE) {
+            $ImageType = ImageType::THUMB;
+        }
 
-	    if ($item->ImageTags->Primary) {
-		$thumbnailURL = getImageURL($item->Id, null, null, $ImageType, null, null, $item->ImageTags->$ImageType, null, null, null, 1920);
-		$thumbnailfilename = $basefilename . '.jpg';
+        if ($item->ImageTags->Primary) {
+            $imageProps = new ImageParams();
+            $imageProps->maxWidth = 1920;
+            $imageProps->tag = $item->ImageTags->$ImageType;
+            $thumbnailURL = getImageURL($item->Id, $imageProps, $ImageType,);
+            $thumbnailfilename = $basefilename . '.jpg';
 
-		downloadCommand($thumbnailURL, $dirname, $thumbnailfilename);
-	    }
+            downloadCommand($thumbnailURL, $dirname, $thumbnailfilename);
+        }
     }
     #endregion
 

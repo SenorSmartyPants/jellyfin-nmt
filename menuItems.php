@@ -49,11 +49,13 @@ function parse($item) {
     $played = ($item->Type == ItemType::SERIES || $item->Type == ItemType::SEASON ? null : $item->UserData->Played);
 
     if ($menuItem->PosterID) {
-        $menuItem->PosterURL = getImageURL($menuItem->PosterID, 
-            ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight),
-            ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth),
-            $indexStyle->ImageType, $menuItem->UnplayedCount, $played
-            );
+        $imageProps = new ImageParams();
+        $imageProps->height = ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight);
+        $imageProps->width = ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth); 
+        $imageProps->unplayedCount = $menuItem->UnplayedCount;
+        $imageProps->AddPlayedIndicator = $played;
+
+        $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $indexStyle->ImageType);
     }
 
     return $menuItem;

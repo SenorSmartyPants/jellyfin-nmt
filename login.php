@@ -58,7 +58,7 @@ class LoginPage extends Page
             <p>User is currently set to:</p>
             <?    
             foreach($this->auth->userIDs as $userID) {
-                ?><img src="<?=getImageURL($userID,100,100,null,null,null,null,null,"Users") ?>" width="100" height="100" /><?php
+                ?><img src="<?=getImageURL($userID, new ImageParams(100, 100), null, 'Users') ?>" width="100" height="100" /><?php
             }
         }
         ?>

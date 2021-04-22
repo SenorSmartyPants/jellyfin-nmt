@@ -20,7 +20,7 @@ class Navbar
         if ($auth->IsAuthenticated())
         {
             foreach($auth->userIDs as $userID) {
-                ?><img src="<?=getImageURL($userID,self::USERIMAGESIZE,self::USERIMAGESIZE,null,null,null,null,null,"Users") ?>" width="<?= self::USERIMAGESIZE ?>" height="<?= self::USERIMAGESIZE ?>" /><?php
+                ?><img src="<?=getImageURL($userID, new ImageParams(self::USERIMAGESIZE, self::USERIMAGESIZE), null, 'Users') ?>" width="<?= self::USERIMAGESIZE ?>" height="<?= self::USERIMAGESIZE ?>" /><?php
             }
         }
     ?></a>&nbsp;
