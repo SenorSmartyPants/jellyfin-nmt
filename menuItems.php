@@ -183,6 +183,17 @@ function setDetailURL($item, $menuItem) {
     $menuItem->DetailURL = $detailURL;
 }
 
+function getEpisodePosterID($item, $useSeasonImage)
+{
+    global $indexStyle;
+    //API
+    if ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) {
+        return $item->SeasonId;
+    } else {
+        return $item->SeriesPrimaryImageTag ? $item->SeriesId : null;
+    }
+}
+
 function getPosterID($item, $useSeasonImage = true) {
     global $indexStyle;
     global $displayepisode;
@@ -191,10 +202,8 @@ function getPosterID($item, $useSeasonImage = true) {
             $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
         case ItemType::EPISODE:
-            //API
             if (!$displayepisode) {
-                $posterID = ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) ? $item->SeasonId : 
-                    ($item->SeriesPrimaryImageTag ? $item->SeriesId : null); 
+                $posterID = getEpisodePosterID($item, $useSeasonImage); 
                 break;
             }
         default:
