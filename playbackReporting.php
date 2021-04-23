@@ -32,6 +32,7 @@ class PlaybackReporting
     private const PLAYSTATEDIR = 'playstate/';
     private const JSONEXT = '.json';
 
+    private const MINRESUME = 0.05;
     private const MAXRESUME = 0.90;
 
     private $playing;
@@ -160,6 +161,13 @@ class PlaybackReporting
                 //set current position to be trimmed position
                 $this->playing->PositionInSeconds = $trimmedPosition;
             }
+
+            if (($this->playing->PositionInSeconds - $this->playing->skipSeconds) <= ($this->playing->Duration * PlaybackReporting::MINRESUME)) {
+                //in first 5% of video (excluding skipSeconds), don't save resume position
+                //report 0 to JF to not save position
+                $this->playing->PositionInSeconds = 0;
+            }
+
             self::apiJSON(
                 '/Sessions/Playing/Stopped',
                 self::getPlaybackPayload(),
