@@ -15,11 +15,13 @@ class PlayingMedia
     public $PlayState;
     public $PositionInSeconds;
     public $LastPositionUpdate;
+    public $skipSeconds;
     public $trimSeconds;
 
-    public function __construct($itemId, $duration, $trimSeconds) {
+    public function __construct($itemId, $duration, $skipSeconds, $trimSeconds) {
         $this->itemId = $itemId;
         $this->Duration = $duration;       
+        $this->skipSeconds = $skipSeconds;
         $this->trimSeconds = $trimSeconds;        
     }
 }
@@ -29,12 +31,15 @@ class PlaybackReporting
     private const PROGRESSUPDATEFREQUENCY = 60;
     private const PLAYSTATEDIR = 'playstate/';
     private const JSONEXT = '.json';
+
+    private const MAXRESUME = 0.90;
+
     private $playing;
     private $sessionId;
 
-    public function __construct($sessionId, $itemId, $duration, $trimSeconds = 0) {
+    public function __construct($sessionId, $itemId, $duration, $skipSeconds = 0, $trimSeconds = 0) {
         $this->sessionId = $sessionId;
-        $this->playing = new PlayingMedia($itemId, $duration, $trimSeconds);   
+        $this->playing = new PlayingMedia($itemId, $duration, $skipSeconds, $trimSeconds);   
     }    
 
     private function getPlaybackPayload($eventName = null)
@@ -151,7 +156,7 @@ class PlaybackReporting
             //add trim seconds to current position
             $trimmedPosition = $this->playing->PositionInSeconds + $this->playing->trimSeconds;
             //if result is >90% resume
-            if ($trimmedPosition / $this->playing->Duration >= 0.9) {
+            if ($trimmedPosition / $this->playing->Duration >= PlaybackReporting::MAXRESUME) {
                 //set current position to be trimmed position
                 $this->playing->PositionInSeconds = $trimmedPosition;
             }
