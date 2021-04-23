@@ -175,6 +175,12 @@ class PlaybackReporting
                 PlayState::STOPPED
             );
         }
+        //report trimSeconds to NMT if at beginning of video
+        if ($this->playing->PositionInSeconds == 0) {
+            return $this->playing->skipSeconds;
+        } else {
+            return $this->playing->PositionInSeconds;
+        }
     }
 
     private function apiJSON($apiendpoint, $payload, $PositionInSeconds, $playState = PlayState::PLAYING)
