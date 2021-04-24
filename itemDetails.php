@@ -31,6 +31,10 @@ setupChildData($item);
 
 class ItemDetailsPage extends ListingsPage
 {
+    private $additionalparts;
+    private $trailers;
+    private $specialfeatures;
+
     public function printJavascript() 
     {
         global $skipTrim, $item;
@@ -63,19 +67,45 @@ class ItemDetailsPage extends ListingsPage
         //what is intro count attribute?
         if ($item->PartCount && $item->PartCount > 0) {
             //Additional Parts
-            $additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
+            $this->additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
         }
         if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
             //Trailers
-            $trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);          
+            $this->trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);          
         }
         if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
             //Special Features
-            $specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);          
+            $this->specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);          
         }
 
         //media sources doesn't contain userdata
-        return array_merge($versions, (array) $additionalparts, (array) $trailers, (array) $specialfeatures);
+        return array_merge($versions, (array) $this->additionalparts, (array) $this->trailers, (array) $this->specialfeatures);
+    }
+
+    public function printPlayButtonGroups($item)
+    {
+        global $skipTrim;
+        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        if ($isMultiple) {
+            //sort versions by name
+            $col = array_column($item->MediaSources, 'Name');
+            array_multisort($col, SORT_ASC, $item->MediaSources);
+        }
+        
+        $position = $skipTrim->getStartPosition($item->UserData);
+        //use mediaSources for better names than pulling each item
+        $previousPlayButtons = printPlayButtons($item->MediaSources, $position, $skipTrim, $isMultiple);
+
+        //check for ExtrasTypes
+        if (!empty($this->additionalparts)) {
+            foreach ($this->additionalparts as $index => $part) {
+                //display a small name 'Part X'
+                $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
+            }
+            $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons); 
+        }
+        $previousPlayButtons = PrintExtras($this->trailers, 'Trailers', $previousPlayButtons);
+        $previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
     }
 }
 
@@ -313,45 +343,20 @@ function printPlayButtons($items, $position, $skipTrim, $isMultiple, $previousPl
     return $previousPlayButtons;
 }
 
-function printPlayButtonGroups($item)
+function PrintExtras($extras, $Label, $previousPlayButtons)
 {
     global $skipTrim;
-    $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
-    if ($isMultiple) {
-        //sort versions by name
-        $col = array_column($item->MediaSources, 'Name');
-        array_multisort($col, SORT_ASC, $item->MediaSources);
+    if (!empty($extras)) {
+        echo "<h4>$Label</h4>";
+        $previousPlayButtons = printPlayButtons($extras, 0, $skipTrim, true, $previousPlayButtons);   
     }
-    
-    $position = $skipTrim->getStartPosition($item->UserData);
-    $previousPlayButtons = printPlayButtons($item->MediaSources, $position, $skipTrim, $isMultiple);
-
-    //check for ExtrasTypes
-    //what is intro count attribute?
-    if ($item->PartCount && $item->PartCount > 0) {
-        echo '<h4>Additional Parts</h4>';
-        $additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
-        foreach ($additionalparts as $index => $part) {
-            //display a small name 'Part X'
-            $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
-        }
-        $previousPlayButtons = printPlayButtons($additionalparts, 0, $skipTrim, true, $previousPlayButtons);   
-    }            
-    if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
-        echo '<h4>Trailers</h4>';
-        $trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
-        $previousPlayButtons = printPlayButtons($trailers, 0, $skipTrim, true, $previousPlayButtons);
-    }
-    if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
-        echo '<h4>Special Features</h4>';
-        $specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
-        $previousPlayButtons = printPlayButtons($specialfeatures, 0, $skipTrim, true, $previousPlayButtons);
-    }
+    return $previousPlayButtons;
 }
 
 function render($item)
 {
     global $parentName, $itemName;
+    global $pageObj;
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
     $durationInMinutes = round($durationInSeconds / 60);
@@ -513,7 +518,7 @@ function render($item)
     </table>
     <?
         if ($item->MediaType) { //only display play button for single items
-            printPlayButtonGroups($item);
+            $pageObj->printPlayButtonGroups($item);
         }
 ?>    
 
