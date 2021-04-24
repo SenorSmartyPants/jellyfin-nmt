@@ -14,6 +14,7 @@ class PlayingMedia
     public $Duration;
     public $PlayState;
     public $PositionInSeconds;
+    public $StartedTime;
     public $LastPositionUpdate;
     public $skipSeconds;
     public $trimSeconds;
@@ -90,9 +91,7 @@ class PlaybackReporting
 
     private function calculateCurrentPosition()
     {
-        $secondsSinceUpdate = time() - $this->playing->LastPositionUpdate;
-
-        $this->playing->PositionInSeconds += $secondsSinceUpdate;
+        $this->playing->PositionInSeconds = time() - $this->playing->StartedTime;
         $this->playing->LastPositionUpdate = time();
 
         return $this->playing->PositionInSeconds; 
@@ -136,6 +135,7 @@ class PlaybackReporting
     {
         $this->playing->PositionInSeconds = $PositionInSeconds;
         $this->playing->PlayState = PlayState::PLAYING;
+        $this->playing->StartedTime = time() - $PositionInSeconds;
 
         self::apiJSON(
             '/Sessions/Playing',
