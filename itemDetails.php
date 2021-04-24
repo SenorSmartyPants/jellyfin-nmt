@@ -43,7 +43,7 @@ class ItemDetailsPage extends ListingsPage
 
         //make array of all video items/mediasources
         $items = $this->getAllVideos($item);
-        CheckinJS::render($items, $skipTrim);
+        CheckinJS::render($items);
     }
 
     private function getAllVideos($item)

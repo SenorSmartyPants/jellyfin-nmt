@@ -199,7 +199,7 @@ function printInitJS()
 
     </script>
 <?
-    CheckinJS::render($episodes, $skipTrim, $selectedEpisodeArrayIndex);
+    CheckinJS::render($episodes, $selectedEpisodeArrayIndex);
 ?>
     <script type="text/javascript">
         //season.js variables

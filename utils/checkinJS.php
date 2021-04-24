@@ -4,10 +4,10 @@ include_once 'utils/arrayCallbacks.php';
 
 class CheckinJS
 {
-    public static function render($items, $skipTrim, $selectedIndex = null)
+    public static function render($items, $selectedIndex = null)
     {
         CheckinJS::PrintIncludes();
-        CheckinJS::printCheckinArrays($items, $skipTrim, $selectedIndex);
+        CheckinJS::printCheckinArrays($items, $selectedIndex);
     }
 
     public static function getCallback(SkipAndTrim $skipTrim, $videoIndex = null)
@@ -19,7 +19,7 @@ class CheckinJS
         return $callbackJS;
     }
 
-    private static function printCheckinArrays($items, $skipTrim, $selectedIndex)
+    private static function printCheckinArrays($items, $selectedIndex)
     {
         $selectedIndex = $selectedIndex ?? 1;
 ?>
@@ -27,7 +27,6 @@ class CheckinJS
             var iEpisodeId = <?= $selectedIndex ?>;
 
             //checkin variables
-            var iSkipSeconds = <?= $skipTrim->skipSeconds ?>;
             var asItemId = <?= getJSArray(array_column($items, 'Id'), true, '0') ?>;
             var asItemDuration = <?= getJSArray(array_map('getRuntimeSeconds', $items), false, '0') ?>;
             var asItemPosition = <?= getJSArray(array_map('getStartPosition', $items), false, '0') ?>;
@@ -41,14 +40,13 @@ class CheckinJS
         <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
         <script type="text/javascript">
             function checkin(itemId, duration, position, skip, trim) {
-                position = ResumeOrRestart(position, iSkipSeconds);
+                position = ResumeOrRestart(position, skip);
                 var url = "checkin.php?id=" + itemId + "&duration=" + duration + "&position=" + position + "&skip=" + skip + "&trim=" + trim;
                 document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
             }
 
             function stop() {
-                var url = 'checkin.php?action=stop';
-                document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
+                document.getElementById("checkinjs").setAttribute('src', 'checkin.php?action=stop&JS=true');
             }
 
             function callback(id, inlineMsg) {
