@@ -16,6 +16,9 @@ include_once 'data.php';
 include_once 'utils.php';
 include_once 'page.php';
 include_once 'templates.php';
+include_once 'utils/javascript.php';
+include_once 'utils/arrayCallbacks.php';
+include_once 'utils/checkinJS.php';
 
 const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 40;
@@ -145,8 +148,6 @@ function renderEpisodeJS($episode)
         asEpisodeUrl.push("<?= translatePathToNMT($episode->Path) ?>");
         asEpisodeVod.push("vod");
         asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
-        asEpisodeId.push("<?= $episode->Id ?>");
-        asEpisodeDuration.push("<?= TicksToSeconds($episode->RunTimeTicks) ?>");
         asEpisodeNo.push("<?= $episode->IndexNumber ?>");
         asEpisodeNoEnd.push("<?= $episode->IndexNumberEnd ?>");
         asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
@@ -185,7 +186,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
-    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId], $skipTrim->skipSeconds, $skipTrim->trimSeconds);";
+    $callbackJS = CheckinJS::getCallback($skipTrim);
     $callbackName = "playepisode" . $indexInList;
     $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
     #endregion
@@ -204,13 +205,13 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 function printInitJS()
 {
     global $series, $season, $episodes, $selectedPage, $epPages, $episodeCount, $selectedEpisodeArrayIndex;
+    global $skipTrim;
 ?>
     <script type="text/javascript">
         iMainSeason = <?= $season->IndexNumber ?>;
 
         var iPage = <?= $selectedPage ?> //selected page
         var iEpPages = <?= $epPages ?>;
-        var iEpisodeId = <?= $selectedEpisodeArrayIndex ?? 1 ?>;
         
         var iEpisodesPerPage = <?= EPISODESPERPAGE ?>;
 
@@ -221,8 +222,6 @@ function printInitJS()
         asEpisodePlot = new Array('0');
         asEpisodeUrl = new Array('0');
         asSeasonNo = new Array('0');
-        asEpisodeId = new Array('0');
-        asEpisodeDuration = new Array('0');
         asEpisodeNo = new Array('0');
         asEpisodeNoEnd = new Array('0');
         asEpisodeImage = new Array('0');
@@ -233,7 +232,7 @@ function printInitJS()
     </script>
 
 <?
-
+    CheckinJS::render($episodes, $skipTrim, $selectedEpisodeArrayIndex);
 foreach ($episodes as $episode) {
     renderEpisodeJS($episode);
 }
@@ -248,14 +247,12 @@ if ($episodeCount > EPISODESPERPAGE) {
 }
 ?>
     <script type="text/javascript">
-
         var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
         var sTitleLong = "<?= $series->Name ?>";
         var fWatch = true;
         var fTVplaylist = false;
     </script>
 <?
-    CheckinJS();
 }
 
 function TopBarSpacerWidth($seasonIndexNumber)

@@ -146,6 +146,13 @@ class SkipAndTrim
             }
         }
     }    
+    public function getStartPosition($UserData)
+    {
+        //start at skipSeconds if user position is 0
+        //otherwise use resume position
+        $startPosition = intval($UserData->PlaybackPositionTicks / (10000 * 1000));
+        return ($startPosition == 0) ? $this->skipSeconds : $startPosition;
+    }
 }
 
 function CheckinJS()
