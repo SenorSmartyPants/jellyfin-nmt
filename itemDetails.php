@@ -48,8 +48,6 @@ class ItemDetailsPage extends ListingsPage
 
     private function getAllVideos($item)
     {
-        //TODO: causing extra API calls
-
         $versions[] = $item;
         $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
         if ($isMultiple) {
@@ -92,9 +90,8 @@ class ItemDetailsPage extends ListingsPage
             array_multisort($col, SORT_ASC, $item->MediaSources);
         }
         
-        $position = $skipTrim->getStartPosition($item->UserData);
         //use mediaSources for better names than pulling each item
-        $previousPlayButtons = printPlayButtons($item->MediaSources, $position, $skipTrim, $isMultiple);
+        $previousPlayButtons = printPlayButtons($item->MediaSources, $skipTrim, $isMultiple);
 
         //check for ExtrasTypes
         if (!empty($this->additionalparts)) {
@@ -307,7 +304,7 @@ function printStreamInfo($stream)
 <?
 }
 
-function printPlayButton($mediaSource, $position, $skipTrim, $isMultiple, $index)
+function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
 {     
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
@@ -330,7 +327,7 @@ function printPlayButton($mediaSource, $position, $skipTrim, $isMultiple, $index
 <?
 }
 
-function printPlayButtons($items, $position, $skipTrim, $isMultiple, $previousPlayButtons = 0)
+function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons = 0)
 {
     foreach ($items as $item) {
         if ($item->MediaSources) {
@@ -338,7 +335,7 @@ function printPlayButtons($items, $position, $skipTrim, $isMultiple, $previousPl
         } else {
             $mediaSource = $item;
         }
-        printPlayButton($mediaSource, $position, $skipTrim, $isMultiple, $previousPlayButtons++);
+        printPlayButton($mediaSource, $skipTrim, $isMultiple, $previousPlayButtons++);
     }
     return $previousPlayButtons;
 }
@@ -348,7 +345,7 @@ function PrintExtras($extras, $Label, $previousPlayButtons)
     global $skipTrim;
     if (!empty($extras)) {
         echo "<h4>$Label</h4>";
-        $previousPlayButtons = printPlayButtons($extras, 0, $skipTrim, true, $previousPlayButtons);   
+        $previousPlayButtons = printPlayButtons($extras, $skipTrim, true, $previousPlayButtons);   
     }
     return $previousPlayButtons;
 }
