@@ -53,12 +53,16 @@ if (isset($_GET["JS"]))
 {
     echo "callback('outputTest2','Checkin callback');";
 }
-//close reponse before starting play, let play run in the background
-closeResponse();
 
 if ($_GET['action'] == 'stop') {
-    $report->Stop();
+    $stoppedPosition = $report->Stop();
+    if (isset($_GET["JS"])) 
+    {
+        echo "\nupdatePosition($stoppedPosition);";
+    }    
 } else {
+    //close reponse before starting play, let play run in the background
+    closeResponse();
     $report->Start($position);
 }
 
