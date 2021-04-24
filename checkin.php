@@ -35,17 +35,10 @@ startReponse();
 $auth = new Authentication();
 
 $itemId = $_GET['id'];
-$duration = $_GET['duration'];
-$position = $_GET['position'];
-$skip = $_GET['skip'];
-$trim = $_GET['trim'];
-
-if (empty($position)) {
-    $position = 0;
-}
-if (empty($trim)) {
-    $trim = 0;
-}
+$duration = intval($_GET['duration']);
+$position = intval($_GET['position']);
+$skip = intval($_GET['skip']);
+$trim = intval($_GET['trim']);
 
 $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $skip, $trim);
 
