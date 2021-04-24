@@ -1,6 +1,7 @@
 <?
 include_once 'utils.php';
 include_once 'listings.php';
+include_once 'utils/checkinJS.php';
 
 const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
@@ -19,13 +20,93 @@ setNames($item);
 
 setupChildData($item);
 
+    //get skip and trim from tags
+    if ($item->Type == ItemType::EPISODE) {
+        //use series for skip and trim
+        $series = getItem($item->SeriesId);
+        $skipTrim = new SkipAndTrim($series);
+    } else {
+        $skipTrim = new SkipAndTrim($item);
+    }
+
 class ItemDetailsPage extends ListingsPage
 {
+    private $additionalparts;
+    private $trailers;
+    private $specialfeatures;
+
     public function printJavascript() 
     {
+        global $skipTrim, $item;
+
         parent::printJavascript();
-        CheckinJS();
-    }  
+
+        //make array of all video items/mediasources
+        $items = $this->getAllVideos($item);
+        CheckinJS::render($items, $skipTrim);
+    }
+
+    private function getAllVideos($item)
+    {
+        //TODO: causing extra API calls
+
+        $versions[] = $item;
+        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        if ($isMultiple) {
+            //get other sources full data, #2 and up
+            for ($i=1; $i < $item->MediaSourceCount; $i++) { 
+                //version name is different from MediaSource name
+                $versions[] = getItem($item->MediaSources[$i]->Id);
+            }
+
+            //sort versions by name
+            $col = array_column($item->MediaSources, 'Name');
+            array_multisort($col, SORT_ASC, $item->MediaSources);
+        }
+
+        //what is intro count attribute?
+        if ($item->PartCount && $item->PartCount > 0) {
+            //Additional Parts
+            $this->additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
+        }
+        if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
+            //Trailers
+            $this->trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);          
+        }
+        if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
+            //Special Features
+            $this->specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);          
+        }
+
+        //media sources doesn't contain userdata
+        return array_merge($versions, (array) $this->additionalparts, (array) $this->trailers, (array) $this->specialfeatures);
+    }
+
+    public function printPlayButtonGroups($item)
+    {
+        global $skipTrim;
+        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        if ($isMultiple) {
+            //sort versions by name
+            $col = array_column($item->MediaSources, 'Name');
+            array_multisort($col, SORT_ASC, $item->MediaSources);
+        }
+        
+        $position = $skipTrim->getStartPosition($item->UserData);
+        //use mediaSources for better names than pulling each item
+        $previousPlayButtons = printPlayButtons($item->MediaSources, $position, $skipTrim, $isMultiple);
+
+        //check for ExtrasTypes
+        if (!empty($this->additionalparts)) {
+            foreach ($this->additionalparts as $index => $part) {
+                //display a small name 'Part X'
+                $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
+            }
+            $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons); 
+        }
+        $previousPlayButtons = PrintExtras($this->trailers, 'Trailers', $previousPlayButtons);
+        $previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
+    }
 }
 
 $pageObj = new ItemDetailsPage($Title, false);
@@ -226,7 +307,7 @@ function printStreamInfo($stream)
 <?
 }
 
-function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
+function printPlayButton($mediaSource, $position, $skipTrim, $isMultiple, $index)
 {     
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
@@ -238,8 +319,8 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
         $linkHTML = 'Play';
     }
 
-    $callbackJS = "checkin('" . $mediaSource->Id . "', " . TicksToSeconds($mediaSource->RunTimeTicks) 
-        . ", " . $skipTrim->skipSeconds . ", " . $skipTrim->trimSeconds . ');';
+    $videoIndex = $index + 1; 
+    $callbackJS = CheckinJS::getCallback($skipTrim, $videoIndex);
     $callbackName = 'playcallback' . $index;
     $callbackAdditionalAttributes = null;
     #endregion
@@ -249,7 +330,7 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
 <?
 }
 
-function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons = 0)
+function printPlayButtons($items, $position, $skipTrim, $isMultiple, $previousPlayButtons = 0)
 {
     foreach ($items as $item) {
         if ($item->MediaSources) {
@@ -257,57 +338,25 @@ function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons =
         } else {
             $mediaSource = $item;
         }
-        printPlayButton($mediaSource, $skipTrim, $isMultiple, $previousPlayButtons++);
+        printPlayButton($mediaSource, $position, $skipTrim, $isMultiple, $previousPlayButtons++);
     }
     return $previousPlayButtons;
 }
 
-function printPlayButtonGroups($item)
+function PrintExtras($extras, $Label, $previousPlayButtons)
 {
-    $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
-    if ($isMultiple) {
-        //sort versions by name
-        $col = array_column($item->MediaSources, 'Name');
-        array_multisort($col, SORT_ASC, $item->MediaSources);
+    global $skipTrim;
+    if (!empty($extras)) {
+        echo "<h4>$Label</h4>";
+        $previousPlayButtons = printPlayButtons($extras, 0, $skipTrim, true, $previousPlayButtons);   
     }
-
-    //get skip and trim from tags
-    if ($item->Type == ItemType::EPISODE) {
-        //use series for skip and trim
-        $series = getItem($item->SeriesId);
-        $skipTrim = new SkipAndTrim($series);
-    } else {
-        $skipTrim = new SkipAndTrim($item);
-    }
-    
-    $previousPlayButtons = printPlayButtons($item->MediaSources, $skipTrim, $isMultiple);
-
-    //check for ExtrasTypes
-    //what is intro count attribute?
-    if ($item->PartCount && $item->PartCount > 0) {
-        echo '<h4>Additional Parts</h4>';
-        $additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
-        foreach ($additionalparts as $index => $part) {
-            //display a small name 'Part X'
-            $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
-        }
-        $previousPlayButtons = printPlayButtons($additionalparts, $skipTrim, true, $previousPlayButtons);   
-    }            
-    if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
-        echo '<h4>Trailers</h4>';
-        $trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
-        $previousPlayButtons = printPlayButtons($trailers, $skipTrim, true, $previousPlayButtons);
-    }
-    if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
-        echo '<h4>Special Features</h4>';
-        $specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
-        $previousPlayButtons = printPlayButtons($specialfeatures, $skipTrim, true, $previousPlayButtons);
-    }
+    return $previousPlayButtons;
 }
 
 function render($item)
 {
     global $parentName, $itemName;
+    global $pageObj;
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
     $durationInMinutes = round($durationInSeconds / 60);
@@ -469,7 +518,7 @@ function render($item)
     </table>
     <?
         if ($item->MediaType) { //only display play button for single items
-            printPlayButtonGroups($item);
+            $pageObj->printPlayButtonGroups($item);
         }
 ?>    
 

@@ -1,4 +1,5 @@
 <?php
+include_once 'utils/javascript.php';
 include_once 'utils.php';
 include_once 'page.php';
 
@@ -120,20 +121,11 @@ class CategoriesJSPage extends CategoriesPage
     protected function printCategory($heading, $categoryName, $items) 
     {
         if (!empty($items)) {
-            
             $this->catName = $categoryName;
             $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
-
-            //NMT has 2048 character limit per line of JS code in JS file
-            //if more than 100 items, put each item on one line so we don't hit the limit
-            if (count($items) > 100) {
-                $padding = "\n\t\t\t";
-            } else {
-                $padding = null;
-            }
 ?>
-        asFilterNames['<?= $heading ?>'] = ["<?= implode("\"," . $padding . "\"", $items);  ?>"];
-        asFilters['<?= $heading ?>'] = ["<?= implode("\",\n\t\t\t\"", $urls);  ?>"];            
+        asFilterNames['<?= $heading ?>'] = <?= getJSArray($items) ?>;
+        asFilters['<?= $heading ?>'] = <?= getJSArray($urls, true) ?>;            
 
 <?
         }    
@@ -161,7 +153,7 @@ class CategoriesJSPage extends CategoriesPage
         if ($this->includeTags && !empty($this->filters->Tags)) {
             $Categories[] = 'Tags';
         }
-        return '["' . implode("\",\"", $Categories) . '"]';
+        return getJSArray($Categories);
     }
 
     public function render()

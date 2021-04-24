@@ -37,6 +37,7 @@ $auth = new Authentication();
 $itemId = $_GET['id'];
 $duration = $_GET['duration'];
 $position = $_GET['position'];
+$skip = $_GET['skip'];
 $trim = $_GET['trim'];
 
 if (empty($position)) {
@@ -46,18 +47,22 @@ if (empty($trim)) {
     $trim = 0;
 }
 
-$report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $trim);
+$report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $skip, $trim);
 
 if (isset($_GET["JS"])) 
 {
     echo "callback('outputTest2','Checkin callback');";
 }
-//close reponse before starting play, let play run in the background
-closeResponse();
 
 if ($_GET['action'] == 'stop') {
-    $report->Stop();
+    $stoppedPosition = $report->Stop();
+    if (isset($_GET["JS"])) 
+    {
+        echo "\nupdatePosition($stoppedPosition);";
+    }    
 } else {
+    //close reponse before starting play, let play run in the background
+    closeResponse();
     $report->Start($position);
 }
 

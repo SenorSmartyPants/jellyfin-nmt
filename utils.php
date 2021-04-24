@@ -146,29 +146,17 @@ class SkipAndTrim
             }
         }
     }    
+    public function getStartPosition($UserData)
+    {
+        //start at skipSeconds if user position is 0
+        //otherwise use resume position
+        $startPosition = intval($UserData->PlaybackPositionTicks / (10000 * 1000));
+        return ($startPosition == 0) ? $this->skipSeconds : $startPosition;
+    }
 }
 
-function CheckinJS()
-{
-?>
-        <script type="text/javascript" src="js/empty.js" id="checkinjs"></script>
-        <script type="text/javascript">
-            function checkin(itemId, duration, position, trim) { 
-                var url = "checkin.php?id=" + itemId + "&duration=" + duration + "&position=" + position + "&trim=" + trim;
-                document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
-            }
-    
-            function stop() {
-                var url = 'checkin.php?action=stop';
-                document.getElementById("checkinjs").setAttribute('src', url + "&JS=true");
-            }
-            
-            function callback(id, inlineMsg) {
-                document.getElementById("checkinjs").setAttribute('src', "js/empty.js");
-            }
-        </script>
-<?
-}
+
+
 
 function TicksToSeconds($ticks)
 {

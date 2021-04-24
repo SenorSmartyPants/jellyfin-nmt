@@ -16,6 +16,9 @@ include_once 'data.php';
 include_once 'utils.php';
 include_once 'page.php';
 include_once 'templates.php';
+include_once 'utils/javascript.php';
+include_once 'utils/arrayCallbacks.php';
+include_once 'utils/checkinJS.php';
 
 const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 40;
@@ -133,28 +136,6 @@ function truncatePlot($Plot, $JSescape = false)
     return $Plot;
 }
 
-function renderEpisodeJS($episode)
-{
-    $Plot = truncatePlot($episode->Overview, true);
-?>
-    <script type="text/javascript">
-        asEpisodeTitle.push("<?= truncateTitle($episode->Name) ?>");
-        asEpisodeTitleCSS.push("<?= titleCSS(strlen($episode->Name)) ?>");
-        asEpisodeTitleShort.push("<?= substr($episode->Name, 0, TITLETRUNCATE) ?>");
-        asEpisodePlot.push("<?= $Plot ?>");
-        asEpisodeUrl.push("<?= translatePathToNMT($episode->Path) ?>");
-        asEpisodeVod.push("vod");
-        asSeasonNo.push("<?= $episode->ParentIndexNumber ?>");
-        asEpisodeId.push("<?= $episode->Id ?>");
-        asEpisodeDuration.push("<?= TicksToSeconds($episode->RunTimeTicks) ?>");
-        asEpisodeNo.push("<?= $episode->IndexNumber ?>");
-        asEpisodeNoEnd.push("<?= $episode->IndexNumberEnd ?>");
-        asEpisodeWatched.push("<?= $episode->UserData->Played ?>");
-        asEpisodeImage.push("<?= $episode->ImageTags->Primary ? getImageURL($episode->Id, new ImageParams(null, 278, $episode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>");
-    </script>
-<?
-}
-
 function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 {
     global $season, $skipTrim;
@@ -185,7 +166,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
-    $callbackJS = "checkin(asEpisodeId[iEpisodeId], asEpisodeDuration[iEpisodeId], $skipTrim->skipSeconds, $skipTrim->trimSeconds);";
+    $callbackJS = CheckinJS::getCallback($skipTrim);
     $callbackName = "playepisode" . $indexInList;
     $callbackAdditionalAttributes = array('id' => 'a2_e_' . $indexInList);
     #endregion
@@ -204,58 +185,58 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 function printInitJS()
 {
     global $series, $season, $episodes, $selectedPage, $epPages, $episodeCount, $selectedEpisodeArrayIndex;
+    global $skipTrim;
 ?>
     <script type="text/javascript">
         iMainSeason = <?= $season->IndexNumber ?>;
 
         var iPage = <?= $selectedPage ?> //selected page
         var iEpPages = <?= $epPages ?>;
-        var iEpisodeId = <?= $selectedEpisodeArrayIndex ?? 1 ?>;
         
         var iEpisodesPerPage = <?= EPISODESPERPAGE ?>;
 
         var fmorePages = <?= $epPages > 1 ? 'true':'false' ?>;
 
-        asEpisodeTitle = new Array('0');
-        asEpisodeTitleCSS = new Array('0');
-        asEpisodePlot = new Array('0');
-        asEpisodeUrl = new Array('0');
-        asSeasonNo = new Array('0');
-        asEpisodeId = new Array('0');
-        asEpisodeDuration = new Array('0');
-        asEpisodeNo = new Array('0');
-        asEpisodeNoEnd = new Array('0');
-        asEpisodeImage = new Array('0');
-        //the following are only used for episode paging
-        asEpisodeTitleShort = new Array('0');
-        asEpisodeVod = new Array('0');
-        asEpisodeWatched = new Array('0');
     </script>
-
 <?
-
-foreach ($episodes as $episode) {
-    renderEpisodeJS($episode);
-}
-
+    CheckinJS::render($episodes, $skipTrim, $selectedEpisodeArrayIndex);
 ?>
+    <script type="text/javascript">
+        //season.js variables
+        var asEpisodeTitle = <?= getJSArray(array_map('getTruncateTitle', $episodes), true, '0')?>;
+        var asEpisodeTitleCSS = <?= getJSArray(array_map('getTitleCSS', $episodes), false, '0')?>;
+        var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
+        var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;
+
+        //both season.js and episodePaging.js 
+        //not really used by my code season, used by paging
+        var asEpisodeUrl = <?= getJSArray(array_map('getURL', $episodes), true, '0')?>;
+    </script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/season/season.js"></script>
 <?
 if ($episodeCount > EPISODESPERPAGE) {
-?>    <script type="text/javascript" src="js/season/episodePaging.js"></script>
+?>
+    <script type="text/javascript">
+        //episodePaging.js
+        var asEpisodeWatched = <?= getJSArray(array_map('getPlayed', $episodes), false, '0')?>;
+        var asEpisodeVod = <?= getJSArray(array_map('getVOD', $episodes), false, '0')?>;
+        var asEpisodeTitleShort = <?= getJSArray(array_map('getShortTitle', $episodes), true, '0')?>;
+        var asSeasonNo = <?= getJSArray(array_column($episodes, 'ParentIndexNumber'), false, '0')?>;
+        var asEpisodeNo = <?= getJSArray(array_column($episodes, 'IndexNumber'), false, '0')?>;
+        var asEpisodeNoEnd = <?= getJSArray(array_map('getIndexNumberEnd', $episodes), false, '0')?>;
+    </script>
+    <script type="text/javascript" src="js/season/episodePaging.js"></script>
 <?
 }
 ?>
     <script type="text/javascript">
-
         var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
         var sTitleLong = "<?= $series->Name ?>";
         var fWatch = true;
         var fTVplaylist = false;
     </script>
 <?
-    CheckinJS();
 }
 
 function TopBarSpacerWidth($seasonIndexNumber)

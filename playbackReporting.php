@@ -14,12 +14,15 @@ class PlayingMedia
     public $Duration;
     public $PlayState;
     public $PositionInSeconds;
+    public $StartedTime;
     public $LastPositionUpdate;
+    public $skipSeconds;
     public $trimSeconds;
 
-    public function __construct($itemId, $duration, $trimSeconds) {
+    public function __construct($itemId, $duration, $skipSeconds, $trimSeconds) {
         $this->itemId = $itemId;
         $this->Duration = $duration;       
+        $this->skipSeconds = $skipSeconds;
         $this->trimSeconds = $trimSeconds;        
     }
 }
@@ -29,12 +32,16 @@ class PlaybackReporting
     private const PROGRESSUPDATEFREQUENCY = 60;
     private const PLAYSTATEDIR = 'playstate/';
     private const JSONEXT = '.json';
+
+    private const MINRESUME = 0.05;
+    private const MAXRESUME = 0.90;
+
     private $playing;
     private $sessionId;
 
-    public function __construct($sessionId, $itemId, $duration, $trimSeconds = 0) {
+    public function __construct($sessionId, $itemId, $duration, $skipSeconds = 0, $trimSeconds = 0) {
         $this->sessionId = $sessionId;
-        $this->playing = new PlayingMedia($itemId, $duration, $trimSeconds);   
+        $this->playing = new PlayingMedia($itemId, $duration, $skipSeconds, $trimSeconds);   
     }    
 
     private function getPlaybackPayload($eventName = null)
@@ -84,9 +91,7 @@ class PlaybackReporting
 
     private function calculateCurrentPosition()
     {
-        $secondsSinceUpdate = time() - $this->playing->LastPositionUpdate;
-
-        $this->playing->PositionInSeconds += $secondsSinceUpdate;
+        $this->playing->PositionInSeconds = time() - $this->playing->StartedTime;
         $this->playing->LastPositionUpdate = time();
 
         return $this->playing->PositionInSeconds; 
@@ -130,6 +135,7 @@ class PlaybackReporting
     {
         $this->playing->PositionInSeconds = $PositionInSeconds;
         $this->playing->PlayState = PlayState::PLAYING;
+        $this->playing->StartedTime = time() - $PositionInSeconds;
 
         self::apiJSON(
             '/Sessions/Playing',
@@ -151,16 +157,29 @@ class PlaybackReporting
             //add trim seconds to current position
             $trimmedPosition = $this->playing->PositionInSeconds + $this->playing->trimSeconds;
             //if result is >90% resume
-            if ($trimmedPosition / $this->playing->Duration >= 0.9) {
+            if ($trimmedPosition / $this->playing->Duration >= PlaybackReporting::MAXRESUME) {
                 //set current position to be trimmed position
                 $this->playing->PositionInSeconds = $trimmedPosition;
             }
+
+            if (($this->playing->PositionInSeconds - $this->playing->skipSeconds) <= ($this->playing->Duration * PlaybackReporting::MINRESUME)) {
+                //in first 5% of video (excluding skipSeconds), don't save resume position
+                //report 0 to JF to not save position
+                $this->playing->PositionInSeconds = 0;
+            }
+
             self::apiJSON(
                 '/Sessions/Playing/Stopped',
                 self::getPlaybackPayload(),
                 $this->playing->PositionInSeconds,
                 PlayState::STOPPED
             );
+        }
+        //report trimSeconds to NMT if at beginning of video
+        if ($this->playing->PositionInSeconds == 0) {
+            return $this->playing->skipSeconds;
+        } else {
+            return $this->playing->PositionInSeconds;
         }
     }
 
