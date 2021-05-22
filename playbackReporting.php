@@ -165,7 +165,7 @@ class PlaybackReporting
             if (($this->playing->PositionInSeconds - $this->playing->skipSeconds) <= ($this->playing->Duration * PlaybackReporting::MINRESUME)) {
                 //in first 5% of video (excluding skipSeconds), don't save resume position
                 //report 0 to JF to not save position
-                $this->playing->PositionInSeconds = 0;
+                $this->playing->PositionInSeconds = 1;
             }
 
             self::apiJSON(
@@ -175,8 +175,9 @@ class PlaybackReporting
                 PlayState::STOPPED
             );
         }
-        //report trimSeconds to NMT if at beginning of video
-        if ($this->playing->PositionInSeconds == 0) {
+        //report skipSeconds to NMT if at beginning of video
+        //+1 because position will be set to 1 if in first 5%
+        if ($this->playing->PositionInSeconds <= $this->playing->skipSeconds + 1) {
             return $this->playing->skipSeconds;
         } else {
             return $this->playing->PositionInSeconds;
