@@ -141,7 +141,14 @@ function container($containerID)
 
 function videoOutput($videoStream)
 {
-    $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
+    //Don't use Display Title if Title is set
+    if ($videoStream->Title) {
+        //build resolution string
+        $output = strval($videoStream->Height) . ($videoStream->IsInterlaced ? 'i' : 'p');
+    } else {
+        $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
+    }
+
     switch ($output) {
         case 'sd':
             $url = "sdtv.png";
