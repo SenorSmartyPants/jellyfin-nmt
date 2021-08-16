@@ -149,12 +149,10 @@ function videoOutput($videoStream)
         $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
     }
 
-    switch ($output) {
-        case 'sd':
-            $url = "sdtv.png";
-            break;            
-        default:
-            $url = $output . ".png";
+    if ($output === 'sd') {
+        $url = "sdtv.png";
+    } else {
+        $url = $output . ".png";
     }
     return '<img src="images/flags/output_' .  $url . '"/>';
 }
