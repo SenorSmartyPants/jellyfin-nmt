@@ -141,12 +141,8 @@ function container($containerID)
 
 function videoOutput($videoStream)
 {
-    //JF reports HDHR vdeos as 720i
     $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
     switch ($output) {
-        case '720i':
-            $url = "720p.png";
-            break;
         case 'sd':
             $url = "sdtv.png";
             break;            
