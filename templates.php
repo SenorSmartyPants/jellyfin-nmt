@@ -1,6 +1,7 @@
 <?
 function audioCodec($audioStream)
 {
+    $debugOutput = '';
     switch (strtolower($audioStream->Codec)) {
         case 'eac3':
             $codecFile = "audcod_dolbyplus.png";
@@ -72,12 +73,14 @@ function audioCodec($audioStream)
             if ($audioStream->Channels == 6) {
                 $channelFile = "audch_51.png";
             } else {
-                $channelFile = $audioStream->Channels . "../1x1.png";
+                $debugOutput = '<!-- Channels = ' . $audioStream->Channels . ' -->';
+                $channelFile = "../1x1.png";
             }
     }
     return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
     . '<img align="top" src="images/flags/' . $codecFile 
-    . '"/><img align="top" src="images/flags/' . $channelFile . '"/>';
+    . '"/><img align="top" src="images/flags/' . $channelFile . '"/>'
+    . $debugOutput;
 }
 
 function container($containerID)
