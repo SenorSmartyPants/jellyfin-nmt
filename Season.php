@@ -16,6 +16,7 @@ include_once 'data.php';
 include_once 'utils.php';
 include_once 'page.php';
 include_once 'templates.php';
+include_once 'menuItems.php';
 include_once 'utils/javascript.php';
 include_once 'utils/arrayCallbacks.php';
 include_once 'utils/checkinJS.php';
@@ -408,7 +409,7 @@ function printSeasonFooter()
     global $series, $season, $selectedEpisode;
     global $tvid_season_info, $tvid_season_play, 
         $tvid_season_pgup, $tvid_season_pgdn,
-        $tvid_season_itemdetails;
+        $tvid_season_itemdetails, $tvid_season_series;
 ?>
         </table>  	
     <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
@@ -423,11 +424,13 @@ function printSeasonFooter()
     if (PCMENU) {
         printPCMenu();
     }
+    $seriesMenuItem = parse($series);
 ?>
     <a TVID="<?= $tvid_season_pgup ?>" ONFOCUSLOAD="" name="pgdn" href=""></a>
     <a TVID="<?= $tvid_season_pgdn ?>" ONFOCUSLOAD="" name="pgup" href=""></a>
 
     <a TVID="<?= $tvid_season_itemdetails ?>" href="<?= itemDetailsLink($season->Id) ?>"></a>
+    <a TVID="<?= $tvid_season_series ?>" href="<?= $seriesMenuItem->DetailURL ?>"></a>
 <?
     Page::printFooter();
 }

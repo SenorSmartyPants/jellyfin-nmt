@@ -29,6 +29,7 @@ $tvid_season_info = 'INFO';
 $tvid_season_pgup = 'PGUP';
 $tvid_season_pgdn = 'PGDN';
 $tvid_season_itemdetails = 'RED';
+$tvid_season_series = 'BLUE';
 
 $tvid_itemdetails_play = 'PLAY';
 $tvid_itemdetails_more = 'RED';
