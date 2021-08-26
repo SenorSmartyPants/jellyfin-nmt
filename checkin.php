@@ -42,11 +42,6 @@ $trim = intval($_GET['trim']);
 
 $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $skip, $trim);
 
-if (isset($_GET["JS"])) 
-{
-    echo "callback('outputTest2','Checkin callback');";
-}
-
 if ($_GET['action'] == 'stop') {
     $stoppedPosition = $report->Stop();
     if (isset($_GET["JS"])) 
