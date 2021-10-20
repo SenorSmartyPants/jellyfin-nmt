@@ -22,8 +22,10 @@ switch ($folderType) {
     default:
         if ($collectionType == CollectionType::TVSHOWS) {
             $type = ItemType::SERIES;
+            $recursive = true;
         } elseif ($collectionType == CollectionType::MOVIES) {
             $type = ItemType::MOVIE;
+            $recursive = true;
         }
 }
 
