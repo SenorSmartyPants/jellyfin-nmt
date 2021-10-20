@@ -56,7 +56,14 @@ if ($season->ImageTags->Banner) {
 $pageObj->backdrop = getBackdropIDandTag($season);
 
 //find nmt-skip|trim tags
+//check series first, then first Studio for tags
+//so series will override anything set up on Studio
 $skipTrim = new SkipAndTrim($series);
+if ($skipTrim->skipSeconds == 0 && $skipTrim->trimSeconds == 0) {
+    $firstStudio = getItem($series->Studios[0]->Id);
+    $skipTrim = new SkipAndTrim($firstStudio);    
+}
+
 
 $params = new UserItemsParams();
 $params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds';
