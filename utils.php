@@ -171,6 +171,16 @@ function escapeURL($url)
 function translatePathToNMT($path)
 {
     global $NMT_path,$NMT_playerpath;
+    //SMB catia settings
+    //vfs objects = catia
+    //catia:mappings = 0x22:0xa8,0x2a:0xa4,0x2f:0xf8,0x3a:0xf7,0x3c:0xab,0x3e:0xbb,0x3f:0xbf,0x5c:0xff,0x7c:0xa6
+
+    //handle catia character mappings
+    $mapping = array('\\' => 'ÿ',
+    ':' => '÷', '*' => '¤', '?' => '¿',
+    '"' => '¨', '<' => '«', '>' => '»',
+    '|' => '¦');
+    $path = strtr($path, $mapping);
     return str_replace($NMT_path,$NMT_playerpath,escapeURL($path));
 }
 
