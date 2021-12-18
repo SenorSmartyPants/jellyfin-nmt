@@ -12,7 +12,7 @@ function getJSArray($items, $forceNewline = false, $first = null)
         } else {
             $padding = null;
         }
-        return '["' . implode("\"," . $padding . "\"", $items) . '"]';
+        return '["' . implode("\"," . $padding . "\"", array_map('addslashes', $items)) . '"]';
     } else {
         return '[]';
     }

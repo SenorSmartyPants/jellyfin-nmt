@@ -139,7 +139,7 @@ function truncatePlot($Plot, $JSescape = false)
         $Plot = substr($Plot, 0, PLOTTRUNCATE) . '...';
     }
     if ($JSescape) {
-        $Plot = addslashes(str_replace(array("\n", "\r"), '', $Plot));
+        $Plot = str_replace(array("\n", "\r"), '', $Plot);
     }
     return $Plot;
 }
