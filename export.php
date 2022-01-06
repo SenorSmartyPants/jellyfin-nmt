@@ -132,7 +132,7 @@ function translatePath($path)
 
 function cleanPath($path)
 {
-    return str_replace(array('\\', '/', ':', '*', '?', '"', '<', '>', '|'), '', $path);
+    return rtrim(str_replace(array('\\', '/', ':', '*', '?', '"', '<', '>', '|'), '', $path),".");
 }
 
 function getBaseFileName($item)
