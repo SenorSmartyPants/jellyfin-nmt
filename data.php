@@ -122,7 +122,7 @@ function apiCall($path, $debug = false, $includeAPIKey = true)
     if ($includeAPIKey) {
         $url .= "&api_key=" . $api_key;
     }
-    if ($debug) {
+    if ($debug || $_GET['debug']) {
         echo "<a href=\"" . $url . "\">url</a><br/>";
     }
 
