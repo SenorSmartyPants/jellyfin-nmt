@@ -44,6 +44,7 @@ setNumPagesAndIndexCount(count($items));
 class IndexPage extends ListingsPage
 {
     private $continueWatching;
+    //private $rewatching;
 
     public function __construct($title)
     {
@@ -55,6 +56,8 @@ class IndexPage extends ListingsPage
         } else {
             $this->onloadset = 'nextup';
         }
+        //check if there are rewatching items
+        //$this->rewatching = (getNextUp(1,0,true)->TotalRecordCount) > 0;
     }
 
     public function printContent()
@@ -64,6 +67,11 @@ class IndexPage extends ListingsPage
         } 
     ?>
         <a href="nextUp.php" name="nextup">Next Up ></a>
+    <?
+/*         if ($this->rewatching) {
+            echo '<a href="nextUp.php?rewatching" name="rewatching">Rewatching ></a>&nbsp;';
+        }  */
+    ?>
         <br clear="all"/>
         <a href="latest.php?type=<?= ItemType::EPISODE ?>">Latest TV Shows ></a>
         <br clear="all"/>
