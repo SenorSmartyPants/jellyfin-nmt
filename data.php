@@ -299,12 +299,19 @@ function getResume($Limit, $StartIndex = 0)
     return getUsersItems($params, 'Resume');
 }
 
-function getNextUp($Limit, $startIndex = 0)
+function getNextUp($Limit, $startIndex = 0, $rewatching = null)
 {
     global $user_id;
 
-    $path = "/Shows/NextUp?UserID=" . $user_id .
-        "&Fields=Path&Limit=" . $Limit . "&StartIndex=" . $startIndex;
+    $params = array(
+        'UserID' => $user_id,
+        'Fields' => 'Path',
+        'Limit' => $Limit,
+        'StartIndex' => $startIndex,
+        'Rewatching' => $rewatching
+    );
+
+    $path = "/Shows/NextUp?" . http_build_query($params);
 
     return apiCall($path);
 }
