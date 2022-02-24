@@ -3,44 +3,6 @@ include_once 'listings.php';
 
 $useSeasonNameForMenuItems = true;
 
-$items = getUsersViews()->Items;
-
-/* features needed
-Series name only for menuitem title
-*/
-$indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
-
-//960x540
-//(1096 - (n+1)*cellspacing) / n = w
-//or 
-//(1096 - (2n)*cellpadding) / n = w
-//larger thumbnails need more padding I think
-
-//thumbnail/.8 = popup dimensions
-//can be whatever I want!
-if (count($items) <= 6) {
-    //3x2
-    $indexStyle->thumbnailsWidth = 341;
-    $indexStyle->thumbnailsHeight = 191;
-    $indexStyle->popupWidth = 426;
-    $indexStyle->popupHeight = 238;
-    $indexStyle->Limit = 6;
-    $indexStyle->nbThumbnailsPerLine = 3;
-} else {
-    //4x3
-    $indexStyle->thumbnailsWidth = 254;
-    $indexStyle->thumbnailsHeight = 143;
-    $indexStyle->popupWidth = 318;
-    $indexStyle->popupHeight = 179;
-    $indexStyle->Limit = 12;
-    $indexStyle->nbThumbnailsPerLine = 4; 
-}
-$indexStyle->moviesTableCellspacing = 16;
-$indexStyle->offsetY = 156;
-$indexStyle->ImageType = ImageType::PRIMARY;
-
-setNumPagesAndIndexCount(count($items));
-
 class IndexPage extends ListingsPage
 {
     private $resume;
@@ -53,6 +15,48 @@ class IndexPage extends ListingsPage
         $this->resume = (getResume(1)->TotalRecordCount) > 0;
         //check if there are rewatching items
         $this->rewatching = false; //(getNextUp(1,0,true)->TotalRecordCount) > 0;
+        $this->items = getUsersViews()->Items;
+    }
+
+    public function render()
+    {
+        $this->setupIndexStyle();
+        setNumPagesAndIndexCount(count($this->items));
+        parent::render();
+    }
+
+    private function setupIndexStyle()
+    {
+        $this->indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
+        $this->indexStyle->ImageType = ImageType::PRIMARY;
+        
+        //960x540
+        //(1096 - (n+1)*cellspacing) / n = w
+        //or 
+        //(1096 - (2n)*cellpadding) / n = w
+        //larger thumbnails need more padding I think
+        
+        //thumbnail/.8 = popup dimensions
+        //can be whatever I want!
+        if (count($this->items) <= 6) {
+            //3x2
+            $this->indexStyle->thumbnailsWidth = 341;
+            $this->indexStyle->thumbnailsHeight = 191;
+            $this->indexStyle->popupWidth = 426;
+            $this->indexStyle->popupHeight = 238;
+            $this->indexStyle->Limit = 6;
+            $this->indexStyle->nbThumbnailsPerLine = 3;
+        } else {
+            //4x3
+            $this->indexStyle->thumbnailsWidth = 254;
+            $this->indexStyle->thumbnailsHeight = 143;
+            $this->indexStyle->popupWidth = 318;
+            $this->indexStyle->popupHeight = 179;
+            $this->indexStyle->Limit = 12;
+            $this->indexStyle->nbThumbnailsPerLine = 4; 
+        }
+        $this->indexStyle->moviesTableCellspacing = 16;
+        $this->indexStyle->offsetY = 156;
     }
 
     private function printHomeSection($sectionname, $nameAttr)
@@ -141,7 +145,5 @@ class IndexPage extends ListingsPage
 }
 
 $pageObj = new IndexPage('Home');
-$pageObj->indexStyle = $indexStyle;
-$pageObj->items = $items;
 $pageObj->render();
 ?>
