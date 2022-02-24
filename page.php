@@ -25,6 +25,8 @@ class Page
 
     public $auth;
 
+    public $displayPreferences;
+
     public function __construct($title)
     {
         global $theme_css;
@@ -37,6 +39,10 @@ class Page
             //redirect to login page
             header('Location: login.php');
             die();
+        }
+        if ($this->auth->IsAuthenticated()) 
+        {
+            $this->displayPreferences = getUserPreferences();
         }
     }
 
@@ -125,7 +131,7 @@ class Page
             ?>onload="<?= $this->onload ?>" <?
         }
 ?>
-<?      if ($this->backdrop->Id) 
+<?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id) 
         { 
             ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), 'Backdrop') ?>"<?   
         }
@@ -149,7 +155,7 @@ class Page
 ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$backdropId) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
+            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$backdropId || !$this->displayPreferences->ShowBackdrop) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
             <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
