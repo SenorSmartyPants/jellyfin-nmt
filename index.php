@@ -55,80 +55,87 @@ class IndexPage extends ListingsPage
         $this->rewatching = false; //(getNextUp(1,0,true)->TotalRecordCount) > 0;
     }
 
-    public function printContent()
+    private function printHomeSection($sectionname, $nameAttr)
     {
-        $nameAttr = ' name="1"';
         $customPrefs = $this->displayPreferences->CustomPrefs;
-        for ($i=0; $i < 7; $i++) { 
-            $sectionname = 'homesection' . $i;
-            switch ($customPrefs->{$sectionname}) {
-                case 'resume':
-                    if ($this->resume) {
-                        echo '<a href="continueWatching.php"' . $nameAttr . '>Continue Watching ></a>&nbsp;';
-                        $nameAttr = null;
-                    }                     
-                    break;
 
-                case 'nextup':
-                    echo '<a href="nextUp.php"' . $nameAttr . '>Next Up ></a>';
+        switch ($customPrefs->{$sectionname}) {
+            case 'resume':
+                if ($this->resume) {
+                    echo '<a href="continueWatching.php"' . $nameAttr . '>Continue Watching ></a>&nbsp;';
+                    $nameAttr = null;
+                }                     
+                break;
+
+            case 'nextup':
+                echo '<a href="nextUp.php"' . $nameAttr . '>Next Up ></a>';
+                echo '<br clear="all"/>';
+                $nameAttr = null;
+                break;
+
+            case 'rewatching':
+                if ($this->rewatching) {
+                    echo '<a href="nextUp.php?rewatching"' . $nameAttr . '>Rewatching ></a>&nbsp;';
                     echo '<br clear="all"/>';
                     $nameAttr = null;
-                    break;
+                }
+                break;                    
+                
+            case 'latestmedia':
+                $user = getUser();
+                $latestExcludes = $user->Configuration->LatestItemsExcludes;
+                foreach ($this->items as $view) {
+                    if ($view->CollectionType != CollectionType::BOXSETS 
+                        && $view->CollectionType != CollectionType::PLAYLISTS
+                        && !in_array($view->Id, $latestExcludes))
+                    {
+                        $cbp = new CategoryBrowseParams();
 
-                case 'rewatching':
-                    if ($this->rewatching) {
-                        echo '<a href="nextUp.php?rewatching"' . $nameAttr . '>Rewatching ></a>&nbsp;';
-                        echo '<br clear="all"/>';
-                        $nameAttr = null;
-                    }
-                    break;                    
-                    
-                case 'latestmedia':
-                    $user = getUser();
-                    $latestExcludes = $user->Configuration->LatestItemsExcludes;
-                    foreach ($this->items as $view) {
-                        if ($view->CollectionType != CollectionType::BOXSETS 
-                            && $view->CollectionType != CollectionType::PLAYLISTS
-                            && !in_array($view->Id, $latestExcludes))
-                        {
-                            $cbp = new CategoryBrowseParams();
-
-                            $cbp->name = 'Latest';
-                            $cbp->topParentName = $view->Name;
-                            $cbp->topParentId = $view->Id;
-                            $cbp->collectionType = $view->CollectionType;
-                            
-                            ?>
-                            <a href="latest.php?<?= http_build_query($cbp) ?>" <?= $nameAttr ?>><?= $cbp->name . ' ' . $view->Name ?> ></a>
-                            <br clear="all"/>
-                            <?
-                            $nameAttr = null;     
-                        }    
-                    }
-                    break;
-                    
-                case 'librarybuttons':
-                case 'smalllibrarytiles':
+                        $cbp->name = 'Latest';
+                        $cbp->topParentName = $view->Name;
+                        $cbp->topParentId = $view->Id;
+                        $cbp->collectionType = $view->CollectionType;
+                        
+                        ?>
+                        <a href="latest.php?<?= http_build_query($cbp) ?>" <?= $nameAttr ?>><?= $cbp->name . ' ' . $view->Name ?> ></a>
+                        <br clear="all"/>
+                        <?
+                        $nameAttr = null;     
+                    }    
+                }
+                break;
+                
+            case 'librarybuttons':
+            case 'smalllibrarytiles':
 ?>
-        <a href="categoriesHTML.php">Categories ></a>
-        <br clear="all"/>
+    <a href="categoriesHTML.php">Categories ></a>
+    <br clear="all"/>
 <?
-                    $this->printPosterTable($this->items);
-                    $nameAttr = null;
-                    break;                      
+                $this->printPosterTable($this->items);
+                $nameAttr = null;
+                break;                      
 
-                # Not supported sections
-                case 'resumeaudio':
-                case 'activerecordings':
-                case 'livetv':
-                case 'none':
-                    break;
+            # Not supported sections
+            case 'resumeaudio':
+            case 'activerecordings':
+            case 'livetv':
+            case 'none':
+                break;
 
-                default:
-                    # Catch new sections, just display name
-                    echo 'New section to support: ' . $customPrefs->{$sectionname} . '<br/>';
-                    break;
-            }
+            default:
+                # Catch new sections, just display name
+                echo 'New section to support: ' . $customPrefs->{$sectionname} . '<br/>';
+                break;
+        }
+        return $nameAttr;
+    }
+
+    public function printContent()
+    {   
+        $nameAttr = ' name="1"';
+        for ($i=0; $i < 7; $i++) { 
+            $sectionname = 'homesection' . $i;
+            $nameAttr = $this->printHomeSection($sectionname, $nameAttr);
         }
     }
 }
