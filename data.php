@@ -298,7 +298,7 @@ function getUsersPublic()
     return apiCall($path, false, false);
 }
 
-function getLatest($itemType, $Limit)
+function getLatest($itemType, $Limit, $ParentID)
 {
     global $GroupItems;
 
@@ -306,7 +306,8 @@ function getLatest($itemType, $Limit)
     $params->Fields = 'Path';
     $params->Limit = $Limit;
     $params->IncludeItemTypes = $itemType;
-    $params->GroupItems = $GroupItems;    
+    $params->GroupItems = $GroupItems;
+    $params->ParentID = $ParentID;
 
     return getUsersItems($params, 'Latest');
 }
