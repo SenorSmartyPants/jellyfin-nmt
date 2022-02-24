@@ -5,6 +5,7 @@ include_once 'secrets.php';
 const ITEMSPATH = '/Items/';
 const USERSPATH = '/Users/';
 const VIDEOSPATH = '/Videos/';
+const PREFERENCESPATH = '/DisplayPreferences/usersettings/';
 
 $apiCallCount = 0;
 
@@ -259,6 +260,27 @@ function getUsersItems(UserItemsParams $params, $suffix = null)
     $querystring = http_build_query($params);
 
     return apiCall($path . $querystring);
+}
+
+function getUser()
+{
+    global $user_id;
+
+    $path = USERSPATH . $user_id . '?';
+    return apiCall($path);
+}
+
+function getUserPreferences()
+{
+    global $user_id;
+
+    $params = array(
+        'UserID' => $user_id,
+        'Client' => 'emby' //use settings from web client
+    );
+
+    $path = PREFERENCESPATH . '?' . http_build_query($params);
+    return apiCall($path);
 }
 
 function getUsersViews()
