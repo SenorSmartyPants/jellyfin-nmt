@@ -44,7 +44,7 @@ setNumPagesAndIndexCount(count($items));
 class IndexPage extends ListingsPage
 {
     private $resume;
-    //private $rewatching;
+    private $rewatching;
 
     public function __construct($title)
     {
@@ -52,7 +52,7 @@ class IndexPage extends ListingsPage
         //check if there are resume items
         $this->resume = (getResume(1)->TotalRecordCount) > 0;
         //check if there are rewatching items
-        //$this->rewatching = (getNextUp(1,0,true)->TotalRecordCount) > 0;
+        $this->rewatching = false; //(getNextUp(1,0,true)->TotalRecordCount) > 0;
     }
 
     public function printContent()
