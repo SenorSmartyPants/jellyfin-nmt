@@ -38,6 +38,9 @@ if ($collectionType === 'search' || !empty($cbp->searchTerm) || empty($parentId)
     $recursive = true;
 }
 
+$pageObj = new ListingsPage('');
+$pageObj->backdrop = $backdrop;
+
 //paging with dynamic style causes issues
 //$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
 overrideIndexStyle($folderType, $collectionType);

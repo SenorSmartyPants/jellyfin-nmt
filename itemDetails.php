@@ -7,28 +7,6 @@ const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
 const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
-$id = htmlspecialchars($_GET["id"]);
-$item = getItem($id);
-
-$libraryBrowse = true;
-$useSeasonNameForMenuItems = false;
-$forceItemDetails = true;
-
-$QSBase = "id=" . $id . "&subitems=" . $_GET["subitems"];
-
-setNames($item);
-
-setupChildData($item);
-
-    //get skip and trim from tags
-    if ($item->Type == ItemType::EPISODE) {
-        //use series for skip and trim
-        $series = getItem($item->SeriesId);
-        $skipTrim = new SkipAndTrim($series);
-    } else {
-        $skipTrim = new SkipAndTrim($item);
-    }
-
 class ItemDetailsPage extends ListingsPage
 {
     private $additionalparts;
@@ -107,6 +85,29 @@ class ItemDetailsPage extends ListingsPage
 }
 
 $pageObj = new ItemDetailsPage($Title, false);
+
+$id = htmlspecialchars($_GET["id"]);
+$item = getItem($id);
+
+$libraryBrowse = true;
+$useSeasonNameForMenuItems = false;
+$forceItemDetails = true;
+
+$QSBase = "id=" . $id . "&subitems=" . $_GET["subitems"];
+
+setNames($item);
+
+setupChildData($item);
+
+    //get skip and trim from tags
+    if ($item->Type == ItemType::EPISODE) {
+        //use series for skip and trim
+        $series = getItem($item->SeriesId);
+        $skipTrim = new SkipAndTrim($series);
+    } else {
+        $skipTrim = new SkipAndTrim($item);
+    }
+
 $pageObj->indexStyle = $indexStyle;
 $pageObj->onloadset = 'play0';
 $pageObj->additionalCSS = 'itemDetails.css';

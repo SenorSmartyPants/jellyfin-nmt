@@ -11,6 +11,8 @@ $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::EPISODE,
 $collectionType = htmlspecialchars($_GET['collectionType']);
 $folderType = ItemType::COLLECTIONFOLDER;
 
+$pageObj = new ListingsPage('');
+
 $items = getLatest($collectionTypeToItemType[$collectionType], $Limit, $topParentId);
 
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);

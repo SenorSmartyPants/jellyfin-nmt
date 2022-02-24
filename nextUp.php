@@ -5,6 +5,7 @@ $useSeasonNameForMenuItems = false;
 
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup6x2);
 
+$pageObj = new ListingsPage('');
 if (isset($_GET['rewatching'])) {
     $rewatching = true;
     $pageObj->title = 'Rewatching';

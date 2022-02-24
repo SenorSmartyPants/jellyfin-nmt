@@ -264,10 +264,6 @@ class ListingsPage extends Page
     }
 }
 
-$pageObj = new ListingsPage('');
-$pageObj->backdrop = $backdrop;
-
-
 function setNumPagesAndIndexCount($totalRecordCount)
 {
     global $page, $numPages, $indexStyle, $pageObj;
