@@ -7,6 +7,7 @@ class IndexPage extends ListingsPage
 {
     private $resume;
     private $rewatching;
+    private $homeSections;
 
     public function __construct($title)
     {
@@ -21,6 +22,7 @@ class IndexPage extends ListingsPage
     public function render()
     {
         $this->setupIndexStyle();
+        $this->getHomeSections();
         setNumPagesAndIndexCount(count($this->items));
         parent::render();
     }
@@ -56,31 +58,50 @@ class IndexPage extends ListingsPage
             $this->indexStyle->nbThumbnailsPerLine = 4; 
         }
         $this->indexStyle->moviesTableCellspacing = 16;
-        $this->indexStyle->offsetY = 156;
     }
 
-    private function printHomeSection($sectionname, $nameAttr)
+    private function getHomeSections()
     {
-        $customPrefs = $this->displayPreferences->CustomPrefs;
+        $this->homeSections = array();
+        $nameAttr = ' name="1"';
+        $prefs = $this->displayPreferences->CustomPrefs;
+        for ($i=0; $i < 7; $i++) { 
+            $sectionname = $prefs->{'homesection' . $i};
+            $sectionHTML = $this->getHomeSection($sectionname, $nameAttr);
+            if (!is_null($sectionHTML)) 
+            {
+                $this->homeSections[$sectionname] = $sectionHTML;
+            }
+            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles')
+            {
+                //calc offset based on number of lines before my media grid
+                //each line text is 27px
+                $this->indexStyle->offsetY = 27 * (count($this->homeSections) - 1) + $this->indexStyle->moviesTableCellspacing 
+                    + floor(($this->indexStyle->popupHeight - $this->indexStyle->thumbnailsHeight) / 2); 
+            }
+        }
+    }
 
-        switch ($customPrefs->{$sectionname}) {
+    private function getHomeSection($sectionname, &$nameAttr)
+    {
+        $sectionHTML = null;
+
+        switch ($sectionname) {
             case 'resume':
                 if ($this->resume) {
-                    echo '<a href="continueWatching.php"' . $nameAttr . '>Continue Watching ></a>&nbsp;';
+                    $sectionHTML = '<a href="continueWatching.php"' . $nameAttr . '>Continue Watching ></a><br clear="all"/>';
                     $nameAttr = null;
                 }                     
                 break;
 
             case 'nextup':
-                echo '<a href="nextUp.php"' . $nameAttr . '>Next Up ></a>';
-                echo '<br clear="all"/>';
+                $sectionHTML = '<a href="nextUp.php"' . $nameAttr . '>Next Up ></a><br clear="all"/>';
                 $nameAttr = null;
                 break;
 
             case 'rewatching':
                 if ($this->rewatching) {
-                    echo '<a href="nextUp.php?rewatching"' . $nameAttr . '>Rewatching ></a>&nbsp;';
-                    echo '<br clear="all"/>';
+                    $sectionHTML =  '<a href="nextUp.php?rewatching"' . $nameAttr . '>Rewatching ></a><br clear="all"/>';
                     $nameAttr = null;
                 }
                 break;                    
@@ -100,22 +121,20 @@ class IndexPage extends ListingsPage
                         $cbp->topParentId = $view->Id;
                         $cbp->collectionType = $view->CollectionType;
                         
-                        ?>
-                        <a href="latest.php?<?= http_build_query($cbp) ?>" <?= $nameAttr ?>><?= $cbp->name . ' ' . $view->Name ?> ></a>
-                        <br clear="all"/>
-                        <?
+                        $sectionHTML .= sprintf('<a href="latest.php?%s" %s > %s %s ></a>&nbsp;', 
+                            http_build_query($cbp), $nameAttr, $cbp->name, $view->Name);
                         $nameAttr = null;     
                     }    
+                }
+                if (!is_null($sectionHTML))
+                {
+                    $sectionHTML .= '<br clear="all"/>';
                 }
                 break;
                 
             case 'librarybuttons':
             case 'smalllibrarytiles':
-?>
-    <a href="categoriesHTML.php">Categories ></a>
-    <br clear="all"/>
-<?
-                $this->printPosterTable($this->items);
+                $sectionHTML = '**PLACEHOLDER**';
                 $nameAttr = null;
                 break;                      
 
@@ -128,18 +147,22 @@ class IndexPage extends ListingsPage
 
             default:
                 # Catch new sections, just display name
-                echo 'New section to support: ' . $customPrefs->{$sectionname} . '<br/>';
+                $sectionHTML = 'New section to support: ' . $sectionname . '<br/>';
                 break;
         }
-        return $nameAttr;
+        return $sectionHTML;
     }
 
     public function printContent()
-    {   
-        $nameAttr = ' name="1"';
-        for ($i=0; $i < 7; $i++) { 
-            $sectionname = 'homesection' . $i;
-            $nameAttr = $this->printHomeSection($sectionname, $nameAttr);
+    {
+        // room for 4 lines of text above current size of thumbnails
+        foreach ($this->homeSections as $sectionname => $homeSection) {
+            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles')
+            {
+                $this->printPosterTable($this->items);
+            } else {
+                echo $homeSection;
+            }
         }
     }
 }
