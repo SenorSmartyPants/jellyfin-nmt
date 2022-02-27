@@ -1,9 +1,9 @@
 <?php
-require_once 'config.php';
-
 $default_listing_style = IndexStyleEnum::PosterPopupDynamic;
 
 $include_jellyfin_logo_when_backdrop_present = false;
+
+require_once 'config.php';
 
 function overrideIndexStyle($folderType, $collectionType)
 {
