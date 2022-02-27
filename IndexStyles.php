@@ -4,7 +4,7 @@ abstract class IndexStyleEnum
 {
     const PosterPopup9x3 = 0;
     const PosterPopup6x2 = 1;
-    const PosterPopupDynamic = 2; //will be 6x2 if count(index) >= 12
+    const PosterPopupDynamic = 2; //will be 6x2 if count(index) <= 12
     const Poster9x3 = 3;
     const Poster6x2 = 4;
     const Poster12x4 = 5;
