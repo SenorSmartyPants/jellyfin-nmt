@@ -168,13 +168,10 @@ class CategoriesJSPage extends CategoriesPage
 
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
         asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed", ""];
+
 <?      
         if ($this->collectionType == CollectionType::TVSHOWS) {
-?>
-        asFilterNames['Status'] = ["Continuing", "Ended"];
-        asFilters['Status'] = ["&name=Continuing&categoryName=seriesStatus&searchTerm=Continuing", "&name=Ended&categoryName=seriesStatus&searchTerm=Ended"];
-
-<?
+            $this->printCategory('Status', 'seriesStatus', ['Continuing', 'Ended']);
         }
         $this->printContent();
 ?>
