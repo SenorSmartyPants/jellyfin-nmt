@@ -5,6 +5,10 @@ $useSeasonNameForMenuItems = false;
 
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup6x2);
 
+$folderType = ItemType::COLLECTIONFOLDER;
+$collectionType = CollectionType::TVSHOWS;
+$topParentName = $collectiontypeNames[$collectionType];
+
 $pageObj = new ListingsPage('');
 if (isset($_GET['rewatching'])) {
     $rewatching = true;
@@ -18,10 +22,6 @@ $itemsAndCount = getNextUp($indexStyle->Limit, ($page - 1) * $indexStyle->Limit,
 $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
-
-$folderType = ItemType::COLLECTIONFOLDER;
-$collectionType = CollectionType::TVSHOWS;
-$topParentName = $collectiontypeNames[$collectionType];
 
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;

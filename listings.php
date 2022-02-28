@@ -31,30 +31,12 @@ $sortBy = empty($_GET['sortBy']) ? SORTNAME : $_GET['sortBy'];
 $sortOrder = empty($_GET['sortOrder']) ? 'Ascending' : $_GET['sortOrder'];
 $collapseBoxSetItems = empty($_GET['collapseBoxSetItems']) ? null : $_GET['collapseBoxSetItems'];
 
-$cbp = new CategoryBrowseParams();
-
-$cbp->topParentName = $topParentName;
-$cbp->topParentId = $topParentId;
-$cbp->parentId = $parentId;
-$cbp->folderType = $folderType;
-$cbp->collectionType = $collectionType;
-
-$cbp->name = $name;
-$cbp->backdropId = $backdropId;
-
-$cbp->categoryName = $_GET['categoryName'];
-$cbp->searchTerm = $_GET['searchTerm'];
-
-$cbp->sortBy = $sortBy;
-$cbp->sortOrder = $sortOrder;
-$cbp->collapseBoxSetItems = $collapseBoxSetItems;
-
-$QSBase = http_build_query($cbp);
-
 class ListingsPage extends Page
 {
     public $items;
     public $menuItems = array();
+    public $cbp;
+    public $QSBase;
 
     protected $renderFiltering;
 
@@ -65,6 +47,9 @@ class ListingsPage extends Page
 
     public function __construct($title, $renderFiltering = true)
     {
+        global $topParentName, $topParentId, $parentId, $folderType, $collectionType;
+        global $name, $backdropId, $sortBy, $sortOrder, $collapseBoxSetItems;
+
         parent::__construct($title);
 
         $this->renderFiltering = $renderFiltering;
@@ -86,20 +71,39 @@ class ListingsPage extends Page
             $this->additionalCSS = 'filter.css';
         }
 
+        $this->cbp = new CategoryBrowseParams();
+
+        $this->cbp->topParentName = $topParentName;
+        $this->cbp->topParentId = $topParentId;
+        $this->cbp->parentId = $parentId;
+        $this->cbp->folderType = $folderType;
+        $this->cbp->collectionType = $collectionType;
+
+        $this->cbp->name = $name;
+        $this->cbp->backdropId = $backdropId;
+
+        $this->cbp->categoryName = $_GET['categoryName'];
+        $this->cbp->searchTerm = $_GET['searchTerm'];
+
+        $this->cbp->sortBy = $sortBy;
+        $this->cbp->sortOrder = $sortOrder;
+        $this->cbp->collapseBoxSetItems = $collapseBoxSetItems;
+
+        $this->QSBase = http_build_query($this->cbp);
+
     }
 
     public function printJavascript() 
     {
         global $folderType, $collectionType;
         global $topParentId, $topParentName;
-        global $QSBase;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
         if ($this->renderFiltering) {
 ?>
             <script type="text/javascript">
-                var baseURL = '<?= $this->url . $QSBase ?>';
+                var baseURL = '<?= categoryBrowseURLEx($this->cbp) ?>';
             </script>
             <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
             <script type="text/javascript" src="js/filter/filter.js"></script>
@@ -133,19 +137,19 @@ class ListingsPage extends Page
         global $folderType, $collectionType, $topParentId, $topParentName;
         $browseType = mapItemTypeToCollectionType(mapFolderTypeToSingleItemType($folderType, $collectionType));
 
-        $cbp = new CategoryBrowseParams();
-        $cbp->topParentName = $topParentName;
-        $cbp->topParentId = $topParentId;
-        $cbp->folderType = $folderType;
-        $cbp->collectionType = $browseType;    
-        $cbp->categoryName = $categoryName;
+        $this->cbp = new CategoryBrowseParams();
+        $this->cbp->topParentName = $topParentName;
+        $this->cbp->topParentId = $topParentId;
+        $this->cbp->folderType = $folderType;
+        $this->cbp->collectionType = $browseType;    
+        $this->cbp->categoryName = $categoryName;
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
-            $cbp->name = $item;
-            $cbp->searchTerm = $item;
+            $this->cbp->name = $item;
+            $this->cbp->searchTerm = $item;
 
-            $url = categoryBrowseURLEx($cbp);
+            $url = categoryBrowseURLEx($this->cbp);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
         }
     }

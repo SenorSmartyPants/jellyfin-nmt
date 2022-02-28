@@ -31,7 +31,7 @@ switch ($folderType) {
 
 //if filtering parameters are set, then search recursively
 //or no parentID set
-if ($collectionType === 'search' || !empty($cbp->searchTerm) || empty($parentId)) {
+if ($collectionType === 'search' || !empty($pageObj->cbp->searchTerm) || empty($parentId)) {
     //exclude season and episodes to match JF behavior
     $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
     $recursive = true;
@@ -54,8 +54,8 @@ $params->SortBy = $sortBy;
 $params->SortOrder = $sortOrder;
 $params->collapseBoxSetItems = $collapseBoxSetItems;
 $params->ExcludeItemTypes = $excludeItemTypes;
-$categoryName = $cbp->categoryName;
-$params->$categoryName = $cbp->searchTerm;
+$categoryName = $pageObj->cbp->categoryName;
+$params->$categoryName = $pageObj->cbp->searchTerm;
 
 $itemsAndCount = getItems($params);
 
