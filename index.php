@@ -159,7 +159,7 @@ class IndexPage extends ListingsPage
         foreach ($this->homeSections as $sectionname => $homeSection) {
             if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles')
             {
-                $this->printPosterTable($this->items);
+                $this->printPosterTable($this->items, $sectionname === array_key_last($this->homeSections));
             } else {
                 echo $homeSection;
             }

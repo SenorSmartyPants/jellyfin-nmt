@@ -180,7 +180,7 @@ class ListingsPage extends Page
         $this->printPosterTable($this->items);  
     }
 
-    function printPosterTable($items)
+    function printPosterTable($items, $wrapBottomRowToTop = true)
     {
         global $lastRow;
     
@@ -196,7 +196,7 @@ class ListingsPage extends Page
                 }
                 $menuItem = getMenuItem($item);
                 if ($menuItem) {
-                    printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine));
+                    printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine), $wrapBottomRowToTop);
                     //add menuItem to menuItems list for later
                     array_push($this->menuItems, $menuItem);
     
@@ -342,7 +342,7 @@ function printPopup($menuItem, $gap, $position)
 }
 
 //gap is for skipping rows, in sets on the bottom
-function printPosterTD($menuItem, $gap, $position, $row)
+function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
 {
     global $indexStyle;
     global $page, $numPages;
@@ -385,10 +385,12 @@ function printPosterTD($menuItem, $gap, $position, $row)
     //last row
     if (isLastRow($row)) {
         if ($numPages == 1) {
-            //go to top row
-            $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
-            $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
-            echo " onkeydownset=\"" . $topofcolumn . "\" ";
+            if ($wrapBottomRowToTop) {
+                //go to top row
+                $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
+                $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
+                echo " onkeydownset=\"" . $topofcolumn . "\" ";
+            }
         } else {
             //down arrow goes to next page
             echo " onkeydownset=\"pgdnload\"";
