@@ -152,6 +152,8 @@ class CategoriesJSPage extends CategoriesPage
         if ($this->includeTags && !empty($this->filters->Tags)) {
             $Categories[] = 'Tags';
         }
+        $Categories[] = 'Sort By';
+        $Categories[] = 'Sort Order';
         return getJSArray($Categories);
     }
 
@@ -164,7 +166,10 @@ class CategoriesJSPage extends CategoriesPage
         var asFilterNames = new Object();   
 
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
-        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", "&name=Played&categoryName=Filters&searchTerm=IsPlayed", ""];
+        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", 
+                                "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", 
+                                "&name=Played&categoryName=Filters&searchTerm=IsPlayed", 
+                                "&name=&categoryName=&searchTerm=&sortBy=&sortOrder=&collapseBoxSetItems="];
 
 <?      
         if ($this->collectionType == CollectionType::TVSHOWS) {
@@ -172,6 +177,28 @@ class CategoriesJSPage extends CategoriesPage
         }
         $this->printContent();
 ?>
+        asFilterNames['Sort By'] = ["Name",
+                                "Community\xa0Rating",
+<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"Critic\\xa0Rating\",\n"; } ?>
+                                "Date\xa0Added",
+                                "Date\xa0Played",
+                                "Parental\xa0Rating",
+<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"Play\\xa0Count\",\n"; } ?>
+                                "Release\xa0Date"<? if ($this->collectionType != CollectionType::TVSHOWS) { echo ',"Runtime"'; } ?>];
+
+        asFilters['Sort By'] = ["&sortBy=SortName&collapseBoxSetItems=",
+                                "&sortBy=CommunityRating&collapseBoxSetItems=false",
+<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"&sortBy=CriticRating&collapseBoxSetItems=false\",\n"; } ?>
+                                "&sortBy=DateCreated&collapseBoxSetItems=false",
+                                "&sortBy=DatePlayed&collapseBoxSetItems=false",
+                                "&sortBy=OfficialRating&collapseBoxSetItems=false",
+<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"&sortBy=PlayCount&collapseBoxSetItems=false\",\n"; } ?>
+                                "&sortBy=PremiereDate&collapseBoxSetItems=false"<? if ($this->collectionType != CollectionType::TVSHOWS) { echo ',"&sortBy=Runtime&collapseBoxSetItems=false"'; } ?>]; 
+
+        asFilterNames['Sort Order'] = ["Ascending", "Descending"];
+        asFilters['Sort Order'] = ["&sortOrder=Ascending", 
+                                "&sortOrder=Descending"];
+
         var sActiveCat = asCatNames[0];        
 <?
     }

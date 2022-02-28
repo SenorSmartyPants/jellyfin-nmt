@@ -63,6 +63,19 @@ $items = $itemsAndCount->Items;
 
 setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
+
+$prettySortBy = [
+    "SortName" => "Name",
+    "CommunityRating" => "Community Rating",
+    "CriticRating" => "Critic Rating",
+    "DateCreated" => "Date Added",
+    "DatePlayed" => "Date Played",
+    "OfficialRating" => "Parental Rating",
+    "PlayCount" => "Play Count",
+    "PremiereDate" => "Release Date",
+    "Runtime" => "Runtime",
+];
+
 if (!empty($topParentName) && $topParentName != $name) {
     $pageObj->title = $topParentName;
     if (!empty($name)) {
@@ -70,6 +83,13 @@ if (!empty($topParentName) && $topParentName != $name) {
     }
 }
 $pageObj->title .= $name;
+if ((!empty($sortBy) && $sortBy != SORTNAME) || $sortOrder == DESC) {
+    $pageObj->title .= ', by ' . $prettySortBy[$sortBy];
+    if ($sortOrder == DESC) {
+        $pageObj->title .= ' ' . $sortOrder;
+    }
+}
+
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
