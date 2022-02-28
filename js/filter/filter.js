@@ -244,4 +244,4 @@ function initMenu()
 
   showCatLinks();
   showGenres();
-};
+}
