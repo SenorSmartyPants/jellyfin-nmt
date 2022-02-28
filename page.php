@@ -27,12 +27,15 @@ class Page
 
     public $displayPreferences;
 
+    public $url;
+
     public function __construct($title)
     {
         global $theme_css;
         $this->theme_css = $theme_css;
         $this->title = $title;
         $this->auth = new Authentication();
+        $this->url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) . '?';
         if ($this->authRequired && !$this->auth->IsAuthenticated())
         {
             //no accessToken
@@ -170,11 +173,10 @@ class Page
         if ($numPages > 1) { 
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
-            $url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) . '?';
-            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $url . $QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
+            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
             //pgdn on last page wraps to first page
             $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
-            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $url . $QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
+            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $this->url . $QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
         }
 ?>
             </td>
