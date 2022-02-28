@@ -82,11 +82,15 @@ class ListingsPage extends Page
     {
         global $folderType, $collectionType;
         global $topParentId, $topParentName;
+        global $QSBase;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
 <?
         if ($this->renderFiltering) {
 ?>
+            <script type="text/javascript">
+                var baseURL = '<?= $this->url . $QSBase ?>';
+            </script>
             <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
             <script type="text/javascript" src="js/filter/filter.js"></script>
 <?
