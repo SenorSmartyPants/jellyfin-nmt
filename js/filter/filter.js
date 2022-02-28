@@ -4,6 +4,7 @@ var fMenu = false;
 var fInit = false;
 
 var iActiveCat = 0;
+var sActiveCat;
 var iMaxCats = 9;
 var iMaxGenres = 9;
 var iLinkMinCat = 5;
