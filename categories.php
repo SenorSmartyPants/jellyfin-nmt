@@ -135,6 +135,7 @@ class CategoriesJSPage extends CategoriesPage
         $Categories = array();
 
         $Categories[] = 'Filters';
+        $Categories[] = 'Features';
         if ($this->collectionType == CollectionType::TVSHOWS) {
             $Categories[] = 'Status';
         }
@@ -175,6 +176,15 @@ class CategoriesJSPage extends CategoriesPage
         if ($this->collectionType == CollectionType::TVSHOWS) {
             $this->printCategory('Status', 'seriesStatus', ['Continuing', 'Ended']);
         }
+?>
+        asFilterNames['Features'] = ["Extras", "Subtitles", "Trailer", "Theme\xa0Song", "Theme\xa0Video"];
+        asFilters['Features'] = ["&name=Extras&categoryName=hasSpecialFeature&searchTerm=true",
+                                "&name=Subtitles&categoryName=hasSubtitles&searchTerm=true", 
+                                "&name=Trailer&categoryName=hasTrailer&searchTerm=true",
+                                "&name=Theme Song&categoryName=hasThemeSong&searchTerm=true",
+                                "&name=Theme Video&categoryName=hasThemeVideo&searchTerm=true"];
+
+<?
         $this->printContent();
 ?>
         asFilterNames['Sort By'] = ["Name",
