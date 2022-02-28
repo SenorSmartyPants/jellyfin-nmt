@@ -100,6 +100,7 @@ class CategoriesJSPage extends CategoriesPage
 {
     private $catName;
     private $collectionType;
+    private $baseurl;
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
@@ -114,7 +115,7 @@ class CategoriesJSPage extends CategoriesPage
 
     protected function getCatBrowseURLCallback($searchTerm)
     {
-        return categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName);
+        return str_replace($this->baseurl, '', categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName));
     }
 
     protected function printCategory($heading, $categoryName, $items) 
@@ -161,6 +162,7 @@ class CategoriesJSPage extends CategoriesPage
     public function render()
     {
         header('Content-type: text/javascript');
+        $this->baseurl = categoryBrowseURL(null, null, $this->collectionType, $this->topParentId, $this->topParentName);
 ?>
         var asCatNames = <?= $this->getCategoriesJSArrayString() ?>;
         var asFilters = new Object();
