@@ -46,6 +46,8 @@ class Page
         if ($this->auth->IsAuthenticated()) 
         {
             $this->displayPreferences = getUserPreferences();
+            $device = new Device();
+            $this->PCMenu = !$device->isNMT && PCMENU;
         }
     }
 
@@ -120,7 +122,7 @@ class Page
 <?
             }
             
-            if (PCMENU) {
+            if ($this->PCMenu) {
                 echo '        <link rel="StyleSheet" type="text/css" href="css/no_nmt.css" media="screen" />' . "\n";
             }
             

@@ -246,7 +246,7 @@ class ListingsPage extends Page
         ?>
         </div>
 <?        
-            if (PCMENU) {
+            if ($this->PCMenu) {
                 $this->printPCMenu();
             }
         }

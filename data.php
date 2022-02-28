@@ -18,13 +18,15 @@ class Device
     private const HTTP_USER_AGENT = 'HTTP_USER_AGENT';
     public $name = 'My testbed class';
     public $id = 1;
+    public $isNMT = false;
 
     function __construct() {
         $this->id = $_SERVER['REMOTE_ADDR'];
+        $this->isNMT = (stripos($_SERVER[self::HTTP_USER_AGENT],"Syabas")!==false);
 
         if (stripos($_SERVER[self::HTTP_USER_AGENT],"Chrome")!==false) {
             $this->name = 'Chrome';
-        } else if (stripos($_SERVER[self::HTTP_USER_AGENT],"Syabas")!==false) {
+        } else if ($this->isNMT) {
             $this->name = 'Popcorn Hour';
         } else {
             $this->name = $_SERVER[self::HTTP_USER_AGENT];

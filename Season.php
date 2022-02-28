@@ -417,6 +417,7 @@ function printSeasonFooter()
     global $tvid_season_info, $tvid_season_play, 
         $tvid_season_pgup, $tvid_season_pgdn,
         $tvid_season_itemdetails, $tvid_season_series;
+    global $pageObj;
 ?>
         </table>  	
     <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
@@ -428,7 +429,7 @@ function printSeasonFooter()
         <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
     </div>
 <?
-    if (PCMENU) {
+    if ($pageObj->PCMenu) {
         printPCMenu();
     }
     $seriesMenuItem = parse($series);
@@ -439,6 +440,6 @@ function printSeasonFooter()
     <a TVID="<?= $tvid_season_itemdetails ?>" href="<?= itemDetailsLink($season->Id) ?>"></a>
     <a TVID="<?= $tvid_season_series ?>" href="<?= $seriesMenuItem->DetailURL ?>"></a>
 <?
-    Page::printFooter();
+    $pageObj->printFooter();
 }
 ?>
