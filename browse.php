@@ -7,7 +7,6 @@ $useSeasonImage = false;
 //common options
 $recursive = false;
 $type = null;
-$sortBy = 'SortName';
 
 switch ($folderType) {
     case ItemType::PLAYLIST:
@@ -52,6 +51,8 @@ $params->Limit = $indexStyle->Limit;
 $params->IncludeItemTypes = $type;
 $params->Recursive = $recursive;
 $params->SortBy = $sortBy;
+$params->SortOrder = $sortOrder;
+$params->collapseBoxSetItems = $collapseBoxSetItems;
 $params->ExcludeItemTypes = $excludeItemTypes;
 $categoryName = $cbp->categoryName;
 $params->$categoryName = $cbp->searchTerm;

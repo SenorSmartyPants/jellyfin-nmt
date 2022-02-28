@@ -25,6 +25,12 @@ $topParentName = $_GET['topParentName'];
 $backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
 
+const SORTNAME = 'SortName';
+const DESC = 'Descending';
+$sortBy = empty($_GET['sortBy']) ? SORTNAME : $_GET['sortBy'];
+$sortOrder = empty($_GET['sortOrder']) ? 'Ascending' : $_GET['sortOrder'];
+$collapseBoxSetItems = empty($_GET['collapseBoxSetItems']) ? null : $_GET['collapseBoxSetItems'];
+
 $cbp = new CategoryBrowseParams();
 
 $cbp->topParentName = $topParentName;
@@ -38,6 +44,10 @@ $cbp->backdropId = $backdropId;
 
 $cbp->categoryName = $_GET['categoryName'];
 $cbp->searchTerm = $_GET['searchTerm'];
+
+$cbp->sortBy = $sortBy;
+$cbp->sortOrder = $sortOrder;
+$cbp->collapseBoxSetItems = $collapseBoxSetItems;
 
 $QSBase = http_build_query($cbp);
 
