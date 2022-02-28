@@ -101,9 +101,14 @@ class ListingsPage extends Page
         <script type="text/javascript" src="js/listings.js"></script>
 <?
         if ($this->renderFiltering) {
+            //clear some options that would be reset by filter
+            $filterCBP = clone $this->cbp;
+            $filterCBP->parentId = null;
+            $filterCBP->backdropId = null;
+            $filterCBP->folderType = null;
 ?>
             <script type="text/javascript">
-                var baseURL = '<?= categoryBrowseURLEx($this->cbp) ?>';
+                var baseURL = '<?= categoryBrowseURLEx($filterCBP) ?>';
             </script>
             <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
             <script type="text/javascript" src="js/filter/filter.js"></script>
