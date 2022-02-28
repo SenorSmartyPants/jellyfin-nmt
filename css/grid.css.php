@@ -2,7 +2,7 @@
 include '../IndexStyles.php';
 header('Content-type: text/css');
 
-$numPosters = $_GET["number"];
+$numPosters = $_GET["number"] > 0 ? $_GET["number"] : 1;
 $styleEnum = $_GET["style"];
 $numPerLine = $_GET["numPerLine"];
 $thumbnailsWidth = $_GET["thumbnailsWidth"];
