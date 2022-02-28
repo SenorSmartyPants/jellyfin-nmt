@@ -49,6 +49,8 @@ class UserItemsParams
     public $PersonIDs = null;
     public $Recursive = null;
     public $SortBy = null;
+    public $SortOrder = null;
+    public $collapseBoxSetItems = null;
     public $StartIndex = null;
     public $StudioIDs = null;
     public $Tags = null;

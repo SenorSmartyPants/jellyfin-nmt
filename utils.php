@@ -239,6 +239,10 @@ class CategoryBrowseParams
 
     public $categoryName = null;
     public $searchTerm = null;
+
+    public $sortBy = null;
+    public $sortOrder = null;
+    public $collapseBoxSetItems = null;
 }
 
 function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null, $topParentName = null)
