@@ -341,11 +341,69 @@ function printPopup($menuItem, $gap, $position)
     }
 }
 
+function getOnkeyleftset($placement)
+{
+    $retval = null;
+    //start of row
+    if (isStartOfRow($placement - 1)) {
+        if ($placement == 1) {
+            $retval = "onkeyleftset=\"pgupload\"";
+        } else {
+            $retval = "onkeyleftset=\"" . ($placement - 1) . "\"";
+        }
+    }
+    return $retval;
+}
+
+function getOnkeyrightset($placement, $row)
+{
+    global $indexStyle, $numPages;
+
+    $retval = null;
+    //end of row
+    if (isEndOfRow($placement - 1)) {
+        if ($placement != $indexStyle->Limit) {
+            if (isLastRow($row)) {
+                if ($numPages == 1) {
+                    //go to first item
+                    $retval =  'onkeyrightset="1"';
+                }
+            } else {
+                $retval = "onkeyrightset=\"" . ($placement + 1) . "\"";
+            }
+        } else {
+            $retval = "onkeyrightset=\"pgdnload\"";
+        }
+    }
+    return $retval;
+}
+
+function getOnkeydownset($placement, $row, $wrapBottomRowToTop)
+{
+    global $indexStyle, $numPages;
+    
+    $retval = null;
+    //last row
+    if (isLastRow($row)) {
+        if ($numPages == 1) {
+            if ($wrapBottomRowToTop) {
+                //go to top row
+                $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
+                $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
+                $retval = " onkeydownset=\"" . $topofcolumn . "\" ";
+            }
+        } else {
+            //down arrow goes to next page
+            $retval = " onkeydownset=\"pgdnload\"";
+        }
+    }
+    return $retval;
+}
+
 //gap is for skipping rows, in sets on the bottom
 function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
 {
     global $indexStyle;
-    global $page, $numPages;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
     <td align="center" <? 
@@ -355,47 +413,9 @@ function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
         <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> onclick="return prompter('TV-14 hardcode')" name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
         id="<?= $placement ?>" 
 <?php
-
-    //start of row
-    if (isStartOfRow($placement - 1)) {
-        if ($placement == 1) {
-            echo "onkeyleftset=\"pgupload\"";
-        } else {
-            echo "onkeyleftset=\"" . ($placement - 1) . "\"";
-        }
-    }
-
-    //end of row
-    if (isEndOfRow($placement - 1)) {
-        if ($placement != $indexStyle->Limit) {
-            if (isLastRow($row)) {
-                if ($numPages == 1) {
-                    //go to first item
-                    echo 'onkeyrightset="1"';
-                }
-            } else {
-                echo "onkeyrightset=\"" . ($placement + 1) . "\"";
-            }
-        } else {
-            echo "onkeyrightset=\"pgdnload\"";
-        }
-    }
-
-
-    //last row
-    if (isLastRow($row)) {
-        if ($numPages == 1) {
-            if ($wrapBottomRowToTop) {
-                //go to top row
-                $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
-                $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
-                echo " onkeydownset=\"" . $topofcolumn . "\" ";
-            }
-        } else {
-            //down arrow goes to next page
-            echo " onkeydownset=\"pgdnload\"";
-        }
-    }
+    echo getOnkeyleftset($placement);
+    echo getOnkeyrightset($placement, $row);    
+    echo getOnkeydownset($placement, $row, $wrapBottomRowToTop);
 ?>>
 <?
     if ($menuItem->PosterURL) {
