@@ -154,7 +154,7 @@ class Page
 
     public function printTitleTable($currentPage = 1, $numPages = 1)
     {
-        global $QSBase, $include_jellyfin_logo_when_backdrop_present;
+        global $include_jellyfin_logo_when_backdrop_present;
         global $backdropId;
         global $tvid_page_pgup, $tvid_page_pgdn;
 ?>
