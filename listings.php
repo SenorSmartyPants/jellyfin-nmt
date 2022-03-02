@@ -108,7 +108,7 @@ class ListingsPage extends Page
             $filterCBP->folderType = null;
 ?>
             <script type="text/javascript">
-                var baseURL = '<?= categoryBrowseURLEx($filterCBP) ?>';
+                var filteringBaseURL = '<?= categoryBrowseURLEx($filterCBP) ?>';
             </script>
             <script type="text/javascript" src="js/filter/filters.js.php?topParentId=<?= $topParentId ?>&topParentName=<?= $topParentName ?>&itemType=<?= mapFolderTypeToSingleItemType($folderType, $collectionType) ?>"></script>
             <script type="text/javascript" src="js/filter/filter.js"></script>

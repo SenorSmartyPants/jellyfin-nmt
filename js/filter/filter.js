@@ -122,7 +122,7 @@ function showGenres()
     document.getElementById('genSpan' + t).firstChild.nodeValue = sGen;
     if (i -1 == iActiveGen)
     {
-      document.getElementById('genLink5').setAttribute('href', baseURL + asFilters[sActiveCat][i-1]);
+      document.getElementById('genLink5').setAttribute('href', filteringBaseURL + asFilters[sActiveCat][i-1]);
     }
   }
 }
