@@ -119,6 +119,7 @@ function getFolderURL($item, $menuItem)
         case ItemType::COLLECTIONFOLDER:
         case ItemType::USERVIEW:
             //set topParentId from Id
+            $cbp->name = null;
             $cbp->topParentId = $item->Id;
             $cbp->topParentName = $item->Name;
             $detailURL = categoryBrowseURLEx($cbp);
