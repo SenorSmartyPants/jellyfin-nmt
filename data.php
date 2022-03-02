@@ -38,7 +38,9 @@ class Device
 
 class UserItemsParams
 {
+    public $Features = null;
     public $Fields = null;
+    public $Filters = null;
     public $Genres = null;
     public $GroupItems = null;
     public $ExcludeItemTypes = null;
@@ -52,6 +54,7 @@ class UserItemsParams
     public $ParentIndexNumber = null;    
     public $PersonIDs = null;
     public $Recursive = null;
+    public $SeriesStatus = null;
     public $SortBy = null;
     public $SortOrder = null;
     public $collapseBoxSetItems = null;
@@ -59,6 +62,40 @@ class UserItemsParams
     public $StudioIDs = null;
     public $Tags = null;
     public $Years = null;
+
+    public const SORTNAME = 'SortName';
+    public const ASC = 'Ascending';
+    public const DESC = 'Descending';
+
+    private $defaultSortBy = UserItemsParams::SORTNAME;
+
+    public function setSortByDefault($value)
+    {
+        $this->defaultSortBy = $value;
+    } 
+
+    public function setFromQueryString()
+    {
+        $params = $_GET['params'];
+        $this->ParentID = $params['ParentID'];
+        if (empty($this->ParentID)) {
+            $this->ParentID = $_GET['topParentId'];;
+        }
+
+        $this->SortBy = empty($params['SortBy']) ? $this->defaultSortBy : $params['SortBy'];
+        $this->SortOrder = empty($params['SortOrder']) ? null : $params['SortOrder'];
+        $this->collapseBoxSetItems = empty($params['collapseBoxSetItems']) ? null : $params['collapseBoxSetItems'];
+
+        $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
+        foreach ($filterCategories as $cat) {
+            $this->$cat = $params[$cat];
+        }
+    }
+
+    public function addParam($categoryName, $searchTerm)
+    {
+        $this->$categoryName = $searchTerm;
+    }
 }
 
 class ImageParams
