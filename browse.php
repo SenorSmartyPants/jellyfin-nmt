@@ -94,7 +94,8 @@ if (empty($name)) {
         }
     }    
     if ((!empty($params->SortBy) && $params->SortBy != UserItemsParams::SORTNAME) || $params->SortOrder == UserItemsParams::DESC) {
-        $name .= ', by ' . $prettySortBy[$params->SortBy];
+        !empty($name) && $name .= ", ";
+        $name .= 'by ' . $prettySortBy[$params->SortBy];
         if ($params->SortOrder == UserItemsParams::DESC) {
             $name .= ' ' . $params->SortOrder;
         }
