@@ -1,6 +1,4 @@
 <?php
-// turn off warnings in PHP8
-error_reporting(E_ALL & ~E_WARNING & ~E_DEPRECATED);
 include_once 'enums.php';
 include_once 'secrets.php';
 

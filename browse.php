@@ -85,7 +85,7 @@ if (empty($name)) {
     foreach ($filterCategories as $cat) {
         if (!empty($params->$cat)) {
             !empty($name) && $name .= ", ";
-            if (str_starts_with($cat, 'has')) {
+            if (strpos($cat, 'has') === 0) {
                 $key = $cat;
             } else {
                 $key = $params->$cat;
