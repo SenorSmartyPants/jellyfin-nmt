@@ -9,12 +9,7 @@ include_once 'filterMenu.php';
 $page = $_GET['page'];
 $page = $page ?? 1;
 
-$parentId = $_GET['parentId'];
 $topParentId = $_GET['topParentId'];
-
-if (empty($parentId)) {
-    $parentId = $topParentId;
-}
 
 $folderType = $_GET['folderType'];
 $collectionType = $_GET['collectionType'];
@@ -24,12 +19,6 @@ $topParentName = $_GET['topParentName'];
 
 $backdropId = $_GET['backdropId'];
 $backdrop = getBackdropIDandTag(null, $backdropId);
-
-const SORTNAME = 'SortName';
-const DESC = 'Descending';
-$sortBy = empty($_GET['sortBy']) ? SORTNAME : $_GET['sortBy'];
-$sortOrder = empty($_GET['sortOrder']) ? 'Ascending' : $_GET['sortOrder'];
-$collapseBoxSetItems = empty($_GET['collapseBoxSetItems']) ? null : $_GET['collapseBoxSetItems'];
 
 class ListingsPage extends Page
 {
@@ -48,7 +37,7 @@ class ListingsPage extends Page
     public function __construct($title, $renderFiltering = true)
     {
         global $topParentName, $topParentId, $parentId, $folderType, $collectionType;
-        global $name, $backdropId, $sortBy, $sortOrder, $collapseBoxSetItems;
+        global $name, $backdropId;
 
         parent::__construct($title);
 
@@ -75,19 +64,13 @@ class ListingsPage extends Page
 
         $this->cbp->topParentName = $topParentName;
         $this->cbp->topParentId = $topParentId;
-        $this->cbp->parentId = $parentId;
         $this->cbp->folderType = $folderType;
         $this->cbp->collectionType = $collectionType;
 
         $this->cbp->name = $name;
         $this->cbp->backdropId = $backdropId;
 
-        $this->cbp->categoryName = $_GET['categoryName'];
-        $this->cbp->searchTerm = $_GET['searchTerm'];
-
-        $this->cbp->sortBy = $sortBy;
-        $this->cbp->sortOrder = $sortOrder;
-        $this->cbp->collapseBoxSetItems = $collapseBoxSetItems;
+        $this->cbp->params->setFromQueryString();
 
         $this->QSBase = http_build_query($this->cbp);
 
@@ -103,9 +86,9 @@ class ListingsPage extends Page
         if ($this->renderFiltering) {
             //clear some options that would be reset by filter
             $filterCBP = clone $this->cbp;
-            $filterCBP->parentId = null;
             $filterCBP->backdropId = null;
-            $filterCBP->folderType = null;
+            $filterCBP->name = null;
+            $filterCBP->params->ParentID = null;
 ?>
             <script type="text/javascript">
                 var filteringBaseURL = '<?= categoryBrowseURLEx($filterCBP) ?>';
@@ -147,7 +130,6 @@ class ListingsPage extends Page
         $this->cbp->topParentId = $topParentId;
         $this->cbp->folderType = $folderType;
         $this->cbp->collectionType = $browseType;    
-        $this->cbp->categoryName = $categoryName;
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...

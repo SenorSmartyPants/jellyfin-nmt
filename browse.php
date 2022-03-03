@@ -4,6 +4,15 @@ include 'listings.php';
 $libraryBrowse = true;
 $useSeasonImage = false;
 
+$pageObj = new ListingsPage('');
+$pageObj->backdrop = $backdrop;
+
+overrideIndexStyle($folderType, $collectionType);
+
+$params = new UserItemsParams();
+$params->StartIndex = ($page - 1) * $indexStyle->Limit;
+$params->Limit = $indexStyle->Limit;
+
 //common options
 $recursive = false;
 $type = null;
@@ -11,11 +20,11 @@ $type = null;
 switch ($folderType) {
     case ItemType::PLAYLIST:
         $recursive = true;
-        $sortBy = null;
+        $params->setSortByDefault(null);
         break;
 
     case ItemType::BOXSET:
-        $sortBy = null;
+        $params->setSortByDefault(null);
         break;
     
     default:
@@ -29,33 +38,17 @@ switch ($folderType) {
 }
 
 
-//if filtering parameters are set, then search recursively
-//or no parentID set
-if ($collectionType === 'search' || !empty($pageObj->cbp->searchTerm) || empty($parentId)) {
+if ($collectionType === 'search' || empty($params->ParentID)) {
     //exclude season and episodes to match JF behavior
     $excludeItemTypes = ItemType::SEASON . ',' . ItemType::EPISODE;
     $recursive = true;
 }
 
-$pageObj = new ListingsPage('');
-$pageObj->backdrop = $backdrop;
-
-//paging with dynamic style causes issues
-//$indexStyle = new IndexStyle($folder_collection_listing_style[$folderType .'/'. $collectionType]);
-overrideIndexStyle($folderType, $collectionType);
-
-$params = new UserItemsParams();
-$params->ParentID = $parentId;
-$params->StartIndex = ($page - 1) * $indexStyle->Limit;
-$params->Limit = $indexStyle->Limit;
 $params->IncludeItemTypes = $type;
-$params->Recursive = $recursive;
-$params->SortBy = $sortBy;
-$params->SortOrder = $sortOrder;
-$params->collapseBoxSetItems = $collapseBoxSetItems;
 $params->ExcludeItemTypes = $excludeItemTypes;
-$categoryName = $pageObj->cbp->categoryName;
-$params->$categoryName = $pageObj->cbp->searchTerm;
+$params->Recursive = $recursive;
+
+$params->setFromQueryString();
 
 $itemsAndCount = getItems($params);
 
@@ -76,6 +69,23 @@ $prettySortBy = [
     "Runtime" => "Runtime",
 ];
 
+if (empty($name)) {
+    //build name from parameters
+    $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
+    foreach ($filterCategories as $cat) {
+        if (!empty($params->$cat)) {
+            !empty($name) && $name .= ", ";
+            $name .= $params->$cat;
+        }
+    }    
+    if ((!empty($params->SortBy) && $params->SortBy != UserItemsParams::SORTNAME) || $params->SortOrder == UserItemsParams::DESC) {
+        $name .= ', by ' . $prettySortBy[$params->SortBy];
+        if ($params->SortOrder == UserItemsParams::DESC) {
+            $name .= ' ' . $params->SortOrder;
+        }
+    }
+}
+
 if (!empty($topParentName) && $topParentName != $name) {
     $pageObj->title = $topParentName;
     if (!empty($name)) {
@@ -83,12 +93,6 @@ if (!empty($topParentName) && $topParentName != $name) {
     }
 }
 $pageObj->title .= $name;
-if ((!empty($sortBy) && $sortBy != SORTNAME) || $sortOrder == DESC) {
-    $pageObj->title .= ', by ' . $prettySortBy[$sortBy];
-    if ($sortOrder == DESC) {
-        $pageObj->title .= ' ' . $sortOrder;
-    }
-}
 
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;

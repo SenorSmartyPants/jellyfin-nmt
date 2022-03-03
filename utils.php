@@ -230,19 +230,16 @@ class CategoryBrowseParams
 {
     public $topParentName = null;
     public $topParentId = null;
-    public $parentId = null;
     public $folderType = null;
-    public $collectionType = 'search';
+    public $collectionType = null;
 
     public $name;
     public $backdropId = null;
+    public $params;
 
-    public $categoryName = null;
-    public $searchTerm = null;
-
-    public $sortBy = null;
-    public $sortOrder = null;
-    public $collapseBoxSetItems = null;
+    function __construct() {
+        $this->params = new UserItemsParams();    
+    }
 }
 
 function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search', $topParentId = null, $topParentName = null)
@@ -252,12 +249,10 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
     }
 
     $cbp = new CategoryBrowseParams();
-    $cbp->name = $searchTerm;
-    $cbp->searchTerm = $searchTerm;
-    $cbp->categoryName = $categoryName;
     $cbp->collectionType = $collectionType;
     $cbp->topParentName = $topParentName;
     $cbp->topParentId = $topParentId;
+    $cbp->params->addParam($categoryName, $searchTerm);
 
     if ($cbp->collectionType === 'search') {
         //top level, just link on the category page 
@@ -268,9 +263,22 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
     return categoryBrowseURLEx($cbp);
 }
 
-function categoryBrowseURLEx(CategoryBrowseParams $cbp)
+function categoryBrowseQSShort($categoryName, $searchTerm, $prefix = null)
 {
-    return 'browse.php?' . http_build_query($cbp);
+    $cbp = new CategoryBrowseParams();
+    if (is_array($categoryName)) {
+        for ($i=0; $i < count($categoryName); $i++) { 
+            $cbp->params->addParam($categoryName[$i], $searchTerm[$i]);
+        }
+    } else {
+        $cbp->params->addParam($categoryName, $searchTerm);
+    }
+    return categoryBrowseURLEx($cbp, $prefix);
+}
+
+function categoryBrowseURLEx(CategoryBrowseParams $cbp, $prefix = 'browse.php?')
+{
+    return $prefix . http_build_query($cbp);
 }
 
 ?>

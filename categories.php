@@ -163,28 +163,52 @@ class CategoriesJSPage extends CategoriesPage
     {
         header('Content-type: text/javascript');
         $this->baseurl = categoryBrowseURL(null, null, $this->collectionType, $this->topParentId, $this->topParentName);
+        $filtersURLs = [categoryBrowseQSShort('Filters', 'IsFavorite', '&'),
+            categoryBrowseQSShort('Filters', 'IsUnplayed', '&'),
+            categoryBrowseQSShort('Filters', 'IsPlayed', '&'),
+            '&clearfilter'];
+
+        $featureURLs = [categoryBrowseQSShort('hasSpecialFeature', 'true', '&'),
+            categoryBrowseQSShort('hasSubtitles', 'true', '&'),
+            categoryBrowseQSShort('hasTrailer', 'true', '&'),
+            categoryBrowseQSShort('hasThemeSong', 'true', '&'),
+            categoryBrowseQSShort('hasThemeVideo', 'true', '&')];
+
+
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['SortName', ''], '&');
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['CommunityRating', 'false'], '&');
+        if ($this->collectionType != CollectionType::TVSHOWS) {
+            $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['CriticRating', 'false'], '&');
+        }
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['DateCreated', 'false'], '&');
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['DatePlayed', 'false'], '&');
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['OfficialRating', 'false'], '&');
+        if ($this->collectionType != CollectionType::TVSHOWS) {
+            $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['PlayCount', 'false'], '&');
+        }
+        $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['PremiereDate', 'false'], '&');
+        if ($this->collectionType != CollectionType::TVSHOWS) {
+            $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['Runtime', 'false'], '&');
+        }
+
+        $sortOrderURLs = [categoryBrowseQSShort('SortOrder', UserItemsParams::ASC, '&'),
+            categoryBrowseQSShort('SortOrder', UserItemsParams::DESC, '&')];  
+
 ?>
         var asCatNames = <?= $this->getCategoriesJSArrayString() ?>;
         var asFilters = new Object();
         var asFilterNames = new Object();   
 
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
-        asFilters['Filters'] = ["&name=Favorites&categoryName=Filters&searchTerm=IsFavorite", 
-                                "&name=Unplayed&categoryName=Filters&searchTerm=IsUnplayed", 
-                                "&name=Played&categoryName=Filters&searchTerm=IsPlayed", 
-                                "&name=&categoryName=&searchTerm=&sortBy=&sortOrder=&collapseBoxSetItems="];
+        asFilters['Filters'] = <?= getJSArray($filtersURLs, true) ?>;
 
 <?      
         if ($this->collectionType == CollectionType::TVSHOWS) {
-            $this->printCategory('Status', 'seriesStatus', ['Continuing', 'Ended']);
+            $this->printCategory('Status', 'SeriesStatus', ['Continuing', 'Ended']);
         }
 ?>
         asFilterNames['Features'] = ["Extras", "Subtitles", "Trailer", "Theme\xa0Song", "Theme\xa0Video"];
-        asFilters['Features'] = ["&name=Extras&categoryName=hasSpecialFeature&searchTerm=true",
-                                "&name=Subtitles&categoryName=hasSubtitles&searchTerm=true", 
-                                "&name=Trailer&categoryName=hasTrailer&searchTerm=true",
-                                "&name=Theme Song&categoryName=hasThemeSong&searchTerm=true",
-                                "&name=Theme Video&categoryName=hasThemeVideo&searchTerm=true"];
+        asFilters['Features'] = <?= getJSArray($featureURLs, true) ?>;
 
 <?
         $this->printContent();
@@ -198,18 +222,10 @@ class CategoriesJSPage extends CategoriesPage
 <? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"Play\\xa0Count\",\n"; } ?>
                                 "Release\xa0Date"<? if ($this->collectionType != CollectionType::TVSHOWS) { echo ',"Runtime"'; } ?>];
 
-        asFilters['Sort By'] = ["&sortBy=SortName&collapseBoxSetItems=",
-                                "&sortBy=CommunityRating&collapseBoxSetItems=false",
-<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"&sortBy=CriticRating&collapseBoxSetItems=false\",\n"; } ?>
-                                "&sortBy=DateCreated&collapseBoxSetItems=false",
-                                "&sortBy=DatePlayed&collapseBoxSetItems=false",
-                                "&sortBy=OfficialRating&collapseBoxSetItems=false",
-<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"&sortBy=PlayCount&collapseBoxSetItems=false\",\n"; } ?>
-                                "&sortBy=PremiereDate&collapseBoxSetItems=false"<? if ($this->collectionType != CollectionType::TVSHOWS) { echo ',"&sortBy=Runtime&collapseBoxSetItems=false"'; } ?>]; 
+        asFilters['Sort By'] = <?= getJSArray($sortByURLs, true) ?>;
 
         asFilterNames['Sort Order'] = ["Ascending", "Descending"];
-        asFilters['Sort Order'] = ["&sortOrder=Ascending", 
-                                "&sortOrder=Descending"];
+        asFilters['Sort Order'] =  <?= getJSArray($sortOrderURLs, true) ?>;;
 
         var sActiveCat = asCatNames[0];        
 <?

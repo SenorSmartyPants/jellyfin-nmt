@@ -113,7 +113,7 @@ function getFolderURL($item, $menuItem)
     $cbp->name = $item->Name;
     $cbp->folderType = $item->Type;
     $cbp->collectionType = $item->CollectionType;
-    $cbp->parentId = $item->Id;
+    $cbp->params->ParentID = $item->Id;
     $cbp->backdropId = $menuItem->BackdropID;
     switch ($item->Type) {
         case ItemType::COLLECTIONFOLDER:
