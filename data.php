@@ -82,13 +82,18 @@ class UserItemsParams
             $this->ParentID = $_GET['topParentId'];;
         }
 
-        $this->SortBy = empty($params['SortBy']) ? $this->defaultSortBy : $params['SortBy'];
-        $this->SortOrder = empty($params['SortOrder']) ? null : $params['SortOrder'];
-        $this->collapseBoxSetItems = empty($params['collapseBoxSetItems']) ? null : $params['collapseBoxSetItems'];
-
-        $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
-        foreach ($filterCategories as $cat) {
-            $this->$cat = $params[$cat];
+        if (isset($_GET['clearfilter']))
+        {
+            $this->SortBy = $this->defaultSortBy;
+        } else {
+            $this->SortBy = empty($params['SortBy']) ? $this->defaultSortBy : $params['SortBy'];
+            $this->SortOrder = empty($params['SortOrder']) ? null : $params['SortOrder'];
+            $this->collapseBoxSetItems = empty($params['collapseBoxSetItems']) ? null : $params['collapseBoxSetItems'];
+    
+            $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
+            foreach ($filterCategories as $cat) {
+                $this->$cat = $params[$cat];
+            }
         }
     }
 
