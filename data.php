@@ -80,6 +80,11 @@ class UserItemsParams
         global $filterCategories; 
 
         $params = $_GET['params'];
+        if (is_array($params)) {
+            $params = array_map("htmlspecialchars", $_GET['params']);
+        } else {
+            $params = null;
+        }
         $this->ParentID = $params['ParentID'];
         if (empty($this->ParentID)) {
             $this->ParentID = $_GET['topParentId'];
