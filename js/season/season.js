@@ -36,7 +36,7 @@ function showEpisode(episodeIndex) {
                 if (iEpisodeId > iEpisodesLength) {
                     //go to first episode
                     iEpisodeId = 1;
-                    if (fmorePages == true) {
+                    if (fmorePages) {
                         //multiple pages, go to first page
                         iPage = 1;
                         toggletab();
@@ -62,7 +62,7 @@ function showEpisode(episodeIndex) {
             },
 
             toggleLeft = function() {
-                if (fmorePages == true) {
+                if (fmorePages) {
                     if (iPage == 1) {
                         iPage = iEpPages;
                         iEpisodeId = iEpisodeId + ((iEpPages - 1) * iEpisodesPerPage);
@@ -79,7 +79,7 @@ function showEpisode(episodeIndex) {
             },
 
             toggleRight = function() {
-                if (fmorePages == true) {
+                if (fmorePages) {
                     if (iPage == iEpPages) {
                         iPage = 1;
                         iEpisodeId = iEpisodeId - ((iEpPages - 1) * iEpisodesPerPage);
@@ -112,7 +112,7 @@ function showEpisode(episodeIndex) {
             },
 
             showSeasonInfo = function() {
-                if (fShowSeasonInfo == true) {
+                if (fShowSeasonInfo) {
                     showNfocus();
                     fShowSeasonInfo = false;
                 } else {

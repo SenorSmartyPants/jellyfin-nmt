@@ -40,7 +40,7 @@ function toggletab() {
         var elTvIDNew = document.getElementById(sTvIdNew);
         var noNew = Math.floor(((iPage - 1) * iLoop) + i);
         if (noNew < (iEpisodesLength + 1)) {
-            if (fTVplaylist == true) {
+            if (fTVplaylist) {
                 elLinkNew.setAttribute("href", asEpisodePlaylist[noNew]);
             } else {
                 var sUrlNew = asEpisodeUrl[noNew];
