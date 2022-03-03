@@ -66,16 +66,31 @@ $prettySortBy = [
     "OfficialRating" => "Parental Rating",
     "PlayCount" => "Play Count",
     "PremiereDate" => "Release Date",
-    "Runtime" => "Runtime",
+    "Runtime" => "Runtime"
+];
+
+$prettyFilter = [
+    "IsFavorite" => "Favorites",
+    "IsUnplayed" => "Unplayed",
+    "IsPlayed" => "Played",
+    "hasSpecialFeature" => "Extras",
+    "hasSubtitles" => "Subtitles",
+    "hasTrailer" => "Trailers",
+    "hasThemeSong" => "Theme Song",
+    "hasThemeVideo" => "Theme Video"
 ];
 
 if (empty($name)) {
     //build name from parameters
-    $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
     foreach ($filterCategories as $cat) {
         if (!empty($params->$cat)) {
             !empty($name) && $name .= ", ";
-            $name .= $params->$cat;
+            if (str_starts_with($cat, 'has')) {
+                $key = $cat;
+            } else {
+                $key = $params->$cat;
+            }
+            $name .= array_key_exists($key, $prettyFilter) ? $prettyFilter[$key] : $params->$cat;
         }
     }    
     if ((!empty($params->SortBy) && $params->SortBy != UserItemsParams::SORTNAME) || $params->SortOrder == UserItemsParams::DESC) {

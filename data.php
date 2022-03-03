@@ -36,6 +36,9 @@ class Device
     }
 }
 
+$filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags',
+    'hasSpecialFeature', 'hasSubtitles', 'hasTrailer', 'hasThemeSong', 'hasThemeVideo'];
+
 class UserItemsParams
 {
     public $Features = null;
@@ -76,10 +79,12 @@ class UserItemsParams
 
     public function setFromQueryString()
     {
+        global $filterCategories; 
+
         $params = $_GET['params'];
         $this->ParentID = $params['ParentID'];
         if (empty($this->ParentID)) {
-            $this->ParentID = $_GET['topParentId'];;
+            $this->ParentID = $_GET['topParentId'];
         }
 
         if (isset($_GET['clearfilter']))
@@ -90,7 +95,6 @@ class UserItemsParams
             $this->SortOrder = empty($params['SortOrder']) ? null : $params['SortOrder'];
             $this->collapseBoxSetItems = empty($params['collapseBoxSetItems']) ? null : $params['collapseBoxSetItems'];
     
-            $filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags'];
             foreach ($filterCategories as $cat) {
                 $this->$cat = $params[$cat];
             }
