@@ -86,59 +86,36 @@ function audioCodec($audioStream)
 function container($containerID)
 {
     $containerID = strtolower($containerID);
-    switch ($containerID) {
-        case 'asf':
-        case 'avi':
-        case 'bin':
-        case 'dat':
-        case 'divx':
-        case 'dvd':
-        case 'img':
-        case 'iso':
-        case 'm1v':
-        case 'm2p':
-        case 'm2t':
-        case 'm2v':
-        case 'm4v':
-        case 'mdf':
-        case 'mov':
-        case 'mts':
-        case 'nrg':
-        case 'qt':
-        case 'rar':
-        case 'rm':
-        case 'rmp4':
-        case 'tp':
-        case 'trp':
-        case 'ts':
-        case 'vob':
-        case 'm2ts':
-        case 'mkv':
-        case 'mp4':
-        case 'mpg':
-        case 'wmv':
-            $url = $containerID . ".png";
+    $justAddExtension = ['asf', 'avi', 'bin', 'dat', 'divx', 'dvd', 'img', 'iso', 'm1v', 
+        'm2p', 'm2t', 'm2v', 'm4v', 'mdf', 'mov', 'mts', 'nrg', 'qt', 'rar', 'rm', 
+        'rmp4', 'tp', 'trp', 'ts', 'vob', 'm2ts', 'mkv', 'mp4', 'mpg', 'wmv'];
+
+    if (in_array($containerID, $justAddExtension)) {
+        $url = $containerID . ".png";
+    } else {
+        switch ($containerID) {
+            case 'mpegts':
+            case 'bdav':
+            case 'bluray':
+                $url = "m2ts.png";
+                break;
+            case 'matroska':
+                $url = "mkv.png";
+                break;
+            case 'mpeg-4':
+                $url = "mp4.png";
+                break;
+            case 'PS':
+                $url = "mpg.png";
+                break;
+            case 'windows media':
+                $url = "wmv.png";
             break;
-        case 'mpegts':
-        case 'bdav':
-        case 'bluray':
-            $url = "m2ts.png";
-            break;
-        case 'matroska':
-            $url = "mkv.png";
-            break;
-        case 'mpeg-4':
-            $url = "mp4.png";
-            break;
-        case 'PS':
-            $url = "mpg.png";
-            break;
-        case 'windows media':
-            $url = "wmv.png";
-        break;
-            default:
-            $url = "unknown.png";
-    }    
+                default:
+                $url = "unknown.png";
+        }  
+    }
+
     return (($url == "unknown.png") ? $containerID : null) . '<img src="images/flags/container_' . $url . '"/>';
 }
 
