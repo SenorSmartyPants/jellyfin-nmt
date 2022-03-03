@@ -196,7 +196,6 @@ function setupChildData($item)
         //get first X cast and crew
         $itemsToDisplay = $item->People;
         $totalItems = count($item->People);
-        //TODO: exclude writers and directors since they are already displayed on the page
         $itemsToDisplay = array_slice($itemsToDisplay, $startIndex, $indexStyle->Limit);
     }
     if ($subitems == "children") {
@@ -577,18 +576,6 @@ if (count($available_subitems) > 1)
     <a TVID="<?= $tvid_itemdetails_more ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>"></a>
 <?
     }
-?>
-   <!--
-
-    <br/>
-    Studio: <?= $item->Studios[0]->Name ?><br/>
-    
-    Imdb:<?= $item->ProviderIds->Imdb ?><br/>
-    tvdb:<?= $item->ProviderIds->Tvdb ?><br/>
-
--->
-
-<?   
 }
 
 ?>
