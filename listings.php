@@ -133,8 +133,7 @@ class ListingsPage extends Page
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
-            $this->cbp->name = $item;
-            $this->cbp->searchTerm = $item;
+            $this->cbp->params->addParam($categoryName, $item);
 
             $url = categoryBrowseURLEx($this->cbp);
             $this->printTVIDLink($url, call_user_func($getTVID, $item));
