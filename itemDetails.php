@@ -26,15 +26,16 @@ class ItemDetailsPage extends ListingsPage
 
     private function getAllVideos($item)
     {
-        $versions[] = $item;
         $isMultiple = IsMultipleVersion($item);
         if ($isMultiple) {
+            SortVersionsByName($item);    
             //get other sources full data, #2 and up
-            for ($i=1; $i < $item->MediaSourceCount; $i++) { 
+            for ($i=0; $i < $item->MediaSourceCount; $i++) { 
                 //version name is different from MediaSource name
                 $versions[] = getItem($item->MediaSources[$i]->Id);
-            }
-            SortVersionsByName($item);
+            } 
+        } else {
+            $versions[] = $item;
         }
 
         //what is intro count attribute?
