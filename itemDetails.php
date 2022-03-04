@@ -96,6 +96,7 @@ $forceItemDetails = true;
 $pageObj->QSBase = "id=" . $id . "&subitems=" . $_GET["subitems"];
 
 setNames($item);
+$pageObj->title = $Title;
 
 setupChildData($item);
 
