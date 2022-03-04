@@ -120,6 +120,7 @@ class ImageParams
     public $tag = null;
     public $unplayedCount = null;
     public $AddPlayedIndicator = null;
+    public $percentPlayed = null;
 
     function __construct($height = null, $width = null, $tag = null) {
         $this->height = $height;

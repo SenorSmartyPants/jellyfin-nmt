@@ -54,6 +54,7 @@ function parse($item) {
         $imageProps->width = ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth); 
         $imageProps->unplayedCount = $menuItem->UnplayedCount;
         $imageProps->AddPlayedIndicator = $played;
+        $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
 
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $indexStyle->ImageType);
     }
