@@ -92,6 +92,26 @@ function videoCallbackLink($mediaSource, $callbackName, $linkName,
     return $html;
 }
 
+function printVideoCallbackLinks($items)
+{
+    $index = 0;
+    foreach ($items as $item) {
+        if ($item->MediaSources) {
+            $mediaSource = $item->MediaSources[0];
+        } else {
+            $mediaSource = $item;
+        }
+        
+        #region videoPlayLink setup
+        $linkName = 'play';
+        $callbackName = 'playcallback' . $index;
+        #endregion
+        $index++;
+
+        echo videoCallbackLink($mediaSource, $callbackName, $linkName) . "\n";
+    }
+}
+
 //pass mediasource instead of item when multiple versions
 //item currently has Path and VideoType for first version, so item can still be passed, like for episodes
 function videoPlayLink($mediaSource, 

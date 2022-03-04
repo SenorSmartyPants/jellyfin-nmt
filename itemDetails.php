@@ -60,14 +60,15 @@ class ItemDetailsPage extends ListingsPage
     {
         global $skipTrim;
         $isMultiple = IsMultipleVersion($item);
+        printVideoCallbackLinks($item->MediaSources);
         if ($isMultiple) {
-            //sort versions by name
-            $col = array_column($item->MediaSources, 'Name');
-            array_multisort($col, SORT_ASC, $item->MediaSources);
+            $mediaSource = null;
+        } else {
+            //use mediaSources for better names than pulling each item
+            $mediaSource = $item->MediaSources[0];
         }
-        
-        //use mediaSources for better names than pulling each item
-        $previousPlayButtons = printPlayButtons($item->MediaSources, $skipTrim, $isMultiple);
+        printPlayButton($mediaSource, $skipTrim, false, null, false);
+        $previousPlayButtons = count($item->MediaSources);
 
         //check for ExtrasTypes
         if (!empty($this->additionalparts)) {
@@ -108,7 +109,7 @@ setupChildData($item);
     }
 
 $pageObj->indexStyle = $indexStyle;
-$pageObj->onloadset = 'play0';
+$pageObj->onloadset = 'play';
 $pageObj->additionalCSS = 'itemDetails.css';
 $pageObj->printHead();
 
@@ -318,7 +319,7 @@ function printStreamInfo($stream)
 <?
 }
 
-function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
+function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index = null, $includeCallbackLink = true)
 {     
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
@@ -330,14 +331,18 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index)
         $linkHTML = 'Play';
     }
 
-    $videoIndex = $index + 1; 
-    $callbackJS = CheckinJS::getCallback($skipTrim, $videoIndex);
-    $callbackName = 'playcallback' . $index;
+    if (is_null($index)) {
+        $callbackJS = CheckinJS::getCallback($skipTrim);
+    } else {
+        $callbackJS = CheckinJS::getCallback($skipTrim, $index + 1);
+    }
+
+    $callbackName = 'playcallback' . (is_null($index) ? 0 : $index);
     $callbackAdditionalAttributes = null;
     #endregion
 
 ?>  
-<table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?></td></tr></table>&nbsp;<br>
+<table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes, $includeCallbackLink) ?></td></tr></table>&nbsp;<br>
 <?
 }
 
@@ -352,6 +357,26 @@ function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons =
         printPlayButton($mediaSource, $skipTrim, $isMultiple, $previousPlayButtons++);
     }
     return $previousPlayButtons;
+}
+
+function printPlayVersionDropdown($items)
+{  
+?>
+    <tr><td><div>Version <?= THREESPACES ?></div></td><td><select onkeydownset="play" id="ddlEpisodeId" 
+    onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
+    >
+<?
+    foreach ($items as $item) {
+        if ($item->MediaSources) {
+            $mediaSource = $item->MediaSources[0];
+        } else {
+            $mediaSource = $item;
+        }
+?>  
+        <option><?= $mediaSource->Name ?></option>
+<?
+    }
+    echo "</select></td></tr><tr><td>&nbsp;<br></td></tr>";
 }
 
 function PrintExtras($extras, $Label, $previousPlayButtons)
@@ -524,6 +549,11 @@ function render($item)
 <?
     }
 
+    // print dropdown for multiple versions here
+    if ($item->MediaType && IsMultipleVersion($item)) { 
+        global $skipTrim;
+        printPlayVersionDropdown($item->MediaSources);
+    }
     ?>
     </table>
     <?
