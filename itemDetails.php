@@ -216,6 +216,9 @@ function setupChildData($item)
             //filter items to ones where PersonID is included
             $params->Recursive = true;
             $params->PersonIDs = $item->Id;
+            //JF-web does not include seasons on person page
+            $params->ExcludeItemTypes = ItemType::SEASON;
+            $params->SortBy = UserItemsParams::SORTNAME;
             $children = getItems($params);
         } else if ($item->Type == ItemType::STUDIO) {
             //filter items to ones where StudioID is included
