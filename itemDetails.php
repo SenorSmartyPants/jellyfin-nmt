@@ -506,7 +506,7 @@ function render($item)
     printCastRow($directors, 'directors', 'Director');
     printCastRow($writers, 'writers', 'Writer');
 
-    if ($item->MediaType) { //only display play button for single items
+    if ($item->MediaType) {
 ?>          
         <tr>
         <? printStreamInfo($streams->Video) ?>
@@ -519,7 +519,7 @@ function render($item)
     ?>
     </table>
     <?
-        if ($item->MediaType) { //only display play button for single items
+        if ($item->MediaType) { 
             $pageObj->printPlayButtonGroups($item);
         }
 ?>    
