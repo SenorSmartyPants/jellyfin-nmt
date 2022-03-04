@@ -78,18 +78,32 @@ function videoAttributes($mediaSource)
     }
 }
 
+function videoCallbackLink($mediaSource, $callbackName, $linkName,  
+    $callbackAdditionalAttributes = null)
+{
+    $html = '<a onfocusload="" ';
+    $html .= 'name="' . $callbackName . '" ';
+    $html .= 'onfocusset="' . $linkName . '" ';
+    $html .= HTMLattributes($callbackAdditionalAttributes);
+    $html .= videoAttributes($mediaSource);
+    $html .= 'onfocus="stop();" '; //call stop method
+    $html .= '></a>';
+
+    return $html;
+}
+
 //pass mediasource instead of item when multiple versions
 //item currently has Path and VideoType for first version, so item can still be passed, like for episodes
 function videoPlayLink($mediaSource, 
     $linkHTML = null, $linkName = null, $additionalAttributes = null, 
-    $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null)
+    $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null, $includeCallbackLink = true)
 {
     //generate 1 link to play with no callback
     //2 links to call server before playing video, to checkin/scrobble
 
     $html = '<a ';
     if ($linkName) {
-        $html .= 'name="' . $linkName . '" ';
+        $html .= 'id="' . $linkName . '" name="' . $linkName . '" ';
     }
 
     $html .= HTMLattributes($additionalAttributes);
@@ -103,14 +117,8 @@ function videoPlayLink($mediaSource,
     
     $html .= '>' . $linkHTML . '</a>';
 
-    if ($callbackJS) {
-        $html .= '<a onfocusload="" ';
-        $html .= 'name="' . $callbackName . '" ';
-        $html .= 'onfocusset="' . $linkName . '" ';
-        $html .= HTMLattributes($callbackAdditionalAttributes);      
-        $html .= videoAttributes($mediaSource);
-        $html .= 'onfocus="stop();" '; //call stop method
-        $html .= '></a>';
+    if ($callbackJS && $includeCallbackLink) {
+        $html .= videoCallbackLink($mediaSource, $callbackName, $linkName, $callbackAdditionalAttributes);
     }
 
     return $html;
