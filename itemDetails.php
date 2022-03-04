@@ -536,12 +536,6 @@ function render($item)
         }
 ?>    
 
-
-    <?= $played ? '<div id="played">Date played ' . $played . '</div>&nbsp;<br>' : null ?>
-
-
-
-
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
@@ -563,8 +557,6 @@ function render($item)
         }        
     } 
     ?>
-
-    <?= $item->MediaType ? '<div id="added">Added ' . $added . '</div>' : null ?>
     
     <? if ($item->AirDays) { ?> 
     <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
