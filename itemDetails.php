@@ -469,10 +469,15 @@ function render($item)
 <?
     } 
 
-    if ($item->CommunityRating) {
-?>        
-        <td>*<?= $item->CommunityRating ?>&nbsp;&nbsp;&nbsp;</td>
-<?
+    if ($item->CommunityRating || $item->CriticRating) {
+        echo '<td>';
+        if ($item->CommunityRating) {
+            echo '*' . $item->CommunityRating . THREESPACES;
+        }
+        if ($item->CriticRating) {
+            echo $item->CriticRating . '/100' . THREESPACES;
+        }
+        echo '</td>';
     } 
 
     if ($item->MediaType) {
