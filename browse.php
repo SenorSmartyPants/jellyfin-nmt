@@ -37,6 +37,7 @@ switch ($folderType) {
         }
 }
 
+$params->setFromQueryString();
 
 if ($collectionType === 'search' || empty($params->ParentID)) {
     //exclude season and episodes to match JF behavior
@@ -47,8 +48,6 @@ if ($collectionType === 'search' || empty($params->ParentID)) {
 $params->IncludeItemTypes = $type;
 $params->ExcludeItemTypes = $excludeItemTypes;
 $params->Recursive = $recursive;
-
-$params->setFromQueryString();
 
 $itemsAndCount = getItems($params);
 
