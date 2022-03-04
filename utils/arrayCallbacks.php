@@ -59,4 +59,9 @@ function getURL($item)
 {
     return translatePathToNMT($item->Path);
 }
+
+function filterPeople($person)
+{
+   return $person->Type != 'Producer' && $person->Type != 'Writer' && $person->Type != 'Director';
+}
 ?>

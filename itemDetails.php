@@ -204,7 +204,8 @@ function setupChildData($item)
     if ($subitems == "people") {
         //get first X cast and crew
         $itemsToDisplay = $item->People;
-        $totalItems = count($item->People);
+        $itemsToDisplay = array_filter($itemsToDisplay, 'filterPeople');
+        $totalItems = count($itemsToDisplay);
         $itemsToDisplay = array_slice($itemsToDisplay, $startIndex, $indexStyle->Limit);
     }
     if ($subitems == "children") {
