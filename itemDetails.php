@@ -27,17 +27,14 @@ class ItemDetailsPage extends ListingsPage
     private function getAllVideos($item)
     {
         $versions[] = $item;
-        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        $isMultiple = IsMultipleVersion($item);
         if ($isMultiple) {
             //get other sources full data, #2 and up
             for ($i=1; $i < $item->MediaSourceCount; $i++) { 
                 //version name is different from MediaSource name
                 $versions[] = getItem($item->MediaSources[$i]->Id);
             }
-
-            //sort versions by name
-            $col = array_column($item->MediaSources, 'Name');
-            array_multisort($col, SORT_ASC, $item->MediaSources);
+            SortVersionsByName($item);
         }
 
         //what is intro count attribute?
@@ -61,7 +58,7 @@ class ItemDetailsPage extends ListingsPage
     public function printPlayButtonGroups($item)
     {
         global $skipTrim;
-        $isMultiple = $item->MediaSourceCount && $item->MediaSourceCount > 1;
+        $isMultiple = IsMultipleVersion($item);
         if ($isMultiple) {
             //sort versions by name
             $col = array_column($item->MediaSources, 'Name');
@@ -121,6 +118,17 @@ $pageObj->printTitleTable($page, $numPages);
 printLogo();
 
 $pageObj->printFooter();
+
+function IsMultipleVersion($item)
+{
+    return $item->MediaSourceCount && $item->MediaSourceCount > 1;
+}
+
+function SortVersionsByName($item)
+{
+    $col = array_column($item->MediaSources, 'Name');
+    array_multisort($col, SORT_ASC, $item->MediaSources);
+}
 
 function setEpisodeIndexStyle($item)
 {
