@@ -65,6 +65,22 @@ table.button {
     padding: 12px;
 }
 
+.blue {
+    color: blue;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color: yellow;
+}
+
 @media screen {
     #popupWrapper {
         position: absolute;

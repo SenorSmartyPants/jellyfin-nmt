@@ -19,6 +19,11 @@ th {
     color: #999999;
 }
 
+select {
+    color: #dddddd;
+    background-color: #303030;
+}
+
 .button {
     background-color: #303030;
 }
