@@ -29,6 +29,9 @@ class Page
 
     public $url;
 
+    public $TitleTableNoteLeft;
+    public $TitleTableNoteRight;
+
     public function __construct($title)
     {
         global $theme_css;
@@ -160,7 +163,13 @@ class Page
 ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
-            <td width="20%" valign="top"><? if ($include_jellyfin_logo_when_backdrop_present || !$backdropId || !$this->displayPreferences->ShowBackdrop) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } ?></td>
+            <td width="20%" valign="top" id="JFlogo"><? 
+            if (empty($this->TitleTableNoteLeft)) {
+                if ($include_jellyfin_logo_when_backdrop_present || !$backdropId || !$this->displayPreferences->ShowBackdrop) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } 
+            } else {
+                echo $this->TitleTableNoteLeft;
+            }
+            ?></td>
             <td width="60%" align="center" valign="top">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
@@ -172,6 +181,7 @@ class Page
                 </table>
             </td>
             <td width="20%" align="right" id="page" valign="top"><? 
+        echo $this->TitleTableNoteRight;
         if ($numPages > 1) { 
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
