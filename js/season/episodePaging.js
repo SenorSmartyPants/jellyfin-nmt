@@ -2,27 +2,25 @@ var sId2ndLinkPrefix = 'a2_e_';
 var iLoop = iEpisodesPerPage;
 var sIdSpanPrefix = 's_e_';
 var sIdTvPrefix = 't_e_';
-var Eid = 'play';
-var Evod = 'vod';
 
+function createAttr(elem, name, value) {
+    var attr = document.createAttribute(name)
+    attr.nodeValue = value;
+    elem.setAttributeNode(attr);
+}
 
 function setVOD(Eid, Evod) {
+    var elem = document.getElementById(Eid);
 
-    document.getElementById(Eid).removeAttribute('vod');
-    document.getElementById(Eid).removeAttribute('zcd');
+    elem.removeAttribute('vod');
+    elem.removeAttribute('zcd');
 
     if (Evod == 'playlist') {
-        var newAttribute = document.createAttribute("vod");
-        newAttribute.nodeValue = "playlist";
-        document.getElementById(Eid).setAttributeNode(newAttribute);
+        createAttr(elem, 'vod', 'playlist');
     } else if (Evod == 'zcd') {
-        var newAttribute = document.createAttribute("zcd");
-        newAttribute.nodeValue = "2";
-        document.getElementById(Eid).setAttributeNode(newAttribute);
+        createAttr(elem, 'zcd', '2');
     } else if (Evod == 'vod') {
-        var newAttribute = document.createAttribute("vod");
-        newAttribute.nodeValue = "";
-        document.getElementById(Eid).setAttributeNode(newAttribute);
+        createAttr(elem, 'vod', '');
     }
 }
 
