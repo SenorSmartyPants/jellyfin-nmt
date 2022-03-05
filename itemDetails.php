@@ -376,6 +376,27 @@ function setNames($item)
     }
 }
 
+function printPoster($item)
+{
+    $imageProps = new ImageParams();
+    $imageProps->width = THUMB_WIDTH;
+    if ($item->ImageTags->Primary) { 
+        $imageProps->tag = $item->ImageTags->Primary;
+        if ($item->PrimaryImageAspectRatio < 1) {
+            $imageProps->width = POSTER_WIDTH;
+        }
+        $url = getImageURL($item->Id, $imageProps, ImageType::PRIMARY);
+    } else if ($item->ImageTags->Thumb) {
+        $imageProps->tag = $item->ImageTags->Thumb;
+        $url = getImageURL($item->Id, $imageProps, ImageType::THUMB);
+    } else {
+        $imageProps->width = POSTER_WIDTH;
+        $url = 'images/1x1.png';
+    } 
+    ?><img width="<?= $imageProps->width ?>" src="<?= $url ?>" /> <?
+    return $imageProps;
+}
+
 function printItemNames($item)
 {
     global $parentName, $itemName;
@@ -395,6 +416,29 @@ function printItemNames($item)
         <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
     <? 
     }
+}
+
+function getItemDate($item)
+{
+    switch ($item->Type) {
+        case ItemType::MOVIE:
+            $date = $item->ProductionYear;
+            break;
+        case ItemType::SERIES:
+            $date = ProductionRangeString($item);
+            break;
+        case ItemType::SEASON:
+            $date = null;
+            break;               
+        default:
+            if ($item->PremiereDate) {
+                $date = formatDate($item->PremiereDate);
+            } else if ($item->ProductionYear) {
+                $date = $item->ProductionYear;
+            }
+            break;
+    }
+    return $date;
 }
 
 function printYearDurationEtc($item, $date, $durationInSeconds)
@@ -598,25 +642,7 @@ function render($item)
 
     $CC = $item->HasSubtitles;
 
-
-    switch ($item->Type) {
-        case ItemType::MOVIE:
-            $date = $item->ProductionYear;
-            break;
-        case ItemType::SERIES:
-            $date = ProductionRangeString($item);
-            break;
-        case ItemType::SEASON:
-            $date = null;
-            break;               
-        default:
-            if ($item->PremiereDate) {
-                $date = formatDate($item->PremiereDate);
-            } else if ($item->ProductionYear) {
-                $date = $item->ProductionYear;
-            }
-            break;
-    }
+    $date = getItemDate($item);
 
     $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
     $writers = array_filter($item->People, function($p) { return $p->Type == 'Writer'; });
@@ -626,20 +652,8 @@ function render($item)
     <tr valign="top">
         <td width="<?= POSTER_WIDTH ?>px" height="416px">
         <? 
-        $imageProps = new ImageParams();
-        if ($item->ImageTags->Primary) { 
-            $imageProps->tag = $item->ImageTags->Primary;
-            if ($item->PrimaryImageAspectRatio < 1) {
-                $imageProps->width = POSTER_WIDTH;
-            } else {
-                $imageProps->width = THUMB_WIDTH;
-            }
-            ?><img width="<?= $imageProps->width ?>" src="<?= getImageURL($item->Id, $imageProps, ImageType::PRIMARY) ?>" /> <? 
-        } else if ($item->ImageTags->Thumb) { 
-            ?><img width="<?= THUMB_WIDTH ?>" src="<?= getImageURL($item->Id, new ImageParams(null, THUMB_WIDTH, $item->ImageTags->Thumb), ImageType::THUMB) ?>" /> <? 
-        } else {
-            ?><img src="images/1x1.png" width="<?= POSTER_WIDTH ?>" /> <?
-        } ?>
+        $imageProps = printPoster($item);
+        ?>
 
         </td>
         <td><img src="images/1x1.png" width="30" height="1" /></td>
