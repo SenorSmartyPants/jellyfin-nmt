@@ -443,6 +443,25 @@ function printYearDurationEtc($item, $date, $durationInSeconds)
     <?
 }
 
+function printPersonVitals($item)
+{
+    if ($item->PremiereDate) { 
+        ?>
+        <div>Born: <?= formatDate($item->PremiereDate) ?></div>&nbsp;<br>
+        <?                
+    }
+    if ($item->ProductionLocations[0]) {
+        ?>
+        <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
+        <?    
+    }
+    if ($item->EndDate) {
+        ?>
+        <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
+        <?    
+    }  
+}
+
 function printCastRow($cast, $castDivId, $castLabel)
 {
     $castLabel .= count($cast) > 1 ? 's' : null;
@@ -622,30 +641,16 @@ function render($item)
     ?>
     </table>
     <?
-        if ($item->MediaType) { 
-            $pageObj->printPlayButtonGroups($item);
-        }
+    if ($item->MediaType) { 
+        $pageObj->printPlayButtonGroups($item);
+    }
 ?>    
 
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
     <? if ($item->Type == ItemType::PERSON) {
-        if ($date) { 
-            ?>
-		    <div>Born: <?= $date ?></div>&nbsp;<br>
-            <?                
-        }
-        if ($item->ProductionLocations[0]) {
-            ?>
-            <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
-            <?    
-        }
-        if ($item->EndDate) {
-            ?>
-            <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
-            <?    
-        }        
+        printPersonVitals($item);
     } 
     ?>
     
