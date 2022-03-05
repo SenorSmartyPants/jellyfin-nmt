@@ -462,6 +462,21 @@ function printPersonVitals($item)
     }  
 }
 
+function printGenreRow($item)
+{
+    if ($item->GenreItems && count($item->GenreItems) > 0) {
+        echo '<tr><td><div>Genres' . THREESPACES . '</div></td><td><div id="genres">';
+        foreach ($item->GenreItems as $genre) {
+            $url = categoryBrowseURL('Genres', $genre->Name);
+            printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
+            if ($genre != end($item->GenreItems)) {
+                echo ', ';
+            }
+        }
+        echo '</div></td></tr><tr><td>&nbsp;<br></td></tr>';
+    }
+}
+
 function printCastRow($cast, $castDivId, $castLabel)
 {
     $castLabel .= count($cast) > 1 ? 's' : null;
@@ -610,17 +625,7 @@ function render($item)
     ?>
     <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
     <?
-    if ($item->GenreItems && count($item->GenreItems) > 0) {
-        echo '<tr><td><div>Genres' . THREESPACES . '</div></td><td><div id="genres">';
-        foreach ($item->GenreItems as $genre) {
-            $url = categoryBrowseURL('Genres', $genre->Name);
-            printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
-            if ($genre != end($item->GenreItems)) {
-                echo ', ';
-            }
-        }
-        echo '</div></td></tr><tr><td>&nbsp;<br></td></tr>';
-    }
+    printGenreRow($item);
     printCastRow($directors, 'directors', 'Director');
     printCastRow($writers, 'writers', 'Writer');
 
