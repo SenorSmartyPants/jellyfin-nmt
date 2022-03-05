@@ -21,6 +21,8 @@ class ItemDetailsPage extends ListingsPage
     private $trailers;
     private $specialfeatures;
 
+    public $subItemsToDisplay;
+
     public function printJavascript() 
     {
         global $skipTrim, $item;
@@ -89,6 +91,125 @@ class ItemDetailsPage extends ListingsPage
         $previousPlayButtons = PrintExtras($this->trailers, 'Trailers', $previousPlayButtons);
         $previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
     }
+    
+    private function setEpisodeIndexStyle($item)
+    {
+        global $displayepisode;
+        global $page, $startIndex;
+
+        $displayepisode = true;
+
+        if ($item->MediaStreams[0]->AspectRatio == "4:3") {
+            //4:3
+            $this->indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup4x3AspectRatio);
+            $this->indexStyle->offsetY = 403;
+        } else {
+            //16x9
+            $this->indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
+            $this->indexStyle->offsetY = 410;
+        }
+        $this->indexStyle->ImageType = ImageType::PRIMARY;
+
+        $startIndex = ($page - 1) * $this->indexStyle->Limit;
+    }
+
+    public function setupChildData($item)
+    {
+        global $available_subitems, $selected_subitems_index;
+        global $page, $startIndex;
+
+        //must be set before head so grid.css.php can run right
+        $this->indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
+        //9x1
+        $this->indexStyle->Limit = 9;
+        $this->indexStyle->offsetY = 500;
+
+        $available_subitems = array();
+
+        if ($item->Type == ItemType::EPISODE) {
+            //display more episodes, before cast
+            $available_subitems[] = SubitemType::MORELIKETHIS;
+        }
+        if ($item->ChildCount) {
+            $available_subitems[] = SubitemType::CHILDREN;
+        }
+        if (!empty($item->People)) {
+            $available_subitems[] = SubitemType::CASTANDCREW;
+        }
+        //only display "more like this" for movies, series, episodes(more from this season), not seasons
+        //episodes list more, first, then crew...
+        if (($item->MediaType == "Video" || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
+            $available_subitems[] = SubitemType::MORELIKETHIS;
+        }
+
+        $selected_subitems_index = array_search($_GET["subitems"], $available_subitems) ?: 0;
+        $subitems = $available_subitems[$selected_subitems_index];
+
+        $startIndex = ($page - 1) * $this->indexStyle->Limit;
+
+        if ($subitems == SubitemType::MORELIKETHIS) {
+            if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
+                $this->setEpisodeIndexStyle($item);
+            }
+            if ($item->Type == ItemType::EPISODE) {
+                //get episodes from this season
+                $params = new UserItemsParams();
+                $params->StartIndex = $startIndex;
+                $params->Limit = $this->indexStyle->Limit;
+                $params->ParentID = $item->SeasonId;
+                $children = getItems($params);
+            } else {
+                $children = getSimilarItems($item->Id, $this->indexStyle->Limit);
+            }
+            $this->subItemsToDisplay = $children->Items;
+            $totalItems = $children->TotalRecordCount;
+        }
+        if ($subitems == SubitemType::CASTANDCREW) {
+            //get first X cast and crew
+            $this->subItemsToDisplay = $item->People;
+            $this->subItemsToDisplay = array_filter($this->subItemsToDisplay, 'filterPeople');
+            $totalItems = count($this->subItemsToDisplay);
+            $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        }
+        if ($subitems == SubitemType::CHILDREN) {
+            //get first X children
+            $params = new UserItemsParams();
+            $params->StartIndex = $startIndex;
+            $params->Limit = $this->indexStyle->Limit;
+            if ($item->Type == ItemType::PERSON) {
+                //filter items to ones where PersonID is included
+                $params->Recursive = true;
+                $params->PersonIDs = $item->Id;
+                //JF-web does not include seasons on person page
+                $params->ExcludeItemTypes = ItemType::SEASON;
+                $params->SortBy = UserItemsParams::SORTNAME;
+                $children = getItems($params);
+            } else if ($item->Type == ItemType::STUDIO) {
+                //filter items to ones where StudioID is included
+                $params->Recursive = true;
+                $params->StudioIDs = $item->Id;
+                $children = getItems($params);
+            } else {
+                //if season, then display episode style
+                if ($item->Type == ItemType::SEASON) {
+                    $this->setEpisodeIndexStyle($item);
+                    $params->StartIndex = $startIndex;
+                    $params->Limit = $this->indexStyle->Limit;
+                }
+                //just get child items //other than series, what will have children, music stuff?
+                $params->ParentID = $item->Id;
+                $children = getItems($params);
+            }
+            $this->subItemsToDisplay = $children->Items;
+            $totalItems = $children->TotalRecordCount;
+        }
+
+        if ($this->subItemsToDisplay) {
+            setNumPagesAndIndexCount($totalItems);
+            $this->TitleTableNoteRight = getSubitemLink($item);
+            $this->TitleTableNoteLeft = $subitems;
+        }
+    }
 }
 
 $pageObj = new ItemDetailsPage($Title, false);
@@ -105,7 +226,7 @@ $pageObj->QSBase = "id=" . $id . "&subitems=" . urlencode($_GET["subitems"]);
 setNames($item);
 $pageObj->title = $Title;
 
-setupChildData($item);
+$pageObj->setupChildData($item);
 
     //get skip and trim from tags
     if ($item->Type == ItemType::EPISODE) {
@@ -116,7 +237,7 @@ setupChildData($item);
         $skipTrim = new SkipAndTrim($item);
     }
 
-$pageObj->indexStyle = $indexStyle;
+
 $pageObj->onloadset = 'play';
 $pageObj->additionalCSS = 'itemDetails.css';
 $pageObj->printHead();
@@ -138,128 +259,6 @@ function SortVersionsByName($item)
 {
     $col = array_column($item->MediaSources, 'Name');
     array_multisort($col, SORT_ASC, $item->MediaSources);
-}
-
-function setEpisodeIndexStyle($item)
-{
-    global $indexStyle, $displayepisode;
-    global $page, $startIndex;
-
-    $displayepisode = true;
-
-    if ($item->MediaStreams[0]->AspectRatio == "4:3") {
-        //4:3
-        $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup4x3AspectRatio);
-        $indexStyle->offsetY = 403;
-    } else {
-        //16x9
-        $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
-        $indexStyle->offsetY = 410;
-    }
-    $indexStyle->ImageType = ImageType::PRIMARY;
-
-    $startIndex = ($page - 1) * $indexStyle->Limit;
-}
-
-function setupChildData($item)
-{
-    global $pageObj; //move into page class
-    global $indexStyle, $itemsToDisplay;
-    global $subitems, $available_subitems, $selected_subitems_index;
-    global $page, $startIndex;
-
-    //must be set before head so grid.css.php can run right
-    $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
-    //9x1
-    $indexStyle->Limit = 9;
-    $indexStyle->offsetY = 500;
-
-    $available_subitems = array();
-
-    if ($item->Type == ItemType::EPISODE) {
-        //display more episodes, before cast
-        $available_subitems[] = SubitemType::MORELIKETHIS;
-    }
-    if ($item->ChildCount) {
-        $available_subitems[] = SubitemType::CHILDREN; 
-    }
-    if (!empty($item->People)) {
-        $available_subitems[] = SubitemType::CASTANDCREW;
-    }
-    //only display "more like this" for movies, series, episodes(more from this season), not seasons
-    //episodes list more, first, then crew...
-    if (($item->MediaType == "Video" || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
-        $available_subitems[] = SubitemType::MORELIKETHIS;
-    }
-
-    $selected_subitems_index = array_search($_GET["subitems"], $available_subitems) ?: 0;
-    $subitems = $available_subitems[$selected_subitems_index];
-
-    $startIndex = ($page - 1) * $indexStyle->Limit;
-
-    if ($subitems == SubitemType::MORELIKETHIS) {
-        if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
-            setEpisodeIndexStyle($item);
-        }
-        if ($item->Type == ItemType::EPISODE) {
-            //get episodes from this season
-            $params = new UserItemsParams();
-            $params->StartIndex = $startIndex;
-            $params->Limit = $indexStyle->Limit;
-            $params->ParentID = $item->SeasonId;
-            $children = getItems($params);
-        } else {
-            $children = getSimilarItems($item->Id, $indexStyle->Limit);
-        }
-        $itemsToDisplay = $children->Items;
-        $totalItems = $children->TotalRecordCount;
-    } 
-    if ($subitems == SubitemType::CASTANDCREW) {
-        //get first X cast and crew
-        $itemsToDisplay = $item->People;
-        $itemsToDisplay = array_filter($itemsToDisplay, 'filterPeople');
-        $totalItems = count($itemsToDisplay);
-        $itemsToDisplay = array_slice($itemsToDisplay, $startIndex, $indexStyle->Limit);
-    }
-    if ($subitems == SubitemType::CHILDREN) {
-        //get first X children
-        $params = new UserItemsParams();
-        $params->StartIndex = $startIndex;
-        $params->Limit = $indexStyle->Limit;
-        if ($item->Type == ItemType::PERSON) {
-            //filter items to ones where PersonID is included
-            $params->Recursive = true;
-            $params->PersonIDs = $item->Id;
-            //JF-web does not include seasons on person page
-            $params->ExcludeItemTypes = ItemType::SEASON;
-            $params->SortBy = UserItemsParams::SORTNAME;
-            $children = getItems($params);
-        } else if ($item->Type == ItemType::STUDIO) {
-            //filter items to ones where StudioID is included
-            $params->Recursive = true;
-            $params->StudioIDs = $item->Id;
-            $children = getItems($params);
-        } else {
-            //if season, then display episode style
-            if ($item->Type == ItemType::SEASON) {
-                setEpisodeIndexStyle($item);
-                $params->StartIndex = $startIndex;
-                $params->Limit = $indexStyle->Limit;
-            }
-            //just get child items
-            $params->ParentID = $item->Id;
-            $children = getItems($params);
-        }
-        $itemsToDisplay = $children->Items;
-        $totalItems = $children->TotalRecordCount;
-    }
-
-    if ($itemsToDisplay) {
-        setNumPagesAndIndexCount($totalItems);
-        $pageObj->TitleTableNoteRight = getSubitemLink($item);
-        $pageObj->TitleTableNoteLeft = $subitems;
-    }
-    
 }
 
 function printLogo()
@@ -608,9 +607,8 @@ function render($item)
     <tr height="182">
         <td colspan="3" align="center">
 <?
-global $itemsToDisplay, $pageObj;
-if ($itemsToDisplay) {
-    $pageObj->printPosterTable($itemsToDisplay);
+if ($pageObj->subItemsToDisplay) {
+    $pageObj->printPosterTable($pageObj->subItemsToDisplay);
 }
 ?>
         </td>
