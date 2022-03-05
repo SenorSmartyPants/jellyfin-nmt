@@ -113,6 +113,69 @@ class ItemDetailsPage extends ListingsPage
         $startIndex = ($page - 1) * $this->indexStyle->Limit;
     }
 
+    private function setupMoreLikeThisItems($item, $startIndex)
+    {
+        if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
+            $this->setEpisodeIndexStyle($item);
+        }
+        if ($item->Type == ItemType::EPISODE) {
+            //get episodes from this season
+            $params = new UserItemsParams();
+            $params->StartIndex = $startIndex;
+            $params->Limit = $this->indexStyle->Limit;
+            $params->ParentID = $item->SeasonId;
+            $children = getItems($params);
+        } else {
+            $children = getSimilarItems($item->Id, $this->indexStyle->Limit);
+        }
+        $this->subItemsToDisplay = $children->Items;
+        return $children->TotalRecordCount;
+    }
+
+    private function setupCastAndCrewItems($item, $startIndex)
+    {
+        //get first X cast and crew
+        $this->subItemsToDisplay = $item->People;
+        $this->subItemsToDisplay = array_filter($this->subItemsToDisplay, 'filterPeople');
+        $totalItems = count($this->subItemsToDisplay);
+        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        return $totalItems;
+    }
+
+    private function setupChildrenItems($item, $startIndex)
+    {
+        //get first X children
+        $params = new UserItemsParams();
+        $params->StartIndex = $startIndex;
+        $params->Limit = $this->indexStyle->Limit;
+        if ($item->Type == ItemType::PERSON) {
+            //filter items to ones where PersonID is included
+            $params->Recursive = true;
+            $params->PersonIDs = $item->Id;
+            //JF-web does not include seasons on person page
+            $params->ExcludeItemTypes = ItemType::SEASON;
+            $params->SortBy = UserItemsParams::SORTNAME;
+            $children = getItems($params);
+        } else if ($item->Type == ItemType::STUDIO) {
+            //filter items to ones where StudioID is included
+            $params->Recursive = true;
+            $params->StudioIDs = $item->Id;
+            $children = getItems($params);
+        } else {
+            //if season, then display episode style
+            if ($item->Type == ItemType::SEASON) {
+                $this->setEpisodeIndexStyle($item);
+                $params->StartIndex = $startIndex;
+                $params->Limit = $this->indexStyle->Limit;
+            }
+            //just get child items //other than series, what will have children, music stuff?
+            $params->ParentID = $item->Id;
+            $children = getItems($params);
+        }
+        $this->subItemsToDisplay = $children->Items;
+        return $children->TotalRecordCount;
+    }
+
     public function setupChildData($item)
     {
         global $available_subitems, $selected_subitems_index;
@@ -148,60 +211,13 @@ class ItemDetailsPage extends ListingsPage
         $startIndex = ($page - 1) * $this->indexStyle->Limit;
 
         if ($subitems == SubitemType::MORELIKETHIS) {
-            if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
-                $this->setEpisodeIndexStyle($item);
-            }
-            if ($item->Type == ItemType::EPISODE) {
-                //get episodes from this season
-                $params = new UserItemsParams();
-                $params->StartIndex = $startIndex;
-                $params->Limit = $this->indexStyle->Limit;
-                $params->ParentID = $item->SeasonId;
-                $children = getItems($params);
-            } else {
-                $children = getSimilarItems($item->Id, $this->indexStyle->Limit);
-            }
-            $this->subItemsToDisplay = $children->Items;
-            $totalItems = $children->TotalRecordCount;
+            $totalItems = $this->setupMoreLikeThisItems($item, $startIndex);
         }
         if ($subitems == SubitemType::CASTANDCREW) {
-            //get first X cast and crew
-            $this->subItemsToDisplay = $item->People;
-            $this->subItemsToDisplay = array_filter($this->subItemsToDisplay, 'filterPeople');
-            $totalItems = count($this->subItemsToDisplay);
-            $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+            $totalItems = $this->setupCastAndCrewItems($item, $startIndex);
         }
         if ($subitems == SubitemType::CHILDREN) {
-            //get first X children
-            $params = new UserItemsParams();
-            $params->StartIndex = $startIndex;
-            $params->Limit = $this->indexStyle->Limit;
-            if ($item->Type == ItemType::PERSON) {
-                //filter items to ones where PersonID is included
-                $params->Recursive = true;
-                $params->PersonIDs = $item->Id;
-                //JF-web does not include seasons on person page
-                $params->ExcludeItemTypes = ItemType::SEASON;
-                $params->SortBy = UserItemsParams::SORTNAME;
-                $children = getItems($params);
-            } else if ($item->Type == ItemType::STUDIO) {
-                //filter items to ones where StudioID is included
-                $params->Recursive = true;
-                $params->StudioIDs = $item->Id;
-                $children = getItems($params);
-            } else {
-                //if season, then display episode style
-                if ($item->Type == ItemType::SEASON) {
-                    $this->setEpisodeIndexStyle($item);
-                    $params->StartIndex = $startIndex;
-                    $params->Limit = $this->indexStyle->Limit;
-                }
-                //just get child items //other than series, what will have children, music stuff?
-                $params->ParentID = $item->Id;
-                $children = getItems($params);
-            }
-            $this->subItemsToDisplay = $children->Items;
-            $totalItems = $children->TotalRecordCount;
+            $totalItems = $this->setupChildrenItems($item, $startIndex);
         }
 
         if ($this->subItemsToDisplay) {
