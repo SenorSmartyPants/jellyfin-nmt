@@ -22,6 +22,8 @@ class ItemDetailsPage extends ListingsPage
     private $specialfeatures;
 
     public $subItemsToDisplay;
+    public $available_subitems;
+    private $selected_subitems_index;
 
     public function printJavascript() 
     {
@@ -178,7 +180,6 @@ class ItemDetailsPage extends ListingsPage
 
     public function setupChildData($item)
     {
-        global $available_subitems, $selected_subitems_index;
         global $page, $startIndex;
 
         //must be set before head so grid.css.php can run right
@@ -187,26 +188,26 @@ class ItemDetailsPage extends ListingsPage
         $this->indexStyle->Limit = 9;
         $this->indexStyle->offsetY = 500;
 
-        $available_subitems = array();
+        $this->available_subitems = array();
 
         if ($item->Type == ItemType::EPISODE) {
             //display more episodes, before cast
-            $available_subitems[] = SubitemType::MORELIKETHIS;
+            $this->available_subitems[] = SubitemType::MORELIKETHIS;
         }
         if ($item->ChildCount) {
-            $available_subitems[] = SubitemType::CHILDREN;
+            $this->available_subitems[] = SubitemType::CHILDREN;
         }
         if (!empty($item->People)) {
-            $available_subitems[] = SubitemType::CASTANDCREW;
+            $this->available_subitems[] = SubitemType::CASTANDCREW;
         }
         //only display "more like this" for movies, series, episodes(more from this season), not seasons
         //episodes list more, first, then crew...
         if (($item->MediaType == "Video" || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
-            $available_subitems[] = SubitemType::MORELIKETHIS;
+            $this->available_subitems[] = SubitemType::MORELIKETHIS;
         }
 
-        $selected_subitems_index = array_search($_GET["subitems"], $available_subitems) ?: 0;
-        $subitems = $available_subitems[$selected_subitems_index];
+        $this->selected_subitems_index = array_search($_GET["subitems"], $this->available_subitems) ?: 0;
+        $subitems = $this->available_subitems[$this->selected_subitems_index];
 
         $startIndex = ($page - 1) * $this->indexStyle->Limit;
 
@@ -222,8 +223,51 @@ class ItemDetailsPage extends ListingsPage
 
         if ($this->subItemsToDisplay) {
             setNumPagesAndIndexCount($totalItems);
-            $this->TitleTableNoteRight = getSubitemLink($item);
-            $this->TitleTableNoteLeft = $subitems;
+            $newindex = $this->selected_subitems_index + 1;
+            $newindex = count($this->available_subitems) == $newindex ? 0 : $newindex;
+
+            $label = $this->updateLabel($item, $subitems) ?? $this->available_subitems[$this->selected_subitems_index];
+            
+            $nextLabel = $this->available_subitems[$newindex];
+            $nextLabel = $this->updateLabel($item, $nextLabel) ?? $nextLabel;
+
+            $this->TitleTableNoteRight = $this->getSubitemLink($item, $newindex, $nextLabel);
+            $this->TitleTableNoteLeft = $label;
+        }
+    }
+
+    private function updateLabel($item, $subitems)
+    {
+        if ($subitems == SubitemType::CHILDREN) {
+            //Update $label
+            switch ($item->Type) {
+                case ItemType::PERSON:
+                    $label = '';
+                    break;
+                case ItemType::STUDIO:
+                    $label = 'Productions';
+                    break;
+                case ItemType::SEASON:
+                    $label = ItemType::EPISODE . 's';
+                    break;
+                case ItemType::SERIES:
+                    $label = ItemType::SEASON . 's';
+                    break;
+                default:
+                    break;
+            }
+        } elseif ($subitems == SubitemType::MORELIKETHIS && $item->Type == ItemType::EPISODE) {
+            $label = 'More from ' . $item->SeasonName;
+        }
+        return $label;
+    }
+
+    private function getSubitemLink($item, $index, $Label)
+    {
+        global $tvid_itemdetails_more;
+        if (count($this->available_subitems) > 1) {
+            return '<a TVID="' . $tvid_itemdetails_more . '" href="' . itemDetailsLink($item->Id) . "&subitems=" . urlencode($this->available_subitems[$index])
+                . '"><span class="' . $tvid_itemdetails_more . '">' . $tvid_itemdetails_more . '</span> for ' . $Label . '</a><br>';
         }
     }
 }
@@ -632,17 +676,4 @@ if ($pageObj->subItemsToDisplay) {
 </table>
 <?
 }
-
-function getSubitemLink($item)
-{
-    global $available_subitems, $selected_subitems_index, $tvid_itemdetails_more;
-    if (count($available_subitems) > 1)
-    {
-        $newindex = $selected_subitems_index + 1;
-        $newindex = count($available_subitems) == $newindex ? 0 : $newindex;
-        return '<a TVID="' . $tvid_itemdetails_more . '" href="' . itemDetailsLink($item->Id) . "&subitems=" . urlencode($available_subitems[$newindex]) 
-            . '"><span class="' . $tvid_itemdetails_more . '">' . $tvid_itemdetails_more . '</span> for ' . $available_subitems[$newindex] . '</a><br>';
-    }
-}
-
 ?>
