@@ -7,6 +7,14 @@ const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
 const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
+
+abstract class SubitemType
+{
+    const MORELIKETHIS = 'More Like This';
+    const CASTANDCREW = 'Cast & Crew';
+    const CHILDREN = 'children';
+}
+
 class ItemDetailsPage extends ListingsPage
 {
     private $additionalparts;
@@ -155,6 +163,7 @@ function setEpisodeIndexStyle($item)
 
 function setupChildData($item)
 {
+    global $pageObj; //move into page class
     global $indexStyle, $itemsToDisplay;
     global $subitems, $available_subitems, $selected_subitems_index;
     global $page, $startIndex;
@@ -169,18 +178,18 @@ function setupChildData($item)
 
     if ($item->Type == ItemType::EPISODE) {
         //display more episodes, before cast
-        $available_subitems[] = "more";
+        $available_subitems[] = SubitemType::MORELIKETHIS;
     }
     if ($item->ChildCount) {
-        $available_subitems[] = "children";
+        $available_subitems[] = SubitemType::CHILDREN; 
     }
     if (!empty($item->People)) {
-        $available_subitems[] = "people";
+        $available_subitems[] = SubitemType::CASTANDCREW;
     }
     //only display "more like this" for movies, series, episodes(more from this season), not seasons
     //episodes list more, first, then crew...
-    if ($item->Type != ItemType::SEASON && $item->Type != ItemType::EPISODE) {
-        $available_subitems[] = "more";
+    if (($item->MediaType == "Video" || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
+        $available_subitems[] = SubitemType::MORELIKETHIS;
     }
 
     $selected_subitems_index = array_search($_GET["subitems"], $available_subitems) ?: 0;
@@ -188,9 +197,11 @@ function setupChildData($item)
 
     $startIndex = ($page - 1) * $indexStyle->Limit;
 
-    if ($subitems == "more") {
-        if ($item->Type == ItemType::EPISODE) {
+    if ($subitems == SubitemType::MORELIKETHIS) {
+        if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
             setEpisodeIndexStyle($item);
+        }
+        if ($item->Type == ItemType::EPISODE) {
             //get episodes from this season
             $params = new UserItemsParams();
             $params->StartIndex = $startIndex;
@@ -203,14 +214,14 @@ function setupChildData($item)
         $itemsToDisplay = $children->Items;
         $totalItems = $children->TotalRecordCount;
     } 
-    if ($subitems == "people") {
+    if ($subitems == SubitemType::CASTANDCREW) {
         //get first X cast and crew
         $itemsToDisplay = $item->People;
         $itemsToDisplay = array_filter($itemsToDisplay, 'filterPeople');
         $totalItems = count($itemsToDisplay);
         $itemsToDisplay = array_slice($itemsToDisplay, $startIndex, $indexStyle->Limit);
     }
-    if ($subitems == "children") {
+    if ($subitems == SubitemType::CHILDREN) {
         //get first X children
         $params = new UserItemsParams();
         $params->StartIndex = $startIndex;
@@ -245,6 +256,8 @@ function setupChildData($item)
 
     if ($itemsToDisplay) {
         setNumPagesAndIndexCount($totalItems);
+        $pageObj->TitleTableNoteRight = getSubitemLink($item);
+        $pageObj->TitleTableNoteLeft = $subitems;
     }
     
 }
@@ -604,12 +617,17 @@ if ($itemsToDisplay) {
     </tr>
 </table>
 <?
-global $available_subitems, $selected_subitems_index, $tvid_itemdetails_more;
-if (count($available_subitems) > 1)
+}
+
+function getSubitemLink($item)
+{
+    global $available_subitems, $selected_subitems_index, $tvid_itemdetails_more;
+    if (count($available_subitems) > 1)
     {
-?>
-    <a TVID="<?= $tvid_itemdetails_more ?>" href="<?= itemDetailsLink($item->Id) . "&subitems=" . $available_subitems[$selected_subitems_index + 1] ?>"></a>
-<?
+        $newindex = $selected_subitems_index + 1;
+        $newindex = count($available_subitems) == $newindex ? 0 : $newindex;
+        return '<a TVID="' . $tvid_itemdetails_more . '" href="' . itemDetailsLink($item->Id) . "&subitems=" . urlencode($available_subitems[$newindex]) 
+            . '"><span class="' . $tvid_itemdetails_more . '">' . $tvid_itemdetails_more . '</span> for ' . $available_subitems[$newindex] . '</a><br>';
     }
 }
 

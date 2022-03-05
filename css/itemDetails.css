@@ -6,6 +6,11 @@ td#page {
     font-size: 12pt;
 }
 
+td#JFlogo {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
 a {
     font-size: 12pt;
     text-decoration: none;
