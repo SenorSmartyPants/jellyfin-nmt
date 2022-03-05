@@ -606,7 +606,7 @@ function printPlayVersionDropdown($item)
     if ($item->MediaType && IsMultipleVersion($item)) { 
         $items = $item->MediaSources;
     ?>
-        <tr><td><div>Version <?= THREESPACES ?></div></td><td><select onkeydownset="play" id="ddlEpisodeId" 
+        <tr><td><div>Version <?= THREESPACES ?></div></td><td colspan="3"><select onkeydownset="play" id="ddlEpisodeId" 
         onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
         >
     <?
@@ -620,7 +620,9 @@ function printPlayVersionDropdown($item)
             <option><?= $mediaSource->Name ?></option>
     <?
         }
-        echo "</select></td></tr><tr><td>&nbsp;<br></td></tr>";
+    ?>
+        </select></td></tr><tr><td>&nbsp;<br></td></tr>
+    <?
     }
 }
 
@@ -646,19 +648,19 @@ function render($item)
 
     $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
     $writers = array_filter($item->People, function($p) { return $p->Type == 'Writer'; });
-?>
+    ?>
 
-<table class="main" border="0" cellpadding="0" cellspacing="0">
-    <tr valign="top">
-        <td width="<?= POSTER_WIDTH ?>px" height="416px">
-        <? 
-        $imageProps = printPoster($item);
-        ?>
+    <table class="main" border="0" cellpadding="0" cellspacing="0">
+        <tr valign="top">
+            <td width="<?= POSTER_WIDTH ?>px" height="416px">
+            <? 
+            $imageProps = printPoster($item);
+            ?>
 
-        </td>
-        <td><img src="images/1x1.png" width="30" height="1" /></td>
-        <td>
-<?
+            </td>
+            <td><img src="images/1x1.png" width="30" height="1" /></td>
+            <td>
+    <?
     printItemNames($item);
     if ($item->Type != ItemType::PERSON && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
         printYearDurationEtc($item, $date, $durationInSeconds);
@@ -677,7 +679,7 @@ function render($item)
     if ($item->MediaType) { 
         $pageObj->printPlayButtonGroups($item);
     }
-?>    
+    ?>    
 
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
@@ -693,14 +695,14 @@ function render($item)
 
     <tr height="182">
         <td colspan="3" align="center">
-<?
-if ($pageObj->subItemsToDisplay) {
-    $pageObj->printPosterTable($pageObj->subItemsToDisplay);
-}
-?>
-        </td>
-    </tr>
-</table>
-<?
+    <?
+    if ($pageObj->subItemsToDisplay) {
+        $pageObj->printPosterTable($pageObj->subItemsToDisplay);
+    }
+    ?>
+            </td>
+        </tr>
+    </table>
+    <?
 }
 ?>
