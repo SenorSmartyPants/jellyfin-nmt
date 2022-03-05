@@ -485,6 +485,20 @@ function printCastRow($cast, $castDivId, $castLabel)
 <?
 }
 
+function printStreamInfoRow($item)
+{
+    $streams = getStreams($item);
+    if ($item->MediaType) {
+    ?>          
+            <tr>
+            <? printStreamInfo($streams->Video) ?>
+            <? printStreamInfo($streams->Audio) ?>
+            <? printStreamInfo($streams->Subtitle) ?>
+            </tr><tr><td>&nbsp;<br></td></tr>
+    <?
+    }
+}
+
 function printStreamInfo($stream)
 {
 ?>
@@ -532,24 +546,27 @@ function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons =
     return $previousPlayButtons;
 }
 
-function printPlayVersionDropdown($items)
-{  
-?>
-    <tr><td><div>Version <?= THREESPACES ?></div></td><td><select onkeydownset="play" id="ddlEpisodeId" 
-    onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
-    >
-<?
-    foreach ($items as $item) {
-        if ($item->MediaSources) {
-            $mediaSource = $item->MediaSources[0];
-        } else {
-            $mediaSource = $item;
+function printPlayVersionDropdown($item)
+{
+    if ($item->MediaType && IsMultipleVersion($item)) { 
+        $items = $item->MediaSources;
+    ?>
+        <tr><td><div>Version <?= THREESPACES ?></div></td><td><select onkeydownset="play" id="ddlEpisodeId" 
+        onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
+        >
+    <?
+        foreach ($items as $item) {
+            if ($item->MediaSources) {
+                $mediaSource = $item->MediaSources[0];
+            } else {
+                $mediaSource = $item;
+            }
+    ?>  
+            <option><?= $mediaSource->Name ?></option>
+    <?
         }
-?>  
-        <option><?= $mediaSource->Name ?></option>
-<?
+        echo "</select></td></tr><tr><td>&nbsp;<br></td></tr>";
     }
-    echo "</select></td></tr><tr><td>&nbsp;<br></td></tr>";
 }
 
 function PrintExtras($extras, $Label, $previousPlayButtons)
@@ -568,7 +585,6 @@ function render($item)
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
 
-    $streams = getStreams($item);
     $CC = $item->HasSubtitles;
 
 
@@ -628,21 +644,8 @@ function render($item)
     printGenreRow($item);
     printCastRow($directors, 'directors', 'Director');
     printCastRow($writers, 'writers', 'Writer');
-
-    if ($item->MediaType) {
-?>          
-        <tr>
-        <? printStreamInfo($streams->Video) ?>
-        <? printStreamInfo($streams->Audio) ?>
-        <? printStreamInfo($streams->Subtitle) ?>
-        </tr><tr><td>&nbsp;<br></td></tr>
-<?
-    }
-
-    // print dropdown for multiple versions here
-    if ($item->MediaType && IsMultipleVersion($item)) { 
-        printPlayVersionDropdown($item->MediaSources);
-    }
+    printStreamInfoRow($item);
+    printPlayVersionDropdown($item);
     ?>
     </table>
     <?
