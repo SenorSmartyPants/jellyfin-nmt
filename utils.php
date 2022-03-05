@@ -123,7 +123,7 @@ function videoPlayLink($mediaSource,
 
     $html = '<a ';
     if ($linkName) {
-        $html .= 'id="' . $linkName . '" name="' . $linkName . '" ';
+        $html .= 'name="' . $linkName . '" ';
     }
 
     $html .= HTMLattributes($additionalAttributes);

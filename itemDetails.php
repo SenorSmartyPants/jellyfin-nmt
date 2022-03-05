@@ -565,8 +565,8 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index = null, $i
 {     
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
-    $attrs = array('tvid'=>$tvid_itemdetails_play);
     $linkName = 'play' . $index;
+    $attrs = array('id'=>$linkName, 'tvid'=>$tvid_itemdetails_play);
     if ($isMultiple) {
         $linkHTML = 'Play - ' . $mediaSource->Name;
     } else {
