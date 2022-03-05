@@ -376,6 +376,73 @@ function setNames($item)
     }
 }
 
+function printItemNames($item)
+{
+    global $parentName, $itemName;
+    if ($parentName) {
+    ?>
+        <h1 class="parentName"><?= $parentName ?></h1>&nbsp;<br>
+        <h3 class="itemName"><?= $itemName ?></h3>&nbsp;<br>
+    <?
+    } else {
+    ?>
+        <h1 class="itemName"><?= $itemName ?></h1>&nbsp;<br>
+    <?
+    }
+
+    if ($item->OriginalTitle && $item->OriginalTitle != $item->Name) {
+    ?>
+        <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
+    <? 
+    }
+}
+
+function printYearDurationEtc($item, $date, $durationInSeconds)
+{
+    $durationInMinutes = round($durationInSeconds / 60);
+    ?>
+        <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr>
+    <? 
+    if ($date) {
+    ?>        
+        <td class=""><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
+    <?
+    }
+    
+    if ($item->MediaType) {
+    ?>          
+            <td class="" ><?= $durationInSeconds > 0 ? $durationInMinutes . ' mins' : null ?>&nbsp;&nbsp;&nbsp;</td>
+    <? 
+    }
+    
+    if ($item->OfficialRating) {
+    ?>
+            <td><div class="border">
+    &nbsp;<?= $item->OfficialRating ?>&nbsp;</div></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <?
+    } 
+    
+    if ($item->CommunityRating || $item->CriticRating) {
+        echo '<td>';
+        if ($item->CommunityRating) {
+            echo '*' . $item->CommunityRating . THREESPACES;
+        }
+        if ($item->CriticRating) {
+            echo $item->CriticRating . '/100' . THREESPACES;
+        }
+        echo '</td>';
+    } 
+    
+    if ($item->MediaType && $durationInSeconds > 0) {
+    ?>  
+        <td>Ends at <?= date('g:i A', time() + ($durationInSeconds) ) ?></td>
+    <?
+    } 
+    ?>
+        </tr></table>&nbsp;<br>
+    <?
+}
+
 function printCastRow($cast, $castDivId, $castLabel)
 {
     $castLabel .= count($cast) > 1 ? 's' : null;
@@ -463,11 +530,9 @@ function PrintExtras($extras, $Label, $previousPlayButtons)
 
 function render($item)
 {
-    global $parentName, $itemName;
     global $pageObj;
     
     $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
-    $durationInMinutes = round($durationInSeconds / 60);
 
     $streams = getStreams($item);
     $CC = $item->HasSubtitles;
@@ -492,22 +557,8 @@ function render($item)
             break;
     }
 
-    $directors = array();
-    $writers = array();
-    $actors = array();
-    if ($item->People) {
-        foreach ($item->People as $person) {
-            if ($person->Type == 'Director') {
-                $directors[] = $person;
-            }
-            if ($person->Type == 'Writer') {
-                $writers[] = $person;
-            }
-            if ($person->Type == 'Actor') {
-                $actors[] = $person;
-            }
-        }
-    }
+    $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
+    $writers = array_filter($item->People, function($p) { return $p->Type == 'Writer'; });
 ?>
 
 <table class="main" border="0" cellpadding="0" cellspacing="0">
@@ -533,66 +584,9 @@ function render($item)
         <td><img src="images/1x1.png" width="30" height="1" /></td>
         <td>
 <?
-    if ($parentName) {
-?>
-        <h1 class="parentName"><?= $parentName ?></h1>&nbsp;<br>
-        <h3 class="itemName"><?= $itemName ?></h3>&nbsp;<br>
-<?
-    } else {
-?>
-        <h1 class="itemName"><?= $itemName ?></h1>&nbsp;<br>
-<?
-    }
-
-    if ($item->OriginalTitle && $item->OriginalTitle != $item->Name) {
-?>
-        <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
-<? 
-    }
-
+    printItemNames($item);
     if ($item->Type != ItemType::PERSON && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
-?>
-
-    <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr>
-<? 
-    if ($date) {
-?>        
-        <td class=""><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
-<?
-    }
-
-    if ($item->MediaType) {
-?>          
-        <td class="" ><?= $durationInSeconds > 0 ? $durationInMinutes . ' mins' : null ?>&nbsp;&nbsp;&nbsp;</td>
-<? 
-    }
-
-    if ($item->OfficialRating) {
-?>
-        <td><div class="border">
-&nbsp;<?= $item->OfficialRating ?>&nbsp;</div></td><td>&nbsp;&nbsp;&nbsp;</td>
-<?
-    } 
-
-    if ($item->CommunityRating || $item->CriticRating) {
-        echo '<td>';
-        if ($item->CommunityRating) {
-            echo '*' . $item->CommunityRating . THREESPACES;
-        }
-        if ($item->CriticRating) {
-            echo $item->CriticRating . '/100' . THREESPACES;
-        }
-        echo '</td>';
-    } 
-
-    if ($item->MediaType) {
-?>  
-        <td><?= $durationInSeconds > 0 ? 'Ends at ' . date('g:i A', time() + ($durationInSeconds) ) : null ?></td>
-<?
-    } 
-?>
-    </tr></table>&nbsp;<br>
-    <?   
+        printYearDurationEtc($item, $date, $durationInSeconds);
     }
     ?>
     <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
@@ -623,7 +617,6 @@ function render($item)
 
     // print dropdown for multiple versions here
     if ($item->MediaType && IsMultipleVersion($item)) { 
-        global $skipTrim;
         printPlayVersionDropdown($item->MediaSources);
     }
     ?>
