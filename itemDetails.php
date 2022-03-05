@@ -445,21 +445,32 @@ function printYearDurationEtc($item, $date, $durationInSeconds)
 
 function printPersonVitals($item)
 {
-    if ($item->PremiereDate) { 
-        ?>
-        <div>Born: <?= formatDate($item->PremiereDate) ?></div>&nbsp;<br>
-        <?                
-    }
-    if ($item->ProductionLocations[0]) {
-        ?>
-        <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
-        <?    
-    }
-    if ($item->EndDate) {
-        ?>
-        <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
-        <?    
-    }  
+    if ($item->Type == ItemType::PERSON) {
+        if ($item->PremiereDate) { 
+            ?>
+            <div>Born: <?= formatDate($item->PremiereDate) ?></div>&nbsp;<br>
+            <?                
+        }
+        if ($item->ProductionLocations[0]) {
+            ?>
+            <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
+            <?    
+        }
+        if ($item->EndDate) {
+            ?>
+            <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
+            <?    
+        } 
+    } 
+}
+
+function printAirDays($item)
+{
+    if ($item->AirDays) { 
+    ?> 
+        <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
+    <? 
+    } 
 }
 
 function printGenreRow($item)
@@ -657,14 +668,10 @@ function render($item)
     <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
     <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
     
-    <? if ($item->Type == ItemType::PERSON) {
-        printPersonVitals($item);
-    } 
+    <? 
+    printPersonVitals($item);
+    printAirDays($item); 
     ?>
-    
-    <? if ($item->AirDays) { ?> 
-    <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
-    <? } ?>
 
     <img src="images/1x1.png" width="<?= 1096-30-$imageProps->width ?>" height="1" />
         </td>
