@@ -1,8 +1,3 @@
-var sId2ndLinkPrefix = 'a2_e_';
-var iLoop = iEpisodesPerPage;
-var sIdSpanPrefix = 's_e_';
-var sIdTvPrefix = 't_e_';
-
 function createAttr(elem, name, value) {
     var attr = document.createAttribute(name)
     attr.nodeValue = value;
@@ -24,7 +19,25 @@ function setVOD(Eid, Evod) {
     }
 }
 
+function formatEpisodeNumber(epnum) {
+    if (epnum < 10) {
+        epnum = '0' + epnum;
+    }
+    if (iMainSeason != asSeasonNo[noNew]) {
+        epnum = 'S' + epnum;
+    }
+    if (asEpisodeNoEnd[noNew]) {
+        epnum += '-' + asEpisodeNoEnd[noNew];
+    }
+    return epnum;
+}
+
 function toggletab() {
+    var sId2ndLinkPrefix = 'a2_e_';
+    var iLoop = iEpisodesPerPage;
+    var sIdSpanPrefix = 's_e_';
+    var sIdTvPrefix = 't_e_';
+    
     for (var i = 1; i <= iLoop; i++) {
         var iElIdNew = i;
         var sLinkIdNew = sIdLinkPrefix + iElIdNew;
@@ -49,16 +62,7 @@ function toggletab() {
             var sMouseOverValueNew = 'showEpisode(' + noNew + ')';
             elLinkNew.setAttribute("onmouseover", sMouseOverValueNew);
 
-            var iEpisodeNoNew = asEpisodeNo[noNew];
-            if (iEpisodeNoNew < 10) {
-                iEpisodeNoNew = '0' + iEpisodeNoNew;
-            }
-            if (iMainSeason != asSeasonNo[noNew]) {
-                iEpisodeNoNew = 'S' + iEpisodeNoNew;
-            }
-            if (asEpisodeNoEnd[noNew]) {
-                iEpisodeNoNew += '-' + asEpisodeNoEnd[noNew];
-            }
+            var iEpisodeNoNew = formatEpisodeNumber(asEpisodeNo[noNew]);
 
             var sWatched = '';
             if (asEpisodeWatched[noNew]) {
