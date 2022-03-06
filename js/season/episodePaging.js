@@ -19,7 +19,8 @@ function setVOD(Eid, Evod) {
     }
 }
 
-function formatEpisodeNumber(epnum) {
+function formatEpisodeNumber(noNew) {
+    epnum = asEpisodeNo[noNew];
     if (epnum < 10) {
         epnum = '0' + epnum;
     }
@@ -62,7 +63,7 @@ function toggletab() {
             var sMouseOverValueNew = 'showEpisode(' + noNew + ')';
             elLinkNew.setAttribute("onmouseover", sMouseOverValueNew);
 
-            var iEpisodeNoNew = formatEpisodeNumber(asEpisodeNo[noNew]);
+            var iEpisodeNoNew = formatEpisodeNumber(noNew);
 
             var sWatched = '';
             if (asEpisodeWatched[noNew]) {
