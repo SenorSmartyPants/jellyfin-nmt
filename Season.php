@@ -127,21 +127,12 @@ function titleCSS($length)
 
 function truncateTitle($title)
 {
-    if (strlen($title) > TITLETRUNCATELONG) {
-        $title = substr($title, 0, TITLETRUNCATELONG) . '...';
-    }
-    return $title;
+    return truncate($title, TITLETRUNCATELONG);
 }
 
 function truncatePlot($Plot, $JSescape = false)
 {
-    if (strlen($Plot) > PLOTTRUNCATE) {
-        $Plot = substr($Plot, 0, PLOTTRUNCATE) . '...';
-    }
-    if ($JSescape) {
-        $Plot = str_replace(array("\n", "\r"), '', $Plot);
-    }
-    return $Plot;
+    return truncate($Plot, PLOTTRUNCATE, $JSescape);
 }
 
 function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
@@ -239,7 +230,7 @@ if ($episodeCount > EPISODESPERPAGE) {
 }
 ?>
     <script type="text/javascript">
-        var sPlotLong = "<?= str_replace(array("\n", "\r"), '', $series->Overview) ?>";
+        var sPlotLong = "<?= JSEscape($series->Overview) ?>";
         var sTitleLong = "<?= $series->Name ?>";
         var fWatch = true;
         var fTVplaylist = false;

@@ -190,8 +190,21 @@ class SkipAndTrim
     }
 }
 
+function JSEscape($str)
+{
+    return str_replace(array("\n", "\r"), '', $str);
+}
 
-
+function truncate($str, $maxlength, $JSescape = false)
+{
+    if (strlen($str) > $maxlength) {
+        $str = substr($str, 0, $maxlength) . '...';
+    }
+    if ($JSescape) {
+        $str = JSEscape($str);
+    }    
+    return $str;
+}
 
 function TicksToSeconds($ticks)
 {
