@@ -466,23 +466,22 @@ function printYearDurationEtc($item, $date, $durationInSeconds)
     <?
     } 
     
-    if ($item->CommunityRating || $item->CriticRating) {
-        if ($item->CommunityRating) {
-            ?><td valign="top"><img src="images/star.png"/></td><td>
-                &nbsp;<?= number_format($item->CommunityRating,1) . THREESPACES ?></td>
-            <?
+    if ($item->CommunityRating) {
+        ?><td valign="top"><img src="images/star.png"/></td><td>
+            &nbsp;<?= number_format($item->CommunityRating,1) . THREESPACES ?></td>
+        <?
+    }
+    
+    if ($item->CriticRating) {
+        if ($item->CriticRating >= 60) {
+            $rt_icon = 'images/fresh.png';
+        } else {
+            $rt_icon = 'images/rotten.png';
         }
-        if ($item->CriticRating) {
-            if ($item->CriticRating >= 60) {
-                $rt_icon = 'images/fresh.png';
-            } else {
-                $rt_icon = 'images/rotten.png';
-            }
-            ?><td valign="top"><img src="<?= $rt_icon ?>"/></td><td>
-                &nbsp;<?= $item->CriticRating . THREESPACES ?></td>
-            <?
-        }
-    } 
+        ?><td valign="top"><img src="<?= $rt_icon ?>"/></td><td>
+            &nbsp;<?= $item->CriticRating . THREESPACES ?></td>
+        <?
+    }
     
     if ($item->MediaType && $durationInSeconds > 0) {
     ?>  
