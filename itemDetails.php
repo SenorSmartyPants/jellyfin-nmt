@@ -127,6 +127,7 @@ class ItemDetailsPage extends ListingsPage
             $this->indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
             $this->indexStyle->offsetY = 410;
         }
+        $this->indexStyle->Limit = $this->indexStyle->nbThumbnailsPerLine;
         $this->indexStyle->ImageType = ImageType::PRIMARY;
 
         $startIndex = ($page - 1) * $this->indexStyle->Limit;

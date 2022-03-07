@@ -67,11 +67,11 @@ class IndexStyle {
                 break;  
   
             case IndexStyleEnum::ThumbPopup:
-                $this->Limit = 4;
+                $this->Limit = 12;
                 break;
 
             case IndexStyleEnum::ThumbPopup4x3AspectRatio:
-                $this->Limit = 5;
+                $this->Limit = 15;
                 break;
 
             case IndexStyleEnum::PosterPopup6x2:
