@@ -40,11 +40,11 @@ class ItemDetailsPage extends ListingsPage
     {
         $isMultiple = IsMultipleVersion($item);
         if ($isMultiple) {
-            SortVersionsByName($item);    
+            SortMediaSourcesByName($item);    
             //get other sources full data, #2 and up
             for ($i=0; $i < $item->MediaSourceCount; $i++) { 
-                //version name is different from MediaSource name
-                $versions[] = getItem($item->MediaSources[$i]->Id);
+                //media source name is what is displayed in ui
+                $versions[] = $item->MediaSources[$i];
             } 
         } else {
             $versions[] = $item;
@@ -315,7 +315,7 @@ function IsMultipleVersion($item)
     return $item->MediaSourceCount && $item->MediaSourceCount > 1;
 }
 
-function SortVersionsByName($item)
+function SortMediaSourcesByName($item)
 {
     $col = array_column($item->MediaSources, 'Name');
     array_multisort($col, SORT_ASC, $item->MediaSources);
@@ -548,8 +548,8 @@ function printCastRow($cast, $castDivId, $castLabel)
 
 function printStreamInfoRow($item)
 {
-    $streams = getStreams($item);
     if ($item->MediaType) {
+        $streams = getStreams($item);
     ?>          
             <tr>
             <? printStreamInfo($streams->Video) ?>
