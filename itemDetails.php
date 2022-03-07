@@ -114,7 +114,6 @@ class ItemDetailsPage extends ListingsPage
     private function setEpisodeIndexStyle($item)
     {
         global $displayepisode;
-        global $page, $startIndex;
 
         $displayepisode = true;
 
@@ -129,19 +128,18 @@ class ItemDetailsPage extends ListingsPage
         }
         $this->indexStyle->Limit = $this->indexStyle->nbThumbnailsPerLine;
         $this->indexStyle->ImageType = ImageType::PRIMARY;
-
-        $startIndex = ($page - 1) * $this->indexStyle->Limit;
     }
 
-    private function setupMoreLikeThisItems($item, $startIndex)
+    private function setupMoreLikeThisItems($item)
     {
+        global $page;
         if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
             $this->setEpisodeIndexStyle($item);
         }
         if ($item->Type == ItemType::EPISODE) {
             //get episodes from this season
             $params = new UserItemsParams();
-            $params->StartIndex = $startIndex;
+            $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
             $params->Limit = $this->indexStyle->Limit;
             $params->ParentID = $item->SeasonId;
             $children = getItems($params);
@@ -162,11 +160,12 @@ class ItemDetailsPage extends ListingsPage
         return $totalItems;
     }
 
-    private function setupChildrenItems($item, $startIndex)
+    private function setupChildrenItems($item)
     {
+        global $page;
         //get first X children
         $params = new UserItemsParams();
-        $params->StartIndex = $startIndex;
+        $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
         $params->Limit = $this->indexStyle->Limit;
         if ($item->Type == ItemType::PERSON) {
             //filter items to ones where PersonID is included
@@ -185,7 +184,7 @@ class ItemDetailsPage extends ListingsPage
             //if season, then display episode style
             if ($item->Type == ItemType::SEASON) {
                 $this->setEpisodeIndexStyle($item);
-                $params->StartIndex = $startIndex;
+                $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
                 $params->Limit = $this->indexStyle->Limit;
             }
             //just get child items //other than series, what will have children, music stuff?
@@ -198,8 +197,7 @@ class ItemDetailsPage extends ListingsPage
 
     public function setupChildData($item)
     {
-        global $page, $startIndex;
-
+        global $page;
         //must be set before head so grid.css.php can run right
         $this->indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
         //9x1
@@ -230,7 +228,7 @@ class ItemDetailsPage extends ListingsPage
         $startIndex = ($page - 1) * $this->indexStyle->Limit;
 
         if ($subitems == SubitemType::MORELIKETHIS) {
-            $totalItems = $this->setupMoreLikeThisItems($item, $startIndex);
+            $totalItems = $this->setupMoreLikeThisItems($item);
         }
         if ($subitems == SubitemType::CASTANDCREW) {
             $totalItems = $this->setupCastAndCrewItems($item, $startIndex);
