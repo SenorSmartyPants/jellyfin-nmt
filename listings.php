@@ -106,7 +106,7 @@ class ListingsPage extends Page
 
     public function printHead()
     {
-        $this->onload = "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
+        $this->onload .= "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
         parent::printHead();
     }
 
