@@ -7,6 +7,7 @@ const POSTER_WIDTH = 276;
 const THUMB_WIDTH = 396;
 const THREESPACES = '&nbsp;&nbsp;&nbsp;';
 
+$availableOverviewHeight = 416;
 
 abstract class SubitemType
 {
@@ -29,7 +30,7 @@ class ItemDetailsPage extends ListingsPage
 
     public function printJavascript() 
     {
-        global $skipTrim, $item;
+        global $item;
 
         parent::printJavascript();
 
@@ -416,22 +417,25 @@ function printPoster($item)
 
 function printItemNames($item)
 {
-    global $parentName, $itemName;
+    global $parentName, $itemName, $availableOverviewHeight;
     if ($parentName) {
     ?>
         <h1 class="parentName"><?= $parentName ?></h1>&nbsp;<br>
-        <h3 class="itemName"><?= $itemName ?></h3>&nbsp;<br>
+        <h3 class="itemName"><?= $itemName ?></h3>
     <?
+        $availableOverviewHeight -= (46 + 22);
     } else {
     ?>
-        <h1 class="itemName"><?= $itemName ?></h1>&nbsp;<br>
+        <h1 class="itemName"><?= $itemName ?></h1>
     <?
+        $availableOverviewHeight -= 37;
     }
 
     if ($item->OriginalTitle && $item->OriginalTitle != $item->Name) {
     ?>
-        <h4 class="itemName"><?= $item->OriginalTitle ?></h4>&nbsp;<br>
+        &nbsp;<br><h4 class="itemName"><?= $item->OriginalTitle ?></h4>
     <? 
+        $availableOverviewHeight -= 30;
     }
 }
 
@@ -473,7 +477,7 @@ function endsAtDescription($stream)
 
 function printYearDurationEtc($item, $stream, $date)
 {
-    ?>
+    ?>&nbsp;<br>
         <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr valign="middle">
     <? 
     if ($date) {
@@ -518,7 +522,7 @@ function printYearDurationEtc($item, $stream, $date)
     <?
     } 
     ?>
-        </tr></table>&nbsp;<br>
+        </tr></table>
     <?
 }
 
@@ -527,17 +531,17 @@ function printPersonVitals($item)
     if ($item->Type == ItemType::PERSON) {
         if ($item->PremiereDate) { 
             ?>
-            <div>Born: <?= formatDate($item->PremiereDate) ?></div>&nbsp;<br>
+            &nbsp;<br><div>Born: <?= formatDate($item->PremiereDate) ?></div>
             <?                
         }
         if ($item->ProductionLocations[0]) {
             ?>
-            <div>Birth place: <?= $item->ProductionLocations[0] ?></div>&nbsp;<br>
+            &nbsp;<br><div>Birth place: <?= $item->ProductionLocations[0] ?></div>
             <?    
         }
         if ($item->EndDate) {
             ?>
-            <div>Died: <?= formatDate($item->EndDate) ?></div>&nbsp;<br>
+            &nbsp;<br><div>Died: <?= formatDate($item->EndDate) ?></div>
             <?    
         } 
     } 
@@ -554,8 +558,10 @@ function printAirDays($item)
 
 function printGenreRow($item)
 {
+    global $availableOverviewHeight;
+
     if ($item->GenreItems && count($item->GenreItems) > 0) {
-        echo '<tr><td><div>Genres' . THREESPACES . '</div></td><td><div id="genres">';
+        echo '<tr><td>&nbsp;<br></td></tr><tr><td><div>Genres' . THREESPACES . '</div></td><td colspan="5"><div id="genres">';
         foreach ($item->GenreItems as $genre) {
             $url = categoryBrowseURL('Genres', $genre->Name);
             printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
@@ -563,28 +569,38 @@ function printGenreRow($item)
                 echo ', ';
             }
         }
-        echo '</div></td></tr><tr><td>&nbsp;<br></td></tr>';
+        echo '</div></td></tr>';
+        $availableOverviewHeight -= 27;
     }
 }
 
 function printCastRow($cast, $castDivId, $castLabel)
 {
+    global $availableOverviewHeight;
+
     $castLabel .= count($cast) > 1 ? 's' : null;
-?>
-    <?= !empty($cast) ? '<tr><td><div>' . $castLabel . THREESPACES . '</div></td><td colspan="5"><div id="' . $castDivId . '">'. formatCast($cast, 4, ', ') . '</div></td></tr><tr><td>&nbsp;<br></td></tr>'  : null ?>
-<?
+
+    if (!empty($cast)) {
+        echo '<tr><td>&nbsp;<br></td></tr><tr><td><div>' . $castLabel . THREESPACES .
+            '</div></td><td colspan="5"><div id="' . $castDivId . '">' .
+            formatCast($cast, 4, ', ') . '</div></td></tr>';
+        $availableOverviewHeight -= 27;
+    }
 }
 
 function printStreamInfoRow($item)
 {
+    global $availableOverviewHeight;
+
     if ($item->MediaType) {
+        $availableOverviewHeight -= 27;
         $streams = getStreams($item);
     ?>          
-            <tr>
+            <tr><td>&nbsp;<br></td></tr><tr>
             <? printStreamInfo($streams->Video) ?>
             <? printStreamInfo($streams->Audio) ?>
             <? printStreamInfo($streams->Subtitle) ?>
-            </tr><tr><td>&nbsp;<br></td></tr>
+            </tr>
     <?
     }
 }
@@ -619,7 +635,7 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index = null, $i
     #endregion
 
 ?>  
-<table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes, $includeCallbackLink) ?></td></tr></table>&nbsp;<br>
+&nbsp;<br><table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes, $includeCallbackLink) ?></td></tr></table>
 <?
 }
 
@@ -638,9 +654,12 @@ function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons =
 
 function printPlayVersionDropdown($item)
 {
+    global $availableOverviewHeight;
     if ($item->MediaType && IsMultipleVersion($item)) { 
+        $availableOverviewHeight -= 28;
         $items = $item->MediaSources;
     ?>
+        <tr><td>&nbsp;<br></td></tr>
         <tr><td><div>Version <?= THREESPACES ?></div></td><td colspan="3"><select onkeydownset="play" id="ddlEpisodeId" 
         onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; updateMediaInfoDisplay(iEpisodeId); document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
         >
@@ -656,7 +675,7 @@ function printPlayVersionDropdown($item)
     <?
         }
     ?>
-        </select></td></tr><tr><td>&nbsp;<br></td></tr>
+        </select></td></tr>
     <?
     }
 }
@@ -673,7 +692,7 @@ function PrintExtras($extras, $Label, $previousPlayButtons)
 
 function render($item)
 {
-    global $pageObj;
+    global $pageObj, $availableOverviewHeight;
     $date = getItemDate($item);
 
     $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
@@ -694,6 +713,7 @@ function render($item)
     printItemNames($item);
     if ($item->Type != ItemType::PERSON && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
         printYearDurationEtc($item, $pageObj->allVideos[0], $date);
+        $availableOverviewHeight -= 29;
     }
     ?>
     <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
@@ -708,13 +728,38 @@ function render($item)
     <?
     if ($item->MediaType) { 
         $pageObj->printPlayButtonGroups($item);
+        $availableOverviewHeight -= 53;
     }
-    ?>    
 
-    <?= $item->Taglines[0] ? '<h3 class="tagline">' . $item->Taglines[0] . '</h3>&nbsp;<br>' : null ?>
-    <?= $item->Overview ? '<div id="overview">' . $item->Overview . '</div>&nbsp;<br>' : null ?>
+    if ($item->Taglines[0]) {
+        echo '&nbsp;<br><h3 class="tagline">' . $item->Taglines[0] . '</h3>';
+        $availableOverviewHeight -= 31;
+    }
+
+    if ($item->Type == ItemType::PERSON) {
+        if ($item->PremiereDate) { 
+            $availableOverviewHeight -= 27;              
+        }
+        if ($item->ProductionLocations[0]) {
+            $availableOverviewHeight -= 27;   
+        }
+        if ($item->EndDate) {
+            $availableOverviewHeight -= 27;   
+        } 
+    }
+    if ($item->AirDays) {
+        $availableOverviewHeight -= 27;
+    } 
+
+    if ($item->Overview) {
+        $availableOverviewHeight -= 9;
+    } 
+
+    //spacer pixel at bottom
+    $availableOverviewHeight -= 1;
     
-    <? 
+    echo $item->Overview ? '&nbsp;<br><div id="overview">' . truncate($item->Overview, $availableOverviewHeight / 21 * 98) . '</div>' : null;
+    
     printPersonVitals($item);
     printAirDays($item); 
     ?>
