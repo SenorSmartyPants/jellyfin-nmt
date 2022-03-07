@@ -25,6 +25,8 @@ class ItemDetailsPage extends ListingsPage
     public $available_subitems;
     private $selected_subitems_index;
 
+    public $allVideos;
+
     public function printJavascript() 
     {
         global $skipTrim, $item;
@@ -32,8 +34,8 @@ class ItemDetailsPage extends ListingsPage
         parent::printJavascript();
 
         //make array of all video items/mediasources
-        $items = $this->getAllVideos($item);
-        CheckinJS::render($items);
+        $this->allVideos = $this->getAllVideos($item);
+        CheckinJS::render($this->allVideos);
     }
 
     private function getAllVideos($item)
@@ -441,21 +443,33 @@ function getItemDate($item)
     return $date;
 }
 
-function printYearDurationEtc($item, $date, $durationInSeconds)
+function runtimeDescription($item)
 {
-    $durationInMinutes = round($durationInSeconds / 60);
+    if ($item->RunTimeTicks)
+    {
+        return round(TicksToSeconds($item->RunTimeTicks) / 60) . ' mins';
+    }
+}
+
+function endsAtDescription($stream)
+{
+    return date('g:i A', time() + TicksToSeconds($stream->RunTimeTicks));
+}
+
+function printYearDurationEtc($item, $stream, $date)
+{
     ?>
         <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr valign="middle">
     <? 
     if ($date) {
     ?>        
-        <td class=""><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
+        <td><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
     <?
     }
     
     if ($item->MediaType) {
     ?>          
-            <td class="" ><?= $durationInSeconds > 0 ? $durationInMinutes . ' mins' : null ?>&nbsp;&nbsp;&nbsp;</td>
+            <td><span id="Runtime"><?= runtimeDescription($stream) ?></span>&nbsp;&nbsp;&nbsp;</td>
     <? 
     }
     
@@ -471,7 +485,7 @@ function printYearDurationEtc($item, $date, $durationInSeconds)
             &nbsp;<?= number_format($item->CommunityRating,1) . THREESPACES ?></td>
         <?
     }
-    
+
     if ($item->CriticRating) {
         if ($item->CriticRating >= 60) {
             $rt_icon = 'images/fresh.png';
@@ -483,9 +497,9 @@ function printYearDurationEtc($item, $date, $durationInSeconds)
         <?
     }
     
-    if ($item->MediaType && $durationInSeconds > 0) {
+    if ($item->MediaType && $stream->RunTimeTicks > 0) {
     ?>  
-        <td>Ends at <?= date('g:i A', time() + ($durationInSeconds) ) ?></td>
+        <td>Ends at <span id="endsAt"><?= endsAtDescription($stream) ?></span></td>
     <?
     } 
     ?>
@@ -563,7 +577,7 @@ function printStreamInfoRow($item)
 function printStreamInfo($stream)
 {
 ?>
-    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td><div id="mediainfo">' . $stream->DisplayTitle . THREESPACES . THREESPACES . '</div></td>' : null ?>
+    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td><div><span id="' . $stream->Type . '">' . $stream->DisplayTitle . '</span>' . THREESPACES . THREESPACES . '</div></td>' : null ?>
 <?
 }
 
@@ -645,11 +659,6 @@ function PrintExtras($extras, $Label, $previousPlayButtons)
 function render($item)
 {
     global $pageObj;
-    
-    $durationInSeconds = round($item->RunTimeTicks / 1000 / 10000);
-
-    $CC = $item->HasSubtitles;
-
     $date = getItemDate($item);
 
     $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
@@ -669,7 +678,7 @@ function render($item)
     <?
     printItemNames($item);
     if ($item->Type != ItemType::PERSON && ($date || $item->MediaType || $item->OfficialRating || $item->CommunityRating)) {
-        printYearDurationEtc($item, $date, $durationInSeconds);
+        printYearDurationEtc($item, $pageObj->allVideos[0], $date);
     }
     ?>
     <table id="GenreDirectorWriter" border="0" cellspacing="0" cellpadding="0">
