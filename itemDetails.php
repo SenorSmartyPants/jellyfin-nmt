@@ -36,6 +36,21 @@ class ItemDetailsPage extends ListingsPage
         //make array of all video items/mediasources
         $this->allVideos = $this->getAllVideos($item);
         CheckinJS::render($this->allVideos);
+        ?>
+        <script type="text/javascript" src="js/itemDetails.js"></script>
+        <?
+
+        //print mediainfo JS arrays
+        /*  */
+        ?>
+        <script type="text/javascript">
+        var asItemRuntimeDesc = <?= getJSArray(array_map('runtimeDescription', $this->allVideos), false) ?>;
+        var asItemEndsAtDesc = <?= getJSArray(array_map('endsAtDescription', $this->allVideos), false) ?>;
+        var asItemVideoDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Video->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        var asItemAudioDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Audio->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        var asItemSubtitleDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Subtitle->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        </script>
+        <?
     }
 
     private function getAllVideos($item)
@@ -301,6 +316,7 @@ $pageObj->setupChildData($item);
 
 
 $pageObj->onloadset = 'play';
+$pageObj->onload = 'init(); ';
 $pageObj->additionalCSS = 'itemDetails.css';
 $pageObj->printHead();
 
@@ -627,7 +643,7 @@ function printPlayVersionDropdown($item)
         $items = $item->MediaSources;
     ?>
         <tr><td><div>Version <?= THREESPACES ?></div></td><td colspan="3"><select onkeydownset="play" id="ddlEpisodeId" 
-        onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
+        onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; updateMediaInfoDisplay(iEpisodeId); document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
         >
     <?
         foreach ($items as $item) {
