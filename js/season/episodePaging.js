@@ -20,7 +20,7 @@ function setVOD(Eid, Evod) {
 }
 
 function formatEpisodeNumber(noNew) {
-    epnum = asEpisodeNo[noNew];
+    var epnum = asEpisodeNo[noNew];
     if (epnum < 10) {
         epnum = '0' + epnum;
     }
