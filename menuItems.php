@@ -222,6 +222,11 @@ function getPosterID($item, $useSeasonImage = true) {
             } else {
                 $posterID = $item->PrimaryImageTag ? $item->Id : null;
             }
+            if (!$posterID && $item->Type == ItemType::EPISODE) {
+                //show series thumb instead
+                $indexStyle->ImageType = ImageType::THUMB;
+                $posterID = $item->ParentThumbItemId;
+            }
             break; 
     }
     return $posterID;
