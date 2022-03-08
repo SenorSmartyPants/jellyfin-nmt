@@ -14,6 +14,7 @@ abstract class SubitemType
     const MORELIKETHIS = 'More Like This';
     const CASTANDCREW = 'Cast & Crew';
     const CHILDREN = 'children';
+    const SPECIALFEATURES = 'Special Features';
 }
 
 class ItemDetailsPage extends ListingsPage
@@ -35,7 +36,6 @@ class ItemDetailsPage extends ListingsPage
         parent::printJavascript();
 
         //make array of all video items/mediasources
-        $this->allVideos = $this->getAllVideos($item);
         CheckinJS::render($this->allVideos);
         ?>
         <script type="text/javascript" src="js/itemDetails.js"></script>
@@ -109,7 +109,7 @@ class ItemDetailsPage extends ListingsPage
             $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons); 
         }
         $previousPlayButtons = PrintExtras($this->trailers, 'Trailers', $previousPlayButtons);
-        $previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
+        //$previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
     }
     
     private function setEpisodeIndexStyle($item)
@@ -161,6 +161,16 @@ class ItemDetailsPage extends ListingsPage
         return $totalItems;
     }
 
+    private function setupSpecialFeatures($startIndex)
+    {
+        //get first X SpecialFeatures
+        $this->setEpisodeIndexStyle($this->specialfeatures[0]);
+        $this->subItemsToDisplay = $this->specialfeatures;
+        $totalItems = count($this->subItemsToDisplay);
+        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        return $totalItems;
+    }    
+
     private function setupChildrenItems($item)
     {
         global $page;
@@ -199,6 +209,9 @@ class ItemDetailsPage extends ListingsPage
     public function setupChildData($item)
     {
         global $page;
+
+        $this->allVideos = $this->getAllVideos($item);
+
         //must be set before head so grid.css.php can run right
         $this->indexStyle = new IndexStyle(IndexStyleEnum::PosterPopup9x3);
         //9x1
@@ -216,6 +229,9 @@ class ItemDetailsPage extends ListingsPage
         }
         if (!empty($item->People)) {
             $this->available_subitems[] = SubitemType::CASTANDCREW;
+        }
+        if ($this->specialfeatures) {
+            $this->available_subitems[] = SubitemType::SPECIALFEATURES;
         }
         //only display "more like this" for movies, series, episodes(more from this season), not seasons
         //episodes list more, first, then crew...
@@ -236,6 +252,9 @@ class ItemDetailsPage extends ListingsPage
         }
         if ($subitems == SubitemType::CHILDREN) {
             $totalItems = $this->setupChildrenItems($item, $startIndex);
+        }
+        if ($subitems == SubitemType::SPECIALFEATURES) {
+            $totalItems = $this->setupSpecialFeatures($startIndex);
         }
 
         if ($this->subItemsToDisplay) {
