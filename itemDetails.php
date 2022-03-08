@@ -15,6 +15,7 @@ abstract class SubitemType
     const CASTANDCREW = 'Cast & Crew';
     const CHILDREN = 'children';
     const SPECIALFEATURES = 'Special Features';
+    const TRAILERS = 'Trailers';
 }
 
 class ItemDetailsPage extends ListingsPage
@@ -108,8 +109,6 @@ class ItemDetailsPage extends ListingsPage
             }
             $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons); 
         }
-        $previousPlayButtons = PrintExtras($this->trailers, 'Trailers', $previousPlayButtons);
-        //$previousPlayButtons = PrintExtras($this->specialfeatures, 'Special Features', $previousPlayButtons);
     }
     
     private function setEpisodeIndexStyle($item)
@@ -169,7 +168,17 @@ class ItemDetailsPage extends ListingsPage
         $totalItems = count($this->subItemsToDisplay);
         $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
         return $totalItems;
-    }    
+    }
+    
+    private function setupTrailers($startIndex)
+    {
+        //get first X Trailers
+        $this->setEpisodeIndexStyle($this->trailers[0]);
+        $this->subItemsToDisplay = $this->trailers;
+        $totalItems = count($this->subItemsToDisplay);
+        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        return $totalItems;
+    }
 
     private function setupChildrenItems($item)
     {
@@ -233,9 +242,12 @@ class ItemDetailsPage extends ListingsPage
         if ($this->specialfeatures) {
             $this->available_subitems[] = SubitemType::SPECIALFEATURES;
         }
+        if ($this->trailers) {
+            $this->available_subitems[] = SubitemType::TRAILERS;
+        }
         //only display "more like this" for movies, series, episodes(more from this season), not seasons
         //episodes list more, first, then crew...
-        if (($item->MediaType == "Video" || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
+        if (($item->Type == ItemType::MOVIE || $item->Type == ItemType::SERIES) && $item->Type != ItemType::EPISODE) {
             $this->available_subitems[] = SubitemType::MORELIKETHIS;
         }
 
@@ -255,6 +267,9 @@ class ItemDetailsPage extends ListingsPage
         }
         if ($subitems == SubitemType::SPECIALFEATURES) {
             $totalItems = $this->setupSpecialFeatures($startIndex);
+        }
+        if ($subitems == SubitemType::TRAILERS) {
+            $totalItems = $this->setupTrailers($startIndex);
         }
 
         if ($this->subItemsToDisplay) {
