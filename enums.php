@@ -41,4 +41,16 @@ abstract class ExtrasType
     const INTROS = 'Intros';
     const ADDITIONALPARTS = 'AdditionalParts';
 }
+
+$prettySpecialFeatures = [
+    'Clip' => 'Featurette',
+    'Trailer' => 'Trailer',
+    'BehindTheScenes' => 'Behind the Scenes',
+    'DeletedScene' => 'Deleted Scene',
+    'Interview' => 'Interview',
+    'Scene' => 'Scene',
+    'Sample' => 'Sample',
+    'ThemeSong' => 'Theme Song',
+    'ThemeVideo' => 'Theme Video'
+];
 ?>

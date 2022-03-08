@@ -72,7 +72,7 @@ function getName($item) {
 }
 
 function getSubtitle($item) {
-    global $useSeasonNameForMenuItems;
+    global $useSeasonNameForMenuItems, $prettySpecialFeatures;
     switch ($item->Type) {
         case ItemType::EPISODE:
             if ($useSeasonNameForMenuItems) {
@@ -100,6 +100,13 @@ function getSubtitle($item) {
             break;
         default:
             $subtitle = $item->ProductionYear;
+            if ($item->ExtraType) {
+                if ($item->ExtraType !== 'Unknown') {
+                    $subtitle = $prettySpecialFeatures[$item->ExtraType];
+                } else {
+                    $subtitle = ' ';
+                }
+            }
             break;
     }
     return $subtitle;
@@ -222,8 +229,8 @@ function getPosterID($item, $useSeasonImage = true) {
             } else {
                 $posterID = $item->PrimaryImageTag ? $item->Id : null;
             }
-            if (!$posterID && $item->Type == ItemType::EPISODE) {
-                //show series thumb instead
+            if (!$posterID && $item->MediaType == 'Video') {
+                //show parent thumb instead
                 $indexStyle->ImageType = ImageType::THUMB;
                 $posterID = $item->ParentThumbItemId;
             }
