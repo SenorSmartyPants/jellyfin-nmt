@@ -141,7 +141,7 @@ class Page
 ?>
 <?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id) 
         { 
-            ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), 'Backdrop') ?>"<?   
+            ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), ImageType::BACKDROP) ?>"<?   
         }
         ?>>
 <?

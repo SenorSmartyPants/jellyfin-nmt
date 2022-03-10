@@ -5,6 +5,7 @@ abstract class ImageType
     const BANNER = 'Banner';
     const THUMB = 'Thumb';
     const LOGO = 'Logo';
+    const BACKDROP = 'Backdrop';
 }
 
 abstract class ItemType

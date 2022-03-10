@@ -201,7 +201,7 @@ function exportCommands($item)
                 $imageProps = new ImageParams();
                 $imageProps->maxWidth = 1000;
                 $imageProps->tag = $item->ParentBackdropImageTags[0];
-                $thumbnailURL = getImageURL($item->ParentBackdropItemId, $imageProps, "Backdrop");
+                $thumbnailURL = getImageURL($item->ParentBackdropItemId, $imageProps, ImageType::BACKDROP);
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             }
         } else if ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
@@ -217,7 +217,12 @@ function exportCommands($item)
     if ($FolderImageType != "None") {
         $ImageType = ImageType::PRIMARY;
         if ($item->Type == ItemType::MOVIE) {
-            $ImageType = ImageType::THUMB;
+            if ($item->ImageTags->Thumb) {
+                $ImageType = ImageType::THUMB;
+            } else {
+                $ImageType = ImageType::BACKDROP;
+            }
+            
         }
 
         if ($item->ImageTags->Primary) {
