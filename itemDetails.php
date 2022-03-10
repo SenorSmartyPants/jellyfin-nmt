@@ -642,7 +642,7 @@ function printStreamInfoRow($item)
 function printStreamInfo($stream)
 {
 ?>
-    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td><div><span id="' . $stream->Type . '">' . $stream->DisplayTitle . '</span>' . THREESPACES . THREESPACES . '</div></td>' : null ?>
+    <?= !empty($stream) ? '<td><div>' . $stream->Type . THREESPACES . '</div></td><td class="nowrap"><div><span id="' . $stream->Type . '">' . $stream->DisplayTitle . '</span>' . THREESPACES . THREESPACES . '</div></td>' : null ?>
 <?
 }
 

@@ -81,6 +81,10 @@ table.button {
     color: yellow;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 @media screen {
     #popupWrapper {
         position: absolute;
