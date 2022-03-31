@@ -10,13 +10,9 @@ $collectionType = CollectionType::TVSHOWS;
 $topParentName = $collectiontypeNames[$collectionType];
 
 $pageObj = new ListingsPage('');
-if (isset($_GET['rewatching'])) {
-    $rewatching = true;
-    $pageObj->title = 'Rewatching';
-} else {
-    $rewatching = null;
-    $pageObj->title = 'Next Up';
-}
+$pageObj->title = 'Next Up';
+
+$rewatching = null;
 
 $itemsAndCount = getNextUp($indexStyle->Limit, ($page - 1) * $indexStyle->Limit, $rewatching);
 $items = $itemsAndCount->Items;

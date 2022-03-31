@@ -378,7 +378,7 @@ function getResume($Limit, $StartIndex = 0)
     return getUsersItems($params, 'Resume');
 }
 
-function getNextUp($Limit, $startIndex = 0, $rewatching = null)
+function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 {
     global $user_id;
 
@@ -387,7 +387,7 @@ function getNextUp($Limit, $startIndex = 0, $rewatching = null)
         'Fields' => 'Path',
         'Limit' => $Limit,
         'StartIndex' => $startIndex,
-        'Rewatching' => $rewatching
+        'enableRewatching' => strboolNull($enableRewatching) 
     );
 
     $path = "/Shows/NextUp?" . http_build_query($params);

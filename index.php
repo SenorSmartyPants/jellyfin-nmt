@@ -6,7 +6,6 @@ $useSeasonNameForMenuItems = true;
 class IndexPage extends ListingsPage
 {
     private $resume;
-    private $rewatching;
     private $homeSections;
 
     public function __construct($title)
@@ -14,8 +13,6 @@ class IndexPage extends ListingsPage
         parent::__construct($title, false);        
         //check if there are resume items
         $this->resume = (getResume(1)->TotalRecordCount) > 0;
-        //check if there are rewatching items
-        $this->rewatching = false; //(getNextUp(1,0,true)->TotalRecordCount) > 0;
         $this->items = getUsersViews()->Items;
     }
 
@@ -99,13 +96,6 @@ class IndexPage extends ListingsPage
                 $nameAttr = null;
                 break;
 
-            case 'rewatching':
-                if ($this->rewatching) {
-                    $sectionHTML =  '<a href="nextUp.php?rewatching"' . $nameAttr . '>Rewatching ></a><br clear="all"/>';
-                    $nameAttr = null;
-                }
-                break;                    
-                
             case 'latestmedia':
                 $user = getUser();
                 $latestExcludes = $user->Configuration->LatestItemsExcludes;
