@@ -31,6 +31,13 @@ function getStreamsFromMediaSource($mediaSource)
         }
     }
     $retval->Audio = $mediaSource->MediaStreams[$mediaSource->DefaultAudioStreamIndex];
+
+    // add sanity check, JF 10.8.0 results 0 which points to video stream on some conditions
+    if ($retval->Audio->Type != 'Audio') {
+        //just return the first audio stream in this edge case
+        $audiostreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Audio'; });
+        $retval->Audio =  current($audiostreams);
+    }
     
     $substreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Subtitle'; });
     //can have subs without a default
