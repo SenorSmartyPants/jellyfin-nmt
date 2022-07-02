@@ -164,7 +164,17 @@ class SkipAndTrim
     public $trimSeconds = 0;
 
     public function __construct($item) {
-        $this->getSkipAndTrim($item);   
+        if ($item->Type == ItemType::EPISODE) {
+            //use series for skip and trim
+            $item = getItem($item->SeriesId);
+        }
+
+        $this->getSkipAndTrim($item);
+        if ($item->Type == ItemType::SERIES && $this->skipSeconds == 0 && $this->trimSeconds == 0) {
+            //if series, also check studio if nothing set for series
+            $firstStudio = getItem($item->Studios[0]->Id);
+            $this->getSkipAndTrim($firstStudio);
+        }
     }     
 
     static private function getSecondsFromSkipTrimTag(String $tag)

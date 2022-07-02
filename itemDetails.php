@@ -339,14 +339,8 @@ $pageObj->title = $Title;
 
 $pageObj->setupChildData($item);
 
-    //get skip and trim from tags
-    if ($item->Type == ItemType::EPISODE) {
-        //use series for skip and trim
-        $series = getItem($item->SeriesId);
-        $skipTrim = new SkipAndTrim($series);
-    } else {
-        $skipTrim = new SkipAndTrim($item);
-    }
+//get skip and trim from tags
+$skipTrim = new SkipAndTrim($item);
 
 
 $pageObj->onloadset = 'play';

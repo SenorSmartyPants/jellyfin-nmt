@@ -17,7 +17,9 @@ class LoginPage extends Page
     {
         if (isset($_GET['id'])) 
         {
-            $this->auth->login2(explode(",", $_GET['id']), explode(",", $_GET['name']));
+            $san_id  = htmlspecialchars($_GET['id']);
+            $san_name = htmlspecialchars($_GET['name']);
+            $this->auth->login2(explode(",", $san_id), explode(",", $san_name));
             header('Location: index.php');
             die();            
         }
