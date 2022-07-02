@@ -4,31 +4,18 @@ var elAudio;
 var elSubtitle;
 var elEndsAt;
 
-function getFirstChildOfId(id) {
-    var elem = document.getElementById(id);
-    if (elem != null) {
-        return elem.firstChild;
-    }
-}
-
-function safeNodeValueSet(elem, value) {
-    if (elem != null) {
-        elem.nodeValue = value;
-    }
-}
-
 function init() {
-    elRuntime = getFirstChildOfId('Runtime');
-    elEndsAt = getFirstChildOfId('endsAt');
-    elVideo = getFirstChildOfId('Video');
-    elAudio = getFirstChildOfId('Audio');
-    elSubtitle = getFirstChildOfId('Subtitle');
+    elRuntime = getFirstChild('Runtime');
+    elEndsAt = getFirstChild('endsAt');
+    elVideo = getFirstChild('Video');
+    elAudio = getFirstChild('Audio');
+    elSubtitle = getFirstChild('Subtitle');
 }
 
 function updateMediaInfoDisplay(index) {
-    safeNodeValueSet(elRuntime, asItemRuntimeDesc[index]);
-    safeNodeValueSet(elEndsAt, asItemEndsAtDesc[index]);
-    safeNodeValueSet(elVideo, asItemVideoDesc[index]);
-    safeNodeValueSet(elAudio, asItemAudioDesc[index]);
-    safeNodeValueSet(elSubtitle, asItemSubtitleDesc[index]);
+    setNodeValue(elRuntime, asItemRuntimeDesc[index]);
+    setNodeValue(elEndsAt, asItemEndsAtDesc[index]);
+    setNodeValue(elVideo, asItemVideoDesc[index]);
+    setNodeValue(elAudio, asItemAudioDesc[index]);
+    setNodeValue(elSubtitle, asItemSubtitleDesc[index]);
 }

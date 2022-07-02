@@ -205,6 +205,7 @@ function printInitJS()
         var asEpisodeUrl = <?= getJSArray(array_map('getURL', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/uiUpdateUtils.js"></script>    
     <script type="text/javascript" src="js/season/season.js"></script>
 <?
 if ($episodeCount > EPISODESPERPAGE) {

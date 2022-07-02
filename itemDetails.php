@@ -39,6 +39,8 @@ class ItemDetailsPage extends ListingsPage
         //make array of all video items/mediasources
         CheckinJS::render($this->allVideos);
         ?>
+
+        <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
         <script type="text/javascript" src="js/itemDetails.js"></script>
         <?
 
