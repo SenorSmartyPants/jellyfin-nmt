@@ -5,6 +5,7 @@ include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
 include_once 'filterMenu.php';
+include_once 'utils/javascript.php';
 
 $page = $_GET['page'];
 $page = $page ?? 1;
@@ -82,6 +83,10 @@ class ListingsPage extends Page
         global $topParentId, $topParentName;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
+        <script type="text/javascript">
+        var asMenuTitle = <?= getJSArray(array_map(function($i) { return $i->Name; }, $this->menuItems), true, "") ?>;
+        var asMenuSubtitle = <?= getJSArray(array_map(function($i) { return $i->Subtitle; }, $this->menuItems), true, "") ?>;
+        </script>        
 <?
         if ($this->renderFiltering) {
             //clear some options that would be reset by filter
@@ -106,6 +111,14 @@ class ListingsPage extends Page
 
     public function printHead()
     {
+        //initialize menuitems
+        foreach ($this->items as $item) {
+            $menuItem = getMenuItem($item);
+            if ($menuItem) {
+                array_push($this->menuItems, $menuItem);
+            }
+        }
+
         $this->onload .= "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
         parent::printHead();
     }
@@ -170,24 +183,19 @@ class ListingsPage extends Page
         <table class="movies" border="0" cellpadding="<?= $this->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $this->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $this->indexStyle->moviesTableAlign ?>">
             <?
             $i = 0;
-            foreach ($items as $item) {
+            foreach ($this->menuItems as $menuItem) {
                 //first item in row
                 if (isStartOfRow($i)) {
                     echo "<tr>";
                 }
-                $menuItem = getMenuItem($item);
-                if ($menuItem) {
-                    printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine), $wrapBottomRowToTop);
-                    //add menuItem to menuItems list for later
-                    array_push($this->menuItems, $menuItem);
-    
-                    //last item in row
-                    if (isEndOfRow($i)) {
-                        echo "</tr>";
-                    }
-    
-                    $i++;
+                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine), $wrapBottomRowToTop);
+
+                //last item in row
+                if (isEndOfRow($i)) {
+                    echo "</tr>";
                 }
+
+                $i++;
             }
             ?>
         </table>
@@ -240,9 +248,6 @@ class ListingsPage extends Page
         <div id="popupWrapper">
 <?
         //print popups last of all, so they have highest z-index on NMT
-        foreach ($this->menuItems as $key => $menuItem) {
-            printTitleAndSubtitle($menuItem, 0, $key);
-        }
         if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($this->menuItems as $key => $menuItem) {
