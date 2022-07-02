@@ -24,7 +24,6 @@ class ItemDetailsPage extends ListingsPage
     private $trailers;
     private $specialfeatures;
 
-    public $subItemsToDisplay;
     public $available_subitems;
     private $selected_subitems_index;
 
@@ -148,17 +147,17 @@ class ItemDetailsPage extends ListingsPage
         } else {
             $children = getSimilarItems($item->Id, $this->indexStyle->Limit);
         }
-        $this->subItemsToDisplay = $children->Items;
+        $this->items = $children->Items;
         return $children->TotalRecordCount;
     }
 
     private function setupCastAndCrewItems($item, $startIndex)
     {
         //get first X cast and crew
-        $this->subItemsToDisplay = $item->People;
-        $this->subItemsToDisplay = array_filter($this->subItemsToDisplay, 'filterPeople');
-        $totalItems = count($this->subItemsToDisplay);
-        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        $this->items = $item->People;
+        $this->items = array_filter($this->items, 'filterPeople');
+        $totalItems = count($this->items);
+        $this->items = array_slice($this->items, $startIndex, $this->indexStyle->Limit);
         return $totalItems;
     }
 
@@ -166,9 +165,9 @@ class ItemDetailsPage extends ListingsPage
     {
         //get first X SpecialFeatures
         $this->setEpisodeIndexStyle($this->specialfeatures[0]);
-        $this->subItemsToDisplay = $this->specialfeatures;
-        $totalItems = count($this->subItemsToDisplay);
-        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        $this->items = $this->specialfeatures;
+        $totalItems = count($this->items);
+        $this->items = array_slice($this->items, $startIndex, $this->indexStyle->Limit);
         return $totalItems;
     }
     
@@ -176,9 +175,9 @@ class ItemDetailsPage extends ListingsPage
     {
         //get first X Trailers
         $this->setEpisodeIndexStyle($this->trailers[0]);
-        $this->subItemsToDisplay = $this->trailers;
-        $totalItems = count($this->subItemsToDisplay);
-        $this->subItemsToDisplay = array_slice($this->subItemsToDisplay, $startIndex, $this->indexStyle->Limit);
+        $this->items = $this->trailers;
+        $totalItems = count($this->items);
+        $this->items = array_slice($this->items, $startIndex, $this->indexStyle->Limit);
         return $totalItems;
     }
 
@@ -213,7 +212,7 @@ class ItemDetailsPage extends ListingsPage
             $params->ParentID = $item->Id;
             $children = getItems($params);
         }
-        $this->subItemsToDisplay = $children->Items;
+        $this->items = $children->Items;
         return $children->TotalRecordCount;
     }
 
@@ -274,7 +273,7 @@ class ItemDetailsPage extends ListingsPage
             $totalItems = $this->setupTrailers($startIndex);
         }
 
-        if ($this->subItemsToDisplay) {
+        if ($this->items) {
             setNumPagesAndIndexCount($totalItems);
             $newindex = $this->selected_subitems_index + 1;
             $newindex = count($this->available_subitems) == $newindex ? 0 : $newindex;
@@ -801,8 +800,8 @@ function render($item)
     <tr height="182">
         <td colspan="3" align="center">
     <?
-    if ($pageObj->subItemsToDisplay) {
-        $pageObj->printPosterTable($pageObj->subItemsToDisplay);
+    if ($pageObj->items) {
+        $pageObj->printPosterTable($pageObj->items);
     }
     ?>
             </td>
