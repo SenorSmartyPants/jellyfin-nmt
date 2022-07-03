@@ -30,6 +30,15 @@ function overrideIndexStyle($folderType, $collectionType)
             $indexStyle->Limit = 9;
             break;
 
+        case ItemType::FOLDER . '/': //assuming base folder only show in music video libraries...
+        case ItemType::COLLECTIONFOLDER . '/' . CollectionType::MUSICVIDEOS:
+            $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup4x3AspectRatio);
+            $indexStyle->ImageType = ImageType::PRIMARY;
+            $indexStyle->offsetY = 28;
+            $indexStyle->moviesTableAlign = Alignment::CENTER;
+            $indexStyle->moviesTableVAlign = VerticalAlignment::MIDDLE;
+            break;
+
         default:
             $indexStyle = new IndexStyle();
             break;

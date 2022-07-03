@@ -18,6 +18,7 @@ abstract class ItemType
     const PERSON = 'Person';
     const STUDIO = 'Studio';
     const COLLECTIONFOLDER = 'CollectionFolder';
+    const FOLDER = 'Folder';
     const PLAYLIST = 'Playlist';
     const USERVIEW = 'UserView';
     const MUSICVIDEO = 'MusicVideo';
