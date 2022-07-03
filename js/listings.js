@@ -42,6 +42,10 @@ function openLink(x) {
     location.assign(document.getElementById(x).href);
 }
 
+function openLinkURL(url) {
+    location.assign(url);
+}
+
 function initpage(enablePopups) {
     PopupsEnabled = enablePopups;
     initMenu();

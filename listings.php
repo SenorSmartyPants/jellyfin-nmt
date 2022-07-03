@@ -86,6 +86,8 @@ class ListingsPage extends Page
         <script type="text/javascript">
         var asMenuTitle = <?= getJSArray(array_map(function($i) { return $i->Name; }, $this->menuItems), true, "") ?>;
         var asMenuSubtitle = <?= getJSArray(array_map(function($i) { return $i->Subtitle; }, $this->menuItems), true, "") ?>;
+        var asMenuURL = <?= getJSArray(array_map(function($i) { return $i->DetailURL; }, $this->menuItems), true, "") ?>;
+        var asMenuImage = <?= getJSArray(array_map(function($i) { return $i->PosterURL; }, $this->menuItems), true, "") ?>;
         </script>        
 <?
         if ($this->renderFiltering) {
@@ -317,11 +319,11 @@ function printPopup($menuItem, $gap, $position)
 
     if ($menuItem->PosterURL) {
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLink(' . $placement . ');"' ?> />
+        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLinkURL(asMenuURL[' . $placement . ']);"' ?> />
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
-        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLink(<?= $placement ?>);" />
+        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLinkURL(asMenuURL[iActiveItem]);" />
 <?php            
         }
     }
@@ -396,7 +398,7 @@ function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
     if (!$menuItem->PosterURL) { 
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="#" onclick="openLinkURL(asMenuURL[iActiveItem]);" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
         id="<?= $placement ?>" 
 <?php
     echo getOnkeyleftset($placement);
