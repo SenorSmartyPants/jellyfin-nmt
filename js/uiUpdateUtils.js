@@ -15,7 +15,7 @@ function setNodeValue(elem, value) {
 // use when saved elem is textnode, then can change class, etc
 function setParentAttr(elem, attrName, attrValue) {
     if (elem != null) {
-        elem.parentElement.setAttribute(attrName, attrValue);
+        elem.parentNode.setAttribute(attrName, attrValue);
     }
 }
 
