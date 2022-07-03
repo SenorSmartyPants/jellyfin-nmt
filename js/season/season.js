@@ -1,7 +1,7 @@
         // series config vars
 
         var sIdLinkPrefix = 'a_e_';
-        var fShowSeasonInfo = false;
+        var fShowingSeasonInfo = false;
         var iEpisodesLength = asEpisodePlot.length - 1;
         var url = false;
         var elEpisodeName;
@@ -14,24 +14,35 @@
         //##########################################################
 
 //called from Season.php and season.js
+
+function init() {
+    //save reference to dynamic elements
+    elEpisodeName = getFirstChild('episodeName');
+    elEpisodeId = getFirstChild('episodeId');
+    elEpisodeImg = document.getElementById('episodeImg');
+    elOpenEpisode = document.getElementById('openEpisode');   
+}
+
 function showEpisode(episodeIndex) {
-    elEpisodeName.setAttribute("class", asEpisodeTitleCSS[episodeIndex]);
-    elEpisodeName.firstChild.nodeValue = asEpisodeTitle[episodeIndex];
-    elEpisodeId.nodeValue = asEpisodePlot[episodeIndex];
+    setParentAttr(elEpisodeName, "class", asEpisodeTitleCSS[episodeIndex]);
+    setNodeValue(elEpisodeName, asEpisodeTitle[episodeIndex]);
+    setNodeValue(elEpisodeId, asEpisodePlot[episodeIndex]);
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
     elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
 }
 
-    var init = function() {
+function showSeasonInfo() {
+    if (fShowingSeasonInfo) {
+        showNfocus();
+        fShowingSeasonInfo = false;
+    } else {
+        setNodeValue(elEpisodeName, sTitleLong);
+        setNodeValue(elEpisodeId, sPlotLong);
+        fShowingSeasonInfo = true;
+    }
+}
 
-                //save reference to dynamic elements
-                elEpisodeName = document.getElementById('episodeName');
-                elEpisodeId = document.getElementById('episodeId').firstChild;
-                elEpisodeImg = document.getElementById('episodeImg');
-                elOpenEpisode = document.getElementById('openEpisode');
-            },
-
-            clickDown = function() {
+    var clickDown = function() {
                 iEpisodeId = iEpisodeId + 1;
                 if (iEpisodeId > iEpisodesLength) {
                     //go to first episode
@@ -107,17 +118,6 @@ function showEpisode(episodeIndex) {
             //would be better to pass in iEpisodeId? then t_e_X wouldn't need to be updated on paging
             setFocus = function(episodeIndexThisPage) {
                 iEpisodeId = episodeIndexThisPage + ((iPage - 1) * iEpisodesPerPage);
-                fShowSeasonInfo = false;
+                fShowingSeasonInfo = false;
                 showNfocus();
-            },
-
-            showSeasonInfo = function() {
-                if (fShowSeasonInfo) {
-                    showNfocus();
-                    fShowSeasonInfo = false;
-                } else {
-                    elEpisodeName.firstChild.nodeValue = sTitleLong;
-                    elEpisodeId.nodeValue = sPlotLong;
-                    fShowSeasonInfo = true;
-                }
-        };
+            };

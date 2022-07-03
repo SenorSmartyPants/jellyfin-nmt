@@ -1,9 +1,3 @@
-function createAttr(elem, name, value) {
-    var attr = document.createAttribute(name)
-    attr.nodeValue = value;
-    elem.setAttributeNode(attr);
-}
-
 function setVOD(Eid, Evod) {
     var elem = document.getElementById(Eid);
 

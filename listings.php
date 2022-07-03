@@ -5,6 +5,7 @@ include_once 'secrets.php';
 include_once 'menuItems.php';
 include_once 'page.php';
 include_once 'filterMenu.php';
+include_once 'utils/javascript.php';
 
 $page = $_GET['page'];
 $page = $page ?? 1;
@@ -82,6 +83,12 @@ class ListingsPage extends Page
         global $topParentId, $topParentName;
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
+        <script type="text/javascript">
+        var asMenuTitle = <?= getJSArray(array_map(function($i) { return $i->Name; }, $this->menuItems), true, "") ?>;
+        var asMenuSubtitle = <?= getJSArray(array_map(function($i) { return $i->Subtitle; }, $this->menuItems), true, "") ?>;
+        var asMenuURL = <?= getJSArray(array_map(function($i) { return $i->DetailURL; }, $this->menuItems), true, "") ?>;
+        var asMenuImage = <?= getJSArray(array_map(function($i) { return $i->PosterURL; }, $this->menuItems), true, "") ?>;
+        </script>        
 <?
         if ($this->renderFiltering) {
             //clear some options that would be reset by filter
@@ -106,6 +113,14 @@ class ListingsPage extends Page
 
     public function printHead()
     {
+        //initialize menuitems
+        foreach ($this->items as $item) {
+            $menuItem = getMenuItem($item);
+            if ($menuItem) {
+                array_push($this->menuItems, $menuItem);
+            }
+        }
+
         $this->onload .= "initpage(" . ((isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) ? 'true' : 'false') . ")";
         parent::printHead();
     }
@@ -170,24 +185,19 @@ class ListingsPage extends Page
         <table class="movies" border="0" cellpadding="<?= $this->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $this->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $this->indexStyle->moviesTableAlign ?>">
             <?
             $i = 0;
-            foreach ($items as $item) {
+            foreach ($this->menuItems as $menuItem) {
                 //first item in row
                 if (isStartOfRow($i)) {
                     echo "<tr>";
                 }
-                $menuItem = getMenuItem($item);
-                if ($menuItem) {
-                    printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine), $wrapBottomRowToTop);
-                    //add menuItem to menuItems list for later
-                    array_push($this->menuItems, $menuItem);
-    
-                    //last item in row
-                    if (isEndOfRow($i)) {
-                        echo "</tr>";
-                    }
-    
-                    $i++;
+                printPosterTD($menuItem, 0, $i, ceil(($i + 1) / $this->indexStyle->nbThumbnailsPerLine), $wrapBottomRowToTop);
+
+                //last item in row
+                if (isEndOfRow($i)) {
+                    echo "</tr>";
                 }
+
+                $i++;
             }
             ?>
         </table>
@@ -240,13 +250,10 @@ class ListingsPage extends Page
         <div id="popupWrapper">
 <?
         //print popups last of all, so they have highest z-index on NMT
-        foreach ($this->menuItems as $key => $menuItem) {
-            printTitleAndSubtitle($menuItem, 0, $key);
-        }
         if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($this->menuItems as $key => $menuItem) {
-                printPopup($menuItem, 0, $key);
+                printPopup($menuItem, $key);
             }
         }
 ?>
@@ -254,7 +261,7 @@ class ListingsPage extends Page
 <?        
         if ($this->renderFiltering) {
 ?>           
-            <div class="hidden" id="navigationlinks">
+            <div id="navigationlinks">
                 <a TVID="<?= $tvid_filter_menu ?>" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
                 <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
                 <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>
@@ -305,18 +312,20 @@ function printTitleAndSubtitle($menuItem, $gap, $position)
 <?
 }
 
-function printPopup($menuItem, $gap, $position)
+function printPopup($menuItem, $position)
 {
     global $indexStyle;
-    $placement = $position + $gap + 1; //$position is zero based
+    $placement = $position + 1; //$position is zero based
+    $row = intdiv($position, $indexStyle->nbThumbnailsPerLine);
+    $col = $position % $indexStyle->nbThumbnailsPerLine;
 
     if ($menuItem->PosterURL) {
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLink(' . $placement . ');"' ?> />
+        <img id="imgDVD<?= $placement ?>" class="menu<?= $placement ?> imgRow<?= $row ?> imgCol<?= $col ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLinkURL(asMenuURL[' . $placement . ']);"' ?> />
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
-        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLink(<?= $placement ?>);" />
+        <img id="frmDVD<?= $placement ?>" class="menu<?= $placement ?> frmRow<?= $row ?> frmCol<?= $col ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLinkURL(asMenuURL[iActiveItem]);" />
 <?php            
         }
     }
@@ -391,7 +400,7 @@ function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
     if (!$menuItem->PosterURL) { 
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
-        <a href="<?= $menuItem->DetailURL ?>" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
+        <a href="#" onclick="openLinkURL(asMenuURL[iActiveItem]);" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
         id="<?= $placement ?>" 
 <?php
     echo getOnkeyleftset($placement);
