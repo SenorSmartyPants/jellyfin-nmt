@@ -4,6 +4,7 @@ include_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
 $useSeasonNameForMenuItems = true;
+$episodeNameInTitle = false;
 
 //2 API calls total for series
 //1 here + 1 in parse(episode)
@@ -63,8 +64,13 @@ function parse($item) {
 }
 
 function getName($item) {
+    global $episodeNameInTitle;
     if ($item->Type == ItemType::EPISODE) {
-        $name = $item->SeriesName;
+        if ($episodeNameInTitle) {
+            $name = $item->IndexNumber . '. ' . $item->Name;
+        } else {
+            $name = $item->SeriesName;
+        }
     } else {
         $name = $item->Name;
     }
@@ -72,13 +78,15 @@ function getName($item) {
 }
 
 function getSubtitle($item) {
-    global $useSeasonNameForMenuItems, $prettySpecialFeatures;
+    global $useSeasonNameForMenuItems, $prettySpecialFeatures, $episodeNameInTitle;
     switch ($item->Type) {
         case ItemType::EPISODE:
             if ($useSeasonNameForMenuItems) {
                 $subtitle = $item->SeasonName;
             } else {
-                $subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
+                if (!$episodeNameInTitle) {
+                    $subtitle = 'S' . $item->ParentIndexNumber . ':E' . $item->IndexNumber . ' - ' . $item->Name;
+                }
             }
             break;
         case ItemType::SERIES:

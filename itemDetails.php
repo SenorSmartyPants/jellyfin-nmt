@@ -133,11 +133,12 @@ class ItemDetailsPage extends ListingsPage
 
     private function setupMoreLikeThisItems($item)
     {
-        global $page;
+        global $page, $episodeNameInTitle;
         if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
             $this->setEpisodeIndexStyle($item);
         }
         if ($item->Type == ItemType::EPISODE) {
+            $episodeNameInTitle = true;
             //get episodes from this season
             $params = new UserItemsParams();
             $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
