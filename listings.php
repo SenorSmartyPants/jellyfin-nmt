@@ -261,7 +261,7 @@ class ListingsPage extends Page
 <?        
         if ($this->renderFiltering) {
 ?>           
-            <div class="hidden" id="navigationlinks">
+            <div id="navigationlinks">
                 <a TVID="<?= $tvid_filter_menu ?>" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
                 <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
                 <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>

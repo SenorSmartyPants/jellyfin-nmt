@@ -201,7 +201,7 @@ class Page
     {
         global $tvid_page_index, $tvid_page_categories, $tvid_page_back;
 ?>
-        <div class="hidden" id="navigationlinks">
+        <div id="navigationlinks">
             <a TVID="<?= $tvid_page_index ?>" href="index.php"></a>
             <a TVID="<?= $tvid_page_categories ?>" href="categoriesHTML.php"></a>
             <a TVID="<?= $tvid_page_back ?>" href="javascript:window.history.back();"></a>            

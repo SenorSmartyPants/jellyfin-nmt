@@ -38,12 +38,16 @@ img {
     border: 0;
 }
 
-.hidden {
+#navigationlinks {
     visibility: hidden;
     display: none;
     position: absolute;
     top: 600px;
     left: 1px;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .abs {
