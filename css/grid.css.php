@@ -94,7 +94,7 @@ for ($i=0;$i < $numPosters; $i++) {
     //add offset
     $frameLeft += $offsetX;
     //bounds checking
-    $frameLeft = max($frameLeft, 0);
+    $frameLeft = max($frameLeft, 1);
     $frameLeft = $frameLeft + $frameWidth > $containingCellWidth ? $containingCellWidth - $frameWidth : $frameLeft;
 
     //height
