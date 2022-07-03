@@ -316,14 +316,16 @@ function printPopup($menuItem, $position)
 {
     global $indexStyle;
     $placement = $position + 1; //$position is zero based
+    $row = intdiv($position, $indexStyle->nbThumbnailsPerLine);
+    $col = $position % $indexStyle->nbThumbnailsPerLine;
 
     if ($menuItem->PosterURL) {
 ?>
-        <img id="imgDVD<?= $placement ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLinkURL(asMenuURL[' . $placement . ']);"' ?> />
+        <img id="imgDVD<?= $placement ?>" class="menu<?= $placement ?> imgRow<?= $row ?> imgCol<?= $col ?>" src="<?= $menuItem->PosterURL ?>" <?= $indexStyle->hoverFrame ? null : 'onclick="openLinkURL(asMenuURL[' . $placement . ']);"' ?> />
 <?php
         if ($indexStyle->hoverFrame) {
 ?>
-        <img id="frmDVD<?= $placement ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLinkURL(asMenuURL[iActiveItem]);" />
+        <img id="frmDVD<?= $placement ?>" class="menu<?= $placement ?> frmRow<?= $row ?> frmCol<?= $col ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLinkURL(asMenuURL[iActiveItem]);" />
 <?php            
         }
     }

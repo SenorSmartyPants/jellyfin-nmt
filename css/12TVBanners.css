@@ -1,31 +1,32 @@
-#imgDVD1 { visibility: hidden; position: absolute; top: 48px; left: 11px; }
-#frmDVD1 { visibility: hidden; position: absolute; top: 37px; left: 0px; }
-#imgDVD2 { visibility: hidden; position: absolute; top: 48px; left: 496px; }
-#frmDVD2 { visibility: hidden; position: absolute; top: 37px; left: 485px; }
+.menu1 { visibility: hidden; position: absolute; }
+.menu2 { visibility: hidden; position: absolute; }
+.menu3 { visibility: hidden; position: absolute; }
+.menu4 { visibility: hidden; position: absolute; }
+.menu5 { visibility: hidden; position: absolute; }
+.menu6 { visibility: hidden; position: absolute; }
+.menu7 { visibility: hidden; position: absolute; }
+.menu8 { visibility: hidden; position: absolute; }
+.menu9 { visibility: hidden; position: absolute; }
+.menu10 { visibility: hidden; position: absolute; }
+.menu11 { visibility: hidden; position: absolute; }
+.menu12 { visibility: hidden; position: absolute; }
 
-#imgDVD3 { visibility: hidden; position: absolute; top: 139px; left: 11px; }
-#frmDVD3 { visibility: hidden; position: absolute; top: 128px; left: 0px; }
-#imgDVD4 { visibility: hidden; position: absolute; top: 139px; left: 496px; }
-#frmDVD4 { visibility: hidden; position: absolute; top: 128px; left: 485px; }
+.frmRow0 { top: 37px; }
+.imgRow0 { top: 48px; }
+.frmRow1 { top: 128px; }
+.imgRow1 { top: 139px; }
+.frmRow2 { top: 219px; }
+.imgRow2 { top: 230px; }
+.frmRow3 { top: 310px; }
+.imgRow3 { top: 321px; }
+.frmRow4 { top: 401px; }
+.imgRow4 { top: 412px; }
+.frmRow5 { top: 492px; }
+.imgRow5 { top: 503px; }
 
-#imgDVD5 { visibility: hidden; position: absolute; top: 230px; left: 11px; }
-#frmDVD5 { visibility: hidden; position: absolute; top: 219px; left: 0px; }
-#imgDVD6 { visibility: hidden; position: absolute; top: 230px; left: 496px; }
-#frmDVD6 { visibility: hidden; position: absolute; top: 219px; left: 485px; }
-
-#imgDVD7 { visibility: hidden; position: absolute; top: 321px; left: 11px; }
-#frmDVD7 { visibility: hidden; position: absolute; top: 310px; left: 0px; }
-#imgDVD8 { visibility: hidden; position: absolute; top: 321px; left: 496px; }
-#frmDVD8 { visibility: hidden; position: absolute; top: 310px; left: 485px; }
-
-#imgDVD9 { visibility: hidden; position: absolute; top: 412px; left: 11px; }
-#frmDVD9 { visibility: hidden; position: absolute; top: 401px; left: 0px; }
-#imgDVD10 { visibility: hidden; position: absolute; top: 412px; left: 496px; }
-#frmDVD10 { visibility: hidden; position: absolute; top: 401px; left: 485px; }
-
-#imgDVD11 { visibility: hidden; position: absolute; top: 503px; left: 11px; }
-#frmDVD11 { visibility: hidden; position: absolute; top: 492px; left: 0px; }
-#imgDVD12 { visibility: hidden; position: absolute; top: 503px; left: 496px; }
-#frmDVD12 { visibility: hidden; position: absolute; top: 492px; left: 485px; }
+.frmCol0 { left: 0px; }
+.imgCol0 { left: 11px; }
+.frmCol1 { left: 485px; }
+.imgCol1 { left: 496px; }
 
 table.movies td { height: 91px; width: 484px; }

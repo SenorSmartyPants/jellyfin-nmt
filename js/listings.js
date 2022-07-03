@@ -30,12 +30,10 @@ function hide(x) {
 
 function showOverlay(x) {
     hideOverlay(iActiveItem);
-    document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "visible";
-    document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "visible";
+    document.styleSheets[0].cssRules[(x - 1)].style.visibility = "visible";
 }
 function hideOverlay(x) {
-    document.styleSheets[0].cssRules[(x - 1) * 2].style.visibility = "hidden";
-    document.styleSheets[0].cssRules[(x - 1) * 2 + 1].style.visibility = "hidden";
+    document.styleSheets[0].cssRules[(x - 1)].style.visibility = "hidden";
 }
 
 function openLink(x) {

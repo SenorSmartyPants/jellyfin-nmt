@@ -104,7 +104,32 @@ for ($i=0;$i < $numPosters; $i++) {
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
-    echo "#imgDVD" . ($i + 1) ." { visibility: hidden; position: absolute; top: " . ($frameTop + $frameDifferenceHeight) . "px; left: " . ($frameLeft + $frameDifferenceWidth + ($frameLeft == 0 ? 1 : 0)) . "px; }\n";
-    echo "#frmDVD" . ($i + 1) ." { visibility: hidden; position: absolute; top: ${frameTop}px; left: ${frameLeft}px; }\n";
+    echo ".menu" . ($i + 1) ." { visibility: hidden; position: absolute; }\n";
+}
+
+for ($row=0;$row < ceil($numPosters / $numPerLine); $row++) {
+    //height
+    $frameTop = $thumbHeightPlusCellSpacing * $row + 1;
+    //add offset
+    $frameTop += $offsetY;    
+    //bounds checking
+    $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
+
+    echo ".frmRow" . ($row) ." { top: ${frameTop}px; }\n";
+    echo ".imgRow" . ($row) ." { top: " . ($frameTop + $frameDifferenceHeight) . "px; }\n";
+}
+
+for ($col=0;$col < $numPerLine; $col++) {
+    //width
+    $previousPostersGap = ($thumbWidthPlusCellSpacing) * ($col % $numPerLine);
+    $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth/2));
+    //add offset
+    $frameLeft += $offsetX;
+    //bounds checking
+    $frameLeft = max($frameLeft, 1);
+    $frameLeft = $frameLeft + $frameWidth > $containingCellWidth ? $containingCellWidth - $frameWidth : $frameLeft;
+
+    echo ".frmCol" . ($col) ." { left: ${frameLeft}px; }\n";
+    echo ".imgCol" . ($col) ." { left: " . ($frameLeft + $frameDifferenceWidth) . "px; }\n";
 }
 ?>
