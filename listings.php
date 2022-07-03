@@ -253,7 +253,7 @@ class ListingsPage extends Page
         if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
             foreach ($this->menuItems as $key => $menuItem) {
-                printPopup($menuItem, 0, $key);
+                printPopup($menuItem, $key);
             }
         }
 ?>
@@ -312,10 +312,10 @@ function printTitleAndSubtitle($menuItem, $gap, $position)
 <?
 }
 
-function printPopup($menuItem, $gap, $position)
+function printPopup($menuItem, $position)
 {
     global $indexStyle;
-    $placement = $position + $gap + 1; //$position is zero based
+    $placement = $position + 1; //$position is zero based
 
     if ($menuItem->PosterURL) {
 ?>
