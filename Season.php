@@ -425,6 +425,18 @@ function printSeasonFooter()
     <a TVID="<?= $tvid_season_itemdetails ?>" href="<?= itemDetailsLink($season->Id) ?>"></a>
     <a TVID="<?= $tvid_season_series ?>" href="<?= $seriesMenuItem->DetailURL ?>"></a>
 <?
+    // preload current page of episode images hidden
+    // will this speed navigation
+    global $episodes, $selectedPage, $episodeCount;
+    $episodeOffset = ($selectedPage - 1) * EPISODESPERPAGE;
+    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) { 
+        $episodeIndex = $episodeOffset + $i;
+        $urlImage = getImage($episodes[$episodeIndex]);      
+?>
+    <img class="abs hidden" src="<?= $urlImage ?>" />
+<?        
+    }
+
     $pageObj->printFooter();
 }
 ?>
