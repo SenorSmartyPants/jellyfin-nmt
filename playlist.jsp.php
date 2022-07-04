@@ -31,6 +31,6 @@ class PlaylistPage extends Page
 
 $itemIDs = $_GET["itemIDs"];
 
-$page = new PlaylistPage();
-$page->itemIDs = explode(',', htmlspecialchars($_GET["itemIDs"]));
-$page->render();
+$pageObj = new PlaylistPage();
+$pageObj->itemIDs = explode(',', htmlspecialchars($_GET["itemIDs"]));
+$pageObj->render();

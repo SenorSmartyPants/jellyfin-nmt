@@ -1,5 +1,5 @@
 <?php
 include_once 'categories.php';
-$page = new CategoriesPage();
-$page->render();
+$pageObj = new CategoriesPage();
+$pageObj->render();
 ?>

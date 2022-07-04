@@ -81,6 +81,6 @@ class LoginPage extends Page
     }
 }
 
-$page = new LoginPage();
-$page->render();
+$pageObj = new LoginPage();
+$pageObj->render();
 ?>

@@ -38,6 +38,6 @@ class SeasonRedirectPage extends Page
     }
 }
 
-$page = new SeasonRedirectPage();
-$page->render();
+$pageObj = new SeasonRedirectPage();
+$pageObj->render();
 ?>
