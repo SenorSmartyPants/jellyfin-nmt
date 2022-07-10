@@ -15,11 +15,11 @@ require_once 'config.php';
 include_once 'data.php';
 include_once 'utils.php';
 include_once 'page.php';
-include_once 'templates.php';
 include_once 'menuItems.php';
 include_once 'utils/javascript.php';
 include_once 'utils/arrayCallbacks.php';
 include_once 'utils/checkinJS.php';
+include_once 'utils/templates.php';
 
 const TITLETRUNCATELONG = 56;
 const TITLETRUNCATE = 40;
@@ -192,15 +192,33 @@ function printInitJS()
     </script>
 <?
     CheckinJS::render($episodes, $selectedEpisodeArrayIndex);
+    
+    global $asVideoOutput, $asContainer, $asAudioCodec, $asAudioChannels;
+    $asVideoOutput = array_map(function($i) { return videoOutputImageURL(getStreams($i)->Video); }, $episodes);
+    $asContainer = array_map(function($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
+    $asAudioCodec = array_map(function($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
+    $asAudioChannels = array_map(function($i) { return audioChannelsImageURL(getStreams($i)->Audio); }, $episodes);
+    //using multiple script blocks to stay under 23k byte limit 
 ?>
     <script type="text/javascript">
         //season.js variables
         var asEpisodeTitle = <?= getJSArray(array_map('getTruncateTitle', $episodes), true, '0')?>;
         var asEpisodeTitleCSS = <?= getJSArray(array_map('getTitleCSS', $episodes), false, '0')?>;
-        var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
-        var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;
         var asRuntime = <?= getJSArray(array_map('runtimeDescription', $episodes), true, '0', true)?>;
-
+    </script>        
+    <script type="text/javascript">
+        var asVideoOutput = <?= getJSArray($asVideoOutput, true, '0')?>;
+        var asContainer = <?= getJSArray($asContainer, true, '0')?>;
+        var asAudioCodec = <?= getJSArray($asAudioCodec, true, '0')?>;
+        var asAudioChannels = <?= getJSArray($asAudioChannels, true, '0')?>;
+    </script>        
+    <script type="text/javascript">    
+        var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
+    </script>
+    <script type="text/javascript">
+        var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;        
+    </script>
+    <script type="text/javascript">
         //both season.js and episodePaging.js 
         //not really used by my code season, used by paging
         var asEpisodeUrl = <?= getJSArray(array_map('getURL', $episodes), true, '0')?>;
@@ -251,6 +269,7 @@ function TopBarSpacerWidth($seasonIndexNumber)
     {
         $width = 30;
     }
+    $width += 131;
     return $width;
 }
 
@@ -274,11 +293,10 @@ function printTopBar()
             <td width="20"></td>
             <td align="center" class="tvyear secondaryText"><?= $season->ProductionYear ?></td>
             <td width="50"></td>
-            <?= $ShowVideoOutput ? '<td>' . videoOutput($streams->Video) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowContainer ? '<td>' . container($streams->Container) . '</td><td width="9"></td>' . "\n" : null ?>
-            <?= $ShowAudioCodec ? '<td>' . audioCodec($streams->Audio) . '</td>' . "\n" : null ?>
-            <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>"></td>
-            <td align="right" class="rating"><? 
+            <?= $ShowVideoOutput ? '<td><img id="videoOutput" src="' . videoOutputImageURL($streams->Video) . '"/></td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowContainer ? '<td><img id="container" src="' . containerImageURL($streams->Container) . '"/></td><td width="9"></td>' . "\n" : null ?>
+            <?= $ShowAudioCodec ? '<td width="146"><img id="audioCodec" align="top" src="' . audioCodecImageURL($streams->Audio) . '"/><img id="audioChannels" align="top" src="' . audioChannelsImageURL($streams->Audio) . '"/></td>' . "\n" : null ?>
+            <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>" align="right" class="rating"><? 
                 if ($series->CommunityRating) 
                 {
                     if ($star_rating) 
@@ -411,8 +429,8 @@ function printSeasonFooter()
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
-        <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
-        <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
+        <div id="divEpisodeImgSabish" class="abs"><img id="episodeImg" src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>" width="278" height="164"/></div>
+        <div id="divEpisodeCertification" class="abs"><img id="episodeOfficialRating" src="<?= officialRatingImageURL($series) ?>"/></div>
         <div id="runtime" class="abs TvLink"><?= runtimeDescription($selectedEpisode, false) ?></div>
     </div>
 <?
@@ -438,7 +456,23 @@ function printSeasonFooter()
     <img class="abs hidden" src="<?= $urlImage ?>" />
 <?        
     }
+    // preload video/audio flags
+    global $asVideoOutput, $asContainer, $asAudioCodec, $asAudioChannels;
+    printImageArray($asVideoOutput);
+    printImageArray($asContainer);
+    printImageArray($asAudioCodec);
+    printImageArray($asAudioChannels);
 
     $pageObj->printFooter();
+}
+
+function printImageArray($Images)
+{
+    foreach (array_unique($Images) as $urlImage)
+    {
+?>
+    <img class="abs hidden" src="<?= $urlImage ?>" />
+<? 
+    }
 }
 ?>

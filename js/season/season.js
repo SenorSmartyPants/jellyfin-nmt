@@ -9,6 +9,11 @@
         var elEpisodeImg;
         var elOpenEpisode;
         var elRuntime;
+        var elVideoOutputImg;
+        var elContainerImg;
+        var elAudioCodecImg;
+        var elAudioChannelsImg;
+
 
         //##########################################################
         //## Functions Series ######################################
@@ -18,20 +23,34 @@
 
 function init() {
     //save reference to dynamic elements
+    //text
     elEpisodeName = getFirstChild('episodeName');
     elEpisodeId = getFirstChild('episodeId');
-    elEpisodeImg = document.getElementById('episodeImg');
-    elOpenEpisode = document.getElementById('openEpisode');
     elRuntime = getFirstChild('runtime');
+    //images
+    elEpisodeImg = document.getElementById('episodeImg');
+    elVideoOutputImg = document.getElementById('videoOutput');
+    elContainerImg = document.getElementById('container');
+    elAudioCodecImg = document.getElementById('audioCodec');
+    elAudioChannelsImg = document.getElementById('audioChannels');
+    //anchor
+    elOpenEpisode = document.getElementById('openEpisode');
 }
 
 function showEpisode(episodeIndex) {
+    //text
     setParentAttr(elEpisodeName, "class", asEpisodeTitleCSS[episodeIndex]);
     setNodeValue(elEpisodeName, asEpisodeTitle[episodeIndex]);
     setNodeValue(elEpisodeId, asEpisodePlot[episodeIndex]);
-    elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
-    elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
     setNodeValue(elRuntime, asRuntime[episodeIndex]);
+    //images
+    elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
+    elVideoOutputImg.setAttribute("src", asVideoOutput[episodeIndex]);
+    elContainerImg.setAttribute("src", asContainer[episodeIndex]);
+    elAudioCodecImg.setAttribute("src", asAudioCodec[episodeIndex]);
+    elAudioChannelsImg.setAttribute("src", asAudioChannels[episodeIndex]);
+    //current episode url - TODO: is this needed?
+    elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
 }
 
 function showSeasonInfo() {

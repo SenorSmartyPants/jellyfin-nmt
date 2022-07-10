@@ -1,7 +1,6 @@
 <?
-function audioCodec($audioStream)
+function audioCodecImageURL($audioStream)
 {
-    $debugOutput = '';
     switch (strtolower($audioStream->Codec)) {
         case 'eac3':
             $codecFile = "audcod_dolbyplus.png";
@@ -50,6 +49,13 @@ function audioCodec($audioStream)
             $codecFile = "unknownaudio.png";
     }
 
+    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
+    . 'images/flags/' . $codecFile;
+}
+
+function audioChannelsImageURL($audioStream)
+{
+    $debugOutput = '';
     switch ($audioStream->ChannelLayout) {
         case '5.1':
             $channelFile = "audch_51.png";
@@ -67,23 +73,23 @@ function audioCodec($audioStream)
         case '6.1':
             $channelFile = "audch_61.png";
             break;
+        case '5':
+            $channelFile = "audch_50.png";
+            break;                
         default:
             # channelLayout empty or doesn't match known layouts
             # use count to guess
             if ($audioStream->Channels == 6) {
                 $channelFile = "audch_51.png";
             } else {
-                $debugOutput = '<!-- Channels = ' . $audioStream->Channels . ' -->';
+                $debugOutput = '<!--Channels=' . $audioStream->Channels . '-->';
                 $channelFile = "../1x1.png";
             }
     }
-    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
-    . '<img align="top" src="images/flags/' . $codecFile 
-    . '"/><img align="top" src="images/flags/' . $channelFile . '"/>'
-    . $debugOutput;
+    return 'images/flags/' . $channelFile . $debugOutput;
 }
 
-function container($containerID)
+function containerImageURL($containerID)
 {
     $containerID = strtolower($containerID);
     $justAddExtension = ['asf', 'avi', 'bin', 'dat', 'divx', 'dvd', 'img', 'iso', 'm1v', 
@@ -116,10 +122,10 @@ function container($containerID)
         }  
     }
 
-    return (($url == "unknown.png") ? $containerID : null) . '<img src="images/flags/container_' . $url . '"/>';
+    return (($url == "unknown.png") ? $containerID : null) . 'images/flags/container_' . $url;
 }
 
-function videoOutput($videoStream)
+function videoOutputImageURL($videoStream)
 {
     //Don't use Display Title if Title is set
     if ($videoStream->Title) {
@@ -134,12 +140,12 @@ function videoOutput($videoStream)
     } else {
         $url = $output . ".png";
     }
-    return '<img src="images/flags/output_' .  $url . '"/>';
+    return 'images/flags/output_' .  $url;
 }
 
-function officialRating($rating)
+function officialRatingImageURL($item)
 {
-    switch ($rating) {
+    switch ($item->OfficialRating) {
         case 'TV-14':
             $url = "tv_14.png";
             break;
@@ -162,8 +168,8 @@ function officialRating($rating)
             $url = "tv_y7fv.png";
             break;
         default:
-            $url = $rating;
+            $url = $item->OfficialRating;
     }
-    return strlen($rating) > 0 ? '<img src="images/certificates/' .  $url . '"/>' : '';
+    return strlen($url) > 0 ? 'images/certificates/' .  $url : 'images/1x1.png';
 }
 ?>
