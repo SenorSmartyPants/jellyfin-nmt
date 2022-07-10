@@ -199,6 +199,7 @@ function printInitJS()
         var asEpisodeTitleCSS = <?= getJSArray(array_map('getTitleCSS', $episodes), false, '0')?>;
         var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
         var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;
+        var asRuntime = <?= getJSArray(array_map('runtimeDescription', $episodes), true, '0', true)?>;
 
         //both season.js and episodePaging.js 
         //not really used by my code season, used by paging
@@ -412,6 +413,7 @@ function printSeasonFooter()
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
         <div id="divEpisodeImgSabish" class="abs"><img src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>" width="278" height="164" id="episodeImg"/></div>
         <div id="divEpisodeCertification" class="abs"><?= officialRating($series->OfficialRating) ?></div>
+        <div id="runtime" class="abs TvLink"><?= runtimeDescription($selectedEpisode, false) ?></div>
     </div>
 <?
     if ($pageObj->PCMenu) {

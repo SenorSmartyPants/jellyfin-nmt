@@ -492,14 +492,6 @@ function getItemDate($item)
     return $date;
 }
 
-function runtimeDescription($item)
-{
-    if ($item->RunTimeTicks)
-    {
-        return round(TicksToSeconds($item->RunTimeTicks) / 60) . ' mins';
-    }
-}
-
 function endsAtDescription($stream)
 {
     return date('g:i A', time() + TicksToSeconds($stream->RunTimeTicks));

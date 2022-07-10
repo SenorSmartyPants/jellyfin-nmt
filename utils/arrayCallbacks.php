@@ -18,6 +18,15 @@ function getRuntimeSeconds($item)
     return TicksToSeconds($item->RunTimeTicks);
 }
 
+function runtimeDescription($item, $JSStyle = true)
+{
+    if ($item->RunTimeTicks)
+    {
+        $br = $JSStyle ? '\xa0' : '&nbsp;';
+        return round(TicksToSeconds($item->RunTimeTicks) / 60) . $br . 'mins';
+    }
+}
+
 function getVOD($item)
 {
     return 'vod';

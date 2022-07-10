@@ -8,6 +8,7 @@
         var elEpisodeId;
         var elEpisodeImg;
         var elOpenEpisode;
+        var elRuntime;
 
         //##########################################################
         //## Functions Series ######################################
@@ -20,7 +21,8 @@ function init() {
     elEpisodeName = getFirstChild('episodeName');
     elEpisodeId = getFirstChild('episodeId');
     elEpisodeImg = document.getElementById('episodeImg');
-    elOpenEpisode = document.getElementById('openEpisode');   
+    elOpenEpisode = document.getElementById('openEpisode');
+    elRuntime = getFirstChild('runtime');
 }
 
 function showEpisode(episodeIndex) {
@@ -29,6 +31,7 @@ function showEpisode(episodeIndex) {
     setNodeValue(elEpisodeId, asEpisodePlot[episodeIndex]);
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
     elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
+    setNodeValue(elRuntime, asRuntime[episodeIndex]);
 }
 
 function showSeasonInfo() {

@@ -1,5 +1,5 @@
 <?
-function getJSArray($items, $forceNewline = false, $first = null)
+function getJSArray($items, $forceNewline = false, $first = null, $skipslashes = null)
 {
     if (isset($first)) {
         array_unshift($items, $first);
@@ -12,7 +12,11 @@ function getJSArray($items, $forceNewline = false, $first = null)
         } else {
             $padding = null;
         }
-        return '["' . implode("\"," . $padding . "\"", array_map('addslashes', $items)) . '"]';
+        if (!$skipslashes)
+        {
+            $items = array_map('addslashes', $items);
+        }
+        return '["' . implode("\"," . $padding . "\"", $items) . '"]';
     } else {
         return '[]';
     }
