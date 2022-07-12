@@ -198,6 +198,12 @@ function printInitJS()
     $asContainer = array_map(function($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
     $asAudioCodec = array_map(function($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
     $asAudioChannels = array_map(function($i) { return audioChannelsImageURL(getStreams($i)->Audio); }, $episodes);
+
+    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique;
+    $asVideoOutputUnique = array_unique($asVideoOutput);
+    $asContainerUnique = array_unique($asContainer);
+    $asAudioCodecUnique = array_unique($asAudioCodec);
+    $asAudioChannelsUnique = array_unique($asAudioChannels);
     //using multiple script blocks to stay under 23k byte limit 
 ?>
     <script type="text/javascript">
@@ -207,10 +213,21 @@ function printInitJS()
         var asRuntime = <?= getJSArray(array_map('runtimeDescription', $episodes), true, '0', true)?>;
     </script>        
     <script type="text/javascript">
-        var asVideoOutput = <?= getJSArray($asVideoOutput, true, '0')?>;
-        var asContainer = <?= getJSArray($asContainer, true, '0')?>;
-        var asAudioCodec = <?= getJSArray($asAudioCodec, true, '0')?>;
-        var asAudioChannels = <?= getJSArray($asAudioChannels, true, '0')?>;
+<?
+        echo count($asVideoOutputUnique) > 1 ? "\t\tvar asVideoOutput = " . getJSArray($asVideoOutput, true, '0') . ";\n" : '';
+        echo count($asContainerUnique) > 1 ? "\t\tvar asContainer = " . getJSArray($asContainer, true, '0') . ";\n" : '';
+        echo count($asAudioCodecUnique) > 1 ? "\t\tvar asAudioCodec = " . getJSArray($asAudioCodec, true, '0') . ";\n" : '';
+        echo count($asAudioChannelsUnique) > 1 ? "\t\tvar asAudioChannels = " . getJSArray($asAudioChannels, true, '0') . ";\n" : '';
+?>
+
+        function showMediainfo(episodeIndex) {
+<?
+        echo count($asVideoOutputUnique) > 1 ? "\t\t\telVideoOutputImg.setAttribute(\"src\", asVideoOutput[episodeIndex]);\n" : '';
+        echo count($asContainerUnique) > 1 ? "\t\t\telContainerImg.setAttribute(\"src\", asContainer[episodeIndex]);\n" : '';
+        echo count($asAudioCodecUnique) > 1 ? "\t\t\telAudioCodecImg.setAttribute(\"src\", asAudioCodec[episodeIndex]);\n" : '';
+        echo count($asAudioChannelsUnique) > 1 ? "\t\t\telAudioChannelsImg.setAttribute(\"src\", asAudioChannels[episodeIndex]);\n" : '';           
+?>
+        }
     </script>        
     <script type="text/javascript">    
         var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
@@ -457,18 +474,18 @@ function printSeasonFooter()
 <?        
     }
     // preload video/audio flags
-    global $asVideoOutput, $asContainer, $asAudioCodec, $asAudioChannels;
-    printImageArray($asVideoOutput);
-    printImageArray($asContainer);
-    printImageArray($asAudioCodec);
-    printImageArray($asAudioChannels);
+    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique;    
+    printImageArray($asVideoOutputUnique);
+    printImageArray($asContainerUnique);
+    printImageArray($asAudioCodecUnique);
+    printImageArray($asAudioChannelsUnique);
 
     $pageObj->printFooter();
 }
 
 function printImageArray($Images)
 {
-    foreach (array_unique($Images) as $urlImage)
+    foreach ($Images as $urlImage)
     {
 ?>
     <img class="abs hidden" src="<?= $urlImage ?>" />

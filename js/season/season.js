@@ -45,12 +45,10 @@ function showEpisode(episodeIndex) {
     setNodeValue(elRuntime, asRuntime[episodeIndex]);
     //images
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
-    elVideoOutputImg.setAttribute("src", asVideoOutput[episodeIndex]);
-    elContainerImg.setAttribute("src", asContainer[episodeIndex]);
-    elAudioCodecImg.setAttribute("src", asAudioCodec[episodeIndex]);
-    elAudioChannelsImg.setAttribute("src", asAudioChannels[episodeIndex]);
     //current episode url - TODO: is this needed?
     elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
+    //episode mediainfo images
+    showMediainfo(episodeIndex);
 }
 
 function showSeasonInfo() {
