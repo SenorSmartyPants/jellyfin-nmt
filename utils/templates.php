@@ -75,7 +75,11 @@ function audioChannelsImageURL($audioStream)
             break;
         case '5':
             $channelFile = "audch_50.png";
-            break;                
+            break;
+        case 'mono':
+        case '1.0':
+            $channelFile = "audch_10.png";
+            break;                            
         default:
             # channelLayout empty or doesn't match known layouts
             # use count to guess
