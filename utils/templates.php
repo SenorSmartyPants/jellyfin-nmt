@@ -127,20 +127,66 @@ function containerImageURL($containerID)
 
 function videoOutputImageURL($videoStream)
 {
-    //Don't use Display Title if Title is set
-    if ($videoStream->Title) {
-        //build resolution string
-        $output = strval($videoStream->Height) . ($videoStream->IsInterlaced ? 'i' : 'p');
-    } else {
-        $output = strtolower(explode(" ", $videoStream->DisplayTitle)[0]);
-    }
-
-    if ($output === 'sd') {
-        $url = "sdtv.png";
-    } else {
-        $url = $output . ".png";
-    }
+    $url = getResolutionText($videoStream) . ".png";
     return 'images/flags/output_' .  $url;
+}
+
+function videoOutputHeight($videoStream)
+{
+    return strval($videoStream->Height);
+}
+
+// based on https://github.com/Shadowghost/jellyfin/blob/63d943aab92a4b5f69e625a269eb830bcbfb4d22/MediaBrowser.Model/Entities/MediaStream.cs#L582-L613
+// tweaked to better (IMHO) handle non standard low definition resolutions < 480
+// add 384p 
+function getResolutionText($videoStream)
+{
+    $h = $videoStream->Height;
+    $w = $videoStream->Width;
+    switch (true)
+    {
+        // 256x144 (16:9 square pixel format)
+        case $w <= 256 && $h <= 144:
+            $retval = "144";
+            break;
+        // 426x240 (16:9 square pixel format)
+        case $w <= 426 && $h <= 240:
+            $retval = "240";
+            break;
+        // 640x360 (16:9 square pixel format)
+        case $w <= 640 && $h <= 360:
+            $retval = "360";
+            break;
+        // 682x384 (16:9 square pixel format)
+        case $w <= 682 && $h <= 384: // Added
+            $retval = "384";
+            break;
+        // 854x480 (16:9 square pixel format)
+        case $w <= 854 && $h <= 480:
+            $retval = "480";
+            break;
+        // 960x544 (16:9 square pixel format)
+        case $w <= 960 && $h <= 544:
+            $retval = "540";
+            break;
+        // 1024x576 (16:9 square pixel format)
+        case $w <= 1024 && $h <= 576:
+            $retval = "576";
+            break;
+        // 1280x720
+        case $w <= 1280 && $h <= 962:
+            $retval = "720";
+            break;
+        // 2560x1080 (FHD ultra wide 21:9) using 1440px width to accomodate WQHD
+        case $w <= 2560 && $h <= 1440:
+            $retval = "1080";
+            break;
+        default:
+            //NMT does not support 4k
+            $retval = "4k";
+            break;
+    }
+    return $retval . ($videoStream->IsInterlaced ? "i" : "p");
 }
 
 function officialRatingImageURL($item)
