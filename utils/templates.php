@@ -261,7 +261,7 @@ function getAspectRatioURL($videoStream)
         case $ar < 2.710:
             $retval = "266";
             break;
-        case $ar < 2.710:
+        case $ar < 3.001:
             $retval = "276";
             break;                                      
         default:
