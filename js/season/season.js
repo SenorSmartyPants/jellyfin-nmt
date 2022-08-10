@@ -47,7 +47,7 @@ function showEpisode(episodeIndex) {
     setNodeValue(elRuntime, asRuntime[episodeIndex]);
     //images
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
-    //current episode url - TODO: is this needed?
+    //current episode url - used when "Play" button is pressed, does not check in currently
     elOpenEpisode.setAttribute("href", asEpisodeUrl[episodeIndex]);
     //episode mediainfo images
     showMediainfo(episodeIndex);
