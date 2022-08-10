@@ -1,6 +1,4 @@
-function setVOD(Eid, Evod) {
-    var elem = document.getElementById(Eid);
-
+function setVOD(elem, Evod) {
     elem.removeAttribute('vod');
     elem.removeAttribute('zcd');
 
@@ -27,53 +25,49 @@ function formatEpisodeNumber(noNew) {
     return epnum;
 }
 
+function episodeListItemDesc(iEpisodeIndex) {
+    var sWatched = '';
+    if (asEpisodeWatched[iEpisodeIndex]) {
+        sWatched = '* ';
+    }
+    return formatEpisodeNumber(iEpisodeIndex) + '. ' + sWatched + asEpisodeTitleShort[iEpisodeIndex];
+}
+
+var sId2ndLinkPrefix = 'a2_e_';
+var sIdSpanPrefix = 's_e_';
+var sIdTvPrefix = 't_e_';
+
+function formatEpisodeListItem(iElId, iEpisodeIndex) {
+    //cache elements
+    var elDesc = getFirstChild(sIdSpanPrefix + iElId);
+    var elLink = document.getElementById(sIdLinkPrefix + iElId);
+    var el2ndLink = document.getElementById(sId2ndLinkPrefix + iElId);
+    var elTvID = document.getElementById(sIdTvPrefix + iElId);
+
+    if (iEpisodeIndex < (iEpisodesLength + 1)) {
+        elDesc.nodeValue = episodeListItemDesc(iEpisodeIndex);
+
+        elLink.setAttribute("href", "#playepisode" + iElId);
+        elLink.setAttribute("onmouseover", 'showEpisode(' + iEpisodeIndex + ')');
+        
+        el2ndLink.setAttribute("href", asEpisodeUrl[iEpisodeIndex]);
+        setVOD(el2ndLink, asEpisodeVod[iElId]);
+
+        elTvID.setAttribute("TVID", asEpisodeNo[iEpisodeIndex]);
+    } else {
+        //clear entry
+        elDesc.nodeValue = " ";
+        elLink.setAttribute("href", " ");
+        elLink.setAttribute("onmouseover", " ");
+        elTvID.setAttribute("TVID", " ");
+    }    
+}
+
 function toggletab() {
-    var sId2ndLinkPrefix = 'a2_e_';
-    var iLoop = iEpisodesPerPage;
-    var sIdSpanPrefix = 's_e_';
-    var sIdTvPrefix = 't_e_';
-    
-    for (var i = 1; i <= iLoop; i++) {
-        var iElIdNew = i;
-        var sLinkIdNew = sIdLinkPrefix + iElIdNew;
-        var s2ndLinkIdNew = sId2ndLinkPrefix + iElIdNew;
-        var sSpanIdNew = sIdSpanPrefix + iElIdNew;
-        var sTvIdNew = sIdTvPrefix + iElIdNew;
-
-        var elLinkNew = document.getElementById(sLinkIdNew);
-        var el2ndLinkNew = document.getElementById(s2ndLinkIdNew);
-        var elSpanNew = document.getElementById(sSpanIdNew);
-        var elTvIDNew = document.getElementById(sTvIdNew);
-        var noNew = Math.floor(((iPage - 1) * iLoop) + i);
-        if (noNew < (iEpisodesLength + 1)) {
-            if (fTVplaylist) {
-                elLinkNew.setAttribute("href", asEpisodePlaylist[noNew]);
-            } else {
-                var sUrlNew = asEpisodeUrl[noNew];
-                elLinkNew.setAttribute("href", "#playepisode" + i);
-                el2ndLinkNew.setAttribute("href", sUrlNew);
-                setVOD(s2ndLinkIdNew, asEpisodeVod[i]);
-            }
-            var sMouseOverValueNew = 'showEpisode(' + noNew + ')';
-            elLinkNew.setAttribute("onmouseover", sMouseOverValueNew);
-
-            var iEpisodeNoNew = formatEpisodeNumber(noNew);
-
-            var sWatched = '';
-            if (asEpisodeWatched[noNew]) {
-                sWatched = "* ";
-            }
-            var sSpanValueNew = iEpisodeNoNew + '. ' + sWatched + asEpisodeTitleShort[noNew];
-
-            elSpanNew.firstChild.nodeValue = sSpanValueNew;
-            elTvIDNew.setAttribute("TVID", asEpisodeNo[noNew]);
-        } else {
-            elLinkNew.setAttribute("href", " ");
-            elLinkNew.setAttribute("onmouseover", " ");
-            elSpanNew.firstChild.nodeValue = " ";
-            elTvIDNew.setAttribute("TVID", " ");
-        }
-
+    var startingIndex = Math.floor((iPage - 1) * iEpisodesPerPage);
+    for (var i = 1; i <= iEpisodesPerPage; i++) {
+        var iEpisodeIndex = startingIndex + i;
+        formatEpisodeListItem(i, iEpisodeIndex)
     }
     document.getElementById('pageCount').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
                             
