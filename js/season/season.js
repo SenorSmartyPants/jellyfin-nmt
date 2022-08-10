@@ -13,6 +13,7 @@
         var elContainerImg;
         var elAudioCodecImg;
         var elAudioChannelsImg;
+        var elAspectRatioImg;
 
 
         //##########################################################
@@ -33,6 +34,7 @@ function init() {
     elContainerImg = document.getElementById('container');
     elAudioCodecImg = document.getElementById('audioCodec');
     elAudioChannelsImg = document.getElementById('audioChannels');
+    elAspectRatioImg = document.getElementById('aspectRatio')
     //anchor
     elOpenEpisode = document.getElementById('openEpisode');
 }

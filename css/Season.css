@@ -10,7 +10,12 @@
 
 #divEpisodeCertification {
     top: 597px;
-    left: 161px;
+    left: 271px;
+}
+
+#divEpisodeAR {
+    top: 597px;
+    left: 122px;
 }
 
 #runtime {

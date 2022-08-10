@@ -193,6 +193,80 @@ function getResolutionText($videoStream)
     return $retval . ($videoStream->IsInterlaced ? "i" : "p");
 }
 
+function getAspectRatioURL($videoStream)
+{
+    $strAR = explode(':', $videoStream->AspectRatio);
+    $ar = $strAR[0] / $strAR[1];
+
+    switch (true)
+    {
+        case $ar < 1.350:
+            $retval = "133";
+            break;
+        case $ar < 1.400:
+            $retval = "137";
+            break;
+        case $ar < 1.465:
+            $retval = "143";
+            break;
+        case $ar < 1.530:
+            $retval = "150";
+            break;
+        case $ar < 1.610:
+            $retval = "156";
+            break;
+        case $ar < 1.705:
+            $retval = "166";
+            break;
+        case $ar < 1.765:
+            $retval = "175";
+            break;
+        case $ar < 1.815:
+            $retval = "178";
+            break;
+        case $ar < 1.925:
+            $retval = "185";
+            break;
+        case $ar < 2.100:
+            $retval = "200";
+            break;
+        case $ar < 2.275:
+            $retval = "220";
+            break;
+        case $ar < 2.370:
+            $retval = "235";
+            break;
+        case $ar < 2.395:
+            $retval = "239";
+            break;
+        case $ar < 2.405:
+            $retval = "240";
+            break;
+        case $ar < 2.415:
+            $retval = "241";
+            break;
+        case $ar < 2.485:
+            $retval = "242";
+            break;
+        case $ar < 2.570:
+            $retval = "255";
+            break;
+        case $ar < 2.625:
+            $retval = "259";
+            break;
+        case $ar < 2.710:
+            $retval = "266";
+            break;
+        case $ar < 2.710:
+            $retval = "276";
+            break;                                      
+        default:
+            $retval = "unknown";
+            break;
+    }
+    return 'images/flags/ar_' .  $retval . '.png';
+}
+
 function officialRatingImageURL($item)
 {
     switch ($item->OfficialRating) {

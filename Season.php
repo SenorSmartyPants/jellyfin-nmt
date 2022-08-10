@@ -193,17 +193,18 @@ function printInitJS()
 <?
     CheckinJS::render($episodes, $selectedEpisodeArrayIndex);
     
-    global $asVideoOutput, $asContainer, $asAudioCodec, $asAudioChannels;
     $asVideoOutput = array_map(function($i) { return videoOutputImageURL(getStreams($i)->Video); }, $episodes);
     $asContainer = array_map(function($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
     $asAudioCodec = array_map(function($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
     $asAudioChannels = array_map(function($i) { return audioChannelsImageURL(getStreams($i)->Audio); }, $episodes);
+    $asAspectRatios = array_map(function($i) { return getAspectRatioURL(getStreams($i)->Video); }, $episodes);
 
-    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique;
+    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;
     $asVideoOutputUnique = array_unique($asVideoOutput);
     $asContainerUnique = array_unique($asContainer);
     $asAudioCodecUnique = array_unique($asAudioCodec);
     $asAudioChannelsUnique = array_unique($asAudioChannels);
+    $asAspectRatiosUnique = array_unique($asAspectRatios);
     //using multiple script blocks to stay under 23k byte limit 
 ?>
     <script type="text/javascript">
@@ -218,6 +219,7 @@ function printInitJS()
         echo count($asContainerUnique) > 1 ? "\t\tvar asContainer = " . getJSArray($asContainer, true, '0') . ";\n" : '';
         echo count($asAudioCodecUnique) > 1 ? "\t\tvar asAudioCodec = " . getJSArray($asAudioCodec, true, '0') . ";\n" : '';
         echo count($asAudioChannelsUnique) > 1 ? "\t\tvar asAudioChannels = " . getJSArray($asAudioChannels, true, '0') . ";\n" : '';
+        echo count($asAspectRatiosUnique) > 1 ? "\t\tvar asAspectRatios = " . getJSArray($asAspectRatios, true, '0') . ";\n" : '';
 ?>
 
         function showMediainfo(episodeIndex) {
@@ -225,7 +227,8 @@ function printInitJS()
         echo count($asVideoOutputUnique) > 1 ? "\t\t\telVideoOutputImg.setAttribute(\"src\", asVideoOutput[episodeIndex]);\n" : '';
         echo count($asContainerUnique) > 1 ? "\t\t\telContainerImg.setAttribute(\"src\", asContainer[episodeIndex]);\n" : '';
         echo count($asAudioCodecUnique) > 1 ? "\t\t\telAudioCodecImg.setAttribute(\"src\", asAudioCodec[episodeIndex]);\n" : '';
-        echo count($asAudioChannelsUnique) > 1 ? "\t\t\telAudioChannelsImg.setAttribute(\"src\", asAudioChannels[episodeIndex]);\n" : '';           
+        echo count($asAudioChannelsUnique) > 1 ? "\t\t\telAudioChannelsImg.setAttribute(\"src\", asAudioChannels[episodeIndex]);\n" : '';
+        echo count($asAspectRatiosUnique) > 1 ? "\t\t\telAspectRatioImg.setAttribute(\"src\", asAspectRatios[episodeIndex]);\n" : '';
 ?>
         }
     </script>        
@@ -449,6 +452,7 @@ function printSeasonFooter()
         <div id="divEpisodeImgSabish" class="abs"><img id="episodeImg" src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>" width="278" height="164"/></div>
         <div id="divEpisodeCertification" class="abs"><img id="episodeOfficialRating" src="<?= officialRatingImageURL($series) ?>"/></div>
         <div id="runtime" class="abs TvLink"><?= runtimeDescription($selectedEpisode, false) ?></div>
+        <div id="divEpisodeAR" class="abs"><img id="aspectRatio" src="<?= getAspectRatioURL(getStreams($selectedEpisode)->Video)?>" /></div>
     </div>
 <?
     if ($pageObj->PCMenu) {
@@ -474,22 +478,28 @@ function printSeasonFooter()
 <?        
     }
     // preload video/audio flags
-    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique;    
+    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;    
     printImageArray($asVideoOutputUnique);
     printImageArray($asContainerUnique);
     printImageArray($asAudioCodecUnique);
     printImageArray($asAudioChannelsUnique);
+    printImageArray($asAspectRatiosUnique);
 
     $pageObj->printFooter();
 }
 
 function printImageArray($Images)
 {
-    foreach ($Images as $urlImage)
+    // don't output array if only 1 item
+    // no need to preload since image is already sourced
+    if (count($Images) > 1) 
     {
+        foreach ($Images as $urlImage)
+        {
 ?>
     <img class="abs hidden" src="<?= $urlImage ?>" />
 <? 
+        }
     }
 }
 ?>
