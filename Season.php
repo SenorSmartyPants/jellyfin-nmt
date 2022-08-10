@@ -133,8 +133,8 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     global $season, $skipTrim;
     if ($episode) {
         if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
-            //Special episode, not displaying special season, then list episode as SX. Title
-            $titleLine = 'S' . $episode->IndexNumber;
+            //Special episode, not displaying special season, then list episode as Sp. Title
+            $titleLine = 'Sp';
         } else {
             $titleLine = sprintf('%02d', $episode->IndexNumber);
         }

@@ -19,7 +19,7 @@ function formatEpisodeNumber(noNew) {
         epnum = '0' + epnum;
     }
     if (iMainSeason != asSeasonNo[noNew]) {
-        epnum = 'S' + epnum;
+        epnum = 'Sp';
     }
     if (asEpisodeNoEnd[noNew]) {
         epnum += '-' + asEpisodeNoEnd[noNew];
