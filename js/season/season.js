@@ -86,69 +86,70 @@ function episodeListItemDesc(iEpisodeIndex) {
     return formatEpisodeNumber(iEpisodeIndex) + '. ' + sWatched + asEpisodeTitleShort[iEpisodeIndex];
 }
 
-    var clickDown = function() {
-                iEpisodeId = iEpisodeId + 1;
-                if (iEpisodeId > iEpisodesLength) {
-                    //go to first episode
-                    iEpisodeId = 1;
-                    if (fmorePages) {
-                        //multiple pages, go to first page
-                        iPage = 1;
-                        toggletab();
-                        return;
-                    }
-                } else if ((iEpisodeId % iEpisodesPerPage) == 1) {
-                    //moved to a new page
-                    iPage = iPage + 1;
-                    toggletab();
-                    return; 
-                }
-                //just move down
-                showNfocus();
-            },
+/**
+ * @param  positionChange 1 = move to next, -1 = previous, +iEpisodesPerPage/-iEpisodesPerPage = paging
+ */
+function updateSelectedItem(positionChange) {
+    iEpisodeId = iEpisodeId + positionChange;
+    if (Math.abs(positionChange) == 1) {
+        if (iEpisodeId == 0) {
+            //wrap around to last page if multiple
+            //wrap to last item if moving by 1
+            iEpisodeId = iEpisodesLength;
+        } else if (iEpisodeId == iEpisodesLength + 1) {
+            //go to first episode
+            iEpisodeId = 1;
+        }
+    } else {
+        //paging, maintain list position between pages
+        if (iEpisodeId < 0) {   
+            //paging down
+            iEpisodeId = iEpisodeId + (iEpPages * iEpisodesPerPage);
+            if (iEpisodeId > iEpisodesLength) iEpisodeId = iEpisodesLength;
+        } else if (iEpisodeId > iEpisodesLength) {
+            //paging up
+            iEpisodeId = iEpisodeId - (iEpPages * iEpisodesPerPage);
+            //check if went past end of list
+            if (iEpisodeId <= 0) iEpisodeId = iEpisodesLength;
+        }
+    }
 
-            clickUp = function() {
-                if ((iEpisodeId - ((iPage - 1) * iEpisodesPerPage)) == 1) {
-                    document.getElementById('gtPlay').focus();
-                } else {
-                    iEpisodeId = iEpisodeId - 1;
-                    showNfocus();
-                }
-            },
+    if (fmorePages) {
+        iNewPage = Math.floor((iEpisodeId - 1) / iEpisodesPerPage) + 1;
+        if (iPage != iNewPage) {
+            iPage = iNewPage;
+            toggletab();
+            return;
+        }
+    }
+    showNfocus();
+}
 
-            toggleLeft = function() {
-                if (fmorePages) {
-                    if (iPage == 1) {
-                        iPage = iEpPages;
-                        iEpisodeId = iEpisodeId + ((iEpPages - 1) * iEpisodesPerPage);
-                        if (iEpisodeId > iEpisodesLength) {
-                            iEpisodeId = iEpisodesLength;
-                        }
-                    } else {
-                        iPage = iPage - 1;
-                        iEpisodeId = iEpisodeId - iEpisodesPerPage;
-                    }
-                    toggletab();
-                } else
-                    showNfocus();
-            },
+function clickDown() {
+    updateSelectedItem(1);
+}
 
-            toggleRight = function() {
-                if (fmorePages) {
-                    if (iPage == iEpPages) {
-                        iPage = 1;
-                        iEpisodeId = iEpisodeId - ((iEpPages - 1) * iEpisodesPerPage);
-                    } else {
-                        iPage = iPage + 1;
-                        iEpisodeId = iEpisodeId + iEpisodesPerPage;
-                        if (iEpisodeId > iEpisodesLength) iEpisodeId = iEpisodesLength;
-                    }
-                    toggletab();
-                } else
-                    showNfocus();
-            },
+function clickUp() {
+    updateSelectedItem(-1);
+}
 
-            showNfocus = function() {
+function toggleLeft() {
+    if (fmorePages) {
+        updateSelectedItem(-iEpisodesPerPage);
+    } else {
+        showNfocus();
+    }
+}
+
+function toggleRight() {
+    if (fmorePages) {
+        updateSelectedItem(iEpisodesPerPage);
+    } else {
+        showNfocus();
+    }    
+}
+
+var         showNfocus = function() {
                 //index on the current page
                 var episodeIndexThisPage = iEpisodeId - ((iPage - 1) * iEpisodesPerPage);
                 var focusId = sIdLinkPrefix + episodeIndexThisPage;
