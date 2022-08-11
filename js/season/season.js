@@ -64,6 +64,28 @@ function showSeasonInfo() {
     }
 }
 
+function formatEpisodeNumber(noNew) {
+    var epnum = asEpisodeNo[noNew];
+    if (epnum < 10) {
+        epnum = '0' + epnum;
+    }
+    if (iMainSeason != asSeasonNo[noNew]) {
+        epnum = 'Sp';
+    }
+    if (asEpisodeNoEnd[noNew]) {
+        epnum += '-' + asEpisodeNoEnd[noNew];
+    }
+    return epnum;
+}
+
+function episodeListItemDesc(iEpisodeIndex) {
+    var sWatched = '';
+    if (asEpisodeWatched[iEpisodeIndex]) {
+        sWatched = '* ';
+    }
+    return formatEpisodeNumber(iEpisodeIndex) + '. ' + sWatched + asEpisodeTitleShort[iEpisodeIndex];
+}
+
     var clickDown = function() {
                 iEpisodeId = iEpisodeId + 1;
                 if (iEpisodeId > iEpisodesLength) {

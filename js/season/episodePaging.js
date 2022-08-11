@@ -11,28 +11,6 @@ function setVOD(elem, Evod) {
     }
 }
 
-function formatEpisodeNumber(noNew) {
-    var epnum = asEpisodeNo[noNew];
-    if (epnum < 10) {
-        epnum = '0' + epnum;
-    }
-    if (iMainSeason != asSeasonNo[noNew]) {
-        epnum = 'Sp';
-    }
-    if (asEpisodeNoEnd[noNew]) {
-        epnum += '-' + asEpisodeNoEnd[noNew];
-    }
-    return epnum;
-}
-
-function episodeListItemDesc(iEpisodeIndex) {
-    var sWatched = '';
-    if (asEpisodeWatched[iEpisodeIndex]) {
-        sWatched = '* ';
-    }
-    return formatEpisodeNumber(iEpisodeIndex) + '. ' + sWatched + asEpisodeTitleShort[iEpisodeIndex];
-}
-
 var sId2ndLinkPrefix = 'a2_e_';
 var sIdSpanPrefix = 's_e_';
 var sIdTvPrefix = 't_e_';
