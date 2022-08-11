@@ -101,21 +101,19 @@ function updateSelectedItem(positionChange) {
             iEpisodeId = 1;
         }
     } else {
-        //paging, maintain list position between pages
-        if (iEpisodeId < 0) {   
-            //paging down
-            iEpisodeId = iEpisodeId + (iEpPages * iEpisodesPerPage);
-            if (iEpisodeId > iEpisodesLength) iEpisodeId = iEpisodesLength;
-        } else if (iEpisodeId > iEpisodesLength) {
-            //paging up
-            iEpisodeId = iEpisodeId - (iEpPages * iEpisodesPerPage);
-            //check if went past end of list
-            if (iEpisodeId <= 0) iEpisodeId = iEpisodesLength;
+        //paging, positionChange = +/-iEpisodesPerPage
+        //maintain list position between pages
+        if (iEpisodeId <= 0 || iEpisodeId > iEpisodesLength) {   
+            iEpisodeId = iEpisodeId - (iEpPages * positionChange);
+            //check if after the end of the list
+            if (iEpisodeId <= 0 || iEpisodeId > iEpisodesLength) {
+                iEpisodeId = iEpisodesLength;
+            }
         }
     }
 
     if (fmorePages) {
-        iNewPage = Math.floor((iEpisodeId - 1) / iEpisodesPerPage) + 1;
+        var iNewPage = Math.floor((iEpisodeId - 1) / iEpisodesPerPage) + 1;
         if (iPage != iNewPage) {
             iPage = iNewPage;
             toggletab();
