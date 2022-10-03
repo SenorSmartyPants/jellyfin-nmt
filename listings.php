@@ -176,7 +176,7 @@ class ListingsPage extends Page
         $this->printPosterTable($this->items);
     }
 
-    function printPosterTable($items, $wrapBottomRowToTop = true)
+    public function printPosterTable($items, $wrapBottomRowToTop = true)
     {
         global $lastRow;
 
@@ -204,7 +204,7 @@ class ListingsPage extends Page
         <?
     }
 
-    function printPCMenu()
+    private function printPCMenu()
     {
     ?>
         <div id="popupWrapper"><div id="noNMT">

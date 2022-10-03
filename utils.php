@@ -305,7 +305,7 @@ class CategoryBrowseParams
     public $backdropId = null;
     public $params;
 
-    function __construct() {
+    public function __construct() {
         $this->params = new UserItemsParams();
     }
 }

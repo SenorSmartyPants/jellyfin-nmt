@@ -20,7 +20,7 @@ class Device
     public $id = 1;
     public $isNMT = false;
 
-    function __construct() {
+    public function __construct() {
         $this->id = $_SERVER['REMOTE_ADDR'];
         $this->isNMT = (stripos($_SERVER[self::HTTP_USER_AGENT],"Syabas")!==false);
 
@@ -122,7 +122,7 @@ class ImageParams
     public $AddPlayedIndicator = null;
     public $percentPlayed = null;
 
-    function __construct($height = null, $width = null, $tag = null) {
+    public function __construct($height = null, $width = null, $tag = null) {
         $this->height = $height;
         $this->width = $width;
         $this->tag = $tag;

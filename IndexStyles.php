@@ -146,7 +146,7 @@ class IndexStyle {
         return $retval;
     }
 
-    function setIndexCount($indexCount){
+    public function setIndexCount($indexCount){
         $this->indexCount = $indexCount;
 
         if ($this->styleEnum == IndexStyleEnum::PosterPopupDynamic) {
