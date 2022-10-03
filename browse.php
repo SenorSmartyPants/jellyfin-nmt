@@ -112,4 +112,3 @@ $pageObj->title .= $name;
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
-?>

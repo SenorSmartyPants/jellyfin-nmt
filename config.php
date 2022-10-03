@@ -9,8 +9,10 @@ $theme_css = "dark.css";
 //Collection type names. Users can localize for non-english
 //only used on page title for filtered views.
 //example 'TV Shows - M'
-$collectiontypeNames = array(CollectionType::TVSHOWS=>'TV Shows', CollectionType::MOVIES=>'Movies', CollectionType::BOXSETS=>'Collections',
-    CollectionType::PLAYLISTS=>'Playlists', CollectionType::MUSICVIDEOS=>'Music Videos');
+$collectiontypeNames = array(
+    CollectionType::TVSHOWS => 'TV Shows', CollectionType::MOVIES => 'Movies', CollectionType::BOXSETS => 'Collections',
+    CollectionType::PLAYLISTS => 'Playlists', CollectionType::MUSICVIDEOS => 'Music Videos'
+);
 
 
 
@@ -35,8 +37,7 @@ $tvid_itemdetails_play = 'PLAY';
 $tvid_itemdetails_more = 'RED';
 
 
-if(file_exists('config_local.php')){
+if (file_exists('config_local.php')) {
     // Include the file
     include_once('config_local.php');
 }
-?>

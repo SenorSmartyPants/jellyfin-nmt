@@ -1,4 +1,4 @@
-<?
+<?php
 include_once 'config.php';
 
 function getBackdropIDandTag($item, $backdropID = null)
@@ -23,8 +23,7 @@ function getBackdropIDandTag($item, $backdropID = null)
 
 function getStreamsFromMediaSource($mediaSource)
 {
-    if ($mediaSource->MediaStreams)
-    {
+    if ($mediaSource->MediaStreams) {
         $retval = new stdClass();
         $retval->Container = $mediaSource->Container;
         foreach ($mediaSource->MediaStreams as $mediastream) {
@@ -37,11 +36,11 @@ function getStreamsFromMediaSource($mediaSource)
         // add sanity check, JF 10.8.0 results 0 which points to video stream on some conditions
         if ($retval->Audio->Type != 'Audio') {
             //just return the first audio stream in this edge case
-            $audiostreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Audio'; });
+            $audiostreams = array_filter($mediaSource->MediaStreams, function ($stream) { return $stream->Type == 'Audio'; });
             $retval->Audio =  current($audiostreams);
         }
 
-        $substreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Subtitle'; });
+        $substreams = array_filter($mediaSource->MediaStreams, function ($stream) { return $stream->Type == 'Subtitle'; });
         //can have subs without a default
         $retval->Subtitle = current($substreams);
         return $retval;
@@ -95,9 +94,12 @@ function videoAttributes($mediaSource)
     }
 }
 
-function videoCallbackLink($mediaSource, $callbackName, $linkName,
-    $callbackAdditionalAttributes = null)
-{
+function videoCallbackLink(
+    $mediaSource,
+    $callbackName,
+    $linkName,
+    $callbackAdditionalAttributes = null
+) {
     $html = '<a onfocusload="" ';
     $html .= 'name="' . $callbackName . '" ';
     $html .= 'onfocusset="' . $linkName . '" ';
@@ -131,10 +133,16 @@ function printVideoCallbackLinks($items)
 
 //pass mediasource instead of item when multiple versions
 //item currently has Path and VideoType for first version, so item can still be passed, like for episodes
-function videoPlayLink($mediaSource,
-    $linkHTML = null, $linkName = null, $additionalAttributes = null,
-    $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null, $includeCallbackLink = true)
-{
+function videoPlayLink(
+    $mediaSource,
+    $linkHTML = null,
+    $linkName = null,
+    $additionalAttributes = null,
+    $callbackJS = null,
+    $callbackName = null,
+    $callbackAdditionalAttributes = null,
+    $includeCallbackLink = true
+) {
     //generate 1 link to play with no callback
     //2 links to call server before playing video, to checkin/scrobble
 
@@ -166,7 +174,8 @@ class SkipAndTrim
     public $skipSeconds = 0;
     public $trimSeconds = 0;
 
-    public function __construct($item) {
+    public function __construct($item)
+    {
         if ($item->Type == ItemType::EPISODE) {
             //use series for skip and trim
             $item = getItem($item->SeriesId);
@@ -180,11 +189,11 @@ class SkipAndTrim
         }
     }
 
-    static private function getSecondsFromSkipTrimTag(String $tag)
+    private static function getSecondsFromSkipTrimTag(String $tag)
     {
-            $amountStr = substr($tag, 9);
-            preg_match('/((?<minutes>\d{1,2})m)?((?<seconds>\d{1,2})s)?/', $amountStr, $skipArray);
-            return $skipArray['minutes'] * 60 + $skipArray['seconds'];
+        $amountStr = substr($tag, 9);
+        preg_match('/((?<minutes>\d{1,2})m)?((?<seconds>\d{1,2})s)?/', $amountStr, $skipArray);
+        return $skipArray['minutes'] * 60 + $skipArray['seconds'];
     }
 
     private function getSkipAndTrim($item)
@@ -238,25 +247,27 @@ function escapeURL($url)
 
 function translatePathToNMT($path)
 {
-    global $NMT_path,$NMT_playerpath;
+    global $NMT_path, $NMT_playerpath;
     //SMB catia settings
     //vfs objects = catia
     //catia:mappings = 0x22:0xa8,0x2a:0xa4,0x2f:0xf8,0x3a:0xf7,0x3c:0xab,0x3e:0xbb,0x3f:0xbf,0x5c:0xff,0x7c:0xa6
 
     //handle catia character mappings
-    $mapping = array('\\' => 'ÿ',
-    ':' => '÷', '*' => '¤', '?' => '¿',
-    '"' => '¨', '<' => '«', '>' => '»',
-    '|' => '¦');
+    $mapping = array(
+        '\\' => 'ÿ',
+        ':' => '÷', '*' => '¤', '?' => '¿',
+        '"' => '¨', '<' => '«', '>' => '»',
+        '|' => '¦'
+    );
     $path = strtr($path, $mapping);
-    return str_replace($NMT_path,$NMT_playerpath,escapeURL($path));
+    return str_replace($NMT_path, $NMT_playerpath, escapeURL($path));
 }
 
 function formatCast($cast, $limit = 27, $separator = ' / ')
 {
     $links = array();
     $cast = array_slice($cast, 0, $limit);
-    foreach($cast as $person) {
+    foreach ($cast as $person) {
         $links[] = itemDetailsLink($person->Id, false, $person->Name);
     }
     return implode($separator, $links);
@@ -266,26 +277,27 @@ function formatDate($datetimeString)
 {
     //use gmdate because PremiereDate usually is only a date, time is not significant
     //don't do localtime translation
-    return gmdate("n/j/Y",strtotime($datetimeString));
+    return gmdate("n/j/Y", strtotime($datetimeString));
 }
 
 function formatDateTime($datetimeString)
 {
-    return date("n/j/Y g:i A",strtotime($datetimeString));
+    return date("n/j/Y g:i A", strtotime($datetimeString));
 }
 
 function ProductionRangeString($item)
 {
     $retval = $item->ProductionYear . ' - ';
     if ($item->EndDate) {
-        $retval .= gmdate("Y",strtotime($item->EndDate));
+        $retval .= gmdate("Y", strtotime($item->EndDate));
     } else {
         $retval .= 'Present';
     }
     return $retval;
 }
 
-function itemDetailsLink($id, $urlOnly = true, $linkText = null) {
+function itemDetailsLink($id, $urlOnly = true, $linkText = null)
+{
     $url = 'itemDetails.php?id=' . $id;
     if ($urlOnly) {
         return $url;
@@ -305,7 +317,8 @@ class CategoryBrowseParams
     public $backdropId = null;
     public $params;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->params = new UserItemsParams();
     }
 }
@@ -335,7 +348,7 @@ function categoryBrowseQSShort($categoryName, $searchTerm, $prefix = null)
 {
     $cbp = new CategoryBrowseParams();
     if (is_array($categoryName)) {
-        for ($i=0; $i < count($categoryName); $i++) {
+        for ($i = 0; $i < count($categoryName); $i++) {
             $cbp->params->addParam($categoryName[$i], $searchTerm[$i]);
         }
     } else {
@@ -348,5 +361,3 @@ function categoryBrowseURLEx(CategoryBrowseParams $cbp, $prefix = 'browse.php?')
 {
     return $prefix . http_build_query($cbp);
 }
-
-?>

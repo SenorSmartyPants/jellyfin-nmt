@@ -44,8 +44,8 @@ class ListingsPage extends Page
 
         $this->renderFiltering = $renderFiltering;
         if ($renderFiltering) {
-            $this->titleLetters = range("A","Z");
-            array_unshift($this->titleLetters,"#");
+            $this->titleLetters = range("A", "Z");
+            array_unshift($this->titleLetters, "#");
 
             $this->singleLetterTVIDs = array("#"=>"1",
                 "A"=>"2", "B"=>"22", "C"=>"222",
@@ -419,4 +419,3 @@ function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
     </td>
 <?php
 }
-?>

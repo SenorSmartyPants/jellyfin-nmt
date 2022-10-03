@@ -19,7 +19,8 @@ class PlayingMedia
     public $skipSeconds;
     public $trimSeconds;
 
-    public function __construct($itemId, $duration, $skipSeconds, $trimSeconds) {
+    public function __construct($itemId, $duration, $skipSeconds, $trimSeconds)
+    {
         $this->itemId = $itemId;
         $this->Duration = $duration;
         $this->skipSeconds = $skipSeconds;
@@ -39,7 +40,8 @@ class PlaybackReporting
     private $playing;
     private $sessionId;
 
-    public function __construct($sessionId, $itemId, $duration, $skipSeconds = 0, $trimSeconds = 0) {
+    public function __construct($sessionId, $itemId, $duration, $skipSeconds = 0, $trimSeconds = 0)
+    {
         $this->sessionId = $sessionId;
         $this->playing = new PlayingMedia($itemId, $duration, $skipSeconds, $trimSeconds);
     }
@@ -83,8 +85,7 @@ class PlaybackReporting
     public function deletePlaystate()
     {
         $filepath = self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT;
-        if (file_exists($filepath))
-        {
+        if (file_exists($filepath)) {
             unlink($filepath);
         }
     }
@@ -117,10 +118,8 @@ class PlaybackReporting
             sleep(self::PROGRESSUPDATEFREQUENCY);
             //reload PlayState from disk
             self::loadPlaystate();
-            if ($this->playing->PlayState == PlayState::PLAYING)
-            {
-                if (self::calculateCurrentPosition() >= $this->playing->Duration)
-                {
+            if ($this->playing->PlayState == PlayState::PLAYING) {
+                if (self::calculateCurrentPosition() >= $this->playing->Duration) {
                     //video not stopped, but after the end of the video, send stop message to JF
                     self::Stop();
                 } else {
@@ -151,8 +150,7 @@ class PlaybackReporting
     {
         //get updated position from session
         self::loadPlaystate();
-        if ($this->playing->PlayState == PlayState::PLAYING)
-        {
+        if ($this->playing->PlayState == PlayState::PLAYING) {
             $this->playing->PositionInSeconds = self::calculateCurrentPosition();
             //add trim seconds to current position
             $trimmedPosition = $this->playing->PositionInSeconds + $this->playing->trimSeconds;
@@ -191,4 +189,3 @@ class PlaybackReporting
         self::updatePlaystate($PositionInSeconds, $playState);
     }
 }
-?>

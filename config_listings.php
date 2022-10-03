@@ -5,7 +5,7 @@ $default_listing_style = IndexStyleEnum::PosterPopupDynamic;
 
 $include_jellyfin_logo_when_backdrop_present = false;
 
-if(file_exists('config_listings_local.php')){
+if (file_exists('config_listings_local.php')) {
     // Include the file
     include_once('config_listings_local.php');
 }
@@ -44,4 +44,3 @@ function overrideIndexStyle($folderType, $collectionType)
             break;
     }
 }
-?>

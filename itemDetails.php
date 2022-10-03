@@ -1,4 +1,4 @@
-<?
+<?php
 include_once 'utils.php';
 include_once 'listings.php';
 include_once 'utils/checkinJS.php';
@@ -49,9 +49,9 @@ class ItemDetailsPage extends ListingsPage
         <script type="text/javascript">
         var asItemRuntimeDesc = <?= getJSArray(array_map('runtimeDescription', $this->allVideos), false, null, true) ?>;
         var asItemEndsAtDesc = <?= getJSArray(array_map('endsAtDescription', $this->allVideos), false) ?>;
-        var asItemVideoDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Video->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
-        var asItemAudioDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Audio->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
-        var asItemSubtitleDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Subtitle->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        var asItemVideoDesc = <?= getJSArray(array_map(function ($i) { return getStreams($i)->Video->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        var asItemAudioDesc = <?= getJSArray(array_map(function ($i) { return getStreams($i)->Audio->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
+        var asItemSubtitleDesc = <?= getJSArray(array_map(function ($i) { return getStreams($i)->Subtitle->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
         </script>
         <?
     }
@@ -197,7 +197,7 @@ class ItemDetailsPage extends ListingsPage
             $params->ExcludeItemTypes = ItemType::SEASON;
             $params->SortBy = UserItemsParams::SORTNAME;
             $children = getItems($params);
-        } else if ($item->Type == ItemType::STUDIO) {
+        } elseif ($item->Type == ItemType::STUDIO) {
             //filter items to ones where StudioID is included
             $params->Recursive = true;
             $params->StudioIDs = $item->Id;
@@ -376,7 +376,7 @@ function printLogo()
     if ($item->ImageTags->Logo) {
         $logoId = $item->Id;
         $logoTag = $item->ImageTags->Logo;
-    } else if ($item->ParentLogoImageTag) {
+    } elseif ($item->ParentLogoImageTag) {
         $logoId = $item->ParentLogoItemId;
         $logoTag = $item->ParentLogoImageTag;
     }
@@ -434,7 +434,7 @@ function printPoster($item)
             $imageProps->width = POSTER_WIDTH;
         }
         $url = getImageURL($item->Id, $imageProps, ImageType::PRIMARY);
-    } else if ($item->ImageTags->Thumb) {
+    } elseif ($item->ImageTags->Thumb) {
         $imageProps->tag = $item->ImageTags->Thumb;
         $url = getImageURL($item->Id, $imageProps, ImageType::THUMB);
     } else {
@@ -484,7 +484,7 @@ function getItemDate($item)
         default:
             if ($item->PremiereDate) {
                 $date = formatDate($item->PremiereDate);
-            } else if ($item->ProductionYear) {
+            } elseif ($item->ProductionYear) {
                 $date = $item->ProductionYear;
             }
             break;
@@ -523,7 +523,7 @@ function printYearDurationEtc($item, $stream, $date)
 
     if ($item->CommunityRating) {
         ?><td valign="top"><img src="images/star.png"/></td><td>
-            &nbsp;<?= number_format($item->CommunityRating,1) . THREESPACES ?></td>
+            &nbsp;<?= number_format($item->CommunityRating, 1) . THREESPACES ?></td>
         <?
     }
 
@@ -717,8 +717,8 @@ function render($item)
     global $pageObj, $availableOverviewHeight;
     $date = getItemDate($item);
 
-    $directors = array_filter($item->People, function($p) { return $p->Type == 'Director'; });
-    $writers = array_filter($item->People, function($p) { return $p->Type == 'Writer'; });
+    $directors = array_filter($item->People, function ($p) { return $p->Type == 'Director'; });
+    $writers = array_filter($item->People, function ($p) { return $p->Type == 'Writer'; });
     ?>
 
     <table class="main" border="0" cellpadding="0" cellspacing="0">
@@ -802,4 +802,3 @@ function render($item)
     </table>
     <?
 }
-?>

@@ -1,4 +1,4 @@
-<?
+<?php
 function audioCodecImageURL($audioStream)
 {
     switch (strtolower($audioStream->Codec)) {
@@ -147,8 +147,7 @@ function getResolutionText($videoStream)
 {
     $h = $videoStream->Height;
     $w = $videoStream->Width;
-    switch (true)
-    {
+    switch (true) {
         // 256x144 (16:9 square pixel format)
         case $w <= 256 && $h <= 144:
             $retval = "144";
@@ -202,8 +201,7 @@ function getAspectRatioURL($videoStream)
     $strAR = explode(':', $videoStream->AspectRatio);
     $ar = $strAR[0] / $strAR[1];
 
-    switch (true)
-    {
+    switch (true) {
         case $ar < 1.350:
             $retval = "133";
             break;
@@ -300,4 +298,3 @@ function officialRatingImageURL($item)
     }
     return strlen($url) > 0 ? 'images/certificates/' .  $url : 'images/1x1.png';
 }
-?>

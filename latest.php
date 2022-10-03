@@ -22,4 +22,3 @@ $pageObj->title = $name . ' ' . $topParentName;
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
-?>

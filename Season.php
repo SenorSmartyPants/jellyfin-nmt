@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 no tv rating in JF episode data?
 TODO:
@@ -75,7 +75,7 @@ do {
 //$episode == first episode from this season, not from specials
 
 $selectedEpisode = $episodes[0];
-foreach($episodes as $key => $episode) {
+foreach ($episodes as $key => $episode) {
     if ($selectedEpisodeIndexNumber == $episode->IndexNumber && $id == $episode->SeasonId) {
         $selectedEpisode = $episode;
         $selectedEpisodeArrayIndex = $key + 1;
@@ -99,20 +99,15 @@ function titleCSS($length)
 {
     if ($length <= 35) {
         $cssClass = "tveptitle";
-    }
-    else if ($length <= 38) {
+    } elseif ($length <= 38) {
         $cssClass = "tveptitle24";
-    }
-    else if ($length <= 43) {
+    } elseif ($length <= 43) {
         $cssClass = "tveptitle22";
-    }
-    else if ($length <= 46) {
+    } elseif ($length <= 46) {
         $cssClass = "tveptitle20";
-    }
-    else if ($length <= 53) {
+    } elseif ($length <= 53) {
         $cssClass = "tveptitle18";
-    }
-    else {
+    } else {
         $cssClass = "tveptitle16";
     }
     return $cssClass;
@@ -193,11 +188,11 @@ function printInitJS()
 <?
     CheckinJS::render($episodes, $selectedEpisodeArrayIndex);
 
-    $asVideoOutput = array_map(function($i) { return videoOutputImageURL(getStreams($i)->Video); }, $episodes);
-    $asContainer = array_map(function($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
-    $asAudioCodec = array_map(function($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
-    $asAudioChannels = array_map(function($i) { return audioChannelsImageURL(getStreams($i)->Audio); }, $episodes);
-    $asAspectRatios = array_map(function($i) { return getAspectRatioURL(getStreams($i)->Video); }, $episodes);
+    $asVideoOutput = array_map(function ($i) { return videoOutputImageURL(getStreams($i)->Video); }, $episodes);
+    $asContainer = array_map(function ($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
+    $asAudioCodec = array_map(function ($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
+    $asAudioChannels = array_map(function ($i) { return audioChannelsImageURL(getStreams($i)->Audio); }, $episodes);
+    $asAspectRatios = array_map(function ($i) { return getAspectRatioURL(getStreams($i)->Video); }, $episodes);
 
     global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;
     $asVideoOutputUnique = array_unique($asVideoOutput);
@@ -273,20 +268,13 @@ if ($episodeCount > EPISODESPERPAGE) {
 
 function TopBarSpacerWidth($seasonIndexNumber)
 {
-    if ($seasonIndexNumber < 10)
-    {
+    if ($seasonIndexNumber < 10) {
         $width = 90;
-    }
-    elseif ($seasonIndexNumber > 9 && $seasonIndexNumber < 100)
-    {
+    } elseif ($seasonIndexNumber > 9 && $seasonIndexNumber < 100) {
         $width = 70;
-    }
-    elseif ($seasonIndexNumber > 99 && $seasonIndexNumber < 1000)
-    {
+    } elseif ($seasonIndexNumber > 99 && $seasonIndexNumber < 1000) {
         $width = 50;
-    }
-    elseif ($seasonIndexNumber > 999)
-    {
+    } elseif ($seasonIndexNumber > 999) {
         $width = 30;
     }
     $width += 131;
@@ -318,14 +306,11 @@ function printTopBar()
             <?= $ShowAudioCodec ? '<td width="146"><img id="audioCodec" align="top" src="' . audioCodecImageURL($streams->Audio) . '"/><img id="audioChannels" align="top" src="' . audioChannelsImageURL($streams->Audio) . '"/></td>' . "\n" : null ?>
             <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>" align="right" class="rating"><?
             //TODO: use episode CommunityRating?
-                if ($series->CommunityRating)
-                {
-                    if ($star_rating)
-                    { ?>
+                if ($series->CommunityRating) {
+                    if ($star_rating) { ?>
                         <img hspace="10" vspace="10" src="images/detail/rating_<?= round($series->CommunityRating)*10?>.png" />
                     <? }
-                    if ($tvNumberRating)
-                    {
+                    if ($tvNumberRating) {
                         echo "&nbsp;(" . $series->CommunityRating . "/10)";
                     }
                 }
@@ -493,10 +478,8 @@ function printImageArray($Images)
 {
     // don't output array if only 1 item
     // no need to preload since image is already sourced
-    if (count($Images) > 1)
-    {
-        foreach ($Images as $urlImage)
-        {
+    if (count($Images) > 1) {
+        foreach ($Images as $urlImage) {
 ?>
     <img class="abs hidden" src="<?= $urlImage ?>" />
 <?

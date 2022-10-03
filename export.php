@@ -22,14 +22,14 @@ if ($id || $parentID || $nextup) {
 
 if ($nextup) {
     $itemsAndCount = getNextUp(50);
-} else if ($id) {
+} elseif ($id) {
     $item = getItem($id);
     //is this a video? export it
     if ($item->MediaType == "Video") {
         //export
         exportCommands($item);
     }
-} else if ($parentID) {
+} elseif ($parentID) {
     if ($_GET["unwatched"]) {
         $IsPlayed  = false;
     }
@@ -132,7 +132,7 @@ function translatePath($path)
 
 function cleanPath($path)
 {
-    return rtrim(str_replace(array('\\', '/', ':', '*', '?', '"', '<', '>', '|'), '', $path),".");
+    return rtrim(str_replace(array('\\', '/', ':', '*', '?', '"', '<', '>', '|'), '', $path), ".");
 }
 
 function getBaseFileName($item)
@@ -197,14 +197,14 @@ function exportCommands($item)
                 $imageProps->tag = $item->ParentThumbImageTag;
                 $thumbnailURL = getImageURL($item->ParentThumbItemId, $imageProps, $FolderImageType);
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
-            } else if ($item->ParentBackdropImageTags[0]) {
+            } elseif ($item->ParentBackdropImageTags[0]) {
                 $imageProps = new ImageParams();
                 $imageProps->maxWidth = 1000;
                 $imageProps->tag = $item->ParentBackdropImageTags[0];
                 $thumbnailURL = getImageURL($item->ParentBackdropItemId, $imageProps, ImageType::BACKDROP);
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             }
-        } else if ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
+        } elseif ($FolderImageType == ImageType::PRIMARY && $item->SeriesPrimaryImageTag) {
             $imageProps = new ImageParams();
             $imageProps->maxWidth = 1000;
             $imageProps->tag = $item->SeriesPrimaryImageTag;
@@ -222,14 +222,13 @@ function exportCommands($item)
             } else {
                 $ImageType = ImageType::BACKDROP;
             }
-
         }
 
         if ($item->ImageTags->Primary) {
             $imageProps = new ImageParams();
             $imageProps->maxWidth = 1920;
             $imageProps->tag = $item->ImageTags->$ImageType;
-            $thumbnailURL = getImageURL($item->Id, $imageProps, $ImageType,);
+            $thumbnailURL = getImageURL($item->Id, $imageProps, $ImageType);
             $thumbnailfilename = $basefilename . '.jpg';
 
             downloadCommand($thumbnailURL, $dirname, $thumbnailfilename);
@@ -240,5 +239,3 @@ function exportCommands($item)
     //video file
     echo sprintf('If (! (Test-Path $dest)) {Copy-Item -LiteralPath "%s" -Destination $dest}' . "\n", translatePath($item->Path));
 }
-
-?>

@@ -1,8 +1,10 @@
-<?
+<?php
 $theme_css = "dark.css";
 
-$collectiontypeNames = array(CollectionType::TVSHOWS=>'TV Shows', CollectionType::MOVIES=>'Movies', CollectionType::BOXSETS=>'Collections',
-    CollectionType::PLAYLISTS=>'Playlists', CollectionType::MUSICVIDEOS=>'Music Videos');
+$collectiontypeNames = array(
+    CollectionType::TVSHOWS => 'TV Shows', CollectionType::MOVIES => 'Movies', CollectionType::BOXSETS => 'Collections',
+    CollectionType::PLAYLISTS => 'Playlists', CollectionType::MUSICVIDEOS => 'Music Videos'
+);
 
 //TVIDs
 $tvid_page_index = 'HOME';
@@ -23,4 +25,3 @@ $tvid_season_series = 'BLUE';
 
 $tvid_itemdetails_play = 'PLAY';
 $tvid_itemdetails_more = 'RED';
-?>

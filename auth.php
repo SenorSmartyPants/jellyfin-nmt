@@ -29,7 +29,7 @@ class Authentication
     {
         return (isset($_SESSION['accessToken']));
     }
-    
+
     public function logout()
     {
         //clear playstate for this session
@@ -38,11 +38,11 @@ class Authentication
 
         $this->setUserID(null);
 
-        if ($this->IsAuthenticated())
-        {
+        if ($this->IsAuthenticated()) {
             apiCallPost(
                 '/Sessions/Logout/',
-                array('non' => 'empty'));
+                array('non' => 'empty')
+            );
         }
 
     }
@@ -55,9 +55,9 @@ class Authentication
         $post = array(
             'Username' => $username
         );
-        
+
         $result = apiCallPost('/Users/AuthenticateByName', $post);
-    
+
         $_SESSION['accessToken'] = $result->AccessToken;
         $_SESSION['ID'] = $result->SessionInfo->Id;
         $this->setUserID($userID);
@@ -75,7 +75,7 @@ class Authentication
         $_SESSION[self::USERIDS] = $userIDs;
         $this->userIDs = $userIDs;
     }
-    
+
     private function addUserToSession($sessionID, $userID)
     {
         //response is empty, 200 if successful
@@ -84,4 +84,3 @@ class Authentication
             array('non' => 'empty'));
     }
 }
-?>

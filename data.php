@@ -20,13 +20,14 @@ class Device
     public $id = 1;
     public $isNMT = false;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->id = $_SERVER['REMOTE_ADDR'];
-        $this->isNMT = (stripos($_SERVER[self::HTTP_USER_AGENT],"Syabas")!==false);
+        $this->isNMT = (stripos($_SERVER[self::HTTP_USER_AGENT], "Syabas") !== false);
 
-        if (stripos($_SERVER[self::HTTP_USER_AGENT],"Chrome")!==false) {
+        if (stripos($_SERVER[self::HTTP_USER_AGENT], "Chrome") !== false) {
             $this->name = 'Chrome';
-        } else if ($this->isNMT) {
+        } elseif ($this->isNMT) {
             $this->name = 'Popcorn Hour';
         } else {
             $this->name = $_SERVER[self::HTTP_USER_AGENT];
@@ -34,8 +35,10 @@ class Device
     }
 }
 
-$filterCategories = ['Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags',
-    'hasSpecialFeature', 'hasSubtitles', 'hasTrailer', 'hasThemeSong', 'hasThemeVideo'];
+$filterCategories = [
+    'Filters', 'Features', 'SeriesStatus', 'Genres', 'NameStartsWith', 'OfficialRatings', 'Years', 'Tags',
+    'hasSpecialFeature', 'hasSubtitles', 'hasTrailer', 'hasThemeSong', 'hasThemeVideo'
+];
 
 class UserItemsParams
 {
@@ -90,8 +93,7 @@ class UserItemsParams
             $this->ParentID = $_GET['topParentId'];
         }
 
-        if (isset($_GET['clearfilter']))
-        {
+        if (isset($_GET['clearfilter'])) {
             $this->SortBy = $this->defaultSortBy;
         } else {
             $this->SortBy = empty($params['SortBy']) ? $this->defaultSortBy : $params['SortBy'];
@@ -122,7 +124,8 @@ class ImageParams
     public $AddPlayedIndicator = null;
     public $percentPlayed = null;
 
-    public function __construct($height = null, $width = null, $tag = null) {
+    public function __construct($height = null, $width = null, $tag = null)
+    {
         $this->height = $height;
         $this->width = $width;
         $this->tag = $tag;
@@ -131,19 +134,23 @@ class ImageParams
 
 function mapItemTypeToCollectionType($itemType)
 {
-    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS,
+    $itemTypeToCollectionType = array(
+        ItemType::SERIES => CollectionType::TVSHOWS,
         ItemType::SEASON => CollectionType::TVSHOWS, ItemType::EPISODE => CollectionType::TVSHOWS,
         ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS,
-        ItemType::PLAYLIST => CollectionType::PLAYLISTS, ItemType::MUSICVIDEO  => CollectionType::MUSICVIDEOS);
+        ItemType::PLAYLIST => CollectionType::PLAYLISTS, ItemType::MUSICVIDEO  => CollectionType::MUSICVIDEOS
+    );
 
     return $itemTypeToCollectionType[$itemType];
 }
 
 function mapFolderTypeToSingleItemType($folderType, $collectionType)
 {
-    $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES,
+    $collectionTypeToItemType = array(
+        CollectionType::TVSHOWS => ItemType::SERIES,
         CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET,
-        CollectionType::PLAYLISTS => ItemType::PLAYLIST, CollectionType::MUSICVIDEOS => ItemType::MUSICVIDEO);
+        CollectionType::PLAYLISTS => ItemType::PLAYLIST, CollectionType::MUSICVIDEOS => ItemType::MUSICVIDEO
+    );
 
     //folders are itemtypes
     if ($folderType == ItemType::COLLECTIONFOLDER || $folderType == ItemType::USERVIEW) {
@@ -151,8 +158,6 @@ function mapFolderTypeToSingleItemType($folderType, $collectionType)
     } else {
         return $folderType;
     }
-
-
 }
 
 function strboolNull($value)
@@ -202,7 +207,8 @@ function apiCallPost($path, $post = null)
         $authHeader .= sprintf($tokenFormat, $_SESSION["accessToken"]);
     }
 
-    $opts = array('http' =>
+    $opts = array(
+        'http' =>
         array(
             'method'  => 'POST',
             'header'  => 'Content-Type: ' . POSTCONTENTTYPE . "\r\n" . $authHeader
@@ -225,7 +231,9 @@ function itemImageExists($itemId, $ImageType = ImageType::PRIMARY)
         $path =  ITEMSPATH . $itemId . "/Images/?";
         $images = apiCall($path);
 
-        $foundImages = array_filter($images, function($image) use ($ImageType) { return $image->ImageType == $ImageType; });
+        $foundImages = array_filter($images, function ($image) use ($ImageType) {
+            return $image->ImageType == $ImageType;
+        });
         return (count($foundImages) > 0);
     } else {
         return false;
@@ -281,10 +289,11 @@ function latestSeasonFromSeries($seriesId)
 
     $seasons = getUsersItems($params);
 
-    return $seasons->Items[$seasons->TotalRecordCount-1];
+    return $seasons->Items[$seasons->TotalRecordCount - 1];
 }
 
-function YAMJpath($item) {
+function YAMJpath($item)
+{
     global $jukebox_url;
 
     return $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
@@ -403,7 +412,8 @@ function getItems(UserItemsParams $params)
     return getUsersItems($params);
 }
 
-function getItem($Id) {
+function getItem($Id)
+{
     $params = new UserItemsParams();
     return getUsersItems($params, $Id);
 }
@@ -431,7 +441,8 @@ function getSimilarItems($Id, $limit = null)
     return apiCall($path);
 }
 
-function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
+function getFilters($parentID = null, $itemTypes = null, $Recursive = null)
+{
     global $user_id;
 
     $path = ITEMSPATH . "Filters?UserID=" . $user_id;
@@ -469,4 +480,3 @@ function getLogoURL()
 
     return $api_url . "/web/assets/img/banner-light.png";
 }
-?>

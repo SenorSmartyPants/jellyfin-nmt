@@ -1,4 +1,4 @@
-<?
+<?php
 include_once 'utils/javascript.php';
 include_once 'utils/arrayCallbacks.php';
 

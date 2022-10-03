@@ -15,8 +15,7 @@ class LoginPage extends Page
 
     private function handleRequest()
     {
-        if (isset($_GET['id']))
-        {
+        if (isset($_GET['id'])) {
             $san_id  = htmlspecialchars($_GET['id']);
             $san_name = htmlspecialchars($_GET['name']);
             $this->auth->login2(explode(",", $san_id), explode(",", $san_name));
@@ -30,23 +29,23 @@ class LoginPage extends Page
         global $api_url, $api_key;
 
         if (!$api_url) {
-            ?>
-            ERROR: $api_url not set in secrets.php<br/>
-            <?
+        ?>
+            ERROR: $api_url not set in secrets.php<br />
+        <?
             $error = true;
         }
 
         if (!$api_key) {
-            ?>
+        ?>
             ERROR: $api_key not set in secrets.php</br>
-            <?
+        <?
             $error = true;
         }
 
         if (count($this->users) == 0) {
-            ?>
+        ?>
             ERROR: No public users returned from Jellyfin</br>
-            <?
+        <?
             $error = true;
         }
 
@@ -54,12 +53,11 @@ class LoginPage extends Page
             exit;
         }
 
-        if ($this->auth->IsAuthenticated())
-        {
-            ?>
+        if ($this->auth->IsAuthenticated()) {
+        ?>
             <p>User is currently set to:</p>
             <?
-            foreach($this->auth->userIDs as $userID) {
+            foreach ($this->auth->userIDs as $userID) {
                 ?><img src="<?=getImageURL($userID, new ImageParams(100, 100), null, 'Users') ?>" width="100" height="100" /><?php
             }
         }
@@ -69,18 +67,17 @@ class LoginPage extends Page
         if (count($this->users) > 1) {
             //if more than 1 user, display first 2 users together in order to watch shows together
         ?>
-        <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
+            <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
         <?
         }
 
         foreach ($this->users as $user) {
-            ?>
+        ?>
             <p><a href="login.php?id=<?= $user->Id ?>&name=<?= $user->Name ?>"><?= $user->Name ?></a></p>
-            <?
+        <?
         }
     }
 }
 
 $pageObj = new LoginPage();
 $pageObj->render();
-?>

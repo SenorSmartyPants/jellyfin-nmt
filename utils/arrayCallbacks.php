@@ -1,4 +1,4 @@
-<?  #Item Array Callbacks
+<?php #Item Array Callbacks
 #region UserData
 function getPlayed($item)
 {
@@ -20,8 +20,7 @@ function getRuntimeSeconds($item)
 
 function runtimeDescription($item, $JSStyle = true)
 {
-    if ($item->RunTimeTicks)
-    {
+    if ($item->RunTimeTicks) {
         $br = $JSStyle ? '\xa0' : '&nbsp;';
         return round(TicksToSeconds($item->RunTimeTicks) / 60) . $br . 'mins';
     }
@@ -73,4 +72,3 @@ function filterPeople($person)
 {
    return $person->Type != 'Producer' && $person->Type != 'Writer' && $person->Type != 'Director';
 }
-?>

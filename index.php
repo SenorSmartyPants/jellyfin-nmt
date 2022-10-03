@@ -65,12 +65,10 @@ class IndexPage extends ListingsPage
         for ($i=0; $i < 7; $i++) {
             $sectionname = $prefs->{'homesection' . $i};
             $sectionHTML = $this->getHomeSection($sectionname, $nameAttr);
-            if (!is_null($sectionHTML))
-            {
+            if (!is_null($sectionHTML)) {
                 $this->homeSections[$sectionname] = $sectionHTML;
             }
-            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles')
-            {
+            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles') {
                 //calc offset based on number of lines before my media grid
                 //each line text is 27px
                 $this->indexStyle->offsetY = 27 * (count($this->homeSections) - 1) + $this->indexStyle->moviesTableCellspacing
@@ -100,10 +98,11 @@ class IndexPage extends ListingsPage
                 $user = getUser();
                 $latestExcludes = $user->Configuration->LatestItemsExcludes;
                 foreach ($this->items as $view) {
-                    if ($view->CollectionType != CollectionType::BOXSETS
+                    if (
+                        $view->CollectionType != CollectionType::BOXSETS
                         && $view->CollectionType != CollectionType::PLAYLISTS
-                        && !in_array($view->Id, $latestExcludes))
-                    {
+                        && !in_array($view->Id, $latestExcludes)
+                    ) {
                         $cbp = new CategoryBrowseParams();
 
                         $cbp->name = 'Latest';
@@ -111,13 +110,17 @@ class IndexPage extends ListingsPage
                         $cbp->topParentId = $view->Id;
                         $cbp->collectionType = $view->CollectionType;
 
-                        $sectionHTML .= sprintf('<a href="latest.php?%s" %s > %s %s ></a>&nbsp;',
-                            http_build_query($cbp), $nameAttr, $cbp->name, $view->Name);
+                        $sectionHTML .= sprintf(
+                            '<a href="latest.php?%s" %s > %s %s ></a>&nbsp;',
+                            http_build_query($cbp),
+                            $nameAttr,
+                            $cbp->name,
+                            $view->Name
+                        );
                         $nameAttr = null;
                     }
                 }
-                if (!is_null($sectionHTML))
-                {
+                if (!is_null($sectionHTML)) {
                     $sectionHTML .= '<br clear="all"/>';
                 }
                 break;
@@ -147,8 +150,7 @@ class IndexPage extends ListingsPage
     {
         // room for 4 lines of text above current size of thumbnails
         foreach ($this->homeSections as $sectionname => $homeSection) {
-            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles')
-            {
+            if ($sectionname == 'librarybuttons' || $sectionname == 'smalllibrarytiles') {
                 $this->printPosterTable($this->items, $sectionname === array_key_last($this->homeSections));
             } else {
                 echo $homeSection;
@@ -159,4 +161,3 @@ class IndexPage extends ListingsPage
 
 $pageObj = new IndexPage('Home');
 $pageObj->render();
-?>

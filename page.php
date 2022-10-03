@@ -39,15 +39,13 @@ class Page
         $this->title = $title;
         $this->auth = new Authentication();
         $this->url = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) . '?';
-        if ($this->authRequired && !$this->auth->IsAuthenticated())
-        {
+        if ($this->authRequired && !$this->auth->IsAuthenticated()) {
             //no accessToken
             //redirect to login page
             header('Location: login.php');
             die();
         }
-        if ($this->auth->IsAuthenticated())
-        {
+        if ($this->auth->IsAuthenticated()) {
             $this->displayPreferences = getUserPreferences();
             $device = new Device();
             $this->PCMenu = !$device->isNMT && PCMENU;
@@ -81,8 +79,7 @@ class Page
         $this->printContentWrapperStart();
         $this->printContent();
         $this->printContentWrapperEnd();
-        if ($this->includeTitleTable)
-        {
+        if ($this->includeTitleTable) {
             $this->printTitleTable($page, $numPages);
         }
         $this->printFooter();
@@ -134,13 +131,11 @@ class Page
     </head>
 
     <body id="body" bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
-        if ($this->onload)
-        {
+        if ($this->onload) {
             ?>onload="<?= $this->onload ?>" <?
         }
 ?>
-<?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id)
-        {
+<?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id) {
             ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), ImageType::BACKDROP) ?>"<?
         }
         ?>>
@@ -149,8 +144,7 @@ class Page
 
     public function printNavbar()
     {
-        if ($this->includeNavbar)
-        {
+        if ($this->includeNavbar) {
             navbar::printNavbar($this->title, $this->auth);
         }
     }
@@ -211,4 +205,3 @@ class Page
 <?php
     }
 }
-?>

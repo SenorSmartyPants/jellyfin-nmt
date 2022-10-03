@@ -14,4 +14,3 @@ setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
-?>

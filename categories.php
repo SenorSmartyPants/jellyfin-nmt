@@ -20,7 +20,7 @@ class CategoriesPage extends Page
         $this->topParentId = $topParentId === '' ? null : $topParentId;
         $this->topParentName = $topParentName === '' ? null : $topParentName;
 
-    /*
+        /*
         performance notes
         Movie item type is slow(~2000ms). parentId is much faster (~500ms)
         Series item type is fast (~50-150ms). parentId is slow (~1200-1500ms)
@@ -29,17 +29,19 @@ class CategoriesPage extends Page
         MusicVideo, no metadata for my library
 
         Conclusion: parentId for everything, except Series/tvshows, then item type
-    */
+        */
 
-        if (empty($topParentId) ||
-            (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1))) {
+        if (
+            empty($topParentId) ||
+            (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1))
+        ) {
             $this->filters = getFilters(null, $itemTypes, true);
         } else {
             $this->filters = getFilters($topParentId, null, true);
         }
 
-        $this->titleLetters = range("A","Z");
-        array_unshift($this->titleLetters,"#");
+        $this->titleLetters = range("A", "Z");
+        array_unshift($this->titleLetters, "#");
     }
 
     public function printContent()
@@ -122,12 +124,12 @@ class CategoriesJSPage extends CategoriesPage
     {
         if (!empty($items)) {
             $this->catName = $categoryName;
-            $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
-?>
-        asFilterNames['<?= $heading ?>'] = <?= getJSArray($items) ?>;
-        asFilters['<?= $heading ?>'] = <?= getJSArray($urls, true) ?>;
+            $urls = array_map(array($this, 'getCatBrowseURLCallback'), $items);
+        ?>
+            asFilterNames['<?= $heading ?>'] = <?= getJSArray($items) ?>;
+            asFilters['<?= $heading ?>'] = <?= getJSArray($urls, true) ?>;
 
-<?
+        <?
         }
     }
 
@@ -163,16 +165,20 @@ class CategoriesJSPage extends CategoriesPage
     {
         header('Content-type: text/javascript');
         $this->baseurl = categoryBrowseURL(null, null, $this->collectionType, $this->topParentId, $this->topParentName);
-        $filtersURLs = [categoryBrowseQSShort('Filters', 'IsFavorite', '&'),
+        $filtersURLs = [
+            categoryBrowseQSShort('Filters', 'IsFavorite', '&'),
             categoryBrowseQSShort('Filters', 'IsUnplayed', '&'),
             categoryBrowseQSShort('Filters', 'IsPlayed', '&'),
-            '&clearfilter'];
+            '&clearfilter'
+        ];
 
-        $featureURLs = [categoryBrowseQSShort('hasSpecialFeature', 'true', '&'),
+        $featureURLs = [
+            categoryBrowseQSShort('hasSpecialFeature', 'true', '&'),
             categoryBrowseQSShort('hasSubtitles', 'true', '&'),
             categoryBrowseQSShort('hasTrailer', 'true', '&'),
             categoryBrowseQSShort('hasThemeSong', 'true', '&'),
-            categoryBrowseQSShort('hasThemeVideo', 'true', '&')];
+            categoryBrowseQSShort('hasThemeVideo', 'true', '&')
+        ];
 
 
         $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['SortName', ''], '&');
@@ -191,10 +197,12 @@ class CategoriesJSPage extends CategoriesPage
             $sortByURLs[] = categoryBrowseQSShort(['SortBy', 'collapseBoxSetItems'], ['Runtime', 'false'], '&');
         }
 
-        $sortOrderURLs = [categoryBrowseQSShort('SortOrder', UserItemsParams::ASC, '&'),
-            categoryBrowseQSShort('SortOrder', UserItemsParams::DESC, '&')];
+        $sortOrderURLs = [
+            categoryBrowseQSShort('SortOrder', UserItemsParams::ASC, '&'),
+            categoryBrowseQSShort('SortOrder', UserItemsParams::DESC, '&')
+        ];
 
-?>
+        ?>
         var asCatNames = <?= $this->getCategoriesJSArrayString() ?>;
         var asFilters = new Object();
         var asFilterNames = new Object();
@@ -202,33 +210,38 @@ class CategoriesJSPage extends CategoriesPage
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
         asFilters['Filters'] = <?= getJSArray($filtersURLs, true) ?>;
 
-<?
+        <?
         if ($this->collectionType == CollectionType::TVSHOWS) {
             $this->printCategory('Status', 'SeriesStatus', ['Continuing', 'Ended']);
         }
-?>
+        ?>
         asFilterNames['Features'] = ["Extras", "Subtitles", "Trailer", "Theme\xa0Song", "Theme\xa0Video"];
         asFilters['Features'] = <?= getJSArray($featureURLs, true) ?>;
 
-<?
+        <?
         $this->printContent();
-?>
+        ?>
         asFilterNames['Sort By'] = ["Name",
-                                "Community\xa0Rating",
-<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"Critic\\xa0Rating\",\n"; } ?>
-                                "Date\xa0Added",
-                                "Date\xa0Played",
-                                "Parental\xa0Rating",
-<? if ($this->collectionType != CollectionType::TVSHOWS) { echo "\t\t\t\t\t\t\t\t\"Play\\xa0Count\",\n"; } ?>
-                                "Release\xa0Date"<? if ($this->collectionType != CollectionType::TVSHOWS) { echo ',"Runtime"'; } ?>];
+        "Community\xa0Rating",
+        <? if ($this->collectionType != CollectionType::TVSHOWS) {
+            echo "\t\t\t\t\t\t\t\t\"Critic\\xa0Rating\",\n";
+        } ?>
+        "Date\xa0Added",
+        "Date\xa0Played",
+        "Parental\xa0Rating",
+        <? if ($this->collectionType != CollectionType::TVSHOWS) {
+            echo "\t\t\t\t\t\t\t\t\"Play\\xa0Count\",\n";
+        } ?>
+        "Release\xa0Date"<? if ($this->collectionType != CollectionType::TVSHOWS) {
+                                echo ',"Runtime"';
+                            } ?>];
 
         asFilters['Sort By'] = <?= getJSArray($sortByURLs, true) ?>;
 
         asFilterNames['Sort Order'] = ["Ascending", "Descending"];
-        asFilters['Sort Order'] =  <?= getJSArray($sortOrderURLs, true) ?>;;
+        asFilters['Sort Order'] = <?= getJSArray($sortOrderURLs, true) ?>;;
 
         var sActiveCat = asCatNames[0];
 <?
     }
 }
-?>

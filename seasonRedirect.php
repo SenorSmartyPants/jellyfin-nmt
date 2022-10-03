@@ -40,4 +40,3 @@ class SeasonRedirectPage extends Page
 
 $pageObj = new SeasonRedirectPage();
 $pageObj->render();
-?>

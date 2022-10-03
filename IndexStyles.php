@@ -30,7 +30,8 @@ abstract class VerticalAlignment
     const BOTTOM = 'bottom';
 }
 
-class IndexStyle {
+class IndexStyle
+{
     private $styleEnum;
     private $indexCount;
 
@@ -89,7 +90,6 @@ class IndexStyle {
             default:
                 $this->Limit = 27;
                 break;
-
         }
     }
 
@@ -146,7 +146,8 @@ class IndexStyle {
         return $retval;
     }
 
-    public function setIndexCount($indexCount){
+    public function setIndexCount($indexCount)
+    {
         $this->indexCount = $indexCount;
 
         if ($this->styleEnum == IndexStyleEnum::PosterPopupDynamic) {
@@ -158,7 +159,7 @@ class IndexStyle {
             $this->setIndexStyle($this->styleEnum);
         }
         if ($this->styleEnum == IndexStyleEnum::PosterPopup6x2) {
-            $this->nbThumbnailsPerLine = $indexCount > 4 ? intdiv($indexCount+1,2) : 6;
+            $this->nbThumbnailsPerLine = $indexCount > 4 ? intdiv($indexCount + 1, 2) : 6;
         }
     }
 
@@ -282,6 +283,4 @@ class IndexStyle {
                 break;
         }
     }
-
 }
-?>

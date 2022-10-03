@@ -1,4 +1,4 @@
-<?
+<?php
 abstract class ImageType
 {
     const PRIMARY = 'Primary';
@@ -55,4 +55,3 @@ $prettySpecialFeatures = [
     'ThemeSong' => 'Theme Song',
     'ThemeVideo' => 'Theme Video'
 ];
-?>

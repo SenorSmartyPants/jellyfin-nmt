@@ -36,7 +36,8 @@ function parseSeries($item)
     }
 }
 
-function parse($item) {
+function parse($item)
+{
     global $indexStyle;
 
     $menuItem = new stdClass();
@@ -63,7 +64,8 @@ function parse($item) {
     return $menuItem;
 }
 
-function getName($item) {
+function getName($item)
+{
     global $episodeNameInTitle;
     if ($item->Type == ItemType::EPISODE) {
         if ($episodeNameInTitle) {
@@ -77,7 +79,8 @@ function getName($item) {
     return $name;
 }
 
-function getSubtitle($item) {
+function getSubtitle($item)
+{
     global $useSeasonNameForMenuItems, $prettySpecialFeatures, $episodeNameInTitle;
     switch ($item->Type) {
         case ItemType::EPISODE:
@@ -199,7 +202,8 @@ function getNonFolderURL($item, $menuItem)
     return $detailURL;
 }
 
-function setDetailURL($item, $menuItem) {
+function setDetailURL($item, $menuItem)
+{
     if ($item->IsFolder) {
         $detailURL = getFolderURL($item, $menuItem);
     } else {
@@ -219,7 +223,8 @@ function getEpisodePosterID($item, $useSeasonImage)
     }
 }
 
-function getPosterID($item, $useSeasonImage = true) {
+function getPosterID($item, $useSeasonImage = true)
+{
     global $indexStyle;
     global $displayepisode;
     switch ($item->Type) {
@@ -247,7 +252,8 @@ function getPosterID($item, $useSeasonImage = true) {
     return $posterID;
 }
 
-function getUnplayedCount($item) {
+function getUnplayedCount($item)
+{
     global $libraryBrowse;
     global $displayepisode;
 
@@ -265,7 +271,8 @@ function getUnplayedCount($item) {
     return $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
 }
 
-function getMenuItem($item) {
+function getMenuItem($item)
+{
     if ($item->Type == ItemType::SERIES) {
         $menuItem = parseSeries($item);
     } else {
@@ -273,4 +280,3 @@ function getMenuItem($item) {
     }
     return $menuItem;
 }
-?>

@@ -5,8 +5,7 @@ $itemType = htmlspecialchars($_GET["itemType"]);
 $topParentId = htmlspecialchars($_GET["topParentId"]);
 $topParentName = htmlspecialchars($_GET['topParentName']);
 
-if (empty($itemType) && empty($topParentId))
-{
+if (empty($itemType) && empty($topParentId)) {
     $pageObj = new CategoriesJSPage();
 } else {
     if (!empty($itemType)) {
@@ -16,4 +15,3 @@ if (empty($itemType) && empty($topParentId))
 }
 
 $pageObj->render();
-?>

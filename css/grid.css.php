@@ -31,7 +31,7 @@ switch ($styleEnum) {
 $thumbWidthPlusCellSpacing = $thumbnailsWidth + $moviesTableCellspacing;
 $tableWidth = ($thumbWidthPlusCellSpacing) *
     ($numPosters >= $numPerLine ? $numPerLine : $numPosters)
-     + $moviesTableCellspacing;
+    + $moviesTableCellspacing;
 
 $thumbHeightPlusCellSpacing = $thumbnailsHeight + $moviesTableCellspacing;
 $tableHeight = ($thumbHeightPlusCellSpacing) *
@@ -85,12 +85,12 @@ $halfPosterWidth = ($thumbWidthPlusCellSpacing + $moviesTableCellspacing) / 2;
 $frameWidth = $popupWidth + $frameDifferenceWidth * 2;
 $frameHeight = $popupHeight + $frameDifferenceHeight * 2;
 
-for ($i=0;$i < $numPosters; $i++) {
+for ($i = 0; $i < $numPosters; $i++) {
     $row = intdiv($i, $numPerLine);
 
     //width
     $previousPostersGap = ($thumbWidthPlusCellSpacing) * ($i % $numPerLine);
-    $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth/2));
+    $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth / 2));
     //add offset
     $frameLeft += $offsetX;
     //bounds checking
@@ -104,10 +104,10 @@ for ($i=0;$i < $numPosters; $i++) {
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
-    echo ".menu" . ($i + 1) ." { visibility: hidden; position: absolute; }\n";
+    echo ".menu" . ($i + 1) . " { visibility: hidden; position: absolute; }\n";
 }
 
-for ($row=0;$row < ceil($numPosters / $numPerLine); $row++) {
+for ($row = 0; $row < ceil($numPosters / $numPerLine); $row++) {
     //height
     $frameTop = $thumbHeightPlusCellSpacing * $row + 1;
     //add offset
@@ -115,21 +115,20 @@ for ($row=0;$row < ceil($numPosters / $numPerLine); $row++) {
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
-    echo ".frmRow" . ($row) ." { top: ${frameTop}px; }\n";
-    echo ".imgRow" . ($row) ." { top: " . ($frameTop + $frameDifferenceHeight) . "px; }\n";
+    echo ".frmRow" . ($row) . " { top: ${frameTop}px; }\n";
+    echo ".imgRow" . ($row) . " { top: " . ($frameTop + $frameDifferenceHeight) . "px; }\n";
 }
 
-for ($col=0;$col < $numPerLine; $col++) {
+for ($col = 0; $col < $numPerLine; $col++) {
     //width
     $previousPostersGap = ($thumbWidthPlusCellSpacing) * ($col % $numPerLine);
-    $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth/2));
+    $frameLeft = floor($previousPostersGap + $halfPosterWidth - ($frameWidth / 2));
     //add offset
     $frameLeft += $offsetX;
     //bounds checking
     $frameLeft = max($frameLeft, 1);
     $frameLeft = $frameLeft + $frameWidth > $containingCellWidth ? $containingCellWidth - $frameWidth : $frameLeft;
 
-    echo ".frmCol" . ($col) ." { left: ${frameLeft}px; }\n";
-    echo ".imgCol" . ($col) ." { left: " . ($frameLeft + $frameDifferenceWidth) . "px; }\n";
+    echo ".frmCol" . ($col) . " { left: ${frameLeft}px; }\n";
+    echo ".imgCol" . ($col) . " { left: " . ($frameLeft + $frameDifferenceWidth) . "px; }\n";
 }
-?>
