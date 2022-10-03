@@ -14,7 +14,7 @@ class CategoriesPage extends Page
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
-        parent::__construct('Categories');  
+        parent::__construct('Categories');
         $this->itemTypes = $itemTypes;
         //test for empty string, convert to null
         $this->topParentId = $topParentId === '' ? null : $topParentId;
@@ -31,7 +31,7 @@ class CategoriesPage extends Page
         Conclusion: parentId for everything, except Series/tvshows, then item type
     */
 
-        if (empty($topParentId) || 
+        if (empty($topParentId) ||
             (!empty($itemTypes) && ($itemTypes[0] === ItemType::SERIES || count($itemTypes) > 1))) {
             $this->filters = getFilters(null, $itemTypes, true);
         } else {
@@ -47,7 +47,7 @@ class CategoriesPage extends Page
         $this->printCategories();
     }
 
-    protected function printCategories() 
+    protected function printCategories()
     {
         $this->printCategory('Genres', 'Genres', $this->filters->Genres);
         $this->printCategory('Title', 'NameStartsWith', $this->titleLetters);
@@ -58,7 +58,7 @@ class CategoriesPage extends Page
         }
     }
 
-    protected function printCategory($heading, $categoryName, $items) 
+    protected function printCategory($heading, $categoryName, $items)
     {
         if (!empty($items)) {
 ?>
@@ -73,7 +73,7 @@ class CategoriesPage extends Page
             <th width="120" valign="top"><?= $heading ?></th>
             <td class="secondaryText">
 <?
-            for ($i=0; $i < count($items); $i++) { 
+            for ($i=0; $i < count($items); $i++) {
                 $url = categoryBrowseURL($categoryName, $items[$i]);
 ?>
                 <a href="<?= $url ?>" <? if ($heading == "Genres" && $i == 0) { echo " name=1 "; } ?>><?= $items[$i] ?></a> <? if ($i < count($items) - 1) { echo " / "; } ?>
@@ -89,7 +89,7 @@ class CategoriesPage extends Page
             <td width="10" height="10" background="images/wall/cat-br.png"></td>
         </tr>
         </table>
-        
+
         <table border="0" cellspacing="0" cellpadding="0"><tr><td height="10"></td></tr></table>
 <?
         }
@@ -104,7 +104,7 @@ class CategoriesJSPage extends CategoriesPage
 
     public function __construct($itemTypes = array(ItemType::MOVIE, ItemType::SERIES, ItemType::BOXSET), $topParentId = null, $topParentName = null)
     {
-        parent::__construct($itemTypes, $topParentId, $topParentName);  
+        parent::__construct($itemTypes, $topParentId, $topParentName);
         $this->includeTags = false;
         if (isset($this->itemTypes) && count($this->itemTypes) == 1) {
             $this->collectionType = mapItemTypeToCollectionType($this->itemTypes[0]);
@@ -118,17 +118,17 @@ class CategoriesJSPage extends CategoriesPage
         return str_replace($this->baseurl, '', categoryBrowseURL($this->catName, $searchTerm, $this->collectionType, $this->topParentId, $this->topParentName));
     }
 
-    protected function printCategory($heading, $categoryName, $items) 
+    protected function printCategory($heading, $categoryName, $items)
     {
         if (!empty($items)) {
             $this->catName = $categoryName;
             $urls = array_map(array( $this, 'getCatBrowseURLCallback' ), $items);
 ?>
         asFilterNames['<?= $heading ?>'] = <?= getJSArray($items) ?>;
-        asFilters['<?= $heading ?>'] = <?= getJSArray($urls, true) ?>;            
+        asFilters['<?= $heading ?>'] = <?= getJSArray($urls, true) ?>;
 
 <?
-        }    
+        }
     }
 
     private function getCategoriesJSArrayString()
@@ -192,17 +192,17 @@ class CategoriesJSPage extends CategoriesPage
         }
 
         $sortOrderURLs = [categoryBrowseQSShort('SortOrder', UserItemsParams::ASC, '&'),
-            categoryBrowseQSShort('SortOrder', UserItemsParams::DESC, '&')];  
+            categoryBrowseQSShort('SortOrder', UserItemsParams::DESC, '&')];
 
 ?>
         var asCatNames = <?= $this->getCategoriesJSArrayString() ?>;
         var asFilters = new Object();
-        var asFilterNames = new Object();   
+        var asFilterNames = new Object();
 
         asFilterNames['Filters'] = ["Favorites", "Unplayed", "Played", "Clear"];
         asFilters['Filters'] = <?= getJSArray($filtersURLs, true) ?>;
 
-<?      
+<?
         if ($this->collectionType == CollectionType::TVSHOWS) {
             $this->printCategory('Status', 'SeriesStatus', ['Continuing', 'Ended']);
         }
@@ -227,7 +227,7 @@ class CategoriesJSPage extends CategoriesPage
         asFilterNames['Sort Order'] = ["Ascending", "Descending"];
         asFilters['Sort Order'] =  <?= getJSArray($sortOrderURLs, true) ?>;;
 
-        var sActiveCat = asCatNames[0];        
+        var sActiveCat = asCatNames[0];
 <?
     }
 }

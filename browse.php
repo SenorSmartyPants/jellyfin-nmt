@@ -26,7 +26,7 @@ switch ($folderType) {
     case ItemType::BOXSET:
         $params->setSortByDefault(null);
         break;
-    
+
     default:
         if ($collectionType == CollectionType::TVSHOWS) {
             $type = ItemType::SERIES;
@@ -91,7 +91,7 @@ if (empty($name)) {
             }
             $name .= array_key_exists($key, $prettyFilter) ? $prettyFilter[$key] : $params->$cat;
         }
-    }    
+    }
     if ((!empty($params->SortBy) && $params->SortBy != UserItemsParams::SORTNAME) || $params->SortOrder == UserItemsParams::DESC) {
         !empty($name) && $name .= ", ";
         $name .= 'by ' . $prettySortBy[$params->SortBy];

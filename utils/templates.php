@@ -49,7 +49,7 @@ function audioCodecImageURL($audioStream)
             $codecFile = "unknownaudio.png";
     }
 
-    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null) 
+    return (($codecFile == "unknownaudio.png") ? $audioStream->Codec : null)
     . 'images/flags/' . $codecFile;
 }
 
@@ -79,7 +79,7 @@ function audioChannelsImageURL($audioStream)
         case 'mono':
         case '1.0':
             $channelFile = "audch_10.png";
-            break;                            
+            break;
         default:
             # channelLayout empty or doesn't match known layouts
             # use count to guess
@@ -96,8 +96,8 @@ function audioChannelsImageURL($audioStream)
 function containerImageURL($containerID)
 {
     $containerID = strtolower($containerID);
-    $justAddExtension = ['asf', 'avi', 'bin', 'dat', 'divx', 'dvd', 'img', 'iso', 'm1v', 
-        'm2p', 'm2t', 'm2v', 'm4v', 'mdf', 'mov', 'mts', 'nrg', 'qt', 'rar', 'rm', 
+    $justAddExtension = ['asf', 'avi', 'bin', 'dat', 'divx', 'dvd', 'img', 'iso', 'm1v',
+        'm2p', 'm2t', 'm2v', 'm4v', 'mdf', 'mov', 'mts', 'nrg', 'qt', 'rar', 'rm',
         'rmp4', 'tp', 'trp', 'ts', 'vob', 'm2ts', 'mkv', 'mp4', 'mpg', 'wmv'];
 
     if (in_array($containerID, $justAddExtension)) {
@@ -123,7 +123,7 @@ function containerImageURL($containerID)
             break;
                 default:
                 $url = "unknown.png";
-        }  
+        }
     }
 
     return (($url == "unknown.png") ? $containerID : null) . 'images/flags/container_' . $url;
@@ -142,7 +142,7 @@ function videoOutputHeight($videoStream)
 
 // based on https://github.com/Shadowghost/jellyfin/blob/63d943aab92a4b5f69e625a269eb830bcbfb4d22/MediaBrowser.Model/Entities/MediaStream.cs#L582-L613
 // tweaked to better (IMHO) handle non standard low definition resolutions < 480
-// add 384p 
+// add 384p
 function getResolutionText($videoStream)
 {
     $h = $videoStream->Height;
@@ -168,7 +168,7 @@ function getResolutionText($videoStream)
         // 720x404 (16:9 square pixel format)
         case $w <= 720 && $h <= 404:
             $retval = "400";
-            break;            
+            break;
         // 854x480 (16:9 square pixel format)
         case $w <= 854 && $h <= 480:
             $retval = "480";
@@ -263,7 +263,7 @@ function getAspectRatioURL($videoStream)
             break;
         case $ar < 3.001:
             $retval = "276";
-            break;                                      
+            break;
         default:
             $retval = "unknown";
             break;

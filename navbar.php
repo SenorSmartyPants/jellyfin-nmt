@@ -1,6 +1,6 @@
 <?php
 
-class Navbar 
+class Navbar
 {
     const USERIMAGESIZE = 45;
 

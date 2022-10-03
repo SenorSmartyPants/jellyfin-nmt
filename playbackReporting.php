@@ -21,13 +21,13 @@ class PlayingMedia
 
     public function __construct($itemId, $duration, $skipSeconds, $trimSeconds) {
         $this->itemId = $itemId;
-        $this->Duration = $duration;       
+        $this->Duration = $duration;
         $this->skipSeconds = $skipSeconds;
-        $this->trimSeconds = $trimSeconds;        
+        $this->trimSeconds = $trimSeconds;
     }
 }
 
-class PlaybackReporting  
+class PlaybackReporting
 {
     private const PROGRESSUPDATEFREQUENCY = 60;
     private const PLAYSTATEDIR = 'playstate/';
@@ -41,8 +41,8 @@ class PlaybackReporting
 
     public function __construct($sessionId, $itemId, $duration, $skipSeconds = 0, $trimSeconds = 0) {
         $this->sessionId = $sessionId;
-        $this->playing = new PlayingMedia($itemId, $duration, $skipSeconds, $trimSeconds);   
-    }    
+        $this->playing = new PlayingMedia($itemId, $duration, $skipSeconds, $trimSeconds);
+    }
 
     private function getPlaybackPayload($eventName = null)
     {
@@ -51,18 +51,18 @@ class PlaybackReporting
             'ItemId' => $this->playing->itemId,
             'PlayMethod' => 'DirectPlay'
         );
-    
+
         if ($eventName) {
             $playback['EventName'] = $eventName;
         }
-        
+
         if ($this->playing->PositionInSeconds) {
             //ticks = ten millionth of a second
             $ticks = $this->playing->PositionInSeconds * 10000 * 1000;
             $playback['PositionTicks'] = $ticks;
         }
-    
-        return $playback;    
+
+        return $playback;
     }
 
     private function updatePlaystate($PositionInSeconds, $playState = PlayState::PLAYING)
@@ -79,11 +79,11 @@ class PlaybackReporting
     {
         $this->playing = json_decode(file_get_contents(self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT));
     }
-    
+
     public function deletePlaystate()
     {
         $filepath = self::PLAYSTATEDIR . $this->sessionId . self::JSONEXT;
-        if (file_exists($filepath)) 
+        if (file_exists($filepath))
         {
             unlink($filepath);
         }
@@ -94,9 +94,9 @@ class PlaybackReporting
         $this->playing->PositionInSeconds = time() - $this->playing->StartedTime;
         $this->playing->LastPositionUpdate = time();
 
-        return $this->playing->PositionInSeconds; 
+        return $this->playing->PositionInSeconds;
     }
-    
+
     private function Progress($PositionInSeconds, $eventName = 'TimeUpdate')
     {
         self::apiJSON(
@@ -117,7 +117,7 @@ class PlaybackReporting
             sleep(self::PROGRESSUPDATEFREQUENCY);
             //reload PlayState from disk
             self::loadPlaystate();
-            if ($this->playing->PlayState == PlayState::PLAYING) 
+            if ($this->playing->PlayState == PlayState::PLAYING)
             {
                 if (self::calculateCurrentPosition() >= $this->playing->Duration)
                 {
@@ -146,12 +146,12 @@ class PlaybackReporting
         //keep sending progress updates until duration or stop from another thread
         self::handleProgess();
     }
-    
+
     public function Stop()
     {
         //get updated position from session
         self::loadPlaystate();
-        if ($this->playing->PlayState == PlayState::PLAYING) 
+        if ($this->playing->PlayState == PlayState::PLAYING)
         {
             $this->playing->PositionInSeconds = self::calculateCurrentPosition();
             //add trim seconds to current position
@@ -187,8 +187,8 @@ class PlaybackReporting
     private function apiJSON($apiendpoint, $payload, $PositionInSeconds, $playState = PlayState::PLAYING)
     {
         apiCallPost($apiendpoint, $payload);
-    
-        self::updatePlaystate($PositionInSeconds, $playState);    
+
+        self::updatePlaystate($PositionInSeconds, $playState);
     }
 }
 ?>

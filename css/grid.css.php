@@ -20,7 +20,7 @@ switch ($styleEnum) {
         $frameDifferenceWidth = 11;
         $frameDifferenceHeight = 11;
         break;
-    
+
     case IndexStyleEnum::PosterPopup9x3:
     default:
         $frameDifferenceWidth = 10;
@@ -29,15 +29,15 @@ switch ($styleEnum) {
 }
 
 $thumbWidthPlusCellSpacing = $thumbnailsWidth + $moviesTableCellspacing;
-$tableWidth = ($thumbWidthPlusCellSpacing) * 
+$tableWidth = ($thumbWidthPlusCellSpacing) *
     ($numPosters >= $numPerLine ? $numPerLine : $numPosters)
      + $moviesTableCellspacing;
 
 $thumbHeightPlusCellSpacing = $thumbnailsHeight + $moviesTableCellspacing;
-$tableHeight = ($thumbHeightPlusCellSpacing) * 
+$tableHeight = ($thumbHeightPlusCellSpacing) *
     (intdiv($numPosters - 1, $numPerLine) + 1)
-    + $moviesTableCellspacing; 
-    
+    + $moviesTableCellspacing;
+
 //9x3 table is 1093x538
 //6x2 table is 1084x534
 $containingCellWidth = 1096;
@@ -53,7 +53,7 @@ switch ($align) {
     case 'right':
         $offsetX = $containingCellWidth - $tableWidth;
         break;
-    
+
     default:
         $offsetX = 0;
         break;
@@ -69,7 +69,7 @@ switch ($vAlign) {
     case 'bottom':
         $offsetY = $containingCellHeight - $tableHeight;
         break;
-    
+
     default:
         $offsetY = 0;
         break;
@@ -100,7 +100,7 @@ for ($i=0;$i < $numPosters; $i++) {
     //height
     $frameTop = $thumbHeightPlusCellSpacing * $row + 1;
     //add offset
-    $frameTop += $offsetY;    
+    $frameTop += $offsetY;
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
@@ -111,7 +111,7 @@ for ($row=0;$row < ceil($numPosters / $numPerLine); $row++) {
     //height
     $frameTop = $thumbHeightPlusCellSpacing * $row + 1;
     //add offset
-    $frameTop += $offsetY;    
+    $frameTop += $offsetY;
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 

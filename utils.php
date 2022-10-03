@@ -7,7 +7,7 @@ function getBackdropIDandTag($item, $backdropID = null)
 
     $retval->Id = $backdropID;
     $retval->Tag = null;
-    
+
     if ($item) {
         if ($item->BackdropImageTags && count($item->BackdropImageTags) > 0) {
             $retval->Id = $item->Id;
@@ -33,14 +33,14 @@ function getStreamsFromMediaSource($mediaSource)
             }
         }
         $retval->Audio = $mediaSource->MediaStreams[$mediaSource->DefaultAudioStreamIndex];
-    
+
         // add sanity check, JF 10.8.0 results 0 which points to video stream on some conditions
         if ($retval->Audio->Type != 'Audio') {
             //just return the first audio stream in this edge case
             $audiostreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Audio'; });
             $retval->Audio =  current($audiostreams);
         }
-        
+
         $substreams = array_filter($mediaSource->MediaStreams, function($stream) { return $stream->Type == 'Subtitle'; });
         //can have subs without a default
         $retval->Subtitle = current($substreams);
@@ -95,7 +95,7 @@ function videoAttributes($mediaSource)
     }
 }
 
-function videoCallbackLink($mediaSource, $callbackName, $linkName,  
+function videoCallbackLink($mediaSource, $callbackName, $linkName,
     $callbackAdditionalAttributes = null)
 {
     $html = '<a onfocusload="" ';
@@ -118,7 +118,7 @@ function printVideoCallbackLinks($items)
         } else {
             $mediaSource = $item;
         }
-        
+
         #region videoPlayLink setup
         $linkName = 'play';
         $callbackName = 'playcallback' . $index;
@@ -131,8 +131,8 @@ function printVideoCallbackLinks($items)
 
 //pass mediasource instead of item when multiple versions
 //item currently has Path and VideoType for first version, so item can still be passed, like for episodes
-function videoPlayLink($mediaSource, 
-    $linkHTML = null, $linkName = null, $additionalAttributes = null, 
+function videoPlayLink($mediaSource,
+    $linkHTML = null, $linkName = null, $additionalAttributes = null,
     $callbackJS = null, $callbackName = null, $callbackAdditionalAttributes = null, $includeCallbackLink = true)
 {
     //generate 1 link to play with no callback
@@ -151,7 +151,7 @@ function videoPlayLink($mediaSource,
     } else {
         $html .= videoAttributes($mediaSource);
     }
-    
+
     $html .= '>' . $linkHTML . '</a>';
 
     if ($callbackJS && $includeCallbackLink) {
@@ -178,7 +178,7 @@ class SkipAndTrim
             $firstStudio = getItem($item->Studios[0]->Id);
             $this->getSkipAndTrim($firstStudio);
         }
-    }     
+    }
 
     static private function getSecondsFromSkipTrimTag(String $tag)
     {
@@ -186,7 +186,7 @@ class SkipAndTrim
             preg_match('/((?<minutes>\d{1,2})m)?((?<seconds>\d{1,2})s)?/', $amountStr, $skipArray);
             return $skipArray['minutes'] * 60 + $skipArray['seconds'];
     }
-    
+
     private function getSkipAndTrim($item)
     {
         //find nmt-skip|trim tags
@@ -200,7 +200,7 @@ class SkipAndTrim
                 $this->trimSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
             }
         }
-    }    
+    }
     public function getStartPosition($UserData)
     {
         //start at skipSeconds if user position is 0
@@ -222,7 +222,7 @@ function truncate($str, $maxlength, $JSescape = false)
     }
     if ($JSescape) {
         $str = JSEscape($str);
-    }    
+    }
     return $str;
 }
 
@@ -306,7 +306,7 @@ class CategoryBrowseParams
     public $params;
 
     function __construct() {
-        $this->params = new UserItemsParams();    
+        $this->params = new UserItemsParams();
     }
 }
 
@@ -323,10 +323,10 @@ function categoryBrowseURL($categoryName, $searchTerm, $collectionType = 'search
     $cbp->params->addParam($categoryName, $searchTerm);
 
     if ($cbp->collectionType === 'search') {
-        //top level, just link on the category page 
+        //top level, just link on the category page
     } else {
         //filter by the displayed collectiontype, tv, movie, boxset...
-        $cbp->folderType = 'CollectionFolder'; 
+        $cbp->folderType = 'CollectionFolder';
     }
     return categoryBrowseURLEx($cbp);
 }
@@ -335,7 +335,7 @@ function categoryBrowseQSShort($categoryName, $searchTerm, $prefix = null)
 {
     $cbp = new CategoryBrowseParams();
     if (is_array($categoryName)) {
-        for ($i=0; $i < count($categoryName); $i++) { 
+        for ($i=0; $i < count($categoryName); $i++) {
             $cbp->params->addParam($categoryName[$i], $searchTerm[$i]);
         }
     } else {

@@ -29,7 +29,7 @@ class ItemDetailsPage extends ListingsPage
 
     public $allVideos;
 
-    public function printJavascript() 
+    public function printJavascript()
     {
         global $item;
 
@@ -60,12 +60,12 @@ class ItemDetailsPage extends ListingsPage
     {
         $isMultiple = IsMultipleVersion($item);
         if ($isMultiple) {
-            SortMediaSourcesByName($item);    
+            SortMediaSourcesByName($item);
             //get other sources full data, #2 and up
-            for ($i=0; $i < $item->MediaSourceCount; $i++) { 
+            for ($i=0; $i < $item->MediaSourceCount; $i++) {
                 //media source name is what is displayed in ui
                 $versions[] = $item->MediaSources[$i];
-            } 
+            }
         } else {
             $versions[] = $item;
         }
@@ -77,11 +77,11 @@ class ItemDetailsPage extends ListingsPage
         }
         if ($item->LocalTrailerCount && $item->LocalTrailerCount > 0) {
             //Trailers
-            $this->trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);          
+            $this->trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
         }
         if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
             //Special Features
-            $this->specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);          
+            $this->specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
         }
 
         //media sources doesn't contain userdata
@@ -108,10 +108,10 @@ class ItemDetailsPage extends ListingsPage
                 //display a small name 'Part X'
                 $part->MediaSources[0]->Name = 'Part ' . (2 + $index);
             }
-            $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons); 
+            $previousPlayButtons = PrintExtras($this->additionalparts, 'Additional Parts', $previousPlayButtons);
         }
     }
-    
+
     private function setEpisodeIndexStyle($item)
     {
         global $displayepisode;
@@ -171,7 +171,7 @@ class ItemDetailsPage extends ListingsPage
         $this->items = array_slice($this->items, $startIndex, $this->indexStyle->Limit);
         return $totalItems;
     }
-    
+
     private function setupTrailers($startIndex)
     {
         //get first X Trailers
@@ -280,7 +280,7 @@ class ItemDetailsPage extends ListingsPage
             $newindex = count($this->available_subitems) == $newindex ? 0 : $newindex;
 
             $label = $this->updateLabel($item, $subitems) ?? $this->available_subitems[$this->selected_subitems_index];
-            
+
             $nextLabel = $this->available_subitems[$newindex];
             $nextLabel = $this->updateLabel($item, $nextLabel) ?? $nextLabel;
 
@@ -373,7 +373,7 @@ function printLogo()
 {
     global $item;
 
-    if ($item->ImageTags->Logo) { 
+    if ($item->ImageTags->Logo) {
         $logoId = $item->Id;
         $logoTag = $item->ImageTags->Logo;
     } else if ($item->ParentLogoImageTag) {
@@ -381,17 +381,17 @@ function printLogo()
         $logoTag = $item->ParentLogoImageTag;
     }
 
-    if ($logoId) { 
+    if ($logoId) {
         $imageProps = new ImageParams();
-        $imageProps->tag = $logoTag; 
+        $imageProps->tag = $logoTag;
         $imageProps->maxHeight = 155;
         $imageProps->maxWidth = 400;
         ?>
         <div id="popupWrapper">
-                <img class="abs" id="logo" 
+                <img class="abs" id="logo"
                  src="<?= getImageURL($logoId, $imageProps, ImageType::LOGO) ?>" />
         </div>
-        <? 
+        <?
     }
 }
 
@@ -428,7 +428,7 @@ function printPoster($item)
 {
     $imageProps = new ImageParams();
     $imageProps->width = THUMB_WIDTH;
-    if ($item->ImageTags->Primary) { 
+    if ($item->ImageTags->Primary) {
         $imageProps->tag = $item->ImageTags->Primary;
         if ($item->PrimaryImageAspectRatio < 1) {
             $imageProps->width = POSTER_WIDTH;
@@ -440,7 +440,7 @@ function printPoster($item)
     } else {
         $imageProps->width = POSTER_WIDTH;
         $url = 'images/1x1.png';
-    } 
+    }
     ?><img width="<?= $imageProps->width ?>" src="<?= $url ?>" /> <?
     return $imageProps;
 }
@@ -464,7 +464,7 @@ function printItemNames($item)
     if ($item->OriginalTitle && $item->OriginalTitle != $item->Name) {
     ?>
         &nbsp;<br><h4 class="itemName"><?= $item->OriginalTitle ?></h4>
-    <? 
+    <?
         $availableOverviewHeight -= 30;
     }
 }
@@ -480,7 +480,7 @@ function getItemDate($item)
             break;
         case ItemType::SEASON:
             $date = null;
-            break;               
+            break;
         default:
             if ($item->PremiereDate) {
                 $date = formatDate($item->PremiereDate);
@@ -501,26 +501,26 @@ function printYearDurationEtc($item, $stream, $date)
 {
     ?>&nbsp;<br>
         <table id="YearDurationEtc" border="0" cellspacing="0" cellpadding="0"><tr valign="middle">
-    <? 
+    <?
     if ($date) {
-    ?>        
+    ?>
         <td><?= $date  ?>&nbsp;&nbsp;&nbsp;</td>
     <?
     }
-    
+
     if ($item->MediaType) {
-    ?>          
+    ?>
             <td><span id="Runtime"><?= runtimeDescription($stream, false) ?></span>&nbsp;&nbsp;&nbsp;</td>
-    <? 
+    <?
     }
-    
+
     if ($item->OfficialRating) {
     ?>
             <td><div class="border">
     &nbsp;<?= $item->OfficialRating ?>&nbsp;</div></td><td>&nbsp;&nbsp;&nbsp;</td>
     <?
-    } 
-    
+    }
+
     if ($item->CommunityRating) {
         ?><td valign="top"><img src="images/star.png"/></td><td>
             &nbsp;<?= number_format($item->CommunityRating,1) . THREESPACES ?></td>
@@ -537,12 +537,12 @@ function printYearDurationEtc($item, $stream, $date)
             &nbsp;<?= $item->CriticRating . THREESPACES ?></td>
         <?
     }
-    
+
     if ($item->MediaType && $stream->RunTimeTicks > 0) {
-    ?>  
+    ?>
         <td>Ends at <span id="endsAt"><?= endsAtDescription($stream) ?></span></td>
     <?
-    } 
+    }
     ?>
         </tr></table>
     <?
@@ -551,31 +551,31 @@ function printYearDurationEtc($item, $stream, $date)
 function printPersonVitals($item)
 {
     if ($item->Type == ItemType::PERSON) {
-        if ($item->PremiereDate) { 
+        if ($item->PremiereDate) {
             ?>
             &nbsp;<br><div>Born: <?= formatDate($item->PremiereDate) ?></div>
-            <?                
+            <?
         }
         if ($item->ProductionLocations[0]) {
             ?>
             &nbsp;<br><div>Birth place: <?= $item->ProductionLocations[0] ?></div>
-            <?    
+            <?
         }
         if ($item->EndDate) {
             ?>
             &nbsp;<br><div>Died: <?= formatDate($item->EndDate) ?></div>
-            <?    
-        } 
-    } 
+            <?
+        }
+    }
 }
 
 function printAirDays($item)
 {
-    if ($item->AirDays) { 
-    ?> 
+    if ($item->AirDays) {
+    ?>
         <div>Airs <?= $item->AirDays[0] ?> at <?= $item->AirTime ?> on <?= itemDetailsLink($item->Studios[0]->Id, false, $item->Studios[0]->Name) ?></div>
-    <? 
-    } 
+    <?
+    }
 }
 
 function printGenreRow($item)
@@ -586,7 +586,7 @@ function printGenreRow($item)
         echo '<tr><td>&nbsp;<br></td></tr><tr><td><div>Genres' . THREESPACES . '</div></td><td colspan="5"><div id="genres">';
         foreach ($item->GenreItems as $genre) {
             $url = categoryBrowseURL('Genres', $genre->Name);
-            printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);            
+            printf('<a href="%2$s">%1$s</a>', $genre->Name, $url);
             if ($genre != end($item->GenreItems)) {
                 echo ', ';
             }
@@ -617,7 +617,7 @@ function printStreamInfoRow($item)
     if ($item->MediaType) {
         $availableOverviewHeight -= 27;
         $streams = getStreams($item);
-    ?>          
+    ?>
             <tr><td>&nbsp;<br></td></tr><tr>
             <? printStreamInfo($streams->Video) ?>
             <? printStreamInfo($streams->Audio) ?>
@@ -635,7 +635,7 @@ function printStreamInfo($stream)
 }
 
 function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index = null, $includeCallbackLink = true)
-{     
+{
     global $tvid_itemdetails_play;
     #region videoPlayLink setup
     $linkName = 'play' . $index;
@@ -656,7 +656,7 @@ function printPlayButton($mediaSource, $skipTrim, $isMultiple, $index = null, $i
     $callbackAdditionalAttributes = null;
     #endregion
 
-?>  
+?>
 &nbsp;<br><table class="nobuffer button" ><tr><td><?= videoPlayLink($mediaSource, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes, $includeCallbackLink) ?></td></tr></table>
 <?
 }
@@ -677,12 +677,12 @@ function printPlayButtons($items, $skipTrim, $isMultiple, $previousPlayButtons =
 function printPlayVersionDropdown($item)
 {
     global $availableOverviewHeight;
-    if ($item->MediaType && IsMultipleVersion($item)) { 
+    if ($item->MediaType && IsMultipleVersion($item)) {
         $availableOverviewHeight -= 28;
         $items = $item->MediaSources;
     ?>
         <tr><td>&nbsp;<br></td></tr>
-        <tr><td><div>Version <?= THREESPACES ?></div></td><td colspan="3"><select onkeydownset="play" id="ddlEpisodeId" 
+        <tr><td><div>Version <?= THREESPACES ?></div></td><td colspan="3"><select onkeydownset="play" id="ddlEpisodeId"
         onchange="iEpisodeId = document.getElementById('ddlEpisodeId').selectedIndex; updateMediaInfoDisplay(iEpisodeId); document.getElementById('play').setAttribute('href','#playcallback' + iEpisodeId); iEpisodeId = iEpisodeId + 1;"
         >
     <?
@@ -692,7 +692,7 @@ function printPlayVersionDropdown($item)
             } else {
                 $mediaSource = $item;
             }
-    ?>  
+    ?>
             <option><?= $mediaSource->Name ?></option>
     <?
         }
@@ -707,7 +707,7 @@ function PrintExtras($extras, $Label, $previousPlayButtons)
     global $skipTrim;
     if (!empty($extras)) {
         echo "<h4>$Label</h4>";
-        $previousPlayButtons = printPlayButtons($extras, $skipTrim, true, $previousPlayButtons);   
+        $previousPlayButtons = printPlayButtons($extras, $skipTrim, true, $previousPlayButtons);
     }
     return $previousPlayButtons;
 }
@@ -724,7 +724,7 @@ function render($item)
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
             <td width="<?= POSTER_WIDTH ?>px" height="416px">
-            <? 
+            <?
             $imageProps = printPoster($item);
             ?>
 
@@ -748,7 +748,7 @@ function render($item)
     ?>
     </table>
     <?
-    if ($item->MediaType) { 
+    if ($item->MediaType) {
         $pageObj->printPlayButtonGroups($item);
         $availableOverviewHeight -= 53;
     }
@@ -759,36 +759,36 @@ function render($item)
     }
 
     if ($item->Type == ItemType::PERSON) {
-        if ($item->PremiereDate) { 
-            $availableOverviewHeight -= 27;              
+        if ($item->PremiereDate) {
+            $availableOverviewHeight -= 27;
         }
         if ($item->ProductionLocations[0]) {
-            $availableOverviewHeight -= 27;   
+            $availableOverviewHeight -= 27;
         }
         if ($item->EndDate) {
-            $availableOverviewHeight -= 27;   
-        } 
+            $availableOverviewHeight -= 27;
+        }
     }
     if ($item->AirDays) {
         $availableOverviewHeight -= 27;
-    } 
+    }
 
     if ($item->Overview) {
         $availableOverviewHeight -= 9;
-    } 
+    }
 
     //spacer pixel at bottom
     $availableOverviewHeight -= 1;
-    
+
     echo $item->Overview ? '&nbsp;<br><div id="overview">' . truncate($item->Overview, $availableOverviewHeight / 21 * 98) . '</div>' : null;
-    
+
     printPersonVitals($item);
-    printAirDays($item); 
+    printAirDays($item);
     ?>
 
     <img src="images/1x1.png" width="<?= 1096-30-$imageProps->width ?>" height="1" />
         </td>
-    </tr>    
+    </tr>
 
     <tr height="182">
         <td colspan="3" align="center">

@@ -167,7 +167,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <?= videoPlayLink($episode, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?> 
+                <?= videoPlayLink($episode, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?>
             </td>
         </tr>
     </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
@@ -184,7 +184,7 @@ function printInitJS()
 
         var iPage = <?= $selectedPage ?> //selected page
         var iEpPages = <?= $epPages ?>;
-        
+
         var iEpisodesPerPage = <?= EPISODESPERPAGE ?>;
 
         var fmorePages = <?= $epPages > 1 ? 'true':'false' ?>;
@@ -192,7 +192,7 @@ function printInitJS()
     </script>
 <?
     CheckinJS::render($episodes, $selectedEpisodeArrayIndex);
-    
+
     $asVideoOutput = array_map(function($i) { return videoOutputImageURL(getStreams($i)->Video); }, $episodes);
     $asContainer = array_map(function($i) { return containerImageURL($i->MediaSources[0]->Container); }, $episodes);
     $asAudioCodec = array_map(function($i) { return audioCodecImageURL(getStreams($i)->Audio); }, $episodes);
@@ -205,14 +205,14 @@ function printInitJS()
     $asAudioCodecUnique = array_unique($asAudioCodec);
     $asAudioChannelsUnique = array_unique($asAudioChannels);
     $asAspectRatiosUnique = array_unique($asAspectRatios);
-    //using multiple script blocks to stay under 23k byte limit 
+    //using multiple script blocks to stay under 23k byte limit
 ?>
     <script type="text/javascript">
         //season.js variables
         var asEpisodeTitle = <?= getJSArray(array_map('getTruncateTitle', $episodes), true, '0')?>;
         var asEpisodeTitleCSS = <?= getJSArray(array_map('getTitleCSS', $episodes), false, '0')?>;
         var asRuntime = <?= getJSArray(array_map('runtimeDescription', $episodes), true, '0', true)?>;
-    </script>        
+    </script>
     <script type="text/javascript">
 <?
         echo count($asVideoOutputUnique) > 1 ? "\t\tvar asVideoOutput = " . getJSArray($asVideoOutput, true, '0') . ";\n" : '';
@@ -231,20 +231,20 @@ function printInitJS()
         echo count($asAspectRatiosUnique) > 1 ? "\t\t\telAspectRatioImg.setAttribute(\"src\", asAspectRatios[episodeIndex]);\n" : '';
 ?>
         }
-    </script>        
-    <script type="text/javascript">    
+    </script>
+    <script type="text/javascript">
         var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript">
-        var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;        
+        var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript">
-        //both season.js and episodePaging.js 
+        //both season.js and episodePaging.js
         //not really used by my code season, used by paging
         var asEpisodeUrl = <?= getJSArray(array_map('getURL', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/uiUpdateUtils.js"></script>    
+    <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
     <script type="text/javascript" src="js/season/season.js"></script>
 <?
 if ($episodeCount > EPISODESPERPAGE) {
@@ -273,19 +273,19 @@ if ($episodeCount > EPISODESPERPAGE) {
 
 function TopBarSpacerWidth($seasonIndexNumber)
 {
-    if ($seasonIndexNumber < 10) 
+    if ($seasonIndexNumber < 10)
     {
         $width = 90;
-    } 
+    }
     elseif ($seasonIndexNumber > 9 && $seasonIndexNumber < 100)
     {
         $width = 70;
     }
-    elseif ($seasonIndexNumber > 99 && $seasonIndexNumber < 1000) 
+    elseif ($seasonIndexNumber > 99 && $seasonIndexNumber < 1000)
     {
         $width = 50;
     }
-    elseif ($seasonIndexNumber > 999) 
+    elseif ($seasonIndexNumber > 999)
     {
         $width = 30;
     }
@@ -305,7 +305,7 @@ function printTopBar()
     <table border="0" cellspacing="0" cellpadding="0">
         <tr height="62" valign="middle">
             <td width="18"></td>
-            <td width="250"><? if ($bannerId) { ?> 
+            <td width="250"><? if ($bannerId) { ?>
                 <img width="244" height="45" src="<?= getImageURL($bannerId, new ImageParams(45, 244), ImageType::BANNER) ?>" />
             <? } ?></td>
             <td width="30"></td>
@@ -316,24 +316,25 @@ function printTopBar()
             <?= $ShowVideoOutput ? '<td><img id="videoOutput" src="' . videoOutputImageURL($streams->Video) . '"/></td><td width="9"></td>' . "\n" : null ?>
             <?= $ShowContainer ? '<td><img id="container" src="' . containerImageURL($streams->Container) . '"/></td><td width="9"></td>' . "\n" : null ?>
             <?= $ShowAudioCodec ? '<td width="146"><img id="audioCodec" align="top" src="' . audioCodecImageURL($streams->Audio) . '"/><img id="audioChannels" align="top" src="' . audioChannelsImageURL($streams->Audio) . '"/></td>' . "\n" : null ?>
-            <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>" align="right" class="rating"><? 
-                if ($series->CommunityRating) 
+            <td width="<?= TopBarSpacerWidth($season->IndexNumber) ?>" align="right" class="rating"><?
+            //TODO: use episode CommunityRating?
+                if ($series->CommunityRating)
                 {
-                    if ($star_rating) 
+                    if ($star_rating)
                     { ?>
                         <img hspace="10" vspace="10" src="images/detail/rating_<?= round($series->CommunityRating)*10?>.png" />
                     <? }
-                    if ($tvNumberRating) 
+                    if ($tvNumberRating)
                     {
-                        echo "&nbsp;(" . $series->CommunityRating . "/10)"; 
+                        echo "&nbsp;(" . $series->CommunityRating . "/10)";
                     }
-                } 
-            ?></td>			
+                }
+            ?></td>
         </tr>
     </table>
     </td>
 </tr>
-<? 
+<?
 }
 
 function printSpacerTable()
@@ -391,16 +392,16 @@ function printLowerTable()
 <td width="100%" colspan="3">
 <!-- episode list, write out the first X -->
 <a id="a_e_dummy" name="episode-dummy" href="#" ></a>
-<? 
+<?
     global $episodes;
     $episodeOffset = ($selectedPage - 1) * EPISODESPERPAGE;
-    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) { 
+    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) {
         $episodeIndex = $episodeOffset + $i;
         renderEpisodeHTML($episodes[$episodeIndex], $i + 1, $episodeIndex + 1);
     }
-?>			
+?>
 </td>
-</tr>  
+</tr>
     <tr>
 		<td valign="top" width="80" colspan="3">
             <a href="#" name="toleft" onfocus="toggleLeft()"></a>
@@ -409,9 +410,9 @@ function printLowerTable()
             <a href="#" name="todown" onfocus="clickDown()"></a>
 		</td>
 	</tr>
-		 
-         </table>  		
-           
+
+         </table>
+
   		 </td>
          </tr>
          </table>
@@ -438,12 +439,12 @@ function printPCMenu()
 function printSeasonFooter()
 {
     global $series, $season, $selectedEpisode;
-    global $tvid_season_info, $tvid_season_play, 
+    global $tvid_season_info, $tvid_season_play,
         $tvid_season_pgup, $tvid_season_pgdn,
         $tvid_season_itemdetails, $tvid_season_series;
     global $pageObj;
 ?>
-        </table>  	
+        </table>
     <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
     <a id="openEpisode" TVID="<?= $tvid_season_play ?>" <?= videoAttributes($selectedEpisode) ?> ></a>
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
@@ -470,15 +471,15 @@ function printSeasonFooter()
     // will this speed navigation
     global $episodes, $selectedPage, $episodeCount;
     $episodeOffset = ($selectedPage - 1) * EPISODESPERPAGE;
-    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) { 
+    for ($i=0; $i < EPISODESPERPAGE && $i < $episodeCount ; $i++) {
         $episodeIndex = $episodeOffset + $i;
-        $urlImage = getImage($episodes[$episodeIndex]);      
+        $urlImage = getImage($episodes[$episodeIndex]);
 ?>
     <img class="abs hidden" src="<?= $urlImage ?>" />
-<?        
+<?
     }
     // preload video/audio flags
-    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;    
+    global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;
     printImageArray($asVideoOutputUnique);
     printImageArray($asContainerUnique);
     printImageArray($asAudioCodecUnique);
@@ -492,13 +493,13 @@ function printImageArray($Images)
 {
     // don't output array if only 1 item
     // no need to preload since image is already sourced
-    if (count($Images) > 1) 
+    if (count($Images) > 1)
     {
         foreach ($Images as $urlImage)
         {
 ?>
     <img class="abs hidden" src="<?= $urlImage ?>" />
-<? 
+<?
         }
     }
 }

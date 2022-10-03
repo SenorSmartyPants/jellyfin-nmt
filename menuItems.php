@@ -11,7 +11,7 @@ $episodeNameInTitle = false;
 function parseSeries($item)
 {
     global $libraryBrowse;
-    
+
     if ($item->UserData->Played || $libraryBrowse) {
         return parse($item);
     } else {
@@ -52,7 +52,7 @@ function parse($item) {
     if ($menuItem->PosterID) {
         $imageProps = new ImageParams();
         $imageProps->height = ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight);
-        $imageProps->width = ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth); 
+        $imageProps->width = ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth);
         $imageProps->unplayedCount = $menuItem->UnplayedCount;
         $imageProps->AddPlayedIndicator = $played;
         $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
@@ -139,16 +139,16 @@ function getFolderURL($item, $menuItem)
             $cbp->topParentId = $item->Id;
             $cbp->topParentName = $item->Name;
             $detailURL = categoryBrowseURLEx($cbp);
-            break;            
+            break;
         case ItemType::SEASON:
             $detailURL = "Season.php?id=" . $item->Id;
-            break;   
+            break;
         case ItemType::SERIES:
             //go directly to season page, or continue to default
             if ($item->ChildCount == 1) {
                 $detailURL = "seasonRedirect.php?SeasonType=first&SeriesId=" . $item->Id;
                 break;
-            }   
+            }
         default:
             //get topParentId from querystring
             $cbp->topParentId = $_GET['topParentId'];
@@ -188,7 +188,7 @@ function getNonFolderURL($item, $menuItem)
         case "Photo":
             $detailURL = translatePathToNMT($item->Path);
             $menuItem->OnDemandTag = "POD";
-            break;                
+            break;
         default:
             break;
     }
@@ -196,10 +196,10 @@ function getNonFolderURL($item, $menuItem)
         //default to itemDetails page
         $detailURL = itemDetailsLink($item->Id);
     }
-    return $detailURL; 
+    return $detailURL;
 }
 
-function setDetailURL($item, $menuItem) {   
+function setDetailURL($item, $menuItem) {
     if ($item->IsFolder) {
         $detailURL = getFolderURL($item, $menuItem);
     } else {
@@ -228,7 +228,7 @@ function getPosterID($item, $useSeasonImage = true) {
             break;
         case ItemType::EPISODE:
             if (!$displayepisode) {
-                $posterID = getEpisodePosterID($item, $useSeasonImage); 
+                $posterID = getEpisodePosterID($item, $useSeasonImage);
                 break;
             }
         default:
@@ -242,7 +242,7 @@ function getPosterID($item, $useSeasonImage = true) {
                 $indexStyle->ImageType = ImageType::THUMB;
                 $posterID = $item->ParentThumbItemId;
             }
-            break; 
+            break;
     }
     return $posterID;
 }

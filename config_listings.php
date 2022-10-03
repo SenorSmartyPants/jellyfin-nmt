@@ -42,6 +42,6 @@ function overrideIndexStyle($folderType, $collectionType)
         default:
             $indexStyle = new IndexStyle();
             break;
-    }    
+    }
 }
 ?>

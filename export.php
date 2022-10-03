@@ -53,10 +53,10 @@ if ($nextup) {
                 <td>Drive</td>
                 <td><select name="drive">
                         <option>D:</option>
-                        <option>E:</option>              
+                        <option>E:</option>
                         <option>F:</option>
                         <option>G:</option>
-                        <option>H:</option>                        
+                        <option>H:</option>
                     </select></td>
             </tr>
             <tr>
@@ -66,7 +66,7 @@ if ($nextup) {
                         <option selected>Thumb</option>
                         <option>None</option>
                     </select></td>
-            </tr>            
+            </tr>
             <tr>
                 <td>Force download</td>
                 <td><input type="checkbox" name="download" value="true"></td>
@@ -85,7 +85,7 @@ if ($nextup) {
                         ?>
                     </select>
                 </td>
-            </tr>            
+            </tr>
             <tr>
                 <td><input type='submit' name="nextup" value="Get Next Up" /></td>
             </tr>
@@ -194,7 +194,7 @@ function exportCommands($item)
             if ($item->ParentThumbImageTag) {
                 $imageProps = new ImageParams();
                 $imageProps->maxWidth = 1000;
-                $imageProps->tag = $item->ParentThumbImageTag;   
+                $imageProps->tag = $item->ParentThumbImageTag;
                 $thumbnailURL = getImageURL($item->ParentThumbItemId, $imageProps, $FolderImageType);
                 downloadCommand($thumbnailURL, $dirname, FOLDERJPG);
             } else if ($item->ParentBackdropImageTags[0]) {
@@ -222,7 +222,7 @@ function exportCommands($item)
             } else {
                 $ImageType = ImageType::BACKDROP;
             }
-            
+
         }
 
         if ($item->ImageTags->Primary) {

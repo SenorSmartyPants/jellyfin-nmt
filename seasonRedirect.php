@@ -6,7 +6,7 @@ class SeasonRedirectPage extends Page
 
     public function __construct()
     {
-        parent::__construct('');     
+        parent::__construct('');
     }
 
     public function render()
@@ -14,7 +14,7 @@ class SeasonRedirectPage extends Page
         $SeriesId = htmlspecialchars($_GET["SeriesId"]);
         $SeasonId = htmlspecialchars($_GET["SeasonId"]);
         $IndexNumber = htmlspecialchars($_GET["IndexNumber"]);
-        
+
         //If seriesID is passed in then we don't know the season ID
         if ($SeriesId) {
             $SeasonType = htmlspecialchars($_GET["SeasonType"]);

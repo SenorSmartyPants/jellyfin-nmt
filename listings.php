@@ -46,9 +46,9 @@ class ListingsPage extends Page
         if ($renderFiltering) {
             $this->titleLetters = range("A","Z");
             array_unshift($this->titleLetters,"#");
-    
-            $this->singleLetterTVIDs = array("#"=>"1", 
-                "A"=>"2", "B"=>"22", "C"=>"222", 
+
+            $this->singleLetterTVIDs = array("#"=>"1",
+                "A"=>"2", "B"=>"22", "C"=>"222",
                 "D"=>"3", "E"=>"33", "F"=>"333",
                 "G"=>"4", "H"=>"44", "I"=>"444",
                 "J"=>"5", "K"=>"55", "L"=>"555",
@@ -57,7 +57,7 @@ class ListingsPage extends Page
                 "T"=>"8", "U"=>"88", "V"=>"888",
                 "W"=>"9", "X"=>"99", "Y"=>"999", "Z"=>"9999"
             );
-    
+
             $this->additionalCSS = 'filter.css';
         }
 
@@ -77,7 +77,7 @@ class ListingsPage extends Page
 
     }
 
-    public function printJavascript() 
+    public function printJavascript()
     {
         global $folderType, $collectionType;
         global $topParentId, $topParentName;
@@ -88,7 +88,7 @@ class ListingsPage extends Page
         var asMenuSubtitle = <?= getJSArray(array_map(function($i) { return $i->Subtitle; }, $this->menuItems), true, "") ?>;
         var asMenuURL = <?= getJSArray(array_map(function($i) { return $i->DetailURL; }, $this->menuItems), true, "") ?>;
         var asMenuImage = <?= getJSArray(array_map(function($i) { return $i->PosterURL; }, $this->menuItems), true, "") ?>;
-        </script>        
+        </script>
 <?
         if ($this->renderFiltering) {
             //clear some options that would be reset by filter
@@ -144,7 +144,7 @@ class ListingsPage extends Page
         $this->cbp->topParentName = $topParentName;
         $this->cbp->topParentId = $topParentId;
         $this->cbp->folderType = $folderType;
-        $this->cbp->collectionType = $browseType;    
+        $this->cbp->collectionType = $browseType;
 
         foreach ($items as $item) {
             //filter by the displayed folder/collectiontype, tv, movie, boxset...
@@ -163,23 +163,23 @@ class ListingsPage extends Page
         }
     }
 
-    public function printContentWrapperStart() 
+    public function printContentWrapperStart()
     {
 ?>
         <table border="0" cellpadding="0" cellspacing="0" align="<?= $this->indexStyle->moviesTableAlign ?>">
         <tr valign="<?= $this->indexStyle->moviesTableVAlign ?>"><td class="posterTableParent">
-<? 
+<?
     }
 
     public function printContent()
     {
-        $this->printPosterTable($this->items);  
+        $this->printPosterTable($this->items);
     }
 
     function printPosterTable($items, $wrapBottomRowToTop = true)
     {
         global $lastRow;
-    
+
         $lastRow = ceil(count($items) / $this->indexStyle->nbThumbnailsPerLine);
         ?>
         <table class="movies" border="0" cellpadding="<?= $this->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $this->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $this->indexStyle->moviesTableAlign ?>">
@@ -202,7 +202,7 @@ class ListingsPage extends Page
             ?>
         </table>
         <?
-    }    
+    }
 
     function printPCMenu()
     {
@@ -241,7 +241,7 @@ class ListingsPage extends Page
         FilterMenu::printFooter();
         ?>
         </div>
-<?        
+<?
             if ($this->PCMenu) {
                 $this->printPCMenu();
             }
@@ -258,16 +258,16 @@ class ListingsPage extends Page
         }
 ?>
         </div>
-<?        
+<?
         if ($this->renderFiltering) {
-?>           
+?>
             <div id="navigationlinks">
                 <a TVID="<?= $tvid_filter_menu ?>" name="showMenu"  onfocusset="catLink5" onclick="toggleMenu()" href="#" ></a>
                 <a name="catLinkUp"   href="#" onfocusset="catLink5" onfocus="catUp();" onfocusload=""></a>
                 <a name="catLinkDown" href="#" onfocusset="catLink5" onfocus="catDown();" onfocusload=""></a>
                 <a name="genLinkUp"   href="#" onfocusset="genLink5" onfocus="genUp();" onfocusload=""></a>
                 <a name="genLinkDown" href="#" onfocusset="genLink5" onfocus="genDown();" onfocusload=""></a>
-            </div>            
+            </div>
 <?
             $this->printSpeedDial();
         }
@@ -280,8 +280,8 @@ function setNumPagesAndIndexCount($totalRecordCount)
     global $page, $numPages, $indexStyle, $pageObj;
     $pageObj->indexStyle = $indexStyle;
     $numPages = ceil($totalRecordCount / $indexStyle->Limit);
-    $indexStyle->setIndexCount($page < $numPages ? 
-                $indexStyle->Limit : 
+    $indexStyle->setIndexCount($page < $numPages ?
+                $indexStyle->Limit :
                 $totalRecordCount - ($indexStyle->Limit * ($page-1)));
 }
 
@@ -326,7 +326,7 @@ function printPopup($menuItem, $position)
         if ($indexStyle->hoverFrame) {
 ?>
         <img id="frmDVD<?= $placement ?>" class="menu<?= $placement ?> frmRow<?= $row ?> frmCol<?= $col ?>" src="<?= $indexStyle->hoverFrame ?>" onclick="openLinkURL(asMenuURL[iActiveItem]);" />
-<?php            
+<?php
         }
     }
 }
@@ -371,7 +371,7 @@ function getOnkeyrightset($placement, $row)
 function getOnkeydownset($placement, $row, $wrapBottomRowToTop)
 {
     global $indexStyle, $numPages;
-    
+
     $retval = null;
     //last row
     if (isLastRow($row)) {
@@ -396,22 +396,22 @@ function printPosterTD($menuItem, $gap, $position, $row, $wrapBottomRowToTop)
     global $indexStyle;
     $placement = $position + $gap + 1; //$position is zero based
     ?>
-    <td align="center" <? 
-    if (!$menuItem->PosterURL) { 
+    <td align="center" <?
+    if (!$menuItem->PosterURL) {
         ?>class="defaultCardBackground<?= ($position % 5) + 1 ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>"<?
     } ?> >
-        <a href="#" onclick="openLinkURL(asMenuURL[iActiveItem]);" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)" 
-        id="<?= $placement ?>" 
+        <a href="#" onclick="openLinkURL(asMenuURL[iActiveItem]);" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)"
+        id="<?= $placement ?>"
 <?php
     echo getOnkeyleftset($placement);
-    echo getOnkeyrightset($placement, $row);    
+    echo getOnkeyrightset($placement, $row);
     echo getOnkeydownset($placement, $row, $wrapBottomRowToTop);
 ?>>
 <?
     if ($menuItem->PosterURL) {
 ?>
         <img src="<?= $menuItem->PosterURL ?>" width="<?= $indexStyle->thumbnailsWidth ?>" height="<?= $indexStyle->thumbnailsHeight ?>" onfocussrc="images/wall/transparent.png" />
-<?   
+<?
     } else {
         echo $menuItem->Name;
     }

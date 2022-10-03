@@ -10,7 +10,7 @@ class IndexPage extends ListingsPage
 
     public function __construct($title)
     {
-        parent::__construct($title, false);        
+        parent::__construct($title, false);
         //check if there are resume items
         $this->resume = (getResume(1)->TotalRecordCount) > 0;
         $this->items = getUsersViews()->Items;
@@ -28,13 +28,13 @@ class IndexPage extends ListingsPage
     {
         $this->indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup);
         $this->indexStyle->ImageType = ImageType::PRIMARY;
-        
+
         //960x540
         //(1096 - (n+1)*cellspacing) / n = w
-        //or 
+        //or
         //(1096 - (2n)*cellpadding) / n = w
         //larger thumbnails need more padding I think
-        
+
         //thumbnail/.8 = popup dimensions
         //can be whatever I want!
         if (count($this->items) <= 6) {
@@ -52,7 +52,7 @@ class IndexPage extends ListingsPage
             $this->indexStyle->popupWidth = 318;
             $this->indexStyle->popupHeight = 179;
             $this->indexStyle->Limit = 12;
-            $this->indexStyle->nbThumbnailsPerLine = 4; 
+            $this->indexStyle->nbThumbnailsPerLine = 4;
         }
         $this->indexStyle->moviesTableCellspacing = 16;
     }
@@ -62,10 +62,10 @@ class IndexPage extends ListingsPage
         $this->homeSections = array();
         $nameAttr = ' name="1"';
         $prefs = $this->displayPreferences->CustomPrefs;
-        for ($i=0; $i < 7; $i++) { 
+        for ($i=0; $i < 7; $i++) {
             $sectionname = $prefs->{'homesection' . $i};
             $sectionHTML = $this->getHomeSection($sectionname, $nameAttr);
-            if (!is_null($sectionHTML)) 
+            if (!is_null($sectionHTML))
             {
                 $this->homeSections[$sectionname] = $sectionHTML;
             }
@@ -73,8 +73,8 @@ class IndexPage extends ListingsPage
             {
                 //calc offset based on number of lines before my media grid
                 //each line text is 27px
-                $this->indexStyle->offsetY = 27 * (count($this->homeSections) - 1) + $this->indexStyle->moviesTableCellspacing 
-                    + floor(($this->indexStyle->popupHeight - $this->indexStyle->thumbnailsHeight) / 2); 
+                $this->indexStyle->offsetY = 27 * (count($this->homeSections) - 1) + $this->indexStyle->moviesTableCellspacing
+                    + floor(($this->indexStyle->popupHeight - $this->indexStyle->thumbnailsHeight) / 2);
             }
         }
     }
@@ -88,7 +88,7 @@ class IndexPage extends ListingsPage
                 if ($this->resume) {
                     $sectionHTML = '<a href="continueWatching.php"' . $nameAttr . '>Continue Watching ></a><br clear="all"/>';
                     $nameAttr = null;
-                }                     
+                }
                 break;
 
             case 'nextup':
@@ -100,7 +100,7 @@ class IndexPage extends ListingsPage
                 $user = getUser();
                 $latestExcludes = $user->Configuration->LatestItemsExcludes;
                 foreach ($this->items as $view) {
-                    if ($view->CollectionType != CollectionType::BOXSETS 
+                    if ($view->CollectionType != CollectionType::BOXSETS
                         && $view->CollectionType != CollectionType::PLAYLISTS
                         && !in_array($view->Id, $latestExcludes))
                     {
@@ -110,23 +110,23 @@ class IndexPage extends ListingsPage
                         $cbp->topParentName = $view->Name;
                         $cbp->topParentId = $view->Id;
                         $cbp->collectionType = $view->CollectionType;
-                        
-                        $sectionHTML .= sprintf('<a href="latest.php?%s" %s > %s %s ></a>&nbsp;', 
+
+                        $sectionHTML .= sprintf('<a href="latest.php?%s" %s > %s %s ></a>&nbsp;',
                             http_build_query($cbp), $nameAttr, $cbp->name, $view->Name);
-                        $nameAttr = null;     
-                    }    
+                        $nameAttr = null;
+                    }
                 }
                 if (!is_null($sectionHTML))
                 {
                     $sectionHTML .= '<br clear="all"/>';
                 }
                 break;
-                
+
             case 'librarybuttons':
             case 'smalllibrarytiles':
                 $sectionHTML = '**PLACEHOLDER**';
                 $nameAttr = null;
-                break;                      
+                break;
 
             # Not supported sections
             case 'resumeaudio':

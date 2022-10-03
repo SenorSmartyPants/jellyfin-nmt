@@ -8,20 +8,20 @@ class LoginPage extends Page
     public function __construct()
     {
         $this->authRequired = false;
-        parent::__construct('Login');  
+        parent::__construct('Login');
         $this->users = getUsersPublic();
         $this->handleRequest();
     }
 
     private function handleRequest()
     {
-        if (isset($_GET['id'])) 
+        if (isset($_GET['id']))
         {
             $san_id  = htmlspecialchars($_GET['id']);
             $san_name = htmlspecialchars($_GET['name']);
             $this->auth->login2(explode(",", $san_id), explode(",", $san_name));
             header('Location: index.php');
-            die();            
+            die();
         }
     }
 
@@ -55,18 +55,18 @@ class LoginPage extends Page
         }
 
         if ($this->auth->IsAuthenticated())
-        {    
+        {
             ?>
             <p>User is currently set to:</p>
-            <?    
+            <?
             foreach($this->auth->userIDs as $userID) {
                 ?><img src="<?=getImageURL($userID, new ImageParams(100, 100), null, 'Users') ?>" width="100" height="100" /><?php
             }
         }
         ?>
         <p>Click on name to set user currently watching.</p>
-        <? 
-        if (count($this->users) > 1) { 
+        <?
+        if (count($this->users) > 1) {
             //if more than 1 user, display first 2 users together in order to watch shows together
         ?>
         <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>

@@ -5,7 +5,7 @@ include_once 'auth.php';
 include_once 'navbar.php';
 const PCMENU = true;
 
-class Page 
+class Page
 {
     private $theme_css;
     protected $includeNavbar = true;
@@ -46,7 +46,7 @@ class Page
             header('Location: login.php');
             die();
         }
-        if ($this->auth->IsAuthenticated()) 
+        if ($this->auth->IsAuthenticated())
         {
             $this->displayPreferences = getUserPreferences();
             $device = new Device();
@@ -61,7 +61,7 @@ class Page
 <?
     }
 
-    public function printContent() 
+    public function printContent()
     {
         echo 'Override printContent to display something useful with render.';
     }
@@ -94,7 +94,7 @@ class Page
         return 671 - ($this->includeNavbar ? navbar::getHeight() : 0) - ($this->includeTitleTable ? 73 : 0);
     }
 
-    public function printJavascript() 
+    public function printJavascript()
     {
         if ($this->InitJSFunction) {
             call_user_func($this->InitJSFunction);
@@ -124,24 +124,24 @@ class Page
 ?>        <link rel="StyleSheet" type="text/css" href="css/<?= $this->additionalCSS ?>"/>
 <?
             }
-            
+
             if ($this->PCMenu) {
                 echo '        <link rel="StyleSheet" type="text/css" href="css/no_nmt.css" media="screen" />' . "\n";
             }
-            
+
             $this->printJavascript();
 ?>
     </head>
 
     <body id="body" bgproperties="fixed" onloadset="<?= $this->onloadset ?>" FOCUSTEXT="#dddddd" focuscolor="<?= $this->focuscolor ?>" bgcolor="#000000" <?
-        if ($this->onload) 
-        { 
+        if ($this->onload)
+        {
             ?>onload="<?= $this->onload ?>" <?
         }
 ?>
-<?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id) 
-        { 
-            ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), ImageType::BACKDROP) ?>"<?   
+<?      if ($this->displayPreferences->ShowBackdrop && $this->backdrop->Id)
+        {
+            ?> background="<?= getImageURL($this->backdrop->Id, new ImageParams(720, 1280, $this->backdrop->Tag), ImageType::BACKDROP) ?>"<?
         }
         ?>>
 <?
@@ -163,9 +163,9 @@ class Page
 ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
-            <td width="20%" valign="top" id="JFlogo"><? 
+            <td width="20%" valign="top" id="JFlogo"><?
             if (empty($this->TitleTableNoteLeft)) {
-                if ($include_jellyfin_logo_when_backdrop_present || !$backdropId || !$this->displayPreferences->ShowBackdrop) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? } 
+                if ($include_jellyfin_logo_when_backdrop_present || !$backdropId || !$this->displayPreferences->ShowBackdrop) { ?><a href="index.php"><img src="<?= getLogoURL() ?>" height="47"/></a><? }
             } else {
                 echo $this->TitleTableNoteLeft;
             }
@@ -180,9 +180,9 @@ class Page
                     </tr>
                 </table>
             </td>
-            <td width="20%" align="right" id="page" valign="top"><? 
+            <td width="20%" align="right" id="page" valign="top"><?
         echo $this->TitleTableNoteRight;
-        if ($numPages > 1) { 
+        if ($numPages > 1) {
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
             echo "\n" . '               <a name="pgupload" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $this->QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
@@ -204,7 +204,7 @@ class Page
         <div id="navigationlinks">
             <a TVID="<?= $tvid_page_index ?>" href="index.php"></a>
             <a TVID="<?= $tvid_page_categories ?>" href="categoriesHTML.php"></a>
-            <a TVID="<?= $tvid_page_back ?>" href="javascript:window.history.back();"></a>            
+            <a TVID="<?= $tvid_page_back ?>" href="javascript:window.history.back();"></a>
         </div>
     </body>
 </html>

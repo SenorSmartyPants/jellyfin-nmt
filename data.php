@@ -30,7 +30,7 @@ class Device
             $this->name = 'Popcorn Hour';
         } else {
             $this->name = $_SERVER[self::HTTP_USER_AGENT];
-        }        
+        }
     }
 }
 
@@ -52,7 +52,7 @@ class UserItemsParams
     public $NameStartsWith = null;
     public $OfficialRatings = null;
     public $ParentID = null;
-    public $ParentIndexNumber = null;    
+    public $ParentIndexNumber = null;
     public $PersonIDs = null;
     public $Recursive = null;
     public $SeriesStatus = null;
@@ -73,11 +73,11 @@ class UserItemsParams
     public function setSortByDefault($value)
     {
         $this->defaultSortBy = $value;
-    } 
+    }
 
     public function setFromQueryString()
     {
-        global $filterCategories; 
+        global $filterCategories;
 
         $params = $_GET['params'];
         if (is_array($params)) {
@@ -97,7 +97,7 @@ class UserItemsParams
             $this->SortBy = empty($params['SortBy']) ? $this->defaultSortBy : $params['SortBy'];
             $this->SortOrder = empty($params['SortOrder']) ? null : $params['SortOrder'];
             $this->collapseBoxSetItems = empty($params['collapseBoxSetItems']) ? null : $params['collapseBoxSetItems'];
-    
+
             foreach ($filterCategories as $cat) {
                 $this->$cat = $params[$cat];
             }
@@ -125,13 +125,13 @@ class ImageParams
     function __construct($height = null, $width = null, $tag = null) {
         $this->height = $height;
         $this->width = $width;
-        $this->tag = $tag;     
-    }    
+        $this->tag = $tag;
+    }
 }
 
 function mapItemTypeToCollectionType($itemType)
 {
-    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS, 
+    $itemTypeToCollectionType = array(ItemType::SERIES => CollectionType::TVSHOWS,
         ItemType::SEASON => CollectionType::TVSHOWS, ItemType::EPISODE => CollectionType::TVSHOWS,
         ItemType::MOVIE => CollectionType::MOVIES, ItemType::BOXSET => CollectionType::BOXSETS,
         ItemType::PLAYLIST => CollectionType::PLAYLISTS, ItemType::MUSICVIDEO  => CollectionType::MUSICVIDEOS);
@@ -141,7 +141,7 @@ function mapItemTypeToCollectionType($itemType)
 
 function mapFolderTypeToSingleItemType($folderType, $collectionType)
 {
-    $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES, 
+    $collectionTypeToItemType = array(CollectionType::TVSHOWS => ItemType::SERIES,
         CollectionType::MOVIES => ItemType::MOVIE, CollectionType::BOXSETS => ItemType::BOXSET,
         CollectionType::PLAYLISTS => ItemType::PLAYLIST, CollectionType::MUSICVIDEOS => ItemType::MUSICVIDEO);
 
@@ -152,7 +152,7 @@ function mapFolderTypeToSingleItemType($folderType, $collectionType)
         return $folderType;
     }
 
-    
+
 }
 
 function strboolNull($value)
@@ -211,8 +211,8 @@ function apiCallPost($path, $post = null)
 
     if ($post) {
         $opts['http']['content'] = json_encode($post);
-    }    
-    
+    }
+
     $context = stream_context_create($opts);
 
     $url = $api_url . $path;
@@ -286,7 +286,7 @@ function latestSeasonFromSeries($seriesId)
 
 function YAMJpath($item) {
     global $jukebox_url;
-    
+
     return $jukebox_url . pathinfo($item->Path)['filename'] . ".html";
 }
 
@@ -387,7 +387,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
         'Fields' => 'Path',
         'Limit' => $Limit,
         'StartIndex' => $startIndex,
-        'enableRewatching' => strboolNull($enableRewatching) 
+        'enableRewatching' => strboolNull($enableRewatching)
     );
 
     $path = "/Shows/NextUp?" . http_build_query($params);
@@ -439,33 +439,33 @@ function getFilters($parentID = null, $itemTypes = null, $Recursive = null) {
     $path .= $parentID ? "&ParentID=" . $parentID : "";
     $path .= $itemTypes ? "&IncludeItemTypes=" . implode(",", $itemTypes) : "";
     $path .= !is_null($Recursive) ? "&Recursive=" . strbool($Recursive) : "";
-    
+
     return apiCall($path);
 }
 
 function getImageURL($id, ImageParams $imageProperties, $imageType = null, $itemsOrUsers = null)
 {
-    global $api_url; 
+    global $api_url;
 
     $itemsOrUsers = $itemsOrUsers ?? 'Items';
     $imageType = $imageType ?? ImageType::PRIMARY;
 
     $imageProperties->AddPlayedIndicator = ($imageProperties->AddPlayedIndicator ? 'true' : null);
-   
-    return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?" 
+
+    return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?"
         . http_build_query($imageProperties);
 }
 
 function getFavIconURL()
 {
-    global $api_url; 
+    global $api_url;
 
     return $api_url . "/web/favicon.ico";
 }
 
 function getLogoURL()
 {
-    global $api_url; 
+    global $api_url;
 
     return $api_url . "/web/assets/img/banner-light.png";
 }
