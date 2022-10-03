@@ -7,7 +7,7 @@ $include_jellyfin_logo_when_backdrop_present = false;
 
 if(file_exists('config_listings_local.php')){
     // Include the file
-    include('config_listings_local.php');
+    include_once('config_listings_local.php');
 }
 
 function overrideIndexStyle($folderType, $collectionType)

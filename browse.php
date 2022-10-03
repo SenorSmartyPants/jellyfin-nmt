@@ -1,5 +1,5 @@
 <?php
-include 'listings.php';
+include_once 'listings.php';
 
 $libraryBrowse = true;
 $useSeasonImage = false;

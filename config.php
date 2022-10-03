@@ -37,6 +37,6 @@ $tvid_itemdetails_more = 'RED';
 
 if(file_exists('config_local.php')){
     // Include the file
-    include('config_local.php');
+    include_once('config_local.php');
 }
 ?>

@@ -2,7 +2,7 @@
 //exports next up episodes and screenshots to USB drive
 //For Roku
 
-include 'data.php';
+include_once 'data.php';
 
 const FOLDERJPG = 'folder.jpg';
 

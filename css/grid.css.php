@@ -1,5 +1,5 @@
 <?php
-include '../IndexStyles.php';
+include_once '../IndexStyles.php';
 header('Content-type: text/css');
 
 $numPosters = $_GET["number"] > 0 ? $_GET["number"] : 1;

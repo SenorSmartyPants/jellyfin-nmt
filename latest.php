@@ -1,5 +1,5 @@
 <?php
-include 'listings.php';
+include_once 'listings.php';
 
 $GroupItems = 'true';
 $Limit = 27;
