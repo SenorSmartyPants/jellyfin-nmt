@@ -47,7 +47,7 @@ class ItemDetailsPage extends ListingsPage
         /*  */
         ?>
         <script type="text/javascript">
-        var asItemRuntimeDesc = <?= getJSArray(array_map('runtimeDescription', $this->allVideos), false) ?>;
+        var asItemRuntimeDesc = <?= getJSArray(array_map('runtimeDescription', $this->allVideos), false, null, true) ?>;
         var asItemEndsAtDesc = <?= getJSArray(array_map('endsAtDescription', $this->allVideos), false) ?>;
         var asItemVideoDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Video->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
         var asItemAudioDesc = <?= getJSArray(array_map(function($i) { return getStreams($i)->Audio->DisplayTitle ?? "None"; }, $this->allVideos), false) ?>;
@@ -510,7 +510,7 @@ function printYearDurationEtc($item, $stream, $date)
     
     if ($item->MediaType) {
     ?>          
-            <td><span id="Runtime"><?= runtimeDescription($stream) ?></span>&nbsp;&nbsp;&nbsp;</td>
+            <td><span id="Runtime"><?= runtimeDescription($stream, false) ?></span>&nbsp;&nbsp;&nbsp;</td>
     <? 
     }
     
