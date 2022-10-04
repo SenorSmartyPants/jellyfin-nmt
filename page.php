@@ -191,14 +191,21 @@ class Page
 <?php
     }
 
+    private function getNMTBrowseURL()
+    {
+        global $NMT_playerpath;
+        return str_replace("file:///opt/sybhttpd/localhost.drives/", "http://localhost.drives:8883/", $NMT_playerpath) . "?filter=3";
+    }
+
     public function printFooter()
     {
-        global $tvid_page_index, $tvid_page_categories, $tvid_page_back;
+        global $tvid_page_index, $tvid_page_categories, $tvid_page_back, $tvid_page_browse;
 ?>
         <div id="navigationlinks">
             <a TVID="<?= $tvid_page_index ?>" href="index.php"></a>
             <a TVID="<?= $tvid_page_categories ?>" href="categoriesHTML.php"></a>
             <a TVID="<?= $tvid_page_back ?>" href="javascript:window.history.back();"></a>
+            <a TVID="<?= $tvid_page_browse ?>" href="<?= $this->getNMTBrowseURL() ?>"></a>
         </div>
     </body>
 </html>

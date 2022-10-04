@@ -13,6 +13,7 @@ $tvid_page_pgup = 'PGUP';
 $tvid_page_pgdn = 'PGDN';
 //to map a button to javascript:window.history.back();
 $tvid_page_back = '';
+$tvid_page_browse = 'YELLOW';
 
 $tvid_filter_menu = 'TAB';
 
