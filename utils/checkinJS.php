@@ -58,8 +58,11 @@ class CheckinJS
             }
 
             function updatePlayed(state) {
-                asEpisodeWatched[iEpisodeId] = state ? "1" : "";
-                updatePlayedUI();
+                newWatched = state ? "1" : "";
+                if (newWatched != asEpisodeWatched[iEpisodeId]) {
+                    asEpisodeWatched[iEpisodeId] = newWatched;
+                    updatePlayedUI();
+                }
             }
 
             function ResumeOrRestart(iResume, iStart) {
