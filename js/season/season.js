@@ -66,6 +66,19 @@ function showSeasonInfo() {
     }
 }
 
+function setEpisodeListItemText(iElId, iEpisodeIndex) {
+    var elDesc = getFirstChild(sIdSpanPrefix + iElId);
+    elDesc.nodeValue = episodeListItemDesc(iEpisodeIndex);
+}
+
+function updatePlayedUI() {
+    setEpisodeListItemText(getIndexCurrentPage(iEpisodeId), iEpisodeId);
+}
+
+function getIndexCurrentPage(iId) {
+    return iId - ((iPage - 1) * iEpisodesPerPage);
+}
+
 function formatEpisodeNumber(noNew) {
     var epnum = asEpisodeNo[noNew];
     if (epnum < 10) {

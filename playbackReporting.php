@@ -28,6 +28,12 @@ class PlayingMedia
     }
 }
 
+class PositionAndPlayed
+{
+    public $PositionInSeconds;
+    public $Played;
+}
+
 class PlaybackReporting
 {
     private const PROGRESSUPDATEFREQUENCY = 60;
@@ -146,7 +152,7 @@ class PlaybackReporting
         self::handleProgess();
     }
 
-    public function Stop()
+    public function Stop(): PositionAndPlayed
     {
         //get updated position from session
         self::loadPlaystate();
@@ -173,13 +179,22 @@ class PlaybackReporting
                 PlayState::STOPPED
             );
         }
+
+        $retval = new PositionAndPlayed();
+
+        //look up played state for this item
+        $playedItem = getItem($this->playing->itemId);
+        $retval->Played = $playedItem->UserData->Played;
+
         //report skipSeconds to NMT if at beginning of video
         //+1 because position will be set to 1 if in first 5%
         if ($this->playing->PositionInSeconds <= $this->playing->skipSeconds + 1) {
-            return $this->playing->skipSeconds;
+            $retval->PositionInSeconds = $this->playing->skipSeconds;
         } else {
-            return $this->playing->PositionInSeconds;
+            $retval->PositionInSeconds = $this->playing->PositionInSeconds;
         }
+
+        return $retval;
     }
 
     private function apiJSON($apiendpoint, $payload, $PositionInSeconds, $playState = PlayState::PLAYING)

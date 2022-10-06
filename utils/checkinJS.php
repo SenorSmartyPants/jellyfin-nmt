@@ -57,6 +57,11 @@ class CheckinJS
                 asItemPosition[iEpisodeId] = position;
             }
 
+            function updatePlayed(state) {
+                asEpisodeWatched[iEpisodeId] = state ? "1" : "";
+                updatePlayedUI();
+            }
+
             function ResumeOrRestart(iResume, iStart) {
                 if (iResume == iStart) return iStart;
                 if (confirm("Report restarting?")) {
@@ -69,4 +74,3 @@ class CheckinJS
 <?
     }
 }
-?>
