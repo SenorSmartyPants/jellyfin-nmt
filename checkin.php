@@ -43,12 +43,10 @@ $trim = intval($_GET['trim']);
 $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $skip, $trim);
 
 if ($_GET['action'] == 'stop') {
-    $stoppedPosition = $report->Stop();
+    $positionAndPlayed = $report->Stop();
     if (isset($_GET["JS"])) {
-        echo "\nupdatePosition($stoppedPosition);";
-        //check if played state has changed
-        //$played = true ? "1" : "";
-        //echo "\updatePlayed(\"$played\");";
+        echo "\nupdatePosition($positionAndPlayed->PositionInSeconds);";
+        echo "\nupdatePlayed(" . strbool($positionAndPlayed->Played) . ");";
     }
 } else {
     //close reponse before starting play, let play run in the background

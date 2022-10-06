@@ -1,6 +1,8 @@
         // series config vars
 
         var sIdLinkPrefix = 'a_e_';
+        var sIdSpanPrefix = 's_e_';
+
         var fShowingSeasonInfo = false;
         var iEpisodesLength = asEpisodePlot.length - 1;
         var url = false;
@@ -64,6 +66,19 @@ function showSeasonInfo() {
     }
 }
 
+function setEpisodeListItemText(iElId, iEpisodeIndex) {
+    var elDesc = getFirstChild(sIdSpanPrefix + iElId);
+    elDesc.nodeValue = episodeListItemDesc(iEpisodeIndex);
+}
+
+function updatePlayedUI() {
+    setEpisodeListItemText(getIndexCurrentPage(iEpisodeId), iEpisodeId);
+}
+
+function getIndexCurrentPage(iId) {
+    return iId - ((iPage - 1) * iEpisodesPerPage);
+}
+
 function formatEpisodeNumber(noNew) {
     var epnum = asEpisodeNo[noNew];
     if (epnum < 10) {
@@ -103,7 +118,7 @@ function updateSelectedItem(positionChange) {
     } else {
         //paging, positionChange = +/-iEpisodesPerPage
         //maintain list position between pages
-        if (iEpisodeId <= 0 || iEpisodeId > iEpisodesLength) {   
+        if (iEpisodeId <= 0 || iEpisodeId > iEpisodesLength) {
             iEpisodeId = iEpisodeId - (iEpPages * positionChange);
             //check if after the end of the list
             if (iEpisodeId <= 0 || iEpisodeId > iEpisodesLength) {
@@ -144,7 +159,7 @@ function toggleRight() {
         updateSelectedItem(iEpisodesPerPage);
     } else {
         showNfocus();
-    }    
+    }
 }
 
 var         showNfocus = function() {

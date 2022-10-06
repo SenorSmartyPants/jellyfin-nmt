@@ -12,7 +12,6 @@ function setVOD(elem, Evod) {
 }
 
 var sId2ndLinkPrefix = 'a2_e_';
-var sIdSpanPrefix = 's_e_';
 var sIdTvPrefix = 't_e_';
 
 function formatEpisodeListItem(iElId, iEpisodeIndex) {

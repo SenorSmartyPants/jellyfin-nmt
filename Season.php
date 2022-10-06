@@ -237,6 +237,13 @@ function printInitJS()
         //both season.js and episodePaging.js
         //not really used by my code season, used by paging
         var asEpisodeUrl = <?= getJSArray(array_map('getURL', $episodes), true, '0')?>;
+
+        //used to make episode list item text
+        var asEpisodeWatched = <?= getJSArray(array_map('getPlayed', $episodes), false, '0')?>;
+        var asEpisodeTitleShort = <?= getJSArray(array_map('getShortTitle', $episodes), true, '0')?>;
+        var asSeasonNo = <?= getJSArray(array_column($episodes, 'ParentIndexNumber'), false, '0')?>;
+        var asEpisodeNo = <?= getJSArray(array_column($episodes, 'IndexNumber'), false, '0')?>;
+        var asEpisodeNoEnd = <?= getJSArray(array_map('getIndexNumberEnd', $episodes), false, '0')?>;
     </script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
@@ -246,12 +253,7 @@ if ($episodeCount > EPISODESPERPAGE) {
 ?>
     <script type="text/javascript">
         //episodePaging.js
-        var asEpisodeWatched = <?= getJSArray(array_map('getPlayed', $episodes), false, '0')?>;
         var asEpisodeVod = <?= getJSArray(array_map('getVOD', $episodes), false, '0')?>;
-        var asEpisodeTitleShort = <?= getJSArray(array_map('getShortTitle', $episodes), true, '0')?>;
-        var asSeasonNo = <?= getJSArray(array_column($episodes, 'ParentIndexNumber'), false, '0')?>;
-        var asEpisodeNo = <?= getJSArray(array_column($episodes, 'IndexNumber'), false, '0')?>;
-        var asEpisodeNoEnd = <?= getJSArray(array_map('getIndexNumberEnd', $episodes), false, '0')?>;
     </script>
     <script type="text/javascript" src="js/season/episodePaging.js"></script>
 <?
