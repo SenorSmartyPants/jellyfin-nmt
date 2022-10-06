@@ -34,7 +34,7 @@ startReponse();
 
 $auth = new Authentication();
 
-$itemId = $_GET['id'];
+$itemId = htmlspecialchars($_GET['id']);
 $duration = intval($_GET['duration']);
 $position = intval($_GET['position']);
 $skip = intval($_GET['skip']);
