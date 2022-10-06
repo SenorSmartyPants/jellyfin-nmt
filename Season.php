@@ -4,12 +4,7 @@ no tv rating in JF episode data?
 TODO:
     Season
     Overview and OfficialRating - missing, pull separately?
-    <br />
     episodes support ParentalRating, but not populated in JF
-    <br />
-    Support watched. Check skin to see <?= $episode->UserData->Played ?>
-
-
 */
 require_once 'config.php';
 include_once 'data.php';
