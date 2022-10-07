@@ -305,7 +305,7 @@ function isEndOfRow($position)
 
 function printTitleAndSubtitle($menuItem, $gap, $position)
 {
-    $placement = $position + $gap + 1; //$position is zero based
+    $placement = $position + $gap; //$position is zero based
 ?>
         <div id="title<?= $placement ?>" class="hidden"><?= $menuItem->Name ?></div>
         <div id="subtitle<?= $placement ?>" class="hidden"><?= $menuItem->Subtitle ?></div>

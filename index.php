@@ -60,7 +60,7 @@ class IndexPage extends ListingsPage
     private function getHomeSections()
     {
         $this->homeSections = array();
-        $nameAttr = ' name="1"';
+        $nameAttr = ' name="0"';
         $prefs = $this->displayPreferences->CustomPrefs;
         for ($i=0; $i < 7; $i++) {
             $sectionname = $prefs->{'homesection' . $i};

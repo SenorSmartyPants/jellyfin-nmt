@@ -16,7 +16,7 @@ class Page
     public $title;
     public $additionalCSS;
     public $InitJSFunction;
-    public $onloadset = '1';
+    public $onloadset = '0';
     public $onload;
     public $focuscolor = '#00a4dc';
 

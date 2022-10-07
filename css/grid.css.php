@@ -85,7 +85,10 @@ $halfPosterWidth = ($thumbWidthPlusCellSpacing + $moviesTableCellspacing) / 2;
 $frameWidth = $popupWidth + $frameDifferenceWidth * 2;
 $frameHeight = $popupHeight + $frameDifferenceHeight * 2;
 
-for ($i = 0; $i < $numPosters; $i++) {
+$numRows = ceil($numPosters / $numPerLine);
+$maxItems = $numPerLine * $numRows;
+
+for ($i = 0; $i < $maxItems; $i++) {
     $row = intdiv($i, $numPerLine);
 
     //width
@@ -104,10 +107,10 @@ for ($i = 0; $i < $numPosters; $i++) {
     //bounds checking
     $frameTop = $frameTop + $frameHeight > $lowerBound ? $lowerBound - $frameHeight : $frameTop;
 
-    echo ".menu" . ($i + 1) . " { visibility: hidden; position: absolute; }\n";
+    echo ".menu" . ($i) . " { visibility: hidden; position: absolute; }\n";
 }
 
-for ($row = 0; $row < ceil($numPosters / $numPerLine); $row++) {
+for ($row = 0; $row < $numRows; $row++) {
     //height
     $frameTop = $thumbHeightPlusCellSpacing * $row + 1;
     //add offset
