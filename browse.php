@@ -53,7 +53,7 @@ $itemsAndCount = getItems($params);
 
 $items = $itemsAndCount->Items;
 
-setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
+$pageObj->setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 
 $prettySortBy = [

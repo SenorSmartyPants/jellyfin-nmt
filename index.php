@@ -20,7 +20,7 @@ class IndexPage extends ListingsPage
     {
         $this->setupIndexStyle();
         $this->getHomeSections();
-        setNumPagesAndIndexCount(count($this->items));
+        $this->setNumPagesAndIndexCount(count($this->items));
         parent::render();
     }
 
