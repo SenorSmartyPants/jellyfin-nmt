@@ -179,7 +179,7 @@ class Page
         if ($numPages > 1) {
             //pgup on first page, wraps around to last page
             $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
-            echo "\n" . '               <a name="pgupload" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $this->QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
+            echo "\n" . '               <a name="pgupload" id="currentPage" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $this->QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
             //pgdn on last page wraps to first page
             $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
             echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $this->url . $this->QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";

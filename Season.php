@@ -143,7 +143,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
         "onkeyrightset" => "toright",
         "onkeyupset" => "toup",
         "onkeyleftset" => "toleft",
-        "onmouseover" => "showEpisode(" . $episodeIndex . ")"
+        "onmouseover" => "show(" . $episodeIndex . ")"
     );
     $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
@@ -364,7 +364,7 @@ function printLowerTable()
 			<table border="0" cellpadding="0" cellspacing="0">
                 <tr><td align="right">
                     <a href="" id="a_e_page" name="epispageCount" onmouseover="toggleRight()" class="TvLink secondaryText" >
-                    <span class="tabTvShow" id="pageCount"><? if ($epPages > 1) { echo $selectedPage . ' / ' . $epPages . ' (' . $episodeCount . ')'; } ?></span>
+                    <? if ($epPages > 1) { echo '<span id="currentPage">' . $selectedPage . '</span> / ' . $epPages . ' (' . $episodeCount . ')'; } ?>
                     </a>
                 </td></tr>
             </table>
