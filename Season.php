@@ -145,7 +145,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
         "onkeyleftset" => "toleft",
         "onmouseover" => "show(" . $episodeIndex . ")"
     );
-    $linkHTML = '<span class="tabTvShow" id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
+    $linkHTML = '<span id="s_e_' . $indexInList . '">' . $titleLine . '&nbsp;</span>';
     $linkName = EPISODE . $indexInList;
 
     $callbackJS = CheckinJS::getCallback($skipTrim);
@@ -160,7 +160,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
                 <?= videoPlayLink($episode, $linkHTML, $linkName, $attrs, $callbackJS, $callbackName, $callbackAdditionalAttributes) ?>
             </td>
         </tr>
-    </table><a href="#" class="tabTvShow" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
+    </table><a href="#" TVID="<?= $episode->IndexNumber ?>" onclick="setFocus(<?= $indexInList ?>); return false;" id="t_e_<?= $indexInList ?>" ></a>
 <?
 }
 
