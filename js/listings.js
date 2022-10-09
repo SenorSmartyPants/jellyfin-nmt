@@ -63,30 +63,36 @@ function updateSelectedItem(pageChange) {
 
     // display left item when going to next page
     // display rightmost item when going to prev
-    if (pageChange == 1) {
-        iActiveItem = 0;
-    } else {
+    var iNewItem = 0;
+    if (pageChange == -1) {
         // going to prev page, either iPageSize, or mod
         if (iPage != iNumPages) {
-            iActiveItem = iPageSize - 1;
+            iNewItem = iPageSize - 1;
         } else {
-            iActiveItem = (asMenuTitle.length - 1) % iPageSize;
+            // this is not a full page, put on last item
+            iNewItem = (asMenuTitle.length - 1) % iPageSize;
         }
     }
 
+    // using pgup/dn TVID does not change the focus
+    // update focus to valid item before updating display
+    focus(iNewItem);
+
     updateDisplayedMenuItems();
+
+    //wait for new page to draw, then show
+    //window.setTimeout("show(" + iNewItem + ")", 1);
+    show(iNewItem);
 }
 
 //almost same as toggletab
 function updateDisplayedMenuItems() {
+    hide(iActiveItem); // hide the active item before redrawing (when tvid paging, two popups could be active at once)
     var startingIndex = Math.floor((iPage - 1) * iPageSize);
     for (var i = 0; i < iPageSize; i++) {
         formatListItem(i, startingIndex + i);
     }
     updatePagePositionDisplay(iPage);
-
-    //wait for new page to draw, then set focus
-    window.setTimeout("focusAndShow(iActiveItem, iActiveItem)", 1);
 }
 
 function formatListItem(iElId, iIndex) {
@@ -95,15 +101,20 @@ function formatListItem(iElId, iIndex) {
 
     if (iIndex < asMenuTitle.length) {
         elMenu.setAttribute("src", asMenuImage[iIndex]);
-        createAttr(elMenu.parentNode, 'onfocusset', ' ');
 
         elimgDVD.setAttribute("src", asMenuImage[iIndex]);
         // TODO: test for frame popup
+
+        if (iIndex == asMenuTitle.length - 1 || (iElId == iPageSize - 1 && iNumPages > 1)) {
+            createAttr(elMenu.parentNode, 'onkeyrightset', 'pgdnload');
+        } else if (iElId == iPageSize - 1) {
+            createAttr(elMenu.parentNode, 'onkeyrightset', iElId + 1);
+        } else {
+            removeAttr(elMenu.parentNode, 'onkeyrightset');
+        }
     } else {
         // clear entry
         elMenu.setAttribute("src", 'images/wall/transparent.png');
-        createAttr(elMenu.parentNode, 'onfocusset', 'dynPageDown');
-
         elimgDVD.setAttribute("src", '');
         // TODO: test for frame popup
     }

@@ -350,6 +350,12 @@ class ListingsPage extends Page
         return ($position % $indexStyle->nbThumbnailsPerLine == $indexStyle->nbThumbnailsPerLine - 1);
     }
 
+    private function isEndOfMenuItems($position)
+    {
+        // check if position would be past valid menuitems limit
+        return ($position >= count($this->menuItems));
+    }
+
     private static function printPopup($menuItem, $position)
     {
         global $indexStyle;
@@ -371,11 +377,16 @@ class ListingsPage extends Page
 
     private function getOnkeyleftset($placement)
     {
+        global $numPages;
         $retval = null;
         //start of row
         if (ListingsPage::isStartOfRow($placement)) {
             if ($placement == 0) {
-                $retval = 'onkeyleftset="' . ($this->dynamicGridPage ? 'dynPageUp' : 'pgupload') . '"';
+                if ($numPages == 1) {
+                    $retval = 'onkeyleftset="' . (count($this->menuItems) - 1) . '"';
+                } else {
+                    $retval = 'onkeyleftset="pgupload"';
+                }
             } else {
                 $retval = "onkeyleftset=\"" . ($placement - 1) . "\"";
             }
@@ -389,7 +400,7 @@ class ListingsPage extends Page
 
         $retval = null;
         //end of row
-        if (ListingsPage::isEndOfRow($placement)) {
+        if (ListingsPage::isEndOfRow($placement) || $this->isEndOfMenuItems($placement + 1)) {
             if ($placement != $indexStyle->Limit - 1) {
                 if (ListingsPage::isLastRow($row)) {
                     if ($numPages == 1) {
@@ -400,7 +411,7 @@ class ListingsPage extends Page
                     $retval = "onkeyrightset=\"" . ($placement + 1) . "\"";
                 }
             } else {
-                $retval = 'onkeyrightset="' . ($this->dynamicGridPage ? 'dynPageDown' : 'pgdnload') . '"';
+                $retval = 'onkeyrightset="pgdnload"';
             }
         }
         return $retval;
@@ -417,7 +428,6 @@ class ListingsPage extends Page
                 if ($wrapBottomRowToTop) {
                     //go to top row
                     $topofcolumn = $placement % $indexStyle->nbThumbnailsPerLine;
-                    $topofcolumn = ($topofcolumn == 0) ? $indexStyle->nbThumbnailsPerLine : $topofcolumn;
                     $retval = " onkeydownset=\"" . $topofcolumn . "\" ";
                 }
             } else {
@@ -437,7 +447,6 @@ class ListingsPage extends Page
         if (!$menuItem) {
             $menuItem = (object) [];
             $menuItem->PosterURL = "images/wall/transparent.png";
-            $menuItem->OnFocusSet = $this->dynamicGridPage ? 'dynPageDown' : 'pgdnload';
         }
         ?>
         <td align="center" <?
@@ -446,7 +455,6 @@ class ListingsPage extends Page
         } ?> >
             <a href="#" onclick="openLinkURL(asMenuURL[iActiveItem]);" <?= $menuItem->OnDemandTag ?? null ?> name="<?= $placement ?>" onmouseover="show(<?= $placement ?>)" onfocus="show(<?= $placement ?>)" onblur="hide(<?= $placement ?>)"
             id="<?= $placement ?>"
-            <?= $menuItem->OnFocusSet ? 'onfocusset="' . $menuItem->OnFocusSet . '"' : '' ?>
     <?php
         echo ListingsPage::getOnkeyleftset($placement);
         echo ListingsPage::getOnkeyrightset($placement, $row);

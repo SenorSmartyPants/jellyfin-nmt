@@ -25,9 +25,17 @@ function createAttr(elem, attrName, attrValue) {
     elem.setAttributeNode(attr);
 }
 
+function removeAttr(elem, attrName) {
+    elem.removeAttribute(attrName);
+}
+
+function focus(id) {
+	document.getElementById('' + id).focus();
+}
+
 // focus and display item
 function focusAndShow(focusid, showid) {
-    document.getElementById('' + focusid).focus();
+    focus(focusid);
     show(showid);
 }
 
