@@ -67,7 +67,7 @@ class LoginPage extends Page
         if (count($this->users) > 1) {
             //if more than 1 user, display first 2 users together in order to watch shows together
         ?>
-            <p><a name='1' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
+            <p><a name='0' href="login.php?id=<?= $this->users[1]->Id ?>,<?= $this->users[0]->Id ?>&name=<?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?>"><?= $this->users[1]->Name ?>,<?= $this->users[0]->Name ?></a></p>
         <?
         }
 
