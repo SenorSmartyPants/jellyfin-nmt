@@ -149,11 +149,28 @@ class Page
         }
     }
 
+    protected function printPaging($currentPage = 1, $numPages = 1)
+    {
+        global $tvid_page_pgup, $tvid_page_pgdn;
+
+        if ($numPages > 1) {
+            if (empty($this->TitleTableNotePages)) {
+                //pgup on first page, wraps around to last page
+                $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
+                echo "\n" . '               <a name="pgupload" id="currentPage" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $this->QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
+                //pgdn on last page wraps to first page
+                $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
+                echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $this->url . $this->QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
+            } else {
+                echo $this->TitleTableNotePages;
+            }
+        }
+    }
+
     public function printTitleTable($currentPage = 1, $numPages = 1)
     {
         global $include_jellyfin_logo_when_backdrop_present;
         global $backdropId;
-        global $tvid_page_pgup, $tvid_page_pgdn;
 ?>
     <table border="0" cellpadding="10" cellspacing="0" width="100%" align="center">
         <tr>
@@ -176,14 +193,7 @@ class Page
             </td>
             <td width="20%" align="right" id="page" valign="top"><?
         echo $this->TitleTableNoteRight;
-        if ($numPages > 1) {
-            //pgup on first page, wraps around to last page
-            $page = ($currentPage == 1) ? $numPages : (intval($currentPage) - 1);
-            echo "\n" . '               <a name="pgupload" id="currentPage" onfocusload="" TVID="' . $tvid_page_pgup . '" href="' . $this->url . $this->QSBase . '&page=' . $page . "\" >" . $currentPage . "</a> / ";
-            //pgdn on last page wraps to first page
-            $page = ($currentPage == $numPages) ? 1 : (intval($currentPage) + 1);
-            echo "\n" . '               <a name="pgdnload" onfocusload="" TVID="' . $tvid_page_pgdn . '" href="' . $this->url . $this->QSBase . '&page=' . $page  . "\" >" . $numPages . "</a>";
-        }
+        $this->printPaging($currentPage, $numPages);
 ?>
             </td>
         </tr>

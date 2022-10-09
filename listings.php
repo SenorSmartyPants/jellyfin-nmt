@@ -257,6 +257,22 @@ class ListingsPage extends Page
     <?
     }
 
+    protected function printPaging($currentPage = 1, $numPages = 1)
+    {
+        global $tvid_page_pgup, $tvid_page_pgdn;
+
+        if ($this->dynamicGridPage) {
+            ?>
+            <a href="#" name="pgupload" onfocus="updateSelectedItem(-1)"></a>
+            <a href="#" name="pgdnload" onfocus="updateSelectedItem(1)"></a>
+            <a href="#" onclick="updateSelectedItem(-1); return false;" TVID="<?= $tvid_page_pgup ?>" id="currentPage"><?= $currentPage ?></a> /
+            <a href="#" onclick="updateSelectedItem(1); return false;" TVID="<?= $tvid_page_pgdn ?>"><?= $numPages ?></a>
+            <?
+        } else {
+            parent::printPaging($currentPage, $numPages);
+        }
+    }
+
     public function printFooter()
     {
         global $tvid_filter_menu;
@@ -301,13 +317,6 @@ class ListingsPage extends Page
             </div>
 <?
             $this->printSpeedDial();
-        }
-
-        if ($this->dynamicGridPage) {
-            ?>
-            <a href="#" name="dynPageUp"   onmouseover="updateSelectedItem(-1)" onfocus="updateSelectedItem(-1)">u</a>
-            <a href="#" name="dynPageDown" onmouseover="updateSelectedItem(1)" onfocus="updateSelectedItem(1)">d</a>
-            <?
         }
 
         parent::printFooter();
