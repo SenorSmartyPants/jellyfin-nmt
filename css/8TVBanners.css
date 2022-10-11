@@ -1,3 +1,4 @@
+.menu0 { visibility: hidden; position: absolute; }
 .menu1 { visibility: hidden; position: absolute; }
 .menu2 { visibility: hidden; position: absolute; }
 .menu3 { visibility: hidden; position: absolute; }
@@ -5,7 +6,6 @@
 .menu5 { visibility: hidden; position: absolute; }
 .menu6 { visibility: hidden; position: absolute; }
 .menu7 { visibility: hidden; position: absolute; }
-.menu8 { visibility: hidden; position: absolute; }
 
 .frmRow0 { top: 61px; }
 .imgRow0 { top: 72px; }

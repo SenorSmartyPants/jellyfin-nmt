@@ -14,7 +14,7 @@ function setVOD(elem, Evod) {
 var sId2ndLinkPrefix = 'a2_e_';
 var sIdTvPrefix = 't_e_';
 
-function formatEpisodeListItem(iElId, iEpisodeIndex) {
+function formatListItem(iElId, iEpisodeIndex) {
     //cache elements
     var elDesc = getFirstChild(sIdSpanPrefix + iElId);
     var elLink = document.getElementById(sIdLinkPrefix + iElId);
@@ -25,8 +25,8 @@ function formatEpisodeListItem(iElId, iEpisodeIndex) {
         elDesc.nodeValue = episodeListItemDesc(iEpisodeIndex);
 
         elLink.setAttribute("href", "#playepisode" + iElId);
-        elLink.setAttribute("onmouseover", 'showEpisode(' + iEpisodeIndex + ')');
-        
+        elLink.setAttribute("onmouseover", 'show(' + iEpisodeIndex + ')');
+
         el2ndLink.setAttribute("href", asEpisodeUrl[iEpisodeIndex]);
         setVOD(el2ndLink, asEpisodeVod[iElId]);
 
@@ -37,17 +37,17 @@ function formatEpisodeListItem(iElId, iEpisodeIndex) {
         elLink.setAttribute("href", " ");
         elLink.setAttribute("onmouseover", " ");
         elTvID.setAttribute("TVID", " ");
-    }    
+    }
 }
 
+// this function redraws item list
 function toggletab() {
     var startingIndex = Math.floor((iPage - 1) * iEpisodesPerPage);
     for (var i = 1; i <= iEpisodesPerPage; i++) {
-        var iEpisodeIndex = startingIndex + i;
-        formatEpisodeListItem(i, iEpisodeIndex)
+        formatListItem(i, startingIndex + i);
     }
-    document.getElementById('pageCount').firstChild.nodeValue = ' ' + iPage + ' / ' + iEpPages + ' (' + iEpisodesLength + ')';
-                            
-    //wait for new page to draw, then set focus 
+    updatePagePositionDisplay(iPage);
+
+    //wait for new page to draw, then set focus
     window.setTimeout("showNfocus()", 1);
 }

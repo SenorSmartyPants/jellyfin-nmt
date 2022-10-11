@@ -14,11 +14,21 @@ $pageObj->title = 'Next Up';
 
 $rewatching = null;
 
-$itemsAndCount = getNextUp($indexStyle->Limit, ($page - 1) * $indexStyle->Limit, $rewatching);
+
+$pageObj->dynamicGridPage = $dynamicGridPage;
+if (!$pageObj->dynamicGridPage) {
+    $StartIndex = ($page - 1) * $indexStyle->Limit;
+    $Limit = $indexStyle->Limit;
+}
+
+$itemsAndCount = getNextUp($Limit, $StartIndex, $rewatching);
 $items = $itemsAndCount->Items;
 
-setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
+$pageObj->setNumPagesAndIndexCount($itemsAndCount->TotalRecordCount);
 
 $pageObj->indexStyle = $indexStyle;
 $pageObj->items = $items;
 $pageObj->render();
+
+
+

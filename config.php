@@ -5,6 +5,8 @@ date_default_timezone_set('America/Chicago');
 
 $theme_css = "dark.css";
 
+$dynamicGridPage = true;
+
 //LOCALIZATION!!!
 //Collection type names. Users can localize for non-english
 //only used on page title for filtered views.

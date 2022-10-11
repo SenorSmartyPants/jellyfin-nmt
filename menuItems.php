@@ -45,7 +45,7 @@ function parse($item)
     $menuItem->Subtitle = getSubtitle($item);
     $menuItem->BackdropID = getBackdropIDandTag($item)->Id;
     setDetailURL($item, $menuItem);
-    $menuItem->PosterID = getPosterID($item);
+    setPosterInfo($item, $menuItem);
     $menuItem->UnplayedCount = getUnplayedCount($item);
 
     $played = ($item->Type == ItemType::SERIES || $item->Type == ItemType::SEASON ? null : $item->UserData->Played);
@@ -58,7 +58,7 @@ function parse($item)
         $imageProps->AddPlayedIndicator = $played;
         $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
 
-        $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $indexStyle->ImageType);
+        $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $menuItem->ImageType);
     }
 
     return $menuItem;
@@ -223,17 +223,20 @@ function getEpisodePosterID($item, $useSeasonImage)
     }
 }
 
-function getPosterID($item, $useSeasonImage = true)
+function setPosterInfo($item, $menuItem)
 {
     global $indexStyle;
     global $displayepisode;
+
+    $menuItem->ImageType = $indexStyle->ImageType;
+
     switch ($item->Type) {
         case ItemType::SEASON:
             $posterID = $item->ImageTags->{$indexStyle->ImageType} ? $item->Id : $item->SeriesId;
             break;
         case ItemType::EPISODE:
             if (!$displayepisode) {
-                $posterID = getEpisodePosterID($item, $useSeasonImage);
+                $posterID = getEpisodePosterID($item, true);
                 break;
             }
         default:
@@ -244,12 +247,12 @@ function getPosterID($item, $useSeasonImage = true)
             }
             if (!$posterID && $item->MediaType == 'Video') {
                 //show parent thumb instead
-                $indexStyle->ImageType = ImageType::THUMB;
+                $menuItem->ImageType = ImageType::THUMB;
                 $posterID = $item->ParentThumbItemId;
             }
             break;
     }
-    return $posterID;
+    $menuItem->PosterID = $posterID;
 }
 
 function getUnplayedCount($item)

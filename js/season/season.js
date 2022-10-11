@@ -41,7 +41,7 @@ function init() {
     elOpenEpisode = document.getElementById('openEpisode');
 }
 
-function showEpisode(episodeIndex) {
+function show(episodeIndex) {
     //text
     setParentAttr(elEpisodeName, "class", asEpisodeTitleCSS[episodeIndex]);
     setNodeValue(elEpisodeName, asEpisodeTitle[episodeIndex]);
@@ -166,8 +166,7 @@ var         showNfocus = function() {
                 //index on the current page
                 var episodeIndexThisPage = iEpisodeId - ((iPage - 1) * iEpisodesPerPage);
                 var focusId = sIdLinkPrefix + episodeIndexThisPage;
-                document.getElementById(focusId).focus();
-                showEpisode(iEpisodeId);
+                focusAndShow(focusId, iEpisodeId);
             },
 
             //called from Season.php

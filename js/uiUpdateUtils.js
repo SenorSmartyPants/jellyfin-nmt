@@ -24,3 +24,24 @@ function createAttr(elem, attrName, attrValue) {
     attr.nodeValue = attrValue;
     elem.setAttributeNode(attr);
 }
+
+function removeAttr(elem, attrName) {
+    elem.removeAttribute(attrName);
+}
+
+function focus(id) {
+	document.getElementById('' + id).focus();
+}
+
+// focus and display item
+function focusAndShow(focusid, showid) {
+    focus(focusid);
+    show(showid);
+}
+
+// Paging routines
+
+// updates current page UI
+function updatePagePositionDisplay(i) {
+    document.getElementById('currentPage').firstChild.nodeValue = '' + i;
+}

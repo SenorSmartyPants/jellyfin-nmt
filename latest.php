@@ -16,7 +16,7 @@ $pageObj = new ListingsPage('');
 $items = getLatest($collectionTypeToItemType[$collectionType], $Limit, $topParentId);
 
 $indexStyle = new IndexStyle(IndexStyleEnum::PosterPopupDynamic);
-setNumPagesAndIndexCount(count($items));
+$pageObj->setNumPagesAndIndexCount(count($items));
 
 $pageObj->title = $name . ' ' . $topParentName;
 $pageObj->indexStyle = $indexStyle;

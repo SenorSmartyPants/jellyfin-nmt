@@ -31,15 +31,12 @@ class ItemDetailsPage extends ListingsPage
 
     public function printJavascript()
     {
-        global $item;
-
         parent::printJavascript();
 
         //make array of all video items/mediasources
         CheckinJS::render($this->allVideos);
         ?>
 
-        <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
         <script type="text/javascript" src="js/itemDetails.js"></script>
         <?
 
@@ -133,18 +130,29 @@ class ItemDetailsPage extends ListingsPage
 
     private function setupMoreLikeThisItems($item)
     {
-        global $page, $episodeNameInTitle;
+        global $page, $episodeNameInTitle, $dynamicGridPage;
         if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
             $this->setEpisodeIndexStyle($item);
         }
         if ($item->Type == ItemType::EPISODE) {
             $episodeNameInTitle = true;
+            $this->dynamicGridPage = $dynamicGridPage;
             //get episodes from this season
             $params = new UserItemsParams();
-            $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
-            $params->Limit = $this->indexStyle->Limit;
+            if (!$this->dynamicGridPage) {
+                $params->StartIndex = ($page - 1) * $this->indexStyle->Limit;
+                $params->Limit = $this->indexStyle->Limit;
+            }
             $params->ParentID = $item->SeasonId;
             $children = getItems($params);
+
+            if (!isset($_GET['page'])) {
+                //find where current item is in list, display that page
+                $epiInArray = array_filter($children->Items, function ($i) use ($item) {
+                    return $item->Id == $i->Id;
+                });
+                $page = intdiv(key($epiInArray), $this->indexStyle->Limit) + 1;
+            }
         } else {
             $children = getSimilarItems($item->Id, $this->indexStyle->Limit);
         }
@@ -275,7 +283,7 @@ class ItemDetailsPage extends ListingsPage
         }
 
         if ($this->items) {
-            setNumPagesAndIndexCount($totalItems);
+            $this->setNumPagesAndIndexCount($totalItems);
             $newindex = $this->selected_subitems_index + 1;
             $newindex = count($this->available_subitems) == $newindex ? 0 : $newindex;
 
@@ -720,7 +728,6 @@ function render($item)
     $directors = array_filter($item->People, function ($p) { return $p->Type == 'Director'; });
     $writers = array_filter($item->People, function ($p) { return $p->Type == 'Writer'; });
     ?>
-
     <table class="main" border="0" cellpadding="0" cellspacing="0">
         <tr valign="top">
             <td width="<?= POSTER_WIDTH ?>px" height="416px">
