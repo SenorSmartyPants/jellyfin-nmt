@@ -97,8 +97,7 @@ class ListingsPage extends Page
         var asMenuSubtitle = <?= getJSArray(array_map(function ($i) { return $i->Subtitle; }, $this->menuItems), true) ?>;
         var asMenuURL = <?= getJSArray(array_map(function ($i) { return $i->DetailURL; }, $this->menuItems), true) ?>;
 <?
-        if ($this->dynamicGridPage)
-        {
+        if ($this->dynamicGridPage) {
 ?>
         var asMenuImage = <?= getJSArray(array_map(function ($i) { return $i->PosterURL; }, $this->menuItems), true) ?>;
 <?
@@ -197,8 +196,7 @@ class ListingsPage extends Page
         global $lastRow;
         global $diplay_menuitems, $offset, $page;
 
-        if ($this->dynamicGridPage)
-        {
+        if ($this->dynamicGridPage) {
             $offset = $this->indexStyle->Limit * ($page - 1);
             $diplay_menuitems = array_slice($this->menuItems, $offset, $this->indexStyle->Limit, true);
         } else {
@@ -215,8 +213,7 @@ class ListingsPage extends Page
             for ($i=0; $i < $max; $i++) {
                 $key = $offset + $i;
                 $menuItem = $diplay_menuitems[$key];
-            //}
-            //foreach ($diplay_menuitems as $key => $menuItem) {
+
                 //first item in row
                 if (ListingsPage::isStartOfRow($i)) {
                     echo "<tr>";
