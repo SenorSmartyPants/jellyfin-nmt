@@ -130,13 +130,13 @@ class ItemDetailsPage extends ListingsPage
 
     private function setupMoreLikeThisItems($item)
     {
-        global $page, $episodeNameInTitle;
+        global $page, $episodeNameInTitle, $dynamicGridPage;
         if ($item->Type == ItemType::EPISODE || $item->Type == ItemType::MUSICVIDEO) {
             $this->setEpisodeIndexStyle($item);
         }
         if ($item->Type == ItemType::EPISODE) {
             $episodeNameInTitle = true;
-            $this->dynamicGridPage = true;
+            $this->dynamicGridPage = $dynamicGridPage;
             //get episodes from this season
             $params = new UserItemsParams();
             if (!$this->dynamicGridPage) {
