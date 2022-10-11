@@ -34,7 +34,7 @@ class ListingsPage extends Page
     protected $titleLetters;
     protected $singleLetterTVIDs;
     protected $letterToNumber;
-    protected $dynamicGridPage = false;
+    public $dynamicGridPage = false;
 
     public function __construct($title, $renderFiltering = true)
     {
@@ -86,10 +86,13 @@ class ListingsPage extends Page
 
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
+        <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
         <script type="text/javascript">
         var iPage = <?= $this->dynamicGridPage ? $page : 1 ?>;
         var iPageSize = <?= $this->indexStyle->Limit ?>;
         var iNumPages = <?= $numPages ?>;
+        var iRowSize = <?= $this->indexStyle->nbThumbnailsPerLine ?>;
+        var iNumRows = <?= ceil(count($this->menuItems) / $this->indexStyle->nbThumbnailsPerLine) ?>;
         var asMenuTitle = <?= getJSArray(array_map(function ($i) { return $i->Name; }, $this->menuItems), true) ?>;
         var asMenuSubtitle = <?= getJSArray(array_map(function ($i) { return $i->Subtitle; }, $this->menuItems), true) ?>;
         var asMenuURL = <?= getJSArray(array_map(function ($i) { return $i->DetailURL; }, $this->menuItems), true) ?>;
@@ -203,12 +206,12 @@ class ListingsPage extends Page
         }
 
 
-        $lastRow = ceil(count($items) / $this->indexStyle->nbThumbnailsPerLine);
+        $lastRow = min(ceil(count($items) / $this->indexStyle->nbThumbnailsPerLine), ceil($this->indexStyle->Limit / $this->indexStyle->nbThumbnailsPerLine));
         ?>
         <table class="movies" border="0" cellpadding="<?= $this->indexStyle->moviesTableCellpadding ?? 0 ?>" cellspacing="<?= $this->indexStyle->moviesTableCellspacing ?? 0 ?>" align="<?= $this->indexStyle->moviesTableAlign ?>">
             <?
             //add empty menuitems so will always print limit
-            $max = $this->dynamicGridPage ? $this->indexStyle->Limit : count($diplay_menuitems);
+            $max = $this->dynamicGridPage ? min($this->indexStyle->Limit, count($diplay_menuitems)) : count($diplay_menuitems);
             for ($i=0; $i < $max; $i++) {
                 $key = $offset + $i;
                 $menuItem = $diplay_menuitems[$key];
@@ -261,15 +264,17 @@ class ListingsPage extends Page
     {
         global $tvid_page_pgup, $tvid_page_pgdn;
 
-        if ($this->dynamicGridPage) {
-            ?>
-            <a href="#" name="pgupload" onfocus="updateSelectedItem(-1)"></a>
-            <a href="#" name="pgdnload" onfocus="updateSelectedItem(1)"></a>
-            <a href="#" onclick="updateSelectedItem(-1); return false;" TVID="<?= $tvid_page_pgup ?>" id="currentPage"><?= $currentPage ?></a> /
-            <a href="#" onclick="updateSelectedItem(1); return false;" TVID="<?= $tvid_page_pgdn ?>"><?= $numPages ?></a>
-            <?
-        } else {
-            parent::printPaging($currentPage, $numPages);
+        if ($numPages > 1) {
+            if ($this->dynamicGridPage) {
+                ?>
+                <a href="#" name="pgupload" onfocus="updateSelectedItem(-1)"></a>
+                <a href="#" name="pgdnload" onfocus="updateSelectedItem(1)"></a>
+                <a href="#" onclick="updateSelectedItem(-1); return false;" TVID="<?= $tvid_page_pgup ?>" id="currentPage"><?= $currentPage ?></a> /
+                <a href="#" onclick="updateSelectedItem(1); return false;" TVID="<?= $tvid_page_pgdn ?>"><?= $numPages ?></a>
+                <?
+            } else {
+                parent::printPaging($currentPage, $numPages);
+            }
         }
     }
 
@@ -353,7 +358,7 @@ class ListingsPage extends Page
     private function isEndOfMenuItems($position)
     {
         // check if position would be past valid menuitems limit
-        return ($position >= count($this->menuItems));
+        return ($position >= count($this->menuItems) - 1);
     }
 
     private static function printPopup($menuItem, $position)
@@ -396,28 +401,27 @@ class ListingsPage extends Page
 
     private function getOnkeyrightset($placement, $row)
     {
-        global $indexStyle, $numPages;
+        global $numPages;
 
         $retval = null;
-        //end of row
-        if (ListingsPage::isEndOfRow($placement) || $this->isEndOfMenuItems($placement + 1)) {
-            if ($placement != $indexStyle->Limit - 1) {
-                if (ListingsPage::isLastRow($row)) {
-                    if ($numPages == 1) {
-                        //go to first item
-                        $retval =  'onkeyrightset="0"';
-                    }
-                } else {
-                    $retval = "onkeyrightset=\"" . ($placement + 1) . "\"";
-                }
+
+        if ((ListingsPage::isEndOfRow($placement) && ListingsPage::isLastRow($row))
+            || $this->isEndOfMenuItems($placement)
+        ) {
+            if ($numPages == 1) {
+                //go to first item
+                $retval =  'onkeyrightset="0"';
             } else {
                 $retval = 'onkeyrightset="pgdnload"';
             }
+        } else {
+            $retval = "onkeyrightset=\"" . ($placement + 1) . "\"";
         }
+
         return $retval;
     }
 
-    private static function getOnkeydownset($placement, $row, $wrapBottomRowToTop)
+    private function getOnkeydownset($placement, $row, $wrapBottomRowToTop)
     {
         global $indexStyle, $numPages;
 
@@ -434,6 +438,10 @@ class ListingsPage extends Page
                 //down arrow goes to next page
                 $retval = " onkeydownset=\"pgdnload\"";
             }
+        } else {
+            // go to next row
+            $nextdown = min($placement + $indexStyle->nbThumbnailsPerLine, count($this->menuItems) - 1);
+            $retval = " onkeydownset=\"" . $nextdown . "\" ";
         }
         return $retval;
     }

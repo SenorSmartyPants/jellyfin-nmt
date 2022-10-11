@@ -95,27 +95,38 @@ function updateDisplayedMenuItems() {
     updatePagePositionDisplay(iPage);
 }
 
+function setOnKeyRight(iElId, iIndex, elNode) {
+    if (iElId == (iPageSize - 1) || iIndex == (asMenuTitle.length - 1)) {
+        elNode.setAttribute('onkeyrightset', 'pgdnload');
+    } else {
+        elNode.setAttribute('onkeyrightset', iElId + 1);
+    }
+}
+
+function setOnKeyDown(iElId, iIndex, elNode) {
+    if (iElId >= (iPageSize - iRowSize) || Math.floor(iIndex / iRowSize) + 1 == iNumRows) {
+        //last row on page, or final row
+        elNode.setAttribute('onkeydownset', 'pgdnload');
+    } else {
+        // bounds check, if nothing below, but not last row, go to right most beneath
+        var nextDown = Math.min(iIndex + iRowSize, asMenuTitle.length - 1) - ((iPage - 1) * iPageSize);
+        elNode.setAttribute('onkeydownset', nextDown);
+    }
+}
+
 function formatListItem(iElId, iIndex) {
     var elMenu = document.getElementById('menuImg' + iElId);
     var elimgDVD = document.getElementById('imgDVD' + iElId);
 
     if (iIndex < asMenuTitle.length) {
         elMenu.setAttribute("src", asMenuImage[iIndex]);
-
         elimgDVD.setAttribute("src", asMenuImage[iIndex]);
-        // TODO: test for frame popup
 
-        if (iIndex == asMenuTitle.length - 1 || (iElId == iPageSize - 1 && iNumPages > 1)) {
-            createAttr(elMenu.parentNode, 'onkeyrightset', 'pgdnload');
-        } else if (iElId == iPageSize - 1) {
-            createAttr(elMenu.parentNode, 'onkeyrightset', iElId + 1);
-        } else {
-            removeAttr(elMenu.parentNode, 'onkeyrightset');
-        }
+        setOnKeyRight(iElId, iIndex, elMenu.parentNode);
+        setOnKeyDown(iElId, iIndex, elMenu.parentNode)
     } else {
         // clear entry
         elMenu.setAttribute("src", 'images/wall/transparent.png');
         elimgDVD.setAttribute("src", '');
-        // TODO: test for frame popup
     }
 }
