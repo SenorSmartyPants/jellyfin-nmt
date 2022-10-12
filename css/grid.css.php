@@ -86,9 +86,9 @@ $frameWidth = $popupWidth + $frameDifferenceWidth * 2;
 $frameHeight = $popupHeight + $frameDifferenceHeight * 2;
 
 $numRows = ceil($numPosters / $numPerLine);
-$maxItems = $numPerLine * $numRows;
+$indexStyle = new IndexStyle(intval($styleEnum));
 
-for ($i = 0; $i < $maxItems; $i++) {
+for ($i = 0; $i < $indexStyle->Limit; $i++) {
     $row = intdiv($i, $numPerLine);
 
     //width

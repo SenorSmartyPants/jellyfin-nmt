@@ -1,4 +1,5 @@
 <?php
+include_once 'enums.php';
 
 abstract class IndexStyleEnum
 {
