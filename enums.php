@@ -16,6 +16,7 @@ abstract class ItemType
     const EPISODE = 'Episode';
     const MOVIE = 'Movie';
     const PERSON = 'Person';
+    const ACTOR = 'Actor';
     const STUDIO = 'Studio';
     const COLLECTIONFOLDER = 'CollectionFolder';
     const FOLDER = 'Folder';
