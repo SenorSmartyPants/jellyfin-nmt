@@ -82,24 +82,33 @@ class ListingsPage extends Page
     {
         global $folderType, $collectionType;
         global $topParentId, $topParentName;
-        global $page, $numPages;
+        global $page, $numPages, $api_url;
 
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
         <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
         <script type="text/javascript">
+        var api_url = '<?= $api_url ?>';
         var iPage = <?= $this->dynamicGridPage ? $page : 1 ?>;
         var iPageSize = <?= $this->indexStyle->Limit ?>;
         var iNumPages = <?= $numPages ?>;
         var iRowSize = <?= $this->indexStyle->nbThumbnailsPerLine ?>;
         var iNumRows = <?= ceil(count($this->menuItems) / $this->indexStyle->nbThumbnailsPerLine) ?>;
+        </script>
+        <script type="text/javascript">
         var asMenuTitle = <?= getJSArray(array_map(function ($i) { return $i->Name; }, $this->menuItems), true) ?>;
+        </script>
+        <script type="text/javascript">
         var asMenuSubtitle = <?= getJSArray(array_map(function ($i) { return $i->Subtitle; }, $this->menuItems), true) ?>;
+        </script>
+        <script type="text/javascript">
         var asMenuURL = <?= getJSArray(array_map(function ($i) { return $i->DetailURL; }, $this->menuItems), true) ?>;
+        </script>
+        <script type="text/javascript">
 <?
         if ($this->dynamicGridPage) {
 ?>
-        var asMenuImage = <?= getJSArray(array_map(function ($i) { return $i->PosterURL; }, $this->menuItems), true) ?>;
+        var asMenuImage = <?= getJSArray(array_map(function ($i) { global $api_url; return str_replace($api_url . '/Items/', '', $i->PosterURL); }, $this->menuItems), true) ?>;
 <?
         }
 ?>
