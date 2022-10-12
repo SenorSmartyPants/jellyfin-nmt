@@ -9,9 +9,13 @@ $pageObj->backdrop = $backdrop;
 
 overrideIndexStyle($folderType, $collectionType);
 
+$pageObj->dynamicGridPage = $dynamicGridPage;
+//get episodes from this season
 $params = new UserItemsParams();
-$params->StartIndex = ($page - 1) * $indexStyle->Limit;
-$params->Limit = $indexStyle->Limit;
+if (!$pageObj->dynamicGridPage) {
+    $params->StartIndex = ($page - 1) * $indexStyle->Limit;
+    $params->Limit = $indexStyle->Limit;
+}
 
 //common options
 $recursive = false;
