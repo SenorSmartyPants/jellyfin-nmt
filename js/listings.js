@@ -119,9 +119,8 @@ function formatListItem(iElId, iIndex) {
     var elimgDVD = document.getElementById('imgDVD' + iElId);
 
     if (iIndex < asMenuTitle.length) {
-        var imgURL = api_url + '/Items/' + asMenuImage[iIndex];
-        elMenu.setAttribute("src", imgURL);
-        elimgDVD.setAttribute("src", imgURL);
+        elMenu.setAttribute("src", asMenuImage[iIndex]);
+        elimgDVD.setAttribute("src", asMenuImage[iIndex]);
 
         setOnKeyRight(iElId, iIndex, elMenu.parentNode);
         setOnKeyDown(iElId, iIndex, elMenu.parentNode)

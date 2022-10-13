@@ -82,37 +82,29 @@ class ListingsPage extends Page
     {
         global $folderType, $collectionType;
         global $topParentId, $topParentName;
-        global $page, $numPages, $api_url;
+        global $page, $numPages;
+
+        $listingsData = 'var asMenuTitle = ' . getJSArray(array_map(function ($i) { return $i->Name; }, $this->menuItems), true) . ";\n";
+        $listingsData .= 'var asMenuSubtitle = ' . getJSArray(array_map(function ($i) { return $i->Subtitle; }, $this->menuItems), true) . ";\n";
+        $listingsData .= 'var asMenuURL = ' . getJSArray(array_map(function ($i) { return $i->DetailURL; }, $this->menuItems), true) . ";\n";
+
+        if ($this->dynamicGridPage) {
+            $listingsData .= 'var asMenuImage = ' . getJSArray(array_map(function ($i) { return $i->PosterURL; }, $this->menuItems), true) . ";\n";
+        }
+
+        $_SESSION['listingsData'] = $listingsData;
 
 ?>
         <script type="text/javascript" src="js/listings.js"></script>
         <script type="text/javascript" src="js/uiUpdateUtils.js"></script>
         <script type="text/javascript">
-        var api_url = '<?= $api_url ?>';
         var iPage = <?= $this->dynamicGridPage ? $page : 1 ?>;
         var iPageSize = <?= $this->indexStyle->Limit ?>;
         var iNumPages = <?= $numPages ?>;
         var iRowSize = <?= $this->indexStyle->nbThumbnailsPerLine ?>;
         var iNumRows = <?= ceil(count($this->menuItems) / $this->indexStyle->nbThumbnailsPerLine) ?>;
         </script>
-        <script type="text/javascript">
-        var asMenuTitle = <?= getJSArray(array_map(function ($i) { return $i->Name; }, $this->menuItems), true) ?>;
-        </script>
-        <script type="text/javascript">
-        var asMenuSubtitle = <?= getJSArray(array_map(function ($i) { return $i->Subtitle; }, $this->menuItems), true) ?>;
-        </script>
-        <script type="text/javascript">
-        var asMenuURL = <?= getJSArray(array_map(function ($i) { return $i->DetailURL; }, $this->menuItems), true) ?>;
-        </script>
-        <script type="text/javascript">
-<?
-        if ($this->dynamicGridPage) {
-?>
-        var asMenuImage = <?= getJSArray(array_map(function ($i) { global $api_url; return str_replace($api_url . '/Items/', '', $i->PosterURL); }, $this->menuItems), true) ?>;
-<?
-        }
-?>
-        </script>
+        <script type="text/javascript" src="js/listingsData.js.php"></script>
 <?
         if ($this->renderFiltering) {
             //clear some options that would be reset by filter
@@ -306,7 +298,6 @@ class ListingsPage extends Page
         //print popups last of all, so they have highest z-index on NMT
         if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
             //print popups last of all, so they have highest z-index on NMT
-            //foreach ($diplay_menuitems as $key => $menuItem) {
             $max = $this->dynamicGridPage ? $this->indexStyle->Limit : count($diplay_menuitems);
             for ($i=0; $i < $max; $i++) {
                 $key = $offset + $i;
