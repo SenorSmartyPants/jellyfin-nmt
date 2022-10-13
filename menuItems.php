@@ -61,7 +61,7 @@ function parse($item)
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $menuItem->ImageType);
     } elseif ($item->Type == ItemType::ACTOR) {
         $menuItem->PosterID = -1;
-        $menuItem->PosterURL = 'images/person/person' . rand(1,5) . '.png';
+        $menuItem->PosterURL = 'images/person/person' . rand(1, 5) . '.png';
     }
 
     return $menuItem;
