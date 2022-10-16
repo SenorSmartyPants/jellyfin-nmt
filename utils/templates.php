@@ -165,7 +165,7 @@ function getResolutionText($videoStream)
             $retval = "384";
             break;
         // 720x404 (16:9 square pixel format)
-        case $w <= 720 && $h <= 404:
+        case $w <= 720 && $h <= 406:
             $retval = "400";
             break;
         // 854x480 (16:9 square pixel format)
