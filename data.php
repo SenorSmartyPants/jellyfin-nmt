@@ -292,6 +292,18 @@ function latestSeasonFromSeries($seriesId)
     return $seasons->Items[$seasons->TotalRecordCount - 1];
 }
 
+function getSeasonFromSeriesBySeasonNumber($seriesId, $seasonNumber)
+{
+    $params = new UserItemsParams();
+    $params->ParentID = $seriesId;
+    $params->IncludeItemTypes = ItemType::SEASON;
+
+    $seasons = getUsersItems($params);
+    $season = array_filter($seasons->Items, function ($s) use ($seasonNumber) { return $s->IndexNumber == $seasonNumber; });
+
+    return array_values($season)[0];
+}
+
 function YAMJpath($item)
 {
     global $jukebox_url;
@@ -393,7 +405,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 
     $params = array(
         'UserID' => $user_id,
-        'Fields' => 'Path',
+        'Fields' => 'Path,SpecialEpisodeNumbers',
         'Limit' => $Limit,
         'StartIndex' => $startIndex,
         'enableRewatching' => strboolNull($enableRewatching)

@@ -171,7 +171,8 @@ function getFolderURL($item, $menuItem)
 
 function getNonFolderURL($item, $menuItem)
 {
-    global $forceItemDetails;
+    global $forceItemDetails, $regularSeason;
+    $regularSeason = null;
 
     switch ($item->MediaType) {
         case "Video":
@@ -179,6 +180,13 @@ function getNonFolderURL($item, $menuItem)
                 //check for season info, very rarely an episode has no season IDs provided
                 if ($item->SeasonId) {
                     $detailURL = "Season.php?id=" . $item->SeasonId . "&episode=" . $item->IndexNumber;
+                    //for specials check airs[after|before] info and display that season
+                    //but seasonID for airs season not included
+                    $specialInSeason = $item->AirsBeforeSeasonNumber ?? $item->AirsAfterSeasonNumber;
+                    if ($specialInSeason) {
+                        $regularSeason = getSeasonFromSeriesBySeasonNumber($item->SeriesId, $specialInSeason);
+                        $detailURL = "Season.php?id=" . $regularSeason->Id . "&episode=" . $item->IndexNumber . "&special";
+                    }
                 } else {
                     //try season redirect, latest season will probably be the one that doesn't have all metadata
                     //I think this is why an episode won't have a seasonID
@@ -217,10 +225,14 @@ function setDetailURL($item, $menuItem)
 
 function getEpisodePosterID($item, $useSeasonImage)
 {
-    global $indexStyle;
+    global $indexStyle, $regularSeason;
+
+    //check for special in a regular season
+    $seasonID = is_null($regularSeason) ? $item->SeasonId : $regularSeason->Id;
+
     //API
-    if ($useSeasonImage && itemImageExists($item->SeasonId, $indexStyle->ImageType)) {
-        return $item->SeasonId;
+    if ($useSeasonImage && itemImageExists($seasonID, $indexStyle->ImageType)) {
+        return $seasonID;
     } else {
         return $item->SeriesPrimaryImageTag ? $item->SeriesId : null;
     }

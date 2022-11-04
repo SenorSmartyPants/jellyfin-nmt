@@ -30,6 +30,7 @@ $tvNumberRating = false;
 
 $id = htmlspecialchars($_GET["id"]);
 $selectedEpisodeIndexNumber = htmlspecialchars($_GET[EPISODE]);
+$special = isset($_GET['special']);
 
 $pageObj = new Page('');
 $pageObj->additionalCSS = 'Season.css';
@@ -71,7 +72,10 @@ do {
 
 $selectedEpisode = $episodes[0];
 foreach ($episodes as $key => $episode) {
-    if ($selectedEpisodeIndexNumber == $episode->IndexNumber && $id == $episode->SeasonId) {
+    if (
+        $selectedEpisodeIndexNumber == $episode->IndexNumber &&
+        ((!$special && $id == $episode->SeasonId) || ($special && $episode->ParentIndexNumber == 0))
+    ) {
         $selectedEpisode = $episode;
         $selectedEpisodeArrayIndex = $key + 1;
         break;
