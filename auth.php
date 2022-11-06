@@ -76,6 +76,39 @@ class Authentication
         $this->userIDs = $userIDs;
     }
 
+    //verify NMT and JF sessions contain the same users
+    public function verifySession($fixSession = false)
+    {
+        # get JF sessions
+        $sessionID = $_SESSION['ID'];
+        $JFSessions = apiCall("/Sessions?");
+        # find NMT session match
+        $JFSessions = array_filter($JFSessions, function ($s) use ($sessionID) {
+            return $s->Id == $sessionID;
+        });
+        $JFSession = array_values($JFSessions)[0];
+
+        #make list of JF session userIDs
+        $JFUserIDs[] = $JFSession->UserId;
+        foreach ($JFSession->AdditionalUsers as $user) {
+            $JFUserIDs[] = $user->UserId;
+        }
+
+        # verify user and additional users
+        $userListsAreEqual = $JFUserIDs === $_SESSION[self::USERIDS];
+
+        if (!$userListsAreEqual && $fixSession) {
+            # add additional NMT users if not present in JF
+            $missingUsers = array_diff($_SESSION[self::USERIDS], $JFUserIDs);
+            foreach ($missingUsers as $user) {
+                self::addUserToSession($sessionID, $user);
+            }
+            $userListsAreEqual = true;
+        }
+
+        return $userListsAreEqual;
+    }
+
     private function addUserToSession($sessionID, $userID)
     {
         //response is empty, 200 if successful

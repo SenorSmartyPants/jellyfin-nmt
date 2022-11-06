@@ -1,4 +1,5 @@
 <?php
+require_once 'auth.php';
 require_once 'data.php';
 
 abstract class PlayState
@@ -156,6 +157,10 @@ class PlaybackReporting
     {
         //get updated position from session
         self::loadPlaystate();
+
+        $auth = new Authentication();
+        $auth->verifySession(true);
+
         if ($this->playing->PlayState == PlayState::PLAYING) {
             $this->playing->PositionInSeconds = self::calculateCurrentPosition();
             //add trim seconds to current position
