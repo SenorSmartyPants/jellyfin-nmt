@@ -1,6 +1,10 @@
 <?php
 $theme_css = "dark.css";
 
+// list of users that want rewatching enabled in next up on NMT
+// can't get JF-web setting for this.
+$rewatchingUserIDs = array("userIDstring");
+
 $collectiontypeNames = array(
     CollectionType::TVSHOWS => 'TV Shows', CollectionType::MOVIES => 'Movies', CollectionType::BOXSETS => 'Collections',
     CollectionType::PLAYLISTS => 'Playlists', CollectionType::MUSICVIDEOS => 'Music Videos'

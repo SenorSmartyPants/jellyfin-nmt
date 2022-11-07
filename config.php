@@ -7,6 +7,8 @@ $theme_css = "dark.css";
 
 $dynamicGridPage = true;
 
+$rewatchingUserIDs = array();
+
 //LOCALIZATION!!!
 //Collection type names. Users can localize for non-english
 //only used on page title for filtered views.

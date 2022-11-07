@@ -12,7 +12,7 @@ $topParentName = $collectiontypeNames[$collectionType];
 $pageObj = new ListingsPage('');
 $pageObj->title = 'Next Up';
 
-$rewatching = null;
+$rewatching = in_array($pageObj->auth->user_id, $rewatchingUserIDs) ? true : null;
 
 
 $pageObj->dynamicGridPage = $dynamicGridPage;
