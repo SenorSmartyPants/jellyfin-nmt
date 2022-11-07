@@ -44,7 +44,7 @@ function getTitleCSS($item)
 
 function getShortTitle($item)
 {
-    return substr($item->Name, 0, TITLETRUNCATE);
+    return mb_substr($item->Name, 0, TITLETRUNCATE);
 }
 #endregion Name
 

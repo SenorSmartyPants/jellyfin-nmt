@@ -227,7 +227,7 @@ function JSEscape($str)
 function truncate($str, $maxlength, $JSescape = false)
 {
     if (strlen($str) > $maxlength) {
-        $str = substr($str, 0, $maxlength) . '...';
+        $str = mb_substr($str, 0, $maxlength) . '...';
     }
     if ($JSescape) {
         $str = JSEscape($str);
