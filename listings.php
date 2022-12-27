@@ -130,10 +130,12 @@ class ListingsPage extends Page
     public function printHead()
     {
         //initialize menuitems
-        foreach ($this->items as $item) {
-            $menuItem = getMenuItem($item);
-            if ($menuItem) {
-                array_push($this->menuItems, $menuItem);
+        if ($this->items) {
+            foreach ($this->items as $item) {
+                $menuItem = getMenuItem($item);
+                if ($menuItem) {
+                    array_push($this->menuItems, $menuItem);
+                }
             }
         }
 
@@ -296,7 +298,7 @@ class ListingsPage extends Page
         <div id="popupWrapper">
 <?
         //print popups last of all, so they have highest z-index on NMT
-        if (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth)) {
+        if (!is_null($diplay_menuitems) && (isset($this->indexStyle->popupHeight) || isset($this->indexStyle->popupWidth))) {
             //print popups last of all, so they have highest z-index on NMT
             $max = $this->dynamicGridPage ? $this->indexStyle->Limit : count($diplay_menuitems);
             for ($i=0; $i < $max; $i++) {
