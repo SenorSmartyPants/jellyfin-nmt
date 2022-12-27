@@ -32,6 +32,7 @@ function overrideIndexStyle($folderType, $collectionType)
 
         case ItemType::FOLDER . '/': //assuming base folder only show in music video libraries...
         case ItemType::COLLECTIONFOLDER . '/' . CollectionType::MUSICVIDEOS:
+        case ItemType::COLLECTIONFOLDER . '/' . CollectionType::HOMEVIDEOS:
             $indexStyle = new IndexStyle(IndexStyleEnum::ThumbPopup4x3AspectRatio);
             $indexStyle->ImageType = ImageType::PRIMARY;
             $indexStyle->offsetY = 28;
