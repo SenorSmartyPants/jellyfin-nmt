@@ -199,17 +199,20 @@ class SkipAndTrim
     private function getSkipAndTrim($item)
     {
         //find nmt-skip|trim tags
-        foreach ($item->Tags as $tag) {
-            if (substr($tag, 0, 8) === 'nmt-skip') {
-                //skip tag found, should only be one
-                $this->skipSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
-            }
-            if (substr($tag, 0, 8) === 'nmt-trim') {
-                //trim tag found, should only be one
-                $this->trimSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
+        if ($item->Tags) {
+            foreach ($item->Tags as $tag) {
+                if (substr($tag, 0, 8) === 'nmt-skip') {
+                    //skip tag found, should only be one
+                    $this->skipSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
+                }
+                if (substr($tag, 0, 8) === 'nmt-trim') {
+                    //trim tag found, should only be one
+                    $this->trimSeconds = SkipAndTrim::getSecondsFromSkipTrimTag($tag);
+                }
             }
         }
     }
+
     public function getStartPosition($UserData)
     {
         //start at skipSeconds if user position is 0
