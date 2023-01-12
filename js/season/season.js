@@ -7,7 +7,8 @@
         var iEpisodesLength = asEpisodePlot.length - 1;
         var url = false;
         var elEpisodeName;
-        var elEpisodeId;
+        var elepisodePlot;
+        var elepisodeAdditionalAudio;
         var elEpisodeImg;
         var elOpenEpisode;
         var elRuntime;
@@ -28,7 +29,8 @@ function init() {
     //save reference to dynamic elements
     //text
     elEpisodeName = getFirstChild('episodeName');
-    elEpisodeId = getFirstChild('episodeId');
+    elepisodePlot = getFirstChild('episodePlot');
+    elepisodeAdditionalAudio = getFirstChild('episodeAdditionalAudio');
     elRuntime = getFirstChild('runtime');
     //images
     elEpisodeImg = document.getElementById('episodeImg');
@@ -45,7 +47,8 @@ function show(episodeIndex) {
     //text
     setParentAttr(elEpisodeName, "class", asEpisodeTitleCSS[episodeIndex]);
     setNodeValue(elEpisodeName, asEpisodeTitle[episodeIndex]);
-    setNodeValue(elEpisodeId, asEpisodePlot[episodeIndex]);
+    setNodeValue(elepisodePlot, asEpisodePlot[episodeIndex]);
+    setNodeValue(elepisodeAdditionalAudio, asEpisodeAdditionalAudio[episodeIndex]);
     setNodeValue(elRuntime, asRuntime[episodeIndex]);
     //images
     elEpisodeImg.setAttribute("src", asEpisodeImage[episodeIndex]);
@@ -61,7 +64,8 @@ function showSeasonInfo() {
         fShowingSeasonInfo = false;
     } else {
         setNodeValue(elEpisodeName, sTitleLong);
-        setNodeValue(elEpisodeId, sPlotLong);
+        setNodeValue(elepisodePlot, sPlotLong);
+        setNodeValue(elepisodeAdditionalAudio, '');
         fShowingSeasonInfo = true;
     }
 }

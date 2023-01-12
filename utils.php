@@ -57,6 +57,19 @@ function getStreams($item)
     return getStreamsFromMediaSource($mediaSource);
 }
 
+function getAdditionalAudioStreams($item)
+{
+    $mediaSource = $item->MediaSources[0];
+    if (!$mediaSource) {
+        //item does not have mediasource, perhaps it is a mediasource
+        $mediaSource = $item;
+    }
+    $audiostreams = array_filter($mediaSource->MediaStreams, function ($stream) { return $stream->Type == 'Audio'; });
+    // drop the first item from the array
+    array_shift($audiostreams);
+    return $audiostreams;
+}
+
 function HTMLattributes($assocArray)
 {
     $html = null;

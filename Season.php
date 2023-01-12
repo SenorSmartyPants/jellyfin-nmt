@@ -230,6 +230,9 @@ function printInitJS()
         var asEpisodePlot = <?= getJSArray(array_map('getPlot', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript">
+        var asEpisodeAdditionalAudio = <?= getJSArray(array_map('getFirstAdditionalAudio', $episodes), true, '0')?>;
+    </script>
+    <script type="text/javascript">
         var asEpisodeImage = <?= getJSArray(array_map('getImage', $episodes), true, '0')?>;
     </script>
     <script type="text/javascript">
@@ -352,7 +355,7 @@ function printLowerTable()
                 </tr>
                 <tr>
                     <td width="320" height="240"></td>
-                    <td width="410" id="episodeId" class="tvplot" align="left" valign="top"><?= truncatePlot($selectedEpisode->Overview) ?? "&#160; " ?></td>
+                    <td width="410" class="tvplot" align="left" valign="top"><p id="episodePlot"><?= truncatePlot($selectedEpisode->Overview) ?? "&#160; " ?></p><div id="episodeAdditionalAudio"><?= getFirstAdditionalAudio($selectedEpisode) ?></div></td>
                 </tr>
 	        </table>
         </td>

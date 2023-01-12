@@ -53,6 +53,15 @@ function getPlot($item)
     return truncatePlot($item->Overview, true);
 }
 
+function getFirstAdditionalAudio($item)
+{
+    $firstAdditional = getAdditionalAudioStreams($item)[0];
+    if ($firstAdditional) {
+        $title = $firstAdditional->Title ?? $firstAdditional->DisplayTitle;
+    }
+    return $title ? 'Additional audio: ' . $title : '';
+}
+
 function getIndexNumberEnd($item)
 {
     return $item->IndexNumberEnd ?? '';
