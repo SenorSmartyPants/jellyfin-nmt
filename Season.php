@@ -17,7 +17,7 @@ include_once 'utils/checkinJS.php';
 include_once 'utils/templates.php';
 
 const TITLETRUNCATELONG = 56;
-const TITLETRUNCATE = 40;
+const TITLETRUNCATE = 38;
 const PLOTTRUNCATE = 470;
 const EPISODESPERPAGE = 15;
 const EPISODE = 'episode';
