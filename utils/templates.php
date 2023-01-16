@@ -273,6 +273,7 @@ function officialRatingImageURL($item)
 {
     switch ($item->OfficialRating) {
         case 'TV-14':
+        case '14':
             $url = "tv_14.png";
             break;
         case 'TV-G':
@@ -282,6 +283,7 @@ function officialRatingImageURL($item)
             $url = "tv_ma.png";
             break;
         case 'TV-PG':
+        case 'PG':
             $url = "tv_pg.png";
             break;
         case 'TV-Y':
@@ -292,6 +294,12 @@ function officialRatingImageURL($item)
             break;
         case 'TV-Y7FV':
             $url = "tv_y7fv.png";
+            break;
+        case '16':
+            $url = "csa_16.png";
+            break;
+        case '12':
+            $url = "csa_16.png";
             break;
         default:
             $url = $item->OfficialRating;
