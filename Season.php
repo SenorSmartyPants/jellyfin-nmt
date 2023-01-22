@@ -137,7 +137,7 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
         if ($episode->ExtraType) {
             //Extra/Special featre Ex. Title
             $titleLine = 'Ex';
-        } else if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
+        } elseif ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
             //Special episode, not displaying special season, then list episode as Sp. Title
             $titleLine = 'Sp';
         } else {
