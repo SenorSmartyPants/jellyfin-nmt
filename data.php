@@ -435,22 +435,13 @@ function getItemExtras($Id, $ExtrasType)
     global $user_id;
 
     $params = new UserItemsParams();
-    // these params are not honored
-    $params->SortBy = UserItemsParams::SORTNAME;
-    $params->SortOrder = UserItemsParams::ASC;
-
     if ($ExtrasType == ExtrasType::ADDITIONALPARTS) {
         $path = VIDEOSPATH . $Id . '/' . ExtrasType::ADDITIONALPARTS . '?UserID=' . $user_id;
         //returns an Items block with counts and index
         //just return Items so it's the same as other calls
         return apiCall($path)->Items;
     } else {
-        $extras = getUsersItems($params, $Id . '/' . $ExtrasType);
-        // so sort them now
-        usort($extras, function ($a, $b) {
-            return $a->SortName <=> $b->SortName;
-        });
-        return $extras;
+        return getUsersItems($params, $Id . '/' . $ExtrasType);
     }
 }
 
