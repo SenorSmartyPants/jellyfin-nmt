@@ -355,7 +355,7 @@ function printLowerTable()
                 </tr>
                 <tr>
                     <td width="320" height="240"></td>
-                    <td width="410" class="tvplot" align="left" valign="top"><p id="episodePlot"><?= truncatePlot($selectedEpisode->Overview) ?? "&#160; " ?></p><div id="episodeAdditionalAudio"><?= getFirstAdditionalAudio($selectedEpisode) ?></div></td>
+                    <td width="410" class="tvplot" align="left" valign="top"><p id="episodePlot"><?= truncatePlot($selectedEpisode->Overview) ?? "&#160; " ?></p><p id="episodeAdditionalAudio"><?= getFirstAdditionalAudio($selectedEpisode) ?></p></td>
                 </tr>
 	        </table>
         </td>
