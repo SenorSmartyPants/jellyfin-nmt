@@ -62,6 +62,14 @@ $episodesAndCount = getUsersItems($params);
 $episodes = $episodesAndCount->Items;
 $episodeCount = $episodesAndCount->TotalRecordCount;
 
+if ($season->SpecialFeatureCount && $season->SpecialFeatureCount > 0) {
+    //Special Features
+    $specialfeatures = getItemExtras($id, ExtrasType::SPECIALFEATURES);
+    // merge season extras into end of episode list
+    $episodes = array_merge($episodes, $specialfeatures);
+    $episodeCount += $season->SpecialFeatureCount;
+}
+
 $epPages = 1 + intdiv(($episodeCount - 1), EPISODESPERPAGE);
 
 $i=0;
@@ -126,7 +134,10 @@ function renderEpisodeHTML($episode, $indexInList, $episodeIndex)
 {
     global $season, $skipTrim;
     if ($episode) {
-        if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
+        if ($episode->ExtraType) {
+            //Extra/Special featre Ex. Title
+            $titleLine = 'Ex';
+        } else if ($episode->ParentIndexNumber == 0 && $season->IndexNumber != 0) {
             //Special episode, not displaying special season, then list episode as Sp. Title
             $titleLine = 'Sp';
         } else {
@@ -243,8 +254,8 @@ function printInitJS()
         //used to make episode list item text
         var asEpisodeWatched = <?= getJSArray(array_map('getPlayed', $episodes), false, '0')?>;
         var asEpisodeTitleShort = <?= getJSArray(array_map('getShortTitle', $episodes), true, '0')?>;
-        var asSeasonNo = <?= getJSArray(array_column($episodes, 'ParentIndexNumber'), false, '0')?>;
-        var asEpisodeNo = <?= getJSArray(array_column($episodes, 'IndexNumber'), false, '0')?>;
+        var asSeasonNo = <?= getJSArray(array_map('getParentIndexNumber', $episodes), false, '0')?>;
+        var asEpisodeNo = <?= getJSArray(array_map('getIndexNumber', $episodes), false, '0')?>;
         var asEpisodeNoEnd = <?= getJSArray(array_map('getIndexNumberEnd', $episodes), false, '0')?>;
     </script>
     <script type="text/javascript" src="js/utils.js"></script>

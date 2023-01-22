@@ -91,6 +91,9 @@ function formatEpisodeNumber(noNew) {
     if (iMainSeason != asSeasonNo[noNew]) {
         epnum = 'Sp';
     }
+    if (asSeasonNo[noNew] == '-1') {
+        epnum = 'Ex';
+    }
     if (asEpisodeNoEnd[noNew]) {
         epnum += '-' + asEpisodeNoEnd[noNew];
     }

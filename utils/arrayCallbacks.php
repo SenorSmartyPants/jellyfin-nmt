@@ -62,6 +62,17 @@ function getFirstAdditionalAudio($item)
     return $title ? 'Additional audio: ' . $title : '';
 }
 
+function getParentIndexNumber($item)
+{
+    // 0 = specials season, X = regular season, -1 = extras/special features
+    return $item->ParentIndexNumber ?? -1;
+}
+
+function getIndexNumber($item)
+{
+    return $item->IndexNumber ?? '';
+}
+
 function getIndexNumberEnd($item)
 {
     return $item->IndexNumberEnd ?? '';
