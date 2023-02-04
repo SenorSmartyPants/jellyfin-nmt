@@ -14,6 +14,7 @@ abstract class ItemType
     const SERIES = 'Series';
     const SEASON = 'Season';
     const EPISODE = 'Episode';
+    const RECORDING = 'Recording';
     const MOVIE = 'Movie';
     const PERSON = 'Person';
     const ACTOR = 'Actor';

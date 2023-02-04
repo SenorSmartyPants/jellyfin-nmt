@@ -41,6 +41,14 @@ function parse($item)
     global $indexStyle;
 
     $menuItem = new stdClass();
+
+    // massage recordings to look like final output
+    if ($item->Type == ItemType::RECORDING && $item->IsSeries) {
+        // treat it like an episode
+        $item->Type = ItemType::EPISODE;
+        $item->Name = $item->EpisodeTitle;
+    }
+
     $menuItem->Name = getName($item);
     $menuItem->Subtitle = getSubtitle($item);
     $menuItem->BackdropID = getBackdropIDandTag($item)->Id;

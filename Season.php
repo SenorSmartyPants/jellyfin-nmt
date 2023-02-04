@@ -90,6 +90,9 @@ foreach ($episodes as $key => $episode) {
     }
 }
 
+// fix episode name for active recording
+$selectedEpisode->Name = $selectedEpisode->EpisodeTitle ?? $selectedEpisode->Name;
+
 $pageObj->onloadset = EPISODE . (($selectedEpisodeArrayIndex - 1) % EPISODESPERPAGE + 1);
 
 $selectedPage = 1 + intdiv(($selectedEpisodeArrayIndex - 1), EPISODESPERPAGE);
