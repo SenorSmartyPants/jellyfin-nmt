@@ -21,6 +21,11 @@ function getBackdropIDandTag($item, $backdropID = null)
     return $retval;
 }
 
+function HasAdditionalParts($item)
+{
+    return ($item->PartCount && $item->PartCount > 1);
+}
+
 function IsMultipleVersion($item)
 {
     return ($item->MediaSourceCount && $item->MediaSourceCount > 1)

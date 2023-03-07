@@ -70,9 +70,11 @@ if ($season->SpecialFeatureCount && $season->SpecialFeatureCount > 0) {
     $episodeCount += $season->SpecialFeatureCount;
 }
 
-//check all episodes for alternate versions (MediaSources)
+
 for ($i=0; $i < count($episodes); $i++) {
     $ep = $episodes[$i];
+
+    //check for alternate versions (MediaSources)
     if (IsMultipleVersion($ep)) {
         SortMediaSourcesByName($ep);
         $numVersions = count($ep->MediaSources);
@@ -92,6 +94,22 @@ for ($i=0; $i < count($episodes); $i++) {
         $ep->MediaSources = array_slice($ep->MediaSources, 0, 1);
         // update episode name to add version name
         $ep->Name .= ' - ' . $ep->MediaSources[0]->Name;
+    }
+
+    //check for additional parts (PartCount)
+    if (HasAdditionalParts($ep)) {
+        $additionalParts = getItemExtras($ep->Id, ExtrasType::ADDITIONALPARTS);
+        // add parts to episode list
+        foreach ($additionalParts as $index => $part) {
+            // set SxE numbers on part
+            $part->ParentIndexNumber = $ep->ParentIndexNumber;
+            $part->IndexNumber = $ep->IndexNumber;
+            $part->Name = $ep->Name . ' - Pt ' . ($index + 2);
+            // insert into episodes
+            array_splice($episodes, ++$i, 0, array($part));
+        }
+        // add pt 1 to first episode part
+        $ep->Name = $ep->Name . ' - Pt 1';
     }
 }
 $episodeCount = count($episodes);

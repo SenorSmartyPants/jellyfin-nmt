@@ -68,7 +68,7 @@ class ItemDetailsPage extends ListingsPage
         }
 
         //what is intro count attribute?
-        if ($item->PartCount && $item->PartCount > 0) {
+        if (HasAdditionalParts($item)) {
             //Additional Parts
             $this->additionalparts = getItemExtras($item->Id, ExtrasType::ADDITIONALPARTS);
         }
