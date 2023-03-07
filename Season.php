@@ -55,7 +55,7 @@ $pageObj->backdrop = getBackdropIDandTag($season);
 $skipTrim = new SkipAndTrim($series);
 
 $params = new UserItemsParams();
-$params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds';
+$params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds,SpecialFeatureCount';
 $params->ParentID = $id;
 
 $episodesAndCount = getUsersItems($params);
@@ -110,6 +110,16 @@ for ($i=0; $i < count($episodes); $i++) {
         }
         // add pt 1 to first episode part
         $ep->Name = $ep->Name . ' - Pt 1';
+    }
+
+    //check for episode extras
+    if (HasExtras($ep)) {
+        $extras = getItemExtras($ep->Id, ExtrasType::SPECIALFEATURES);
+        // add extras to episode list
+        foreach ($extras as $extra) {
+            // insert into episodes
+            array_splice($episodes, ++$i, 0, array($extra));
+        }
     }
 }
 $episodeCount = count($episodes);

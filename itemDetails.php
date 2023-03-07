@@ -76,7 +76,7 @@ class ItemDetailsPage extends ListingsPage
             //Trailers
             $this->trailers = getItemExtras($item->Id, ExtrasType::LOCALTRAILERS);
         }
-        if ($item->SpecialFeatureCount && $item->SpecialFeatureCount > 0) {
+        if (HasExtras($item)) {
             //Special Features
             $this->specialfeatures = getItemExtras($item->Id, ExtrasType::SPECIALFEATURES);
         }

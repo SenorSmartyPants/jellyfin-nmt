@@ -23,7 +23,12 @@ function getBackdropIDandTag($item, $backdropID = null)
 
 function HasAdditionalParts($item)
 {
-    return ($item->PartCount && $item->PartCount > 1);
+    return $item->PartCount && $item->PartCount > 1;
+}
+
+function HasExtras($item)
+{
+    return $item->SpecialFeatureCount && $item->SpecialFeatureCount > 0;
 }
 
 function IsMultipleVersion($item)
