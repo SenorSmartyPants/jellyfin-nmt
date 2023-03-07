@@ -67,7 +67,7 @@ function parse($item)
         $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
 
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $menuItem->ImageType);
-    } elseif ($item->Type == ItemType::ACTOR) {
+    } elseif ($item->Type == ItemType::ACTOR || $item->Type == ItemType::GUESTSTAR) {
         $menuItem->PosterID = -1;
         $menuItem->PosterURL = 'images/person/person' . rand(1, 5) . '.png';
     }
@@ -107,16 +107,16 @@ function getSubtitle($item)
             $subtitle = ProductionRangeString($item);
             break;
         //PersonTypes
-        case "Actor":
+        case ItemType::ACTOR:
         case "Director":
         case "Writer":
         case "Producer":
-        case "GuestStar":
+        case ItemType::GUESTSTAR:
         case "Composer":
         case "Conductor":
         case "Lyricist":
             $subtitle = ($item->Role ? "as " . $item->Role : $item->Type);
-            if ($subtitle == "GuestStar") {
+            if ($subtitle == ItemType::GUESTSTAR) {
                 $subtitle = "Guest star";
             }
             break;
