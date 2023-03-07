@@ -366,17 +366,6 @@ printLogo();
 
 $pageObj->printFooter();
 
-function IsMultipleVersion($item)
-{
-    return $item->MediaSourceCount && $item->MediaSourceCount > 1;
-}
-
-function SortMediaSourcesByName($item)
-{
-    $col = array_column($item->MediaSources, 'Name');
-    array_multisort($col, SORT_ASC, $item->MediaSources);
-}
-
 function printLogo()
 {
     global $item;

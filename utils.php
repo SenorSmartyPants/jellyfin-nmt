@@ -21,6 +21,18 @@ function getBackdropIDandTag($item, $backdropID = null)
     return $retval;
 }
 
+function IsMultipleVersion($item)
+{
+    return ($item->MediaSourceCount && $item->MediaSourceCount > 1)
+        || ($item->MediaSources && count($item->MediaSources) > 1);
+}
+
+function SortMediaSourcesByName($item)
+{
+    $col = array_column($item->MediaSources, 'Name');
+    array_multisort($col, SORT_ASC, $item->MediaSources);
+}
+
 function getStreamsFromMediaSource($mediaSource)
 {
     if ($mediaSource->MediaStreams) {
