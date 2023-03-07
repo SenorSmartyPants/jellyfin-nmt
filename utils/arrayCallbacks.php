@@ -13,19 +13,6 @@ function getStartPosition($item)
 }
 #endregion UserData
 
-function getRuntimeSeconds($item)
-{
-    return TicksToSeconds($item->RunTimeTicks);
-}
-
-function runtimeDescription($item, $JSStyle = true)
-{
-    if ($item->RunTimeTicks) {
-        $br = $JSStyle ? '\xa0' : '&nbsp;';
-        return round(TicksToSeconds($item->RunTimeTicks) / 60) . $br . 'mins';
-    }
-}
-
 function getVOD($item)
 {
     return 'vod';
@@ -83,9 +70,27 @@ function getImage($item)
     return $item->ImageTags->Primary ? getImageURL($item->Id, new ImageParams(null, 278, $item->ImageTags->Primary), ImageType::PRIMARY) : 'images/wall/transparent.png';
 }
 
+function getMediaSourceID($item)
+{
+    return $item->MediaSources[0]->Id;
+}
+
 function getURL($item)
 {
-    return translatePathToNMT($item->Path);
+    return translatePathToNMT($item->MediaSources[0]->Path);
+}
+
+function getRuntimeSeconds($item)
+{
+    return TicksToSeconds($item->MediaSources[0]->RunTimeTicks);
+}
+
+function runtimeDescription($item, $JSStyle = true)
+{
+    if ($item->RunTimeTicks) {
+        $br = $JSStyle ? '\xa0' : '&nbsp;';
+        return round(TicksToSeconds($item->MediaSources[0]->RunTimeTicks) / 60) . $br . 'mins';
+    }
 }
 
 function filterPeople($person)
