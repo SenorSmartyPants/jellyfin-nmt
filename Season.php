@@ -62,13 +62,40 @@ $episodesAndCount = getUsersItems($params);
 $episodes = $episodesAndCount->Items;
 $episodeCount = $episodesAndCount->TotalRecordCount;
 
+//Season level Special Features
 if ($season->SpecialFeatureCount && $season->SpecialFeatureCount > 0) {
-    //Special Features
     $specialfeatures = getItemExtras($id, ExtrasType::SPECIALFEATURES);
     // merge season extras into end of episode list
     $episodes = array_merge($episodes, $specialfeatures);
     $episodeCount += $season->SpecialFeatureCount;
 }
+
+//check all episodes for alternate versions (MediaSources)
+for ($i=0; $i < count($episodes); $i++) {
+    $ep = $episodes[$i];
+    if (IsMultipleVersion($ep))
+    {
+        SortMediaSourcesByName($ep);
+        $numVersions = count($ep->MediaSources);
+
+        for ($j=1; $j < $numVersions; $j++) {
+            // copy item
+            $alt = clone $ep;
+            // remove extra media sources and reindex keys
+            $alt->MediaSources = array_slice($alt->MediaSources, $j, 1);
+            // update episode name to add version name
+            $alt->Name .= ' - ' . $alt->MediaSources[0]->Name;
+            // insert copy into episodes
+            array_splice($episodes, ++$i, 0, array($alt));
+        }
+
+        // delete extra media sources from original
+        $ep->MediaSources = array_slice($ep->MediaSources, 0, 1);
+        // update episode name to add version name
+        $ep->Name .= ' - ' . $ep->MediaSources[0]->Name;
+    }
+}
+$episodeCount = count($episodes);
 
 $epPages = 1 + intdiv(($episodeCount - 1), EPISODESPERPAGE);
 
