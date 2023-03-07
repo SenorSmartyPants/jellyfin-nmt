@@ -27,7 +27,7 @@ class CheckinJS
             var iEpisodeId = <?= $selectedIndex ?>;
 
             //checkin variables
-            var asItemId = <?= getJSArray(array_column($items, 'Id'), true, '0') ?>;
+            var asItemId = <?= getJSArray(array_map('getMediaSourceID', $items), true, '0') ?>;
             var asItemDuration = <?= getJSArray(array_map('getRuntimeSeconds', $items), false, '0') ?>;
             var asItemPosition = <?= getJSArray(array_map('getStartPosition', $items), false, '0') ?>;
         </script>
