@@ -73,8 +73,7 @@ if ($season->SpecialFeatureCount && $season->SpecialFeatureCount > 0) {
 //check all episodes for alternate versions (MediaSources)
 for ($i=0; $i < count($episodes); $i++) {
     $ep = $episodes[$i];
-    if (IsMultipleVersion($ep))
-    {
+    if (IsMultipleVersion($ep)) {
         SortMediaSourcesByName($ep);
         $numVersions = count($ep->MediaSources);
 
