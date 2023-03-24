@@ -3,8 +3,7 @@ include_once 'secrets.php';
 
 ini_set("allow_url_fopen", true);
 
-//const OFFSETFROMTOPRIGHTCORNER = 25; // circle center offset
-const OFFSETFROMTOPRIGHTCORNER = 38; // circle center offset
+const OFFSETFROMCORNER = 24; // circle center offset
 
 $id = htmlspecialchars($_GET['id']);
 $imageType = htmlspecialchars($_GET['imageType']);
@@ -22,12 +21,12 @@ header('Content-type: image/png');
 // TODO: apache image caching
 
 // get resized poster from JF
-//global $api_url;
 $image = imagecreatefromjpeg($api_url . "/Items/" . $id . "/Images/" . $imageType . "?height=" . $height . "&width=" . $width);
-//imagesavealpha($image, true);
 
 // Allocate A Color For The Text
 $white = imagecolorallocate($image, 255, 255, 255);
+// JF blue
+$jf_blue = imagecolorallocate($image, 0x00, 0xA4, 0xDC);
 
 if ($AddPlayedIndicator) {
     DrawPlayedIndicator($image, $white);
@@ -47,11 +46,18 @@ imagedestroy($image);
 
 function DrawCircle($image, $x, $y)
 {
-    // choose a color for the ellipse - JF blue = CC00A4DC
-    $col_ellipse = imagecolorallocatealpha($image, 0x00, 0xA4, 0xDC, 25);
+    global $jf_blue;
+    // https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.codepoints
+    $font_path = 'fonts/MaterialIcons-Regular.ttf';
+    $text = "\u{ef4a}"; // circle
+
+    $font_size = 36;
+
+    $x -= 24; //x and y are not circle center, but bounding box bottom left
+    $y += 24;
 
     // draw the JF circle
-    imagefilledellipse($image, $x, $y, 40, 40, $col_ellipse);
+    imagettftext($image, $font_size, 0, $x, $y, $jf_blue, $font_path, $text);
 }
 
 // x,y == center of circle
@@ -65,15 +71,15 @@ function DrawCountIndicator($image, $font_color, int $count, $x, $y)
     // Set Text to Be Printed On Image
     $text = $count;
     $font_size = 19;
-    $y += 10;
+    $y += 9;
 
     if ($count < 10) {
-        $x -= 6;
+        $x -= 7;
     } else if ($count < 100) {
-        $x -= 13;
+        $x -= 14;
     } else {
         // 3 digits, decrease the font
-        $x -= 18;
+        $x -= 19;
         $y -= 1;
         $font_size = 16;
     }
@@ -82,25 +88,26 @@ function DrawCountIndicator($image, $font_color, int $count, $x, $y)
 
 function DrawUnplayedCountIndicator($image, $font_color, int $unplayedCount)
 {
-    $x = imagesx($image) - OFFSETFROMTOPRIGHTCORNER;
-    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMTOPRIGHTCORNER);
+    $x = imagesx($image) - OFFSETFROMCORNER;
+    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMCORNER);
 }
 
 function DrawMediaSourceCountIndicator($image, $font_color, int $unplayedCount)
 {
-    $x = OFFSETFROMTOPRIGHTCORNER;
-    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMTOPRIGHTCORNER);
+    $x = OFFSETFROMCORNER;
+    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMCORNER);
 }
 
 function DrawPlayedIndicator($image, $font_color)
 {
-    $x = imagesx($image) - OFFSETFROMTOPRIGHTCORNER;
-    DrawCircle($image, $x, OFFSETFROMTOPRIGHTCORNER);
+    $x = imagesx($image) - OFFSETFROMCORNER;
+    DrawCircle($image, $x, OFFSETFROMCORNER);
 
-    $font_path = 'fonts/DejaVuSans.ttf';
-    $text = "\u{2714}"; // heavy checkmark
-    $font_size = 26;
-    $x -= 13;
-    $y = OFFSETFROMTOPRIGHTCORNER + 13;
+    // https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.codepoints
+    $font_path = 'fonts/MaterialIcons-Regular.ttf';
+    $text = "\u{e5ca}"; // check
+    $font_size = 24;
+    $x -= 16;
+    $y = OFFSETFROMCORNER + 16;
     imagettftext($image, $font_size, 0, $x, $y, $font_color, $font_path, $text);
 }
