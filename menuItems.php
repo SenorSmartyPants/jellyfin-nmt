@@ -65,6 +65,7 @@ function parse($item)
         $imageProps->unplayedCount = $menuItem->UnplayedCount;
         $imageProps->AddPlayedIndicator = $played;
         $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
+        $imageProps->mediaSourceCount = $item->MediaSourceCount && $item->MediaSourceCount > 1 ? $item->MediaSourceCount : null;
 
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $menuItem->ImageType);
     } elseif ($item->Type == ItemType::ACTOR || $item->Type == ItemType::GUESTSTAR) {
