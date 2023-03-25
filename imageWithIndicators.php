@@ -22,11 +22,6 @@ $mediaSourceCount = intval($_GET['mediaSourceCount']);
 $specialFeatureCount = intval($_GET['specialFeatureCount']);
 $AddPlayedIndicator = boolval($_GET['AddPlayedIndicator']);
 
-//Set the Content Type
-header('Content-type: image/png');
-
-// TODO: apache image caching
-
 // get resized poster from JF
 $image = imagecreatefromstring(file_get_contents($api_url . "/Items/" . $id . "/Images/" . $imageType . "?height=" . $height . "&width=" . $width));
 
@@ -53,6 +48,12 @@ if ($percentPlayed) {
     DrawPercentPlayed($image, $percentPlayed);
 }
 
+// send caching headers
+// caching won't survive NMT reboot, if NMT caches at all
+header('Pragma: public');
+header('Cache-Control: max-age=86400');
+header('Expires: '. gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
+header('Content-type: image/png');
 // Send Image to Browser
 imagepng($image);
 
