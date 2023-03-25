@@ -382,7 +382,7 @@ function getLatest($itemType, $Limit, $ParentID)
     global $GroupItems;
 
     $params = new UserItemsParams();
-    $params->Fields = 'Path';
+    $params->Fields = 'Path,MediaSourceCount,SpecialFeatureCount,ExtraIds';
     $params->Limit = $Limit;
     $params->IncludeItemTypes = $itemType;
     $params->GroupItems = $GroupItems;
@@ -394,7 +394,7 @@ function getLatest($itemType, $Limit, $ParentID)
 function getResume($Limit, $StartIndex = 0)
 {
     $params = new UserItemsParams();
-    $params->Fields = 'Path';
+    $params->Fields = 'Path,MediaSourceCount,SpecialFeatureCount,ExtraIds';
     $params->Limit = $Limit;
     $params->StartIndex = $StartIndex;
 
@@ -407,7 +407,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 
     $params = array(
         'UserID' => $user_id,
-        'Fields' => 'Path,SpecialEpisodeNumbers,MediaSourceCount,SpecialFeatureCount',
+        'Fields' => 'Path,SpecialEpisodeNumbers,MediaSourceCount,SpecialFeatureCount,ExtraIds',
         'Limit' => $Limit,
         'StartIndex' => $startIndex,
         'enableRewatching' => strboolNull($enableRewatching)
@@ -421,7 +421,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 function getItems(UserItemsParams $params)
 {
     //set defaults
-    $params->Fields = $params->Fields ?? 'Path,ChildCount,MediaSourceCount,SpecialFeatureCount';
+    $params->Fields = $params->Fields ?? 'Path,ChildCount,MediaSourceCount,SpecialFeatureCount,ExtraIds';
 
     return getUsersItems($params);
 }

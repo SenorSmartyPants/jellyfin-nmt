@@ -55,7 +55,7 @@ $pageObj->backdrop = getBackdropIDandTag($season);
 $skipTrim = new SkipAndTrim($series);
 
 $params = new UserItemsParams();
-$params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds,SpecialFeatureCount';
+$params->Fields = 'Path,Overview,Height,Width,MediaSources,ProviderIds,SpecialFeatureCount,ExtraIds';
 $params->ParentID = $id;
 
 $episodesAndCount = getUsersItems($params);
