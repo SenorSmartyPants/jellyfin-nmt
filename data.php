@@ -124,6 +124,7 @@ class ImageParams
     public $AddPlayedIndicator = null;
     public $percentPlayed = null;
     public $mediaSourceCount = null;
+    public $specialFeatureCount = null;
 
     public function __construct($height = null, $width = null, $tag = null)
     {
@@ -406,7 +407,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 
     $params = array(
         'UserID' => $user_id,
-        'Fields' => 'Path,SpecialEpisodeNumbers,MediaSourceCount',
+        'Fields' => 'Path,SpecialEpisodeNumbers,MediaSourceCount,SpecialFeatureCount',
         'Limit' => $Limit,
         'StartIndex' => $startIndex,
         'enableRewatching' => strboolNull($enableRewatching)
@@ -420,7 +421,7 @@ function getNextUp($Limit, $startIndex = 0, $enableRewatching = null)
 function getItems(UserItemsParams $params)
 {
     //set defaults
-    $params->Fields = $params->Fields ?? 'Path,ChildCount,MediaSourceCount';
+    $params->Fields = $params->Fields ?? 'Path,ChildCount,MediaSourceCount,SpecialFeatureCount';
 
     return getUsersItems($params);
 }
@@ -479,8 +480,9 @@ function getImageURL($id, ImageParams $imageProperties, $imageType = null, $item
     if ($imageProperties->unplayedCount
         || $imageProperties->AddPlayedIndicator
         || $imageProperties->percentPlayed
-        || $imageProperties->mediaSourceCount)
-    {
+        || $imageProperties->mediaSourceCount
+        || $imageProperties->specialFeatureCount
+    ) {
         // process image for indicators
         return "imageWithIndicators.php?id=" . $id . "&imageType=" . $imageType . "&"
             . http_build_query($imageProperties);
