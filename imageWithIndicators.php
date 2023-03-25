@@ -17,6 +17,7 @@ $imageType = htmlspecialchars($_GET['imageType']);
 $height = intval($_GET['height']);
 $width = intval($_GET['width']);
 $unplayedCount = intval($_GET['unplayedCount']);
+$percentPlayed = intval($_GET['percentPlayed']);
 $mediaSourceCount = intval($_GET['mediaSourceCount']);
 $specialFeatureCount = intval($_GET['specialFeatureCount']);
 $AddPlayedIndicator = boolval($_GET['AddPlayedIndicator']);
@@ -46,6 +47,10 @@ if ($mediaSourceCount > 0) {
 
 if ($specialFeatureCount > 0) {
     DrawSpecialFeatureIndicator($image, $white, false);
+}
+
+if ($percentPlayed) {
+    DrawPercentPlayed($image, $percentPlayed);
 }
 
 // Send Image to Browser
@@ -142,4 +147,22 @@ function DrawSpecialFeatureIndicator($image, $font_color, $draw_circle = true)
     $y = OFFSETFROMCORNER + 16;
     imagettftext($image, $font_size, 0, $x, $y, $font_color, ICONFONT, $text);
     $leftCornerOffset += INDICATORWIDTH;
+}
+
+// bottom
+function DrawPercentPlayed($image, $percent)
+{
+    global $jf_blue, $height, $width;
+
+    $indicatorHeight = 8;
+
+    $endX = $width - 1;
+    $endY = $height - 1;
+
+    // draw transparent background
+    $transblack = imagecolorallocatealpha($image, 0, 0, 0, 48);
+    imagefilledrectangle($image, 0, $endY - $indicatorHeight, $endX, $endY, $transblack);
+
+    $foregroundWidth = ($endX * $percent) / 100;
+    imagefilledrectangle($image, 0, $endY - $indicatorHeight, $foregroundWidth, $endY, $jf_blue);
 }
