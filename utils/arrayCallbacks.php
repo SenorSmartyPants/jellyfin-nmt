@@ -37,7 +37,8 @@ function getShortTitle($item)
 
 function getPlot($item)
 {
-    return truncatePlot($item->Overview, true);
+    global $prettySpecialFeatures;
+    return truncatePlot($item->Overview ?? $prettySpecialFeatures[$item->ExtraType], true);
 }
 
 function getFirstAdditionalAudio($item)
