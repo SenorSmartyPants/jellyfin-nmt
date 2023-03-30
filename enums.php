@@ -48,7 +48,9 @@ abstract class ExtrasType
 }
 
 $prettySpecialFeatures = [
-    'Clip' => 'Featurette',
+    'Clip' => 'Clip',
+    'Featurette' => 'Featurette',
+    'Short' => 'Short',
     'Trailer' => 'Trailer',
     'BehindTheScenes' => 'Behind the Scenes',
     'DeletedScene' => 'Deleted Scene',
