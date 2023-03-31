@@ -73,24 +73,25 @@ function getImage($item)
 
 function getMediaSourceID($item)
 {
-    return $item->MediaSources[0]->Id;
+    return $item->MediaSources[0]->Id ?? $item->Id;
 }
 
 function getURL($item)
 {
-    return translatePathToNMT($item->MediaSources[0]->Path);
+    return translatePathToNMT($item->MediaSources[0]->Path ?? $item->Path);
 }
 
 function getRuntimeSeconds($item)
 {
-    return TicksToSeconds($item->MediaSources[0]->RunTimeTicks);
+    return TicksToSeconds($item->MediaSources[0]->RunTimeTicks ?? $item->RunTimeTicks);
 }
 
 function runtimeDescription($item, $JSStyle = true)
 {
-    if ($item->RunTimeTicks) {
+    $runTimeTicks = $item->MediaSources[0]->RunTimeTicks ?? $item->RunTimeTicks;
+    if ($runTimeTicks) {
         $br = $JSStyle ? '\xa0' : '&nbsp;';
-        return round(TicksToSeconds($item->MediaSources[0]->RunTimeTicks) / 60) . $br . 'mins';
+        return round(TicksToSeconds($runTimeTicks) / 60) . $br . 'mins';
     }
 }
 
