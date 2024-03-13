@@ -18,7 +18,8 @@ $collectiontypeNames = array(
     CollectionType::PLAYLISTS => 'Playlists', CollectionType::MUSICVIDEOS => 'Music Videos'
 );
 
-
+// ExtraTypes to display before the parent episode
+$before_episode_extra_types = array('');
 
 //Default TVIDs
 $tvid_page_index = 'HOME';

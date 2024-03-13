@@ -118,7 +118,11 @@ for ($i=0; $i < count($episodes); $i++) {
         // add extras to episode list
         foreach ($extras as $extra) {
             // insert into episodes
-            array_splice($episodes, ++$i, 0, array($extra));
+            $position = ++$i;
+            if (in_array($extra->ExtraType, $before_episode_extra_types)) {
+                $position -= 1;
+            }
+            array_splice($episodes, $position, 0, array($extra));
         }
     }
 }
