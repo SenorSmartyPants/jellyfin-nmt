@@ -36,7 +36,7 @@ if ($nextup) {
 
     $params = new UserItemsParams();
     $params->Fields = 'Path';
-    $params->Limit = 50;
+    $params->Limit = 200;
     $params->ParentID = $parentID;
     $params->SortBy = 'SortName';
     $params->IncludeItemTypes = ItemType::EPISODE;
