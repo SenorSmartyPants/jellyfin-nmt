@@ -66,7 +66,7 @@ class CheckinJS
             }
 
             function ResumeOrRestart(iResume, iStart) {
-                if (iResume == iStart) return iStart;
+                if (iResume == iStart || (iResume - iStart) < 60) return iStart;
                 if (confirm("Report restarting?")) {
                     return iStart;
                 } else {
