@@ -3,14 +3,29 @@ include_once 'secrets.php';
 
 ini_set("allow_url_fopen", true);
 
-const OFFSETFROMCORNER = 24; // circle center offset
-const INDICATORWIDTH = 44;
+const INDICATORWIDTH = [22, 33, 44];
+
+const CIRCLEOFFSET = [12, 18, 24]; // circle center offset
+const CIRCLEFONTSIZE = [18, 27, 36];
+
+const CHECKFONTSIZE = [12, 18, 24];
+const CHECKOFFSET = [8, 12, 16];
+
+const COUNTFONTSIZE = [10, 14, 19];
+const COUNTXOFFSET = [4, 5.5, 7];
+const COUNTXOFFSET3DIGITTWEAK = [0, 1, 5];
+const COUNTYOFFSET = [5, 7, 9];
+const COUNTYOFFSET3DIGITTWEAK = [1, 2, 1];
+
+const PLAYEDPERCENTHEIGHT = [2, 4, 8];
+
+const SIZESMALL = 0;
+const SIZEMEDIUM = 1;
+const SIZELARGE = 2;
 
 // https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.codepoints
 const ICONFONT = 'fonts/MaterialIcons-Regular.ttf';
 
-
-$leftCornerOffset = OFFSETFROMCORNER;
 
 $id = htmlspecialchars($_GET['id']);
 $imageType = htmlspecialchars($_GET['imageType']);
@@ -21,6 +36,9 @@ $percentPlayed = intval($_GET['percentPlayed']);
 $mediaSourceCount = intval($_GET['mediaSourceCount']);
 $specialFeatureCount = intval($_GET['specialFeatureCount']);
 $AddPlayedIndicator = boolval($_GET['AddPlayedIndicator']);
+$indicatorSize = intval($_GET['indicatorSize']);
+
+$leftCornerOffset = CIRCLEOFFSET[$indicatorSize];
 
 // get resized poster from JF
 $image = imagecreatefromstring(file_get_contents($api_url . "/Items/" . $id . "/Images/" . $imageType . "?height=" . $height . "&width=" . $width));
@@ -60,16 +78,17 @@ imagepng($image);
 // Clear Memory
 imagedestroy($image);
 
+// x,y == center of circle
 function DrawCircle($image, $x, $y)
 {
-    global $jf_blue;
+    global $jf_blue, $indicatorSize;
 
     $text = "\u{ef4a}"; // circle
 
-    $font_size = 36;
+    $font_size = CIRCLEFONTSIZE[$indicatorSize];
 
-    $x -= 24; //x and y are not circle center, but bounding box bottom left
-    $y += 24;
+    $x -= CIRCLEOFFSET[$indicatorSize]; //x and y are not circle center, but bounding box bottom left
+    $y += CIRCLEOFFSET[$indicatorSize];
 
     // draw the JF circle
     imagettftext($image, $font_size, 0, $x, $y, $jf_blue, ICONFONT, $text);
@@ -78,6 +97,7 @@ function DrawCircle($image, $x, $y)
 // x,y == center of circle
 function DrawCountIndicator($image, $font_color, int $count, $x, $y)
 {
+    global $indicatorSize;
     DrawCircle($image, $x, $y);
 
     // Set Path to Font File
@@ -85,18 +105,18 @@ function DrawCountIndicator($image, $font_color, int $count, $x, $y)
 
     // Set Text to Be Printed On Image
     $text = $count;
-    $font_size = 19;
-    $y += 9;
+    $font_size = COUNTFONTSIZE[$indicatorSize];
+    $y += COUNTYOFFSET[$indicatorSize];
 
     if ($count < 10) {
-        $x -= 7;
+        $x -= COUNTXOFFSET[$indicatorSize];
     } elseif ($count < 100) {
-        $x -= 14;
+        $x -= COUNTXOFFSET[$indicatorSize] * 2;
     } else {
         // 3 digits, decrease the font
-        $x -= 19;
-        $y -= 1;
-        $font_size = 16;
+        $x -= COUNTXOFFSET[$indicatorSize] * 2 + COUNTXOFFSET3DIGITTWEAK[$indicatorSize];
+        $y -= COUNTYOFFSET3DIGITTWEAK[$indicatorSize];
+        $font_size = COUNTFONTSIZE[$indicatorSize] - 3;
     }
     imagettftext($image, $font_size, 0, $x, $y, $font_color, $font_path, $text);
 }
@@ -104,66 +124,68 @@ function DrawCountIndicator($image, $font_color, int $count, $x, $y)
 // right side
 function DrawUnplayedCountIndicator($image, $font_color, int $unplayedCount)
 {
-    $x = imagesx($image) - OFFSETFROMCORNER;
-    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMCORNER);
+    global $indicatorSize;
+    $x = imagesx($image) - CIRCLEOFFSET[$indicatorSize];
+    DrawCountIndicator($image, $font_color, $unplayedCount, $x, CIRCLEOFFSET[$indicatorSize]);
 }
 
 function DrawPlayedIndicator($image, $font_color)
 {
-    $x = imagesx($image) - OFFSETFROMCORNER;
-    DrawCircle($image, $x, OFFSETFROMCORNER);
+    global $indicatorSize;
+    $x = imagesx($image) - CIRCLEOFFSET[$indicatorSize];
+    DrawCircle($image, $x, CIRCLEOFFSET[$indicatorSize]);
 
     $text = "\u{e5ca}"; // check
-    $font_size = 24;
-    $x -= 16;
-    $y = OFFSETFROMCORNER + 16;
+    $font_size = CHECKFONTSIZE[$indicatorSize];
+    $x -= CHECKOFFSET[$indicatorSize];
+    $y = CIRCLEOFFSET[$indicatorSize] + CHECKOFFSET[$indicatorSize];
     imagettftext($image, $font_size, 0, $x, $y, $font_color, ICONFONT, $text);
 }
 
 // left side
 function DrawMediaSourceCountIndicator($image, $font_color, int $unplayedCount)
 {
-    global $leftCornerOffset;
+    global $leftCornerOffset, $indicatorSize;
     $x = $leftCornerOffset;
-    DrawCountIndicator($image, $font_color, $unplayedCount, $x, OFFSETFROMCORNER);
+    DrawCountIndicator($image, $font_color, $unplayedCount, $x, CIRCLEOFFSET[$indicatorSize]);
     // move the offset over incase we have more indicators for the left side
-    $leftCornerOffset += INDICATORWIDTH;
+    $leftCornerOffset += INDICATORWIDTH[$indicatorSize];
 }
 
 function DrawSpecialFeatureIndicator($image, $font_color, $draw_circle = true)
 {
-    global $leftCornerOffset, $jf_blue;
-    $x = $leftCornerOffset;
+    global $leftCornerOffset, $jf_blue, $indicatorSize;
+    $x = $leftCornerOffset - CHECKOFFSET[$indicatorSize];
     if ($draw_circle) {
-        DrawCircle($image, $x, OFFSETFROMCORNER);
-        $x -= 16;
+        DrawCircle($image, $x, CIRCLEOFFSET[$indicatorSize]);
     } else {
         $font_color = $jf_blue;
-        $x -= 16;
     }
 
     $text = "\u{e02c}"; // movie
-    $font_size = 24;
+    $font_size = CHECKFONTSIZE[$indicatorSize];
 
-    $y = OFFSETFROMCORNER + 16;
+    $y = CIRCLEOFFSET[$indicatorSize] + CHECKOFFSET[$indicatorSize];
     imagettftext($image, $font_size, 0, $x, $y, $font_color, ICONFONT, $text);
-    $leftCornerOffset += INDICATORWIDTH;
+    $leftCornerOffset += INDICATORWIDTH[$indicatorSize];
 }
 
 // bottom
 function DrawPercentPlayed($image, $percent)
 {
-    global $jf_blue, $height, $width;
+    global $jf_blue, $height, $width, $indicatorSize;
 
-    $indicatorHeight = 8;
+    if (0 < $percent && $percent < 100) {
+        $indicatorHeight = PLAYEDPERCENTHEIGHT[$indicatorSize];
 
-    $endX = $width - 1;
-    $endY = $height - 1;
+        $endX = $width ?: imagesx($image) - 1;
+        $endY = $height ?: imagesy($image) - 1;
 
-    // draw transparent background
-    $transblack = imagecolorallocatealpha($image, 0, 0, 0, 48);
-    imagefilledrectangle($image, 0, $endY - $indicatorHeight, $endX, $endY, $transblack);
+        // draw transparent background
+        $transblack = imagecolorallocatealpha($image, 0, 0, 0, 48);
+        imagefilledrectangle($image, 0, $endY - $indicatorHeight, $endX, $endY, $transblack);
 
-    $foregroundWidth = ($endX * $percent) / 100;
-    imagefilledrectangle($image, 0, $endY - $indicatorHeight, $foregroundWidth, $endY, $jf_blue);
+        $foregroundWidth = ($endX * $percent) / 100;
+        imagefilledrectangle($image, 0, $endY - $indicatorHeight, $foregroundWidth, $endY, $jf_blue);
+    }
 }

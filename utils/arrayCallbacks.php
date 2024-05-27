@@ -68,7 +68,10 @@ function getIndexNumberEnd($item)
 
 function getImage($item)
 {
-    return $item->ImageTags->Primary ? getImageURL($item->Id, new ImageParams(null, 278, $item->ImageTags->Primary), ImageType::PRIMARY) : 'images/wall/transparent.png';
+    $imageProps = new ImageParams(null, 278, $item->ImageTags->Primary);
+    $imageProps->setIndicators($item, ImageParams::SMALLINDICATORS);
+
+    return $item->ImageTags->Primary ? getImageURL($item->Id, $imageProps, ImageType::PRIMARY) : 'images/wall/transparent.png';
 }
 
 function getMediaSourceID($item)

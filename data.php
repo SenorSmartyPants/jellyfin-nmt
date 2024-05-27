@@ -114,6 +114,10 @@ class UserItemsParams
 
 class ImageParams
 {
+    const SMALLINDICATORS = 0;
+    const MEDIUMINDICATORS = 1;
+    const LARGEINDICATORS = 2;
+
     public $height = null;
     public $width = null;
     public $maxHeight = null;
@@ -125,12 +129,25 @@ class ImageParams
     public $percentPlayed = null;
     public $mediaSourceCount = null;
     public $specialFeatureCount = null;
+    public $indicatorSize = null;
 
     public function __construct($height = null, $width = null, $tag = null)
     {
         $this->height = $height;
         $this->width = $width;
         $this->tag = $tag;
+    }
+
+    public function setIndicators($item, $size = ImageParams::LARGEINDICATORS)
+    {
+        $played = ($item->Type == ItemType::SERIES || $item->Type == ItemType::SEASON ? null : $item->UserData->Played);
+
+        $this->indicatorSize = $size;
+        $this->unplayedCount = getUnplayedCount($item);
+        $this->AddPlayedIndicator = $played;
+        $this->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
+        $this->mediaSourceCount = $item->MediaSourceCount && $item->MediaSourceCount > 1 ? $item->MediaSourceCount : null;
+        $this->specialFeatureCount = $item->SpecialFeatureCount && $item->SpecialFeatureCount > 0 ? $item->SpecialFeatureCount : null;
     }
 }
 
@@ -455,6 +472,25 @@ function getSimilarItems($Id, $limit = null)
     return apiCall($path);
 }
 
+function getUnplayedCount($item)
+{
+    global $libraryBrowse;
+    global $displayepisode;
+
+    if ($item->Type == ItemType::EPISODE) {
+        if (!$displayepisode) {
+            //API
+            $series = getItem($item->SeriesId);
+            $unplayedCount = $series->UserData->UnplayedItemCount;
+        }
+    } else {
+        $unplayedCount = $item->UserData->UnplayedItemCount;
+    }
+    //libraryBrowse, but should be based on if watched are hidden, like always in next up, or sometimes in latest
+    $minUnplayedCount = $libraryBrowse ? 0 : 1;
+    return $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
+}
+
 function getFilters($parentID = null, $itemTypes = null, $Recursive = null)
 {
     global $user_id;
@@ -486,6 +522,9 @@ function getImageURL($id, ImageParams $imageProperties, $imageType = null, $item
         // process image for indicators
         return "imageWithIndicators.php?id=" . $id . "&imageType=" . $imageType . "&"
             . http_build_query($imageProperties);
+    } else {
+        // clear imagesize
+        $imageProperties->indicatorSize = null;
     }
 
     return $api_url . "/" . $itemsOrUsers . "/" . $id . "/Images/" . $imageType . "?"

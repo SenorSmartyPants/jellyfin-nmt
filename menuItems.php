@@ -54,19 +54,12 @@ function parse($item)
     $menuItem->BackdropID = getBackdropIDandTag($item)->Id;
     setDetailURL($item, $menuItem);
     setPosterInfo($item, $menuItem);
-    $menuItem->UnplayedCount = getUnplayedCount($item);
-
-    $played = ($item->Type == ItemType::SERIES || $item->Type == ItemType::SEASON ? null : $item->UserData->Played);
 
     if ($menuItem->PosterID) {
         $imageProps = new ImageParams();
         $imageProps->height = ($indexStyle->popupHeight ?? $indexStyle->thumbnailsHeight);
         $imageProps->width = ($indexStyle->popupWidth ?? $indexStyle->thumbnailsWidth);
-        $imageProps->unplayedCount = $menuItem->UnplayedCount;
-        $imageProps->AddPlayedIndicator = $played;
-        $imageProps->percentPlayed = $item->UserData->PlayedPercentage > 0 ? $item->UserData->PlayedPercentage : null;
-        $imageProps->mediaSourceCount = $item->MediaSourceCount && $item->MediaSourceCount > 1 ? $item->MediaSourceCount : null;
-        $imageProps->specialFeatureCount = $item->SpecialFeatureCount && $item->SpecialFeatureCount > 0 ? $item->SpecialFeatureCount : null;
+        $imageProps->setIndicators($item);
 
         $menuItem->PosterURL = getImageURL($menuItem->PosterID, $imageProps, $menuItem->ImageType);
     } elseif ($item->Type == ItemType::ACTOR || $item->Type == ItemType::GUESTSTAR) {
@@ -278,25 +271,6 @@ function setPosterInfo($item, $menuItem)
             break;
     }
     $menuItem->PosterID = $posterID;
-}
-
-function getUnplayedCount($item)
-{
-    global $libraryBrowse;
-    global $displayepisode;
-
-    if ($item->Type == ItemType::EPISODE) {
-        if (!$displayepisode) {
-            //API
-            $series = getItem($item->SeriesId);
-            $unplayedCount = $series->UserData->UnplayedItemCount;
-        }
-    } else {
-        $unplayedCount = $item->UserData->UnplayedItemCount;
-    }
-    //libraryBrowse, but should be based on if watched are hidden, like always in next up, or sometimes in latest
-    $minUnplayedCount = $libraryBrowse ? 0 : 1;
-    return $unplayedCount > $minUnplayedCount ? $unplayedCount : null;
 }
 
 function getMenuItem($item)

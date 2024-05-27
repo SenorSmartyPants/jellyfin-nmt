@@ -272,6 +272,11 @@ function printInitJS()
     $asAudioChannelsUnique = array_unique($asAudioChannels);
     $asAspectRatiosUnique = array_unique($asAspectRatios);
     //using multiple script blocks to stay under 23k byte limit
+
+    //set this to use episode counts and not series counts
+    global $displayepisode;
+    $displayepisode = true;
+
 ?>
     <script type="text/javascript">
         //season.js variables
@@ -504,6 +509,15 @@ function printSeasonFooter()
         $tvid_season_pgup, $tvid_season_pgdn,
         $tvid_season_itemdetails, $tvid_season_series;
     global $pageObj;
+
+    if ($selectedEpisode->ImageTags->Primary)
+    {
+        $imageProps = new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary);
+        $imageProps->setIndicators($selectedEpisode, ImageParams::SMALLINDICATORS);
+        $selectedImageURL = getImageURL($selectedEpisode->Id, $imageProps, ImageType::PRIMARY);
+    } else {
+        $selectedImageURL = "images/wall/transparent.png";
+    }
 ?>
         </table>
     <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>
@@ -511,7 +525,7 @@ function printSeasonFooter()
     <a href="#" onclick="return  toggleEpisodeDetails();" tvid=""></a>
     <div id="popupWrapper">
         <div id="divEpisodeImgBackSabish" class="abs"><img src="images/season/epi_back.png" width="308" id="episodeImgBack"/></div>
-        <div id="divEpisodeImgSabish" class="abs"><img id="episodeImg" src="<?= $selectedEpisode->ImageTags->Primary ? getImageURL($selectedEpisode->Id, new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary), ImageType::PRIMARY) : "images/wall/transparent.png" ?>" width="278" height="164"/></div>
+        <div id="divEpisodeImgSabish" class="abs"><img id="episodeImg" src="<?= $selectedImageURL ?>" width="278" height="164"/></div>
         <div id="divEpisodeCertification" class="abs"><img id="episodeOfficialRating" src="<?= officialRatingImageURL($series) ?>"/></div>
         <div id="runtime" class="abs TvLink"><?= runtimeDescription($selectedEpisode, false) ?></div>
         <div id="divEpisodeAR" class="abs"><img id="aspectRatio" src="<?= getAspectRatioURL(getStreams($selectedEpisode)->Video)?>" /></div>
