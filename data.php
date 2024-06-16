@@ -207,7 +207,13 @@ function apiCall($path, $debug = false, $includeAPIKey = true)
         echo "<a href=\"" . $url . "\">url</a><br/>";
     }
 
-    return json_decode(file_get_contents($url));
+    $json = @file_get_contents($url);
+    if (strpos($http_response_header[0], "200")) {
+        return json_decode($json);
+    } else {
+        return "";
+    }
+
 }
 
 //JF 10.7.0+ only supports JSON post calls
