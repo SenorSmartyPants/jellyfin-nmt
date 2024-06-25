@@ -1,6 +1,7 @@
 <?php
 require_once 'auth.php';
 require_once 'playbackReporting.php';
+include_once 'utils/arrayCallbacks.php';
 
 function startReponse()
 {
@@ -48,6 +49,10 @@ $report = new PlaybackReporting($_SESSION['ID'], $itemId, $duration, $skip, $tri
 if ($_GET['action'] == 'stop') {
     $positionAndPlayed = $report->Stop();
     if (isset($_GET["JS"])) {
+        $item = getItem($positionAndPlayed->ItemId);
+        if ($item->Type == ItemType::EPISODE) {
+            echo "\nupdateEpisodeImageURL('" . getImage($item) . "');";
+        }
         echo "\nupdatePosition($positionAndPlayed->PositionInSeconds);";
         echo "\nupdatePlayed(" . strbool($positionAndPlayed->Played) . ");";
     }

@@ -10,6 +10,7 @@
         var elepisodePlot;
         var elepisodeAdditionalAudio;
         var elEpisodeImg;
+        var elHiddenEpisodeImg;
         var elOpenEpisode;
         var elRuntime;
         var elVideoOutputImg;
@@ -34,6 +35,7 @@ function init() {
     elRuntime = getFirstChild('runtime');
     //images
     elEpisodeImg = document.getElementById('episodeImg');
+    elHiddenEpisodeImg = document.getElementById('hiddenEpisodeImg');
     elVideoOutputImg = document.getElementById('videoOutput');
     elContainerImg = document.getElementById('container');
     elAudioCodecImg = document.getElementById('audioCodec');
@@ -106,6 +108,19 @@ function episodeListItemDesc(iEpisodeIndex) {
         sWatched = '* ';
     }
     return formatEpisodeNumber(iEpisodeIndex) + '. ' + sWatched + asEpisodeTitleShort[iEpisodeIndex];
+}
+
+function updateEpisodeImageURL(URL) {
+    asEpisodeImage[iEpisodeId] = URL;
+    // will this previous null image display?
+    elHiddenEpisodeImg.setAttribute("src", asEpisodeImage[iEpisodeId]);
+
+    //wait for new image to load, then set url
+    window.setTimeout("updateEpisodeImageURLPart2()", 1);
+}
+
+function updateEpisodeImageURLPart2() {
+    elEpisodeImg.setAttribute("src", asEpisodeImage[iEpisodeId]);
 }
 
 /**

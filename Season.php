@@ -541,6 +541,10 @@ function printSeasonFooter()
     <img class="abs hidden" src="<?= $urlImage ?>" />
 <?
     }
+?>
+    <img class="abs hidden" id="hiddenEpisodeImg" src="" />
+<?
+
     // preload video/audio flags
     global $asVideoOutputUnique, $asContainerUnique, $asAudioCodecUnique, $asAudioChannelsUnique, $asAspectRatiosUnique;
     printImageArray($asVideoOutputUnique);
