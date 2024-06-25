@@ -31,6 +31,7 @@ class PlayingMedia
 
 class PositionAndPlayed
 {
+    public $ItemId;
     public $PositionInSeconds;
     public $Played;
 }
@@ -187,6 +188,7 @@ class PlaybackReporting
 
         $retval = new PositionAndPlayed();
 
+        $retval->ItemId = $this->playing->itemId;
         //look up played state for this item
         $playedItem = getItem($this->playing->itemId);
         $retval->Played = $playedItem->UserData->Played;
