@@ -272,11 +272,6 @@ function printInitJS()
     $asAudioChannelsUnique = array_unique($asAudioChannels);
     $asAspectRatiosUnique = array_unique($asAspectRatios);
     //using multiple script blocks to stay under 23k byte limit
-
-    //set this to use episode counts and not series counts
-    global $displayepisode;
-    $displayepisode = true;
-
 ?>
     <script type="text/javascript">
         //season.js variables
@@ -510,14 +505,7 @@ function printSeasonFooter()
         $tvid_season_itemdetails, $tvid_season_series;
     global $pageObj;
 
-    if ($selectedEpisode->ImageTags->Primary)
-    {
-        $imageProps = new ImageParams(null, 278, $selectedEpisode->ImageTags->Primary);
-        $imageProps->setIndicators($selectedEpisode, ImageParams::SMALLINDICATORS);
-        $selectedImageURL = getImageURL($selectedEpisode->Id, $imageProps, ImageType::PRIMARY);
-    } else {
-        $selectedImageURL = "images/wall/transparent.png";
-    }
+    $selectedImageURL = getImage($selectedEpisode)
 ?>
         </table>
     <a TVID="<?= $tvid_season_info ?>" name="gt_tvshow" href="#" onclick="showSeasonInfo()"></a>

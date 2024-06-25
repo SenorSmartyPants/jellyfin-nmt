@@ -68,6 +68,10 @@ function getIndexNumberEnd($item)
 
 function getImage($item)
 {
+    //set this to use episode counts and not series counts
+    global $displayepisode;
+    $displayepisode = true;
+
     $imageProps = new ImageParams(null, 278, $item->ImageTags->Primary);
     $imageProps->setIndicators($item, ImageParams::SMALLINDICATORS);
 
