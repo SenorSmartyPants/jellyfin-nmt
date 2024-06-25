@@ -35,6 +35,10 @@ startReponse();
 $auth = new Authentication();
 
 $itemId = htmlspecialchars($_GET['id']);
+if (!ctype_xdigit($itemId)) {
+    // only allow hexdec strings
+    $itemId = null;
+}
 $duration = intval($_GET['duration']);
 $position = intval($_GET['position']);
 $skip = intval($_GET['skip']);
