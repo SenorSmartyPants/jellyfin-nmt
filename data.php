@@ -10,7 +10,7 @@ const PREFERENCESPATH = '/DisplayPreferences/usersettings/';
 $apiCallCount = 0;
 
 const CLIENTNAME = 'Jellyfin-NMT';
-const CLIENTVERSION = '0.4.5';
+const CLIENTVERSION = '0.6.0';
 const POSTCONTENTTYPE = 'application/json';
 
 class Device
