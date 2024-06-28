@@ -12,6 +12,23 @@ Videos are direct played via mounted filesystem on NMT. Playback status is repor
 
 ## Setup
 
+- docker-compose
+```  jellyfin-nmt:
+    build:
+      context: /mnt/storage/Jukeboxes/jellyfin-nmt
+      dockerfile: Dockerfile
+    container_name: jellyfin-nmt
+    volumes:
+      - /mnt/storage/Jukeboxes:/var/www/html
+      - /mnt/storage/media/Videos:/videos
+    ports:
+      - 8321:80
+    restart: always
+    mem_limit: 1024m
+    environment:
+      - PUID=1001
+      - PGID=100
+```
 - Create an API key in Jellyfin
 - Create a secrets.php file based on this template, save it in the root of the application folder.
 
